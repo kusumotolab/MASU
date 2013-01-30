@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  * 
- * ‘ÎÛƒtƒ@ƒCƒ‹‚ğŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD TargetFile ‚ğ—v‘f‚Æ‚µ‚Ä‚ÂD
+ * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ TargetFile ã‚’è¦ç´ ã¨ã—ã¦æŒã¤ï¼
  * 
  * since 2006.11.12
  */
@@ -22,7 +22,7 @@ public final class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
-     * @param targetFile ’Ç‰Á‚·‚é‘ÎÛƒtƒ@ƒCƒ‹ (TargetFile)
+     * @param targetFile è¿½åŠ ã™ã‚‹å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« (TargetFile)
      */
     public void add(final TargetFile targetFile) {
 
@@ -41,25 +41,25 @@ public final class TargetFileManager implements Iterable<TargetFile> {
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”‚ğ•Ô‚·
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°ã‚’è¿”ã™
      * 
-     * @return ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”
+     * @return å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°
      */
     public int size() {
         return this.targetFiles.size();
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ğƒNƒŠƒA
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¯ãƒªã‚¢
      */
     public void clear() {
         this.targetFiles.clear();
     }
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚é‘ÎÛƒtƒ@ƒCƒ‹‚ÌSortedSet‚ğ•Ô‚·
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®SortedSetã‚’è¿”ã™
      * 
-     * @return “o˜^‚³‚ê‚Ä‚¢‚é‘ÎÛƒtƒ@ƒCƒ‹‚ÌSortedSet
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®SortedSet
      */
     public SortedSet<TargetFile> getFiles() {
         final SortedSet<TargetFile> files = new TreeSet<TargetFile>();
@@ -68,7 +68,7 @@ public final class TargetFileManager implements Iterable<TargetFile> {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒpƒX‚Ìƒtƒ@ƒCƒ‹‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ‘ã‚¹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿”ã™
      * 
      * @param filepath
      * @return
@@ -79,8 +79,8 @@ public final class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^D 
-     * ˆÈ‘O‚Í HashSet ‚ğ—p‚¢‚Ä‚¢‚½‚ªC“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚Ìƒtƒ@ƒCƒ‹‚Í‚Ü‚Æ‚ß‚Ä•Ô‚·‚Ù‚¤‚ª‚æ‚¢‚Ì‚ÅCTreeSet ‚É•ÏX‚µ‚½D
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ 
+     * ä»¥å‰ã¯ HashSet ã‚’ç”¨ã„ã¦ã„ãŸãŒï¼ŒåŒã˜ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã¾ã¨ã‚ã¦è¿”ã™ã»ã†ãŒã‚ˆã„ã®ã§ï¼ŒTreeSet ã«å¤‰æ›´ã—ãŸï¼
      */
     public TargetFileManager() {
         this.targetFiles = new ConcurrentHashMap<String, TargetFile>();
@@ -88,7 +88,7 @@ public final class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
-     * ‘ÎÛƒtƒ@ƒCƒ‹ (TargetFile) ‚ğŠi”[‚·‚é•Ï”D
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« (TargetFile) ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final ConcurrentMap<String, TargetFile> targetFiles;
 }

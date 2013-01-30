@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * •Ï”‚Ìg—p‚âƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µ‚È‚ÇCƒvƒƒOƒ‰ƒ€—v‘f‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * å¤‰æ•°ã®ä½¿ç”¨ã‚„ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—ãªã©ï¼Œãƒ—ãƒ­ã‚°ãƒ©ãƒ è¦ç´ ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -17,11 +17,11 @@ public abstract class ExpressionInfo implements ConditionInfo {
 
     /**
      *
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     ExpressionInfo(final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
@@ -38,9 +38,9 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ®“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å¼å†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ®“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet 
+     * @return å¼å†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set 
      */
     @Override
     public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -48,43 +48,43 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ƒGƒ“ƒeƒBƒeƒBg—p‚ÌŒ^‚ğ•Ô‚·D
+     * ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã®å‹ã‚’è¿”ã™ï¼
      * 
-     * @return ƒGƒ“ƒeƒBƒeƒBg—p‚ÌŒ^
+     * @return ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã®å‹
      */
     public abstract TypeInfo getType();
 
     /**
-     * ŠJns‚ğ•Ô‚·
+     * é–‹å§‹è¡Œã‚’è¿”ã™
      * 
-     * @return ŠJns
+     * @return é–‹å§‹è¡Œ
      */
     public final int getFromLine() {
         return this.fromLine;
     }
 
     /**
-     * ŠJn—ñ‚ğ•Ô‚·
+     * é–‹å§‹åˆ—ã‚’è¿”ã™
      * 
-     * @return ŠJn—ñ
+     * @return é–‹å§‹åˆ—
      */
     public final int getFromColumn() {
         return this.fromColumn;
     }
 
     /**
-     * I—¹s‚ğ•Ô‚·
+     * çµ‚äº†è¡Œã‚’è¿”ã™
      * 
-     * @return I—¹s
+     * @return çµ‚äº†è¡Œ
      */
     public final int getToLine() {
         return this.toLine;
     }
 
     /**
-     * I—¹—ñ‚ğ•Ô‚·
+     * çµ‚äº†åˆ—ã‚’è¿”ã™
      * 
-     * @return I—¹—ñ
+     * @return çµ‚äº†åˆ—
      */
     public final int getToColumn() {
         return this.toColumn;
@@ -129,9 +129,9 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ŠO‘¤‚ÌExecutableElement‚ğ•Ô‚·
+     * å¤–å´ã®ExecutableElementã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚ÌExecutableElement
+     * @return å¤–å´ã®ExecutableElement
      */
     public final ExecutableElementInfo getOwnerExecutableElement() {
         assert null != this.ownerExecutableElement : "this.ownerExecutableElement must not be null!";
@@ -139,9 +139,9 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚ğ‚Â•¶‚ğ•Ô‚·
+     * ã“ã®å¼ã‚’æŒã¤æ–‡ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì®‚ğ‚Â•¶
+     * @return ã“ã®å¼ã‚’æŒã¤æ–‡
      */
     public final StatementInfo getOwnerStatement() {
 
@@ -154,16 +154,16 @@ public abstract class ExpressionInfo implements ConditionInfo {
             return ((ExpressionInfo) ownerExecutableElement).getOwnerStatement();
         }
 
-        // ownerExecutableElement ‚ª StatementInfo ‚Å‚à ExpressionInfo@‚Å‚à‚È‚¢‚Æ‚«‚ÍIllegalStateException
+        // ownerExecutableElement ãŒ StatementInfo ã§ã‚‚ ExpressionInfoã€€ã§ã‚‚ãªã„ã¨ãã¯IllegalStateException
         throw new IllegalStateException(
                 "ownerExecutableElement must be StatementInfo or ExpressionInfo.");
         //return null;
     }
 
     /**
-     * ‚±‚Ì®‚ğ‚Â®‚ğ•Ô‚·
+     * ã“ã®å¼ã‚’æŒã¤å¼ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì®‚ğ‚Â®
+     * @return ã“ã®å¼ã‚’æŒã¤å¼
      */
     public final ExpressionInfo getOwnerExpression() {
 
@@ -172,14 +172,14 @@ public abstract class ExpressionInfo implements ConditionInfo {
             return (ExpressionInfo) ownerExecutableElement;
         }
 
-        // ownerExecutableElement‚ªExpressionInfo‚Å‚È‚¢ê‡‚ÍCnull‚ğ•Ô‚·
+        // ownerExecutableElementãŒExpressionInfoã§ãªã„å ´åˆã¯ï¼Œnullã‚’è¿”ã™
         return null;
     }
 
     /**
-     * ’¼Ú‚ÌƒI[ƒi[‚Å‚ ‚éExecutableElement‚ğƒZƒbƒg‚·‚é
+     * ç›´æ¥ã®ã‚ªãƒ¼ãƒŠãƒ¼ã§ã‚ã‚‹ExecutableElementã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param ownerExecutableElement ’¼Ú‚ÌƒI[ƒi[‚Å‚ ‚éExecutableElement
+     * @param ownerExecutableElement ç›´æ¥ã®ã‚ªãƒ¼ãƒŠãƒ¼ã§ã‚ã‚‹ExecutableElement
      */
     public void setOwnerExecutableElement(final ExecutableElementInfo ownerExecutableElement) {
 
@@ -192,7 +192,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo•Ô‚·
+     * ã“ã®å¼ã‚’æ¡ä»¶ã¨ã—ã¦æŒã¤ConditionalBlockInfoè¿”ã™
      */
     @Override
     public final ConditionalBlockInfo getOwnerConditionalBlock() {
@@ -200,8 +200,8 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo‚ğİ’è‚·‚é
-     * ˆø”‚ªnull‚Å‚ ‚é‚±‚Æ‚ğ‹–—e‚·‚éD
+     * ã“ã®å¼ã‚’æ¡ä»¶ã¨ã—ã¦æŒã¤ConditionalBlockInfoã‚’è¨­å®šã™ã‚‹
+     * å¼•æ•°ãŒnullã§ã‚ã‚‹ã“ã¨ã‚’è¨±å®¹ã™ã‚‹ï¼
      */
     @Override
     public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
@@ -211,9 +211,9 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * ƒI[ƒi[ƒƒ\ƒbƒh‚ğ•Ô‚·
+     * ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™
      * 
-     * @return ƒI[ƒi[ƒƒ\ƒbƒh
+     * @return ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final CallableUnitInfo getOwnerMethod() {
@@ -221,9 +221,9 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
-     * •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ‚ğ•Ô‚·
+     * æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“ã‚’è¿”ã™
      * 
-     * @return •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
+     * @return æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
      */
     @Override
     public final LocalSpaceInfo getOwnerSpace() {
@@ -233,32 +233,32 @@ public abstract class ExpressionInfo implements ConditionInfo {
     private ExecutableElementInfo ownerExecutableElement;
 
     /**
-     * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚ÄŠ—L‚·‚éConditionalBlockInfo‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®å¼ã‚’æ¡ä»¶ã¨ã—ã¦æ‰€æœ‰ã™ã‚‹ConditionalBlockInfoã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private ConditionalBlockInfo ownerConditionalBlock;
 
     /**
-     * ƒI[ƒi[ƒƒ\ƒbƒh‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final CallableUnitInfo ownerMethod;
 
     /**
-     * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int fromColumn;
 
     /**
-     * I—¹s‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * çµ‚äº†è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int toLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int toColumn;
 

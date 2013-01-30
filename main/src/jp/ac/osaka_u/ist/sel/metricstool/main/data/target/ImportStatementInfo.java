@@ -10,7 +10,7 @@ import java.util.Set;
 public abstract class ImportStatementInfo<T> extends UnitInfo {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
      * @param fromLine 
      * @param fromColumn
@@ -29,9 +29,9 @@ public abstract class ImportStatementInfo<T> extends UnitInfo {
     }
 
     /**
-     * ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return@ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet
+     * @returnã€€ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     abstract Set<T> getImportedUnits();
 

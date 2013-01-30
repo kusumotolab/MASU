@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 
 /**
- * ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -18,16 +18,16 @@ import java.util.TreeSet;
 public final class MethodCallInfo extends CallInfo<MethodInfo> {
 
     /**
-     * ŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      *
-     * @param qualifierType ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Ìe‚ÌŒ^
-     * @param qualifierExpression ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌeƒGƒ“ƒeƒBƒeƒB
-     * @param callee ŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param qualifierType ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®è¦ªã®å‹
+     * @param qualifierExpression ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®è¦ªã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
+     * @param callee å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
             final MethodInfo callee, final TypeInfo type, final CallableUnitInfo ownerMethod,
@@ -46,7 +46,7 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®å‹ã‚’è¿”ã™
      */
     @Override
     public TypeInfo getType() {
@@ -54,26 +54,26 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         //        final MethodInfo callee = this.getCallee();
         //        final TypeInfo returnType = callee.getReturnType();
         //
-        //        // ’è‹`‚Ì•Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Å‚È‚¯‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚¹‚é
+        //        // å®šç¾©ã®è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ãªã‘ã‚Œã°ãã®ã¾ã¾è¿”ã›ã‚‹
         //        if (!(returnType instanceof TypeParameterTypeInfo)) {
         //            return returnType;
         //        }
         //
-        //        //@Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡
+        //        //ã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆ
         //        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getQualifierType();
         //        final List<TypeInfo> typeArguments = callOwnerType.getTypeArguments();
         //
-        //        // Œ^ˆø”‚ª‚ ‚éê‡‚ÍC‚»‚ÌŒ^‚ğ•Ô‚·
+        //        // å‹å¼•æ•°ãŒã‚ã‚‹å ´åˆã¯ï¼Œãã®å‹ã‚’è¿”ã™
         //        if (0 < typeArguments.size()) {
         //            final int typeParameterIndex = ((TypeParameterTypeInfo) returnType)
         //                    .getReferncedTypeParameter().getIndex();
         //            final TypeInfo typeArgument = typeArguments.get(typeParameterIndex);
         //            return typeArgument;
         //
-        //            // Œ^ˆø”‚ª‚È‚¢ê‡‚ÍC“Áê‚ÈŒ^‚ğ•Ô‚·
+        //            // å‹å¼•æ•°ãŒãªã„å ´åˆã¯ï¼Œç‰¹æ®Šãªå‹ã‚’è¿”ã™
         //        } else {
         //
-        //            // Java@‚Ìê‡ (Œ^ƒpƒ‰ƒ[ƒ^‚Í1.5‚©‚ç“±“ü‚³‚ê‚½)
+        //            // Javaã€€ã®å ´åˆ (å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯1.5ã‹ã‚‰å°å…¥ã•ã‚ŒãŸ)
         //            if (Settings.getInstance().getLanguage().equals(LANGUAGE.JAVA15)) {
         //                final ClassInfo referencedClass = DataManager.getInstance().getClassInfoManager()
         //                        .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -93,18 +93,18 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚éŒ^‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒãã£ã¤ã„ã¦ã„ã‚‹å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚éŒ^
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒãã£ã¤ã„ã¦ã„ã‚‹å‹
      */
     public TypeInfo getQualifierType() {
         return this.qualifierType;
     }
 
     /**
-     * ‚±‚Ì®iƒƒ\ƒbƒhŒÄ‚Ño‚µj‚É‚¨‚¯‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·ƒNƒ‰ƒX
+     * ã“ã®å¼ï¼ˆãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ï¼‰ã«ãŠã‘ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ã‚¯ãƒ©ã‚¹
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -119,9 +119,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -133,9 +133,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      */
     @Override
     public String getText() {
@@ -166,9 +166,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -209,9 +209,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌeC‚Â‚Ü‚è‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é—v‘f‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®è¦ªï¼Œã¤ã¾ã‚Šã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒãã£ã¤ã„ã¦ã„ã‚‹è¦ç´ ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Ìe
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®è¦ª
      */
     public final ExpressionInfo getQualifierExpression() {
         return this.qualifierExpression;

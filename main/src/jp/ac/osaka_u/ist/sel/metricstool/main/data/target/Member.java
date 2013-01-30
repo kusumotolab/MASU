@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 /**
- * クラスのメンバを表すインターフェース
+ * 繧ｯ繝ｩ繧ｹ縺ｮ繝｡繝ｳ繝舌ｒ陦ｨ縺吶う繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  *

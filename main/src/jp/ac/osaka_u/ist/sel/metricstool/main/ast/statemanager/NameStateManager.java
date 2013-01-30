@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒrƒWƒ^[‚Ì–¼‘O‹Lq•”‚Ö‚Ìo“ü‚è‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒD
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ã®åå‰è¨˜è¿°éƒ¨ã¸ã®å‡ºå…¥ã‚Šã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ï¼
  * 
  * 
  * @author kou-tngt
@@ -18,9 +18,9 @@ public class NameStateManager extends EnterExitStateManager {
     }
 
     /**
-     * –¼‘O‹Lq•”‚Ì’†‚É“ü‚Á‚½‚É’Ê’m‚³‚ê‚é‚½‚ß‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
+     * åå‰è¨˜è¿°éƒ¨ã®ä¸­ã«å…¥ã£ãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹ãŸã‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
      * 
-     * @return@–¼‘O‹Lq•”‚Ì’†‚É“ü‚Á‚½‚É’Ê’m‚³‚ê‚é‚½‚ß‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * @returnã€€åå‰è¨˜è¿°éƒ¨ã®ä¸­ã«å…¥ã£ãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹ãŸã‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getEnterEventType() {
@@ -28,9 +28,9 @@ public class NameStateManager extends EnterExitStateManager {
     }
 
     /**
-     * –¼‘O‹Lq•”‚©‚ço‚½‚É’Ê’m‚³‚ê‚é‚½‚ß‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
+     * åå‰è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹ãŸã‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
      * 
-     * @return@–¼‘O‹Lq•”‚©‚ço‚½‚É’Ê’m‚³‚ê‚é‚½‚ß‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * @returnã€€åå‰è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹ãŸã‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getExitEventType() {
@@ -38,11 +38,11 @@ public class NameStateManager extends EnterExitStateManager {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒCƒxƒ“ƒg‚ª–¼‘O‹Lq•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * token.isNameDescription()‚ªtrue‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆãŒåå‰è¨˜è¿°éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * token.isNameDescription()ãŒtrueã§ã‚ã‚Œã°trueã‚’è¿”ã™ï¼
      * 
-     * @param event –¼‘O‹Lq•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚éƒCƒxƒ“ƒg
-     * @return token.isNameDescription()‚ªtrue‚Å‚ ‚ê‚Îtrue
+     * @param event åå‰è¨˜è¿°éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return token.isNameDescription()ãŒtrueã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {

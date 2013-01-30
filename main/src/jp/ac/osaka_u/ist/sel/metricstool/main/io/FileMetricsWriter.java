@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒtƒ@ƒCƒ‹ƒƒgƒŠƒNƒX‚ð‘‚«o‚·ƒNƒ‰ƒX‚ªŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface FileMetricsWriter extends MetricsWriter {
 
     /**
-     * ƒtƒ@ƒCƒ‹–¼‚Ìƒ^ƒCƒgƒ‹•¶Žš—ñ
+     * ãƒ•ã‚¡ã‚¤ãƒ«åã®ã‚¿ã‚¤ãƒˆãƒ«æ–‡å­—åˆ—
      */
     String FILE_NAME = new String("\"File Name\"");
 }

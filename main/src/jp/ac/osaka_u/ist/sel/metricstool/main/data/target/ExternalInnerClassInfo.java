@@ -21,9 +21,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * ŠO‘¤‚ÌŠ—LÒ‚ğ•Ô‚·
+     * å¤–å´ã®æ‰€æœ‰è€…ã‚’è¿”ã™
      * 
-     * @param outerOwner ŠO‘¤‚ÌŠ—LÒ
+     * @param outerOwner å¤–å´ã®æ‰€æœ‰è€…
      */
     public void setOuterUnit(final UnitInfo outerUnit) {
 
@@ -36,9 +36,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @return å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     @Override
     public UnitInfo getOuterUnit() {
@@ -46,9 +46,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     @Override
     public final ClassInfo getOuterClass() {
@@ -57,7 +57,7 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
 
         while (true) {
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚È‚Ì‚Å‚©‚È‚ç‚¸ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚ ‚é
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ãªã®ã§ã‹ãªã‚‰ãšå¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹
             if (null == outer) {
                 throw new IllegalStateException();
             }
@@ -71,9 +71,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * ŠO‘¤‚Ìƒƒ\ƒbƒh‚ğ•Ô‚·.
+     * å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚Ìƒƒ\ƒbƒh
+     * @returnã€€å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final CallableUnitInfo getOuterCallableUnit() {
@@ -104,7 +104,7 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ÌƒIƒuƒWƒFƒNƒg‚ğ•Û‘¶‚·‚é•Ï”
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private UnitInfo outerUnit;
 

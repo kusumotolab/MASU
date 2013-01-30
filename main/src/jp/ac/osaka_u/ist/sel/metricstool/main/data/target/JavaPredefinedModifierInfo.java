@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * public‚âprivate‚È‚ÇJava‚ÌŒ¾Œê‚Å‹K’è‚³‚ê‚Ä‚¢‚éCüq‚ğˆµ‚¤ƒNƒ‰ƒX
+ * publicã‚„privateãªã©Javaã®è¨€èªã§è¦å®šã•ã‚Œã¦ã„ã‚‹ä¿®é£¾å­ã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
  * @author a-saitoh
  *
  */
@@ -14,90 +14,90 @@ public final class JavaPredefinedModifierInfo extends JavaModifierInfo {
 
 
     /**
-     * abstract ‚ğ•\‚·’è”
+     * abstract ã‚’è¡¨ã™å®šæ•°
      */
     public static final String ABSTRACT_STRING = "abstract";
 
     /**
-     * final ‚ğ•\‚·’è”
+     * final ã‚’è¡¨ã™å®šæ•°
      */
     public static final String FINAL_STRING = "final";
 
     /**
-     * private ‚ğ•\‚·’è”
+     * private ã‚’è¡¨ã™å®šæ•°
      */
     public static final String PRIVATE_STRING = "private";
 
     /**
-     * protected ‚ğ•\‚·’è”
+     * protected ã‚’è¡¨ã™å®šæ•°
      */
     public static final String PROTECTED_STRING = "protected";
 
     /**
-     * public ‚ğ•\‚·’è”
+     * public ã‚’è¡¨ã™å®šæ•°
      */
     public static final String PUBLIC_STRING = "public";
 
     /**
-     * static ‚ğ•\‚·’è”
+     * static ã‚’è¡¨ã™å®šæ•°
      */
     public static final String STATIC_STRING = "static";
 
     /**
-     * virtual ‚ğ•\‚·’è”
+     * virtual ã‚’è¡¨ã™å®šæ•°
      */
     public static final String VIRTUAL_STRING = "virtual";
     
     /**
-     * synchronized ‚ğ•\‚·’è”
+     * synchronized ã‚’è¡¨ã™å®šæ•°
      */
     public static final String SYNCHRONIZED_STRING = "synchronized";
 
     /**
-     * abstract ‚ğ•\‚·’è”
+     * abstract ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo ABSTRACT = new JavaPredefinedModifierInfo(ABSTRACT_STRING);
 
     /**
-     * final ‚ğ•\‚·’è”
+     * final ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo FINAL = new JavaPredefinedModifierInfo(FINAL_STRING);
 
     /**
-     * private ‚ğ•\‚·’è”
+     * private ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo PRIVATE = new JavaPredefinedModifierInfo(PRIVATE_STRING);
 
     /**
-     * protected ‚ğ•\‚·’è”
+     * protected ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo PROTECTED = new JavaPredefinedModifierInfo(PROTECTED_STRING);
 
     /**
-     * public ‚ğ•\‚·’è”
+     * public ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo PUBLIC = new JavaPredefinedModifierInfo(PUBLIC_STRING);
 
     /**
-     * static ‚ğ•\‚·’è”
+     * static ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo STATIC = new JavaPredefinedModifierInfo(STATIC_STRING);
 
     /**
-     * virtual ‚ğ•\‚·’è”
+     * virtual ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo VIRTUAL = new JavaPredefinedModifierInfo(VIRTUAL_STRING);
 
     /**
-     * synchronized ‚ğ•\‚·’è”
+     * synchronized ã‚’è¡¨ã™å®šæ•°
      */
     public static final JavaPredefinedModifierInfo SYNCHRONIZED = new JavaPredefinedModifierInfo(SYNCHRONIZED_STRING);
 
     /**
-     * Cüq–¼‚©‚çCCüqƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒh
+     * ä¿®é£¾å­åã‹ã‚‰ï¼Œä¿®é£¾å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param name Cüq–¼
-     * @return CüqƒIƒuƒWƒFƒNƒg
+     * @param name ä¿®é£¾å­å
+     * @return ä¿®é£¾å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public static JavaPredefinedModifierInfo getModifierInfo(final String name) {
 
@@ -111,7 +111,7 @@ public final class JavaPredefinedModifierInfo extends JavaModifierInfo {
     }
 
     /**
-     * Cüq–¼‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä¿®é£¾å­åã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
      * @param name
      */
@@ -121,7 +121,7 @@ public final class JavaPredefinedModifierInfo extends JavaModifierInfo {
 
 
     /**
-     * ¶¬‚µ‚½ ModifierInfo ƒIƒuƒWƒFƒNƒg‚ğ•Û‘¶‚µ‚Ä‚¢‚­‚½‚ß‚Ì’è”
+     * ç”Ÿæˆã—ãŸ ModifierInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã—ã¦ã„ããŸã‚ã®å®šæ•°
      */
     private static final Map<String, JavaPredefinedModifierInfo> MODIFIERS = new HashMap<String, JavaPredefinedModifierInfo>();
 

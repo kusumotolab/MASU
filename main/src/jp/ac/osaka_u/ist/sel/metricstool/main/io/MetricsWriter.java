@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒƒgƒŠƒNƒX‚ğ‘‚«o‚·jƒNƒ‰ƒX‚ªÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’æ›¸ãå‡ºã™jã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,12 +10,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface MetricsWriter {
 
     /**
-     * ƒƒgƒŠƒNƒX‚ğƒtƒ@ƒCƒ‹‚É‘‚«o‚·
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™
      */
     public abstract void write();
 
     /**
-     * ƒƒgƒŠƒNƒX’l‚ª‚È‚¢‚±‚Æ‚ğ•\‚·•¶š
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ãŒãªã„ã“ã¨ã‚’è¡¨ã™æ–‡å­—
      */
     char NO_METRIC = '-';
 

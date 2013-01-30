@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * •Ï”éŒ¾•¶‚Ìî•ñ‚ğ•Û—L‚·‚éƒNƒ‰ƒX
+ * å¤‰æ•°å®£è¨€æ–‡ã®æƒ…å ±ã‚’ä¿æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -19,15 +19,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionInfo {
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”C‰Šú‰»®CˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚éê‡C‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğg—p‚·‚é
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ï¼ŒåˆæœŸåŒ–å¼ï¼Œä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚‹å ´åˆï¼Œã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ä½¿ç”¨ã™ã‚‹
      * 
-     * @param variableDeclaration éŒ¾‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”
-     * @param initializationExpression ‰Šú‰»®
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param variableDeclaration å®£è¨€ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+     * @param initializationExpression åˆæœŸåŒ–å¼
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public VariableDeclarationStatementInfo(final LocalSpaceInfo ownerSpace,
             final LocalVariableUsageInfo variableDeclaration,
@@ -47,20 +47,20 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
             this.initializationExpression = initializationExpression;
         } else {
 
-            // ownerSpaceInfo‚ªƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì
+            // ownerSpaceInfoãŒãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®æ™‚
             if (ownerSpace instanceof CallableUnitInfo) {
                 this.initializationExpression = new EmptyExpressionInfo(
                         (CallableUnitInfo) ownerSpace, toLine, toColumn - 1, toLine, toColumn - 1);
             }
 
-            // ownerSpaceInfo‚ªƒuƒƒbƒN•¶‚Ì
+            // ownerSpaceInfoãŒãƒ–ãƒ­ãƒƒã‚¯æ–‡ã®æ™‚
             else if (ownerSpace instanceof BlockInfo) {
                 final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
                 this.initializationExpression = new EmptyExpressionInfo(ownerMethod, toLine,
                         toColumn - 1, toLine, toColumn - 1);
             }
 
-            // ‚»‚êˆÈŠO‚Ì‚ÍƒGƒ‰[
+            // ãã‚Œä»¥å¤–ã®æ™‚ã¯ã‚¨ãƒ©ãƒ¼
             else {
                 throw new IllegalStateException();
             }
@@ -71,35 +71,35 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ‚±‚ÌéŒ¾•¶‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
+     * ã“ã®å®£è¨€æ–‡ã§å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌéŒ¾•¶‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é•Ï”
+     * @return ã“ã®å®£è¨€æ–‡ã§å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
      */
     public final LocalVariableInfo getDeclaredLocalVariable() {
         return this.variableDeclaration.getUsedVariable();
     }
 
     /**
-     * éŒ¾‚Ì•Ï”g—p‚ğ•Ô‚·
-     * @return éŒ¾‚Ì•Ï”g—p
+     * å®£è¨€æ™‚ã®å¤‰æ•°ä½¿ç”¨ã‚’è¿”ã™
+     * @return å®£è¨€æ™‚ã®å¤‰æ•°ä½¿ç”¨
      */
     public final LocalVariableUsageInfo getDeclaration() {
         return this.variableDeclaration;
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®‚ğ•Ô‚·
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
      * 
-     * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®D‰Šú‰»‚³‚ê‚Ä‚¢ê‡‚Ínull
+     * @return å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ï¼åˆæœŸåŒ–ã•ã‚Œã¦ã„å ´åˆã¯null
      */
     public final ExpressionInfo getInitializationExpression() {
         return this.initializationExpression;
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚ê‚Îtrue
+     * @return å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚Œã°true
      */
     public boolean isInitialized() {
         return !(this.initializationExpression instanceof EmptyExpressionInfo);
@@ -118,9 +118,9 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -130,9 +130,9 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -141,9 +141,9 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ‚±‚Ì•Ï”éŒ¾•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°å®£è¨€æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì•Ï”éŒ¾•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®å¤‰æ•°å®£è¨€æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -177,17 +177,17 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ÌŒ^‚ğ•Ô‚·
-     * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ÌŒ^
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®å‹ã‚’è¿”ã™
+     * @return å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®å‹
      */
     public TypeInfo getType() {
         return this.variableDeclaration.getType();
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -199,7 +199,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo•Ô‚·
+     * ã“ã®å¼ã‚’æ¡ä»¶ã¨ã—ã¦æŒã¤ConditionalBlockInfoè¿”ã™
      */
     @Override
     public final ConditionalBlockInfo getOwnerConditionalBlock() {
@@ -207,8 +207,8 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo‚ğİ’è‚·‚é
-     * ˆø”‚ªnull‚Å‚ ‚é‚±‚Æ‚ğ‹–—e‚·‚é.
+     * ã“ã®å¼ã‚’æ¡ä»¶ã¨ã—ã¦æŒã¤ConditionalBlockInfoã‚’è¨­å®šã™ã‚‹
+     * å¼•æ•°ãŒnullã§ã‚ã‚‹ã“ã¨ã‚’è¨±å®¹ã™ã‚‹.
      */
     @Override
     public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
@@ -241,17 +241,17 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final LocalVariableUsageInfo variableDeclaration;
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final ExpressionInfo initializationExpression;
 
     /**
-     * ‚±‚Ì•Ï”éŒ¾•¶‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒtƒB[ƒ‹ƒh
+     * ã“ã®å¤‰æ•°å®£è¨€æ–‡ã‚’æ¡ä»¶ã¨ã—ã¦æŒã¤ConditionalBlockInfoã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private ConditionalBlockInfo ownerConditionalBlock;
 }

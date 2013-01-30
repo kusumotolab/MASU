@@ -15,15 +15,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * {@link BuildDataManager}‚Å‚ÌƒuƒƒbƒN—Ş(ƒNƒ‰ƒXCƒƒ\ƒbƒhCƒuƒƒbƒN)‚ğŠÇ—‚·‚é‚½‚ß‚ÌƒXƒ^ƒbƒN
- * ƒNƒ‰ƒXCƒƒ\ƒbƒhCƒuƒƒbƒN‚»‚ê‚¼‚ê‚ğ‹æ•Ê‚¹‚¸‚ÉƒXƒ^ƒbƒN‚ÉÏ‚Ş‚Ù‚©C•Ö‹Xã‚»‚ê‚¼‚ê‚ÌƒXƒ^ƒbƒN‚à•Û‚µ‚Ä‚¢‚éD
+ * {@link BuildDataManager}ã§ã®ãƒ–ãƒ­ãƒƒã‚¯é¡(ã‚¯ãƒ©ã‚¹ï¼Œãƒ¡ã‚½ãƒƒãƒ‰ï¼Œãƒ–ãƒ­ãƒƒã‚¯)ã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®ã‚¹ã‚¿ãƒƒã‚¯
+ * ã‚¯ãƒ©ã‚¹ï¼Œãƒ¡ã‚½ãƒƒãƒ‰ï¼Œãƒ–ãƒ­ãƒƒã‚¯ãã‚Œãã‚Œã‚’åŒºåˆ¥ã›ãšã«ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€ã»ã‹ï¼Œä¾¿å®œä¸Šãã‚Œãã‚Œã®ã‚¹ã‚¿ãƒƒã‚¯ã‚‚ä¿æŒã—ã¦ã„ã‚‹ï¼
  * @author g-yamada
  *
  */
 public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo>> {
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     public UnitStack() {
         super();
@@ -33,11 +33,11 @@ public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo
     }
 
     /**
-     * ©g‚ÌƒXƒ^ƒbƒN‚©‚ç—v‘f‚ğ‚Ğ‚Æ‚Âƒ|ƒbƒv‚µCƒ|ƒbƒv‚µ‚½—v‘f‚É‰‚¶‚Ä‘Î‰‚·‚éŒÂ•Ê‚ÌƒXƒ^ƒbƒN‚àƒ|ƒbƒv‚·‚é
+     * è‡ªèº«ã®ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰è¦ç´ ã‚’ã²ã¨ã¤ãƒãƒƒãƒ—ã—ï¼Œãƒãƒƒãƒ—ã—ãŸè¦ç´ ã«å¿œã˜ã¦å¯¾å¿œã™ã‚‹å€‹åˆ¥ã®ã‚¹ã‚¿ãƒƒã‚¯ã‚‚ãƒãƒƒãƒ—ã™ã‚‹
      */
     @Override
     public UnresolvedUnitInfo<? extends UnitInfo> pop() {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         final UnresolvedUnitInfo<? extends UnitInfo> result = super.pop();
@@ -56,11 +56,11 @@ public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo
     }
 
     /**
-     * ƒNƒ‰ƒX‚ğƒXƒ^ƒbƒN‚ÉÏ‚Ş
-     * @param unit ‚±‚ÌƒXƒ^ƒbƒN‚ÉÏ‚ŞƒNƒ‰ƒX
+     * ã‚¯ãƒ©ã‚¹ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€
+     * @param unit ã“ã®ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€ã‚¯ãƒ©ã‚¹
      */
     public void push(final UnresolvedClassInfo unit) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == unit) {
             throw new IllegalArgumentException();
@@ -70,11 +70,11 @@ public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo
     }
 
     /**
-     * ŒÄ‚Ño‚µ‰Â”\‚È—v‘f(ƒƒ\ƒbƒhCƒRƒ“ƒXƒgƒ‰ƒNƒ^)‚ğƒXƒ^ƒbƒN‚ÉÏ‚Ş
-     * @param unit ‚±‚ÌƒXƒ^ƒbƒN‚ÉÏ‚ŞŒÄ‚Ño‚µ‰Â”\‚È—v‘f
+     * å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ (ãƒ¡ã‚½ãƒƒãƒ‰ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿)ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€
+     * @param unit ã“ã®ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ 
      */
     public void push(final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> unit) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == unit) {
             throw new IllegalArgumentException();
@@ -84,11 +84,11 @@ public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo
     }
 
     /**
-     * ƒuƒƒbƒN‚ğƒXƒ^ƒbƒN‚ÉÏ‚Ş
-     * @param unit ‚±‚ÌƒXƒ^ƒbƒN‚ÉÏ‚ŞƒuƒƒbƒN
+     * ãƒ–ãƒ­ãƒƒã‚¯ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€
+     * @param unit ã“ã®ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€ãƒ–ãƒ­ãƒƒã‚¯
      */
     public void push(final UnresolvedBlockInfo<? extends BlockInfo> unit) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == unit) {
             throw new IllegalArgumentException();
@@ -105,89 +105,89 @@ public final class UnitStack extends Stack<UnresolvedUnitInfo<? extends UnitInfo
     }
 
     /**
-     * ’¼‹ß‚ÌƒNƒ‰ƒX‚ğæ“¾‚·‚éDƒXƒ^ƒbƒN‚©‚çƒ|ƒbƒv‚µ‚È‚¢
-     * @return ’¼‹ß‚ÌƒNƒ‰ƒX
+     * ç›´è¿‘ã®ã‚¯ãƒ©ã‚¹ã‚’å–å¾—ã™ã‚‹ï¼ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰ãƒãƒƒãƒ—ã—ãªã„
+     * @return ç›´è¿‘ã®ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedClassInfo getLatestClass() {
         return this.classStack.isEmpty() ? null : this.classStack.peek();
     }
 
     /**
-     * ’¼‹ß‚ÌŒÄ‚Ño‚µ‰Â”\‚È—v‘f(ƒƒ\ƒbƒh/ƒRƒ“ƒXƒgƒ‰ƒNƒ^)‚ğæ“¾‚·‚éDƒXƒ^ƒbƒN‚©‚çƒ|ƒbƒv‚µ‚È‚¢D
-     * @return ’¼‹ß‚ÌŒÄ‚Ño‚µ‰Â”\‚È—v‘f
+     * ç›´è¿‘ã®å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ (ãƒ¡ã‚½ãƒƒãƒ‰/ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿)ã‚’å–å¾—ã™ã‚‹ï¼ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰ãƒãƒƒãƒ—ã—ãªã„ï¼
+     * @return ç›´è¿‘ã®å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ 
      */
     public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getLatestCallableUnit() {
         return this.callableUnitStack.isEmpty() ? null : this.callableUnitStack.peek();
     }
 
     /**
-     * ’¼‹ß‚ÌƒuƒƒbƒN‚ğæ“¾‚·‚éDƒXƒ^ƒbƒN‚©‚çƒ|ƒbƒv‚µ‚È‚¢
-     * @return ’¼‹ß‚ÌƒuƒƒbƒN
+     * ç›´è¿‘ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å–å¾—ã™ã‚‹ï¼ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰ãƒãƒƒãƒ—ã—ãªã„
+     * @return ç›´è¿‘ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedBlockInfo<? extends BlockInfo> getLatestBlock() {
         return this.blockStack.isEmpty() ? null : this.blockStack.peek();
     }
 
     /**
-     * ƒNƒ‰ƒX‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return ƒNƒ‰ƒX‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚ê‚ÎtrueC‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
+     * ã‚¯ãƒ©ã‚¹ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return ã‚¯ãƒ©ã‚¹ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚Œã°trueï¼Œãã†ã§ãªã‘ã‚Œã°false
      */
     public boolean isClassAtPeek() {
         return this.peek() == this.getLatestClass();
     }
 
     /**
-     * ƒuƒƒbƒN‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return ƒuƒƒbƒN‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚ê‚Îtrue, ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
+     * ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚Œã°true, ãã†ã§ãªã‘ã‚Œã°false
      */
     public boolean isBlockAtPeek() {
         return this.peek() == this.getLatestBlock();
     }
 
     /**
-     * ŒÄ‚Ño‚µ‰Â”\‚È—v‘f‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return ŒÄ‚Ño‚µ‰Â”\‚È—v‘f‚ªƒXƒ^ƒbƒN‚ÌÅ‚àã‚É‚ ‚ê‚Îtrue, ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
+     * å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ ãŒã‚¹ã‚¿ãƒƒã‚¯ã®æœ€ã‚‚ä¸Šã«ã‚ã‚Œã°true, ãã†ã§ãªã‘ã‚Œã°false
      */
     public boolean isCallableUnitAtPeek() {
         return this.peek() == this.getLatestCallableUnit();
     }
     
     /**
-     * ƒNƒ‰ƒX‚Ì‚İ‚ğŠÇ—‚µ‚Ä‚¢‚éƒXƒ^ƒbƒN‚ğæ“¾‚·‚é
-     * @return ƒNƒ‰ƒX‚Ì‚İ‚ğŠÇ—‚µ‚Ä‚¢‚éƒXƒ^ƒbƒN
+     * ã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ç®¡ç†ã—ã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯ã‚’å–å¾—ã™ã‚‹
+     * @return ã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ç®¡ç†ã—ã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     public Stack<UnresolvedClassInfo> getClassStack(){
         return this.classStack;
     }
     
     /**
-     * ŒÄ‚Ño‚µ‰Â”\‚È—v‘f‚Ì‚İ‚ğŠÇ—‚µ‚Ä‚¢‚éƒXƒ^ƒbƒN‚ğæ“¾‚·‚é
-     * @return ŒÄ‚Ño‚µ‰Â”\‚È—v‘f‚Ì‚İ‚ğŠÇ—‚µ‚Ä‚¢‚éƒXƒ^ƒbƒN
+     * å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ ã®ã¿ã‚’ç®¡ç†ã—ã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯ã‚’å–å¾—ã™ã‚‹
+     * @return å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ ã®ã¿ã‚’ç®¡ç†ã—ã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     public Stack<UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> getCallableUnitStack(){
         return this.callableUnitStack;
     }
 
-    // ¡‚Ì‚Æ‚±‚ë•K—v‚È‚¢
+    // ä»Šã®ã¨ã“ã‚å¿…è¦ãªã„
 //    public Stack<UnresolvedBlockInfo<? extends BlockInfo>> getBlockStack(){};
     
     /**
-     * ƒNƒ‰ƒX‚Ì‚İ‚ğŠÇ—‚·‚éƒXƒ^ƒbƒN
+     * ã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ç®¡ç†ã™ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<UnresolvedClassInfo> classStack;
 
     /**
-     * ŒÄ‚Ño‚µ‰Â”\‚È—v‘f‚Ì‚İ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+     * å‘¼ã³å‡ºã—å¯èƒ½ãªè¦ç´ ã®ã¿ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
      */
     private final Stack<UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> callableUnitStack;
 
     /**
-     * ƒuƒƒbƒN‚Ì‚İ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+     * ãƒ–ãƒ­ãƒƒã‚¯ã®ã¿ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
      */
     private final Stack<UnresolvedBlockInfo<? extends BlockInfo>> blockStack;
 
     /**
-     * ©“®¶¬‚µ‚½ƒVƒŠƒAƒ‹ID
+     * è‡ªå‹•ç”Ÿæˆã—ãŸã‚·ãƒªã‚¢ãƒ«ID
      */
     private static final long serialVersionUID = 3545194400868254302L;
 }

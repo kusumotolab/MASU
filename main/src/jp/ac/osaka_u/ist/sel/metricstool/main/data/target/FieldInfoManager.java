@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒtƒB[ƒ‹ƒhî•ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒXD FieldInfo ‚ğ—v‘f‚Æ‚µ‚Ä‚ÂD
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼ FieldInfo ã‚’è¦ç´ ã¨ã—ã¦æŒã¤ï¼
  * 
  * @author higo
  * 
@@ -17,9 +17,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FieldInfoManager {
 
     /**
-     * ‘ÎÛƒtƒB[ƒ‹ƒh‚ğ’Ç‰Á‚·‚é
+     * å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param fieldInfo ’Ç‰Á‚·‚é‘ÎÛƒtƒB[ƒ‹ƒhî•ñ
+     * @param fieldInfo è¿½åŠ ã™ã‚‹å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±
      */
     public void add(final TargetFieldInfo fieldInfo) {
 
@@ -32,9 +32,9 @@ public final class FieldInfoManager {
     }
 
     /**
-     * ŠO•”ƒtƒB[ƒ‹ƒh‚ğ’Ç‰Á‚·‚é
+     * å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param fieldInfo ’Ç‰Á‚·‚éŠO•”ƒtƒB[ƒ‹ƒh
+     * @param fieldInfo è¿½åŠ ã™ã‚‹å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     public void add(final ExternalFieldInfo fieldInfo) {
 
@@ -47,43 +47,43 @@ public final class FieldInfoManager {
     }
 
     /**
-     * ‘ÎÛƒtƒB[ƒ‹ƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‘ÎÛƒtƒB[ƒ‹ƒh‚Ì SortedSet
+     * @return å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet
      */
     public SortedSet<TargetFieldInfo> getTargetFieldInfos() {
         return Collections.unmodifiableSortedSet(this.targetFieldInfos);
     }
 
     /**
-     * ŠO•”ƒtƒB[ƒ‹ƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ŠO•”ƒtƒB[ƒ‹ƒh‚Ì SortedSet
+     * @return å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet
      */
     public SortedSet<ExternalFieldInfo> getExternalFieldInfos() {
         return Collections.unmodifiableSortedSet(this.externalFieldInfos);
     }
 
     /**
-     * ‘ÎÛƒtƒB[ƒ‹ƒh‚ÌŒÂ”‚ğ•Ô‚·
+     * å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€‹æ•°ã‚’è¿”ã™
      * 
-     * @return ‘ÎÛƒtƒB[ƒ‹ƒh‚ÌŒÂ”
+     * @return å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€‹æ•°
      */
     public int getTargetFieldCount() {
         return this.targetFieldInfos.size();
     }
 
     /**
-     * ŠO•”ƒtƒB[ƒ‹ƒh‚ÌŒÂ”‚ğ•Ô‚·
+     * å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€‹æ•°ã‚’è¿”ã™
      * 
-     * @return ŠO•”ƒtƒB[ƒ‹ƒh‚ÌŒÂ”
+     * @return å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å€‹æ•°
      */
     public int getExternalFieldCount() {
         return this.externalFieldInfos.size();
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒhî•ñ‚ğƒNƒŠƒA
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’ã‚¯ãƒªã‚¢
      */
     public void clear() {
         this.targetFieldInfos.clear();
@@ -92,7 +92,7 @@ public final class FieldInfoManager {
 
     /**
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^D ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“‚ÅÀ‘•‚µ‚Ä‚¢‚é‚½‚ß‚É private ‚ª‚Â‚¢‚Ä‚¢‚éD
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã§å®Ÿè£…ã—ã¦ã„ã‚‹ãŸã‚ã« private ãŒã¤ã„ã¦ã„ã‚‹ï¼
      */
     public FieldInfoManager() {
         this.targetFieldInfos = new TreeSet<TargetFieldInfo>();
@@ -101,13 +101,13 @@ public final class FieldInfoManager {
 
     /**
      * 
-     * ‘ÎÛƒtƒB[ƒ‹ƒhî•ñ‚ğŠi”[‚·‚é•Ï”D
+     * å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final SortedSet<TargetFieldInfo> targetFieldInfos;
 
     /**
      * 
-     * ŠO•”ƒtƒB[ƒ‹ƒhî•ñ‚ğŠi”[‚·‚é•Ï”D
+     * å¤–éƒ¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final SortedSet<ExternalFieldInfo> externalFieldInfos;
 }

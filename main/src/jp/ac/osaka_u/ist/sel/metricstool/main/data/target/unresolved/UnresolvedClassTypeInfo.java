@@ -27,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒNƒ‰ƒXŒ^‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -35,16 +35,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<ReferenceTypeInfo> {
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼CQÆ–¼‚ğ—^‚¦‚Ä‰Šú‰»
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åï¼Œå‚ç…§åã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param availableNamespaces –¼‘O‹óŠÔ–¼
-     * @param referenceName QÆ–¼
+     * @param availableNamespaces åå‰ç©ºé–“å
+     * @param referenceName å‚ç…§å
      */
     public UnresolvedClassTypeInfo(
             final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == availableNamespaces) || (null == referenceName)) {
             throw new NullPointerException();
@@ -56,16 +56,16 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒXŒ^‚ª‚·‚Å‚É‰ğŒˆÏ‚İ‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * ã“ã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‹ãŒã™ã§ã«è§£æ±ºæ¸ˆã¿ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * 
-     * @return ‰ğŒˆÏ‚İ‚Ìê‡‚Í trueC‰ğŒˆ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í false
+     * @return è§£æ±ºæ¸ˆã¿ã®å ´åˆã¯ trueï¼Œè§£æ±ºã•ã‚Œã¦ã„ãªã„å ´åˆã¯ false
      */
     public boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒXŒ^‚Ì‰ğŒˆÏ‚İ‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‹ã®è§£æ±ºæ¸ˆã¿ã®å‹ã‚’è¿”ã™
      */
     @Override
     public ReferenceTypeInfo getResolved() {
@@ -82,18 +82,18 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // import •¶‚Åw’è‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚È‚çCŠO•”ƒNƒ‰ƒX‚Æ‚µ‚Ä“o˜^‚·‚é
+        // import æ–‡ã§æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ãªã‚‰ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ç™»éŒ²ã™ã‚‹
         for (final UnresolvedClassImportStatementInfo availableNamespace : this
                 .getAvailableNamespaces()) {
 
@@ -107,12 +107,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // “o˜^‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX–¼‚©‚çŒŸo
+        // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹åã‹ã‚‰æ¤œå‡º
         final String[] referenceName = this.getReferenceName();
         final Collection<ClassInfo> candidateClasses = classInfoManager
                 .getClassInfos(referenceName[referenceName.length - 1]);
 
-        //•¡”€QÆ‚Ìê‡‚ÍŠ®‘SŒÀ’è–¼‚©‚Ç‚¤‚©‚ğ’²‚×‚éC’P€QÆ‚Ìê‡‚ÍƒfƒtƒHƒ‹ƒgƒpƒbƒP[ƒW‚©‚ç’²‚×‚é
+        //è¤‡æ•°é …å‚ç…§ã®å ´åˆã¯å®Œå…¨é™å®šåã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ï¼Œå˜é …å‚ç…§ã®å ´åˆã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã‹ã‚‰èª¿ã¹ã‚‹
         {
             final ClassInfo matchedClass = classInfoManager.getClassInfo(referenceName);
             if (null != matchedClass) {
@@ -128,8 +128,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // ƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚©‚çŒŸõi’P€QÆ‚Ìê‡j
-        // ‚½‚¾‚µC©•ª‚Æ“¯‚¶ƒpƒbƒP[ƒW‚ÌƒNƒ‰ƒX‚ÍœŠO‚·‚é
+        // ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¤œç´¢ï¼ˆå˜é …å‚ç…§ã®å ´åˆï¼‰
+        // ãŸã ã—ï¼Œè‡ªåˆ†ã¨åŒã˜ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®ã‚¯ãƒ©ã‚¹ã¯é™¤å¤–ã™ã‚‹
         if (this.isMoniminalReference()) {
             for (final UnresolvedClassImportStatementInfo unresolvedClassImportStatement : this
                     .getAvailableNamespaces()) {
@@ -138,7 +138,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
                         .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                 methodInfoManager);
 
-                // ©•ª‚Æ“¯‚¶ƒpƒbƒP[ƒW‚ÍœŠO‚·‚é
+                // è‡ªåˆ†ã¨åŒã˜ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã¯é™¤å¤–ã™ã‚‹
                 {
                     final TargetClassInfo outestUsingClass = (usingClass instanceof TargetInnerClassInfo) ? (TargetClassInfo) TargetInnerClassInfo
                             .getOutestClass((TargetInnerClassInfo) usingClass)
@@ -165,8 +165,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // ’P€QÆ‚Ìê‡‚ÍƒCƒ“ƒ|[ƒg•¶‚ğ—p‚¢‚È‚¢‚Å‚à—˜—p‰Â”\‚ÈƒNƒ‰ƒX‚©‚çŒŸõ
-        // ƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚©‚ç‚ÌŒŸõ‚æ‚è‚à‰º‚É‚È‚¢‚Æ‚¢‚¯‚È‚¢
+        // å˜é …å‚ç…§ã®å ´åˆã¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã‚’ç”¨ã„ãªã„ã§ã‚‚åˆ©ç”¨å¯èƒ½ãªã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¤œç´¢
+        // ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®æ¤œç´¢ã‚ˆã‚Šã‚‚ä¸‹ã«ãªã„ã¨ã„ã‘ãªã„
         if (this.isMoniminalReference()) {
 
             for (final ClassInfo availableClass : NameResolver.getAvailableClasses(usingClass)) {
@@ -184,7 +184,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // ’PsQÆ‚Ìê‡‚ÍC©•ª‚ÌƒpƒbƒP[ƒW‚ÌƒNƒ‰ƒX‚à—˜—p‰Â”\‚È‚Ì‚ÅCŒŸõ
+        // å˜è¡Œå‚ç…§ã®å ´åˆã¯ï¼Œè‡ªåˆ†ã®ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®ã‚¯ãƒ©ã‚¹ã‚‚åˆ©ç”¨å¯èƒ½ãªã®ã§ï¼Œæ¤œç´¢
         if (this.isMoniminalReference()) {
             for (final UnresolvedClassImportStatementInfo unresolvedClassImportStatement : this
                     .getAvailableNamespaces()) {
@@ -193,7 +193,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
                         .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                 methodInfoManager);
 
-                // ©•ª‚Æ“¯‚¶ƒpƒbƒP[ƒWˆÈŠO‚ÍœŠO‚·‚é
+                // è‡ªåˆ†ã¨åŒã˜ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ä»¥å¤–ã¯é™¤å¤–ã™ã‚‹
                 {
                     final TargetClassInfo outestUsingClass = (usingClass instanceof TargetInnerClassInfo) ? (TargetClassInfo) TargetInnerClassInfo
                             .getOutestClass((TargetInnerClassInfo) usingClass)
@@ -221,7 +221,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // ƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚©‚çŒŸõi•¡”€QÆ‚Ìê‡j 
+        // ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¤œç´¢ï¼ˆè¤‡æ•°é …å‚ç…§ã®å ´åˆï¼‰ 
         if (!this.isMoniminalReference()) {
 
             for (final UnresolvedClassImportStatementInfo unresolvedClassImportStatement : this
@@ -273,7 +273,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // ’P€QÆ‚Ìê‡‚ÍŒ^ƒpƒ‰ƒ[ƒ^‚©‚Ç‚¤‚©‚ğ’²‚×‚é
+        // å˜é …å‚ç…§ã®å ´åˆã¯å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹
         if (this.isMoniminalReference()) {
 
             TypeParameterizable typeParameterizableUnit = null != usingMethod ? usingMethod
@@ -290,7 +290,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             } while (null != typeParameterizableUnit);
         }
 
-        //‚±‚±‚É‚­‚é‚Ì‚ÍCƒNƒ‰ƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Æ‚«
+        //ã“ã“ã«ãã‚‹ã®ã¯ï¼Œã‚¯ãƒ©ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã¨ã
         if (this.isMoniminalReference()) {
 
             //System.out.println(referenceName[0]);
@@ -306,8 +306,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
 
         } else {
 
-            // ƒCƒ“ƒ|[ƒg–¼‚ğQÆ–¼‚ğ‘g‚İ‡‚í‚¹‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ‚·
-            // ‚½‚Æ‚¦‚ÎC import A.B.C ‚ÅCQÆ–¼‚ªCC.D‚Å‚ ‚ê‚ÎCŠ®‘SŒÀ’è–¼‚ªA.B.C.D‚ÌƒNƒ‰ƒX‚ª‚ ‚é‚±‚Æ‚É‚È‚é
+            // ã‚¤ãƒ³ãƒãƒ¼ãƒˆåã‚’å‚ç…§åã‚’çµ„ã¿åˆã‚ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã‚’è©¦ã™
+            // ãŸã¨ãˆã°ï¼Œ import A.B.C ã§ï¼Œå‚ç…§åãŒï¼ŒC.Dã§ã‚ã‚Œã°ï¼Œå®Œå…¨é™å®šåãŒA.B.C.Dã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã“ã¨ã«ãªã‚‹
             for (final UnresolvedClassImportStatementInfo availableNamespace : this
                     .getAvailableNamespaces()) {
 
@@ -362,13 +362,13 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
 
         return this.resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        //        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        //        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         //        MetricsToolSecurityManager.getInstance().checkAccess();
         //        if ((null == usingClass) || (null == classInfoManager)) {
         //            throw new IllegalArgumentException();
         //        }
         //
-        //        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        //        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         //        if (this.alreadyResolved()) {
         //            return this.getResolved();
         //        }
@@ -437,22 +437,22 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔCŒ^‚ÌŠ®‘SCü–¼‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param referenceName Œ^‚ÌŠ®‘SCü–¼
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ï¼Œå‹ã®å®Œå…¨ä¿®é£¾åã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param referenceName å‹ã®å®Œå…¨ä¿®é£¾å
      */
     public UnresolvedClassTypeInfo(final String[] referenceName) {
         this(new LinkedList<UnresolvedClassImportStatementInfo>(), referenceName);
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^g—p‚ğ’Ç‰Á‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeParameterUsage ’Ç‰Á‚·‚éŒ^ƒpƒ‰ƒ[ƒ^g—p
+     * @param typeParameterUsage è¿½åŠ ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨
      */
     public final void addTypeArgument(
             final UnresolvedTypeInfo<? extends TypeInfo> typeParameterUsage) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameterUsage) {
             throw new NullPointerException();
@@ -462,18 +462,18 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚Åg—p‚³‚ê‚Ä‚¢‚éŒ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒXQÆ‚Åg—p‚³‚ê‚Ä‚¢‚éŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     public final List<UnresolvedTypeInfo<? extends TypeInfo>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚Ì–¼‘O‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚Ì–¼‘O‚ğ•Ô‚·
+     * @return ã“ã®å‚ç…§å‹ã®åå‰ã‚’è¿”ã™
      */
     @Override
     public final String getTypeName() {
@@ -481,19 +481,19 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğ•Ô‚·
+     * @return ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’è¿”ã™
      */
     public final String[] getReferenceName() {
         return Arrays.<String> copyOf(this.referenceName, this.referenceName.length);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğˆø”‚Å—^‚¦‚ç‚ê‚½•¶š‚ÅŒ‹‡‚µ‚Ä•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—ã§çµåˆã—ã¦è¿”ã™
      * 
-     * @param delimiter Œ‹‡‚É—p‚¢‚é•¶š
-     * @return ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğˆø”‚Å—^‚¦‚ç‚ê‚½•¶š‚ÅŒ‹‡‚µ‚½•¶š—ñ
+     * @param delimiter çµåˆã«ç”¨ã„ã‚‹æ–‡å­—
+     * @return ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—ã§çµåˆã—ãŸæ–‡å­—åˆ—
      */
     public final String getReferenceName(final String delimiter) {
 
@@ -511,41 +511,41 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌŠ®‘SŒÀ’è–¼‚Æ‚µ‚Ä‰Â”\«‚Ì‚ ‚é–¼‘O‹óŠÔ–¼‚Ìˆê——‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å®Œå…¨é™å®šåã¨ã—ã¦å¯èƒ½æ€§ã®ã‚ã‚‹åå‰ç©ºé–“åã®ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ÌŠ®‘SŒÀ’è–¼‚Æ‚µ‚Ä‰Â”\«‚Ì‚ ‚é–¼‘O‹óŠÔ–¼‚Ìˆê——
+     * @return ã“ã®å‚ç…§å‹ã®å®Œå…¨é™å®šåã¨ã—ã¦å¯èƒ½æ€§ã®ã‚ã‚‹åå‰ç©ºé–“åã®ä¸€è¦§
      */
     public final List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
-     * ‚±‚ÌQÆ‚ª’P€‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã“ã®å‚ç…§ãŒå˜é …ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return@’P€‚Å‚ ‚éê‡‚ÍtrueC‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @returnã€€å˜é …ã§ã‚ã‚‹å ´åˆã¯trueï¼Œãã†ã§ãªã„å ´åˆã¯false
      */
     public final boolean isMoniminalReference() {
         return 1 == this.referenceName.length;
     }
 
     /**
-     * –¢‰ğŒˆƒNƒ‰ƒX‚ğ—^‚¦‚é‚ÆC‚»‚Ì–¢‰ğŒˆQÆŒ^‚ğ•Ô‚·
+     * æœªè§£æ±ºã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã‚‹ã¨ï¼Œãã®æœªè§£æ±ºå‚ç…§å‹ã‚’è¿”ã™
      * 
-     * @param referencedClass –¢‰ğŒˆƒNƒ‰ƒX
-     * @return —^‚¦‚ç‚ê‚½–¢‰ğŒˆƒNƒ‰ƒX‚Ì–¢‰ğŒˆQÆŒ^
+     * @param referencedClass æœªè§£æ±ºã‚¯ãƒ©ã‚¹
+     * @return ä¸ãˆã‚‰ã‚ŒãŸæœªè§£æ±ºã‚¯ãƒ©ã‚¹ã®æœªè§£æ±ºå‚ç…§å‹
      */
     public final static UnresolvedClassTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
         return new UnresolvedClassTypeInfo(referencedClass.getFullQualifiedName());
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆQÆŒ^‚ª•\‚·–¢‰ğŒˆƒNƒ‰ƒXQÆ‚ğ•Ô‚·
+     * ã“ã®æœªè§£æ±ºå‚ç…§å‹ãŒè¡¨ã™æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‚ç…§ã‚’è¿”ã™
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
-     * @return ‚±‚Ì–¢‰ğŒˆQÆŒ^‚ª•\‚·–¢‰ğŒˆƒNƒ‰ƒXQÆ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
+     * @return ã“ã®æœªè§£æ±ºå‚ç…§å‹ãŒè¡¨ã™æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‚ç…§
      */
     public final UnresolvedClassReferenceInfo getUsage(
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
@@ -567,17 +567,17 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
     }
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”C–¼‘O‰ğŒˆˆ—‚ÌÛ‚É—p‚¢‚é
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼Œåå‰è§£æ±ºå‡¦ç†ã®éš›ã«ç”¨ã„ã‚‹
      */
     private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
 
     /**
-     * QÆ–¼‚ğ•Û‘¶‚·‚é•Ï”
+     * å‚ç…§åã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final String[] referenceName;
 
     /**
-     * Œ^ˆø”‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹å¼•æ•°ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedTypeInfo<? extends TypeInfo>> typeArguments;
 

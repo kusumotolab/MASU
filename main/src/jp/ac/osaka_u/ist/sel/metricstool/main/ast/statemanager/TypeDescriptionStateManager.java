@@ -4,7 +4,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 /**
- * ƒrƒWƒ^[‚ªŒ^‹Lq•”‚Öo“ü‚è‚·‚éÛ‚Ìó‘Ô‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒD
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒå‹è¨˜è¿°éƒ¨ã¸å‡ºå…¥ã‚Šã™ã‚‹éš›ã®çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ï¼
  * 
  * @author kou-tngt
  *

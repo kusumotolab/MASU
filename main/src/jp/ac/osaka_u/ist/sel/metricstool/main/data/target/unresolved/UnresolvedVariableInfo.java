@@ -12,34 +12,34 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * Unresolved‚È•Ï”‚Ì‹¤’Ê‚ÈeƒNƒ‰ƒX.
+ * Unresolvedãªå¤‰æ•°ã®å…±é€šãªè¦ªã‚¯ãƒ©ã‚¹.
  * <ul>
- * <li>•Ï”–¼</li>
- * <li>Œ^</li>
- * <li>Cüq</li>
- * <li>ˆÊ’uî•ñ</li>
+ * <li>å¤‰æ•°å</li>
+ * <li>å‹</li>
+ * <li>ä¿®é£¾å­</li>
+ * <li>ä½ç½®æƒ…å ±</li>
  * </ul>
  * 
  * @author higo
- * @param <TVar> ‰ğŒˆÏ‚İ‚ÌŒ^
- * @param <TUnit> ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
+ * @param <TVar> è§£æ±ºæ¸ˆã¿ã®å‹
+ * @param <TUnit> ã“ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
  */
 public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends UnitInfo>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends UnresolvedUnitInfo<TVar> implements ModifierSetting {
 
     /**
-     * •Ï”–¼‚ğ•Ô‚·
+     * å¤‰æ•°åã‚’è¿”ã™
      * 
-     * @return •Ï”–¼
+     * @return å¤‰æ•°å
      */
     public final String getName() {
         return this.name;
     }
 
     /**
-     * •Ï”–¼‚ğƒZƒbƒg‚·‚é
+     * å¤‰æ•°åã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param name •Ï”–¼
+     * @param name å¤‰æ•°å
      */
     public final void setName(final String name) {
 
@@ -51,18 +51,18 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
     }
 
     /**
-     * •Ï”‚ÌŒ^‚ğ•Ô‚·
+     * å¤‰æ•°ã®å‹ã‚’è¿”ã™
      * 
-     * @return •Ï”‚ÌŒ^
+     * @return å¤‰æ•°ã®å‹
      */
     public final UnresolvedTypeInfo<?> getType() {
         return this.type;
     }
 
     /**
-     * •Ï”‚ÌŒ^‚ğƒZƒbƒg‚·‚é
+     * å¤‰æ•°ã®å‹ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param type •Ï”‚ÌŒ^
+     * @param type å¤‰æ•°ã®å‹
      */
     public final void setType(final UnresolvedTypeInfo<?> type) {
 
@@ -74,27 +74,27 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
     }
 
     /**
-     * Cüq‚Ì Set ‚ğ•Ô‚·
+     * ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return Cüq‚Ì Set
+     * @return ä¿®é£¾å­ã® Set
      */
     public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
+     * @return ã“ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     public final TUnit getDefinitionUnit() {
         return this.definitionUnit;
     }
 
     /**
-     * Cüq‚ğ’Ç‰Á‚·‚é
+     * ä¿®é£¾å­ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param modifier ’Ç‰Á‚·‚éCüq
+     * @param modifier è¿½åŠ ã™ã‚‹ä¿®é£¾å­
      */
     public final void addModifier(final ModifierInfo modifier) {
 
@@ -106,15 +106,15 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
     }
 
     /**
-     * •Ï”ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD
+     * å¤‰æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param name •Ï”–¼
-     * @param type •Ï”‚ÌŒ^
-     * @param definitionUnit éŒ¾‚µ‚Ä‚¢‚é‹óŠÔ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param name å¤‰æ•°å
+     * @param type å¤‰æ•°ã®å‹
+     * @param definitionUnit å®£è¨€ã—ã¦ã„ã‚‹ç©ºé–“
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo<?> type,
             final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
@@ -139,22 +139,22 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
     }
 
     /**
-     * •Ï”–¼‚ğ•\‚·•Ï”
+     * å¤‰æ•°åã‚’è¡¨ã™å¤‰æ•°
      */
     private String name;
 
     /**
-     * •Ï”‚ÌŒ^‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã®å‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private UnresolvedTypeInfo<?> type;
 
     /**
-     * •Ï”‚ÌCüq‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã®ä¿®é£¾å­ã‚’è¡¨ã™å¤‰æ•°
      */
     private Set<ModifierInfo> modifiers;
 
     /**
-     * •Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¡¨ã™å¤‰æ•°
      */
     private final TUnit definitionUnit;
 

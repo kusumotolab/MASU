@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -24,13 +24,13 @@ public final class UnresolvedConstructorInfo extends
         UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -39,22 +39,22 @@ public final class UnresolvedConstructorInfo extends
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      */
     @Override
     public TargetConstructorInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // CüqC–¼‘OC•Ô‚è’lCs”‚ğæ“¾
+        // ä¿®é£¾å­ï¼Œåå‰ï¼Œè¿”ã‚Šå€¤ï¼Œè¡Œæ•°ã‚’å–å¾—
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
         final int constructorFromLine = this.getFromLine();
         final int constructorFromColumn = this.getFromColumn();
@@ -69,8 +69,8 @@ public final class UnresolvedConstructorInfo extends
                 classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setOuterUnit(ownerClass);
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚É’Ç‰Á‚·‚é
-        // ‚±‚±‚Å‚Íextendsß‚Í‰ğŒˆ‚µ‚È‚¢
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã«è¿½åŠ ã™ã‚‹
+        // ã“ã“ã§ã¯extendsç¯€ã¯è§£æ±ºã—ãªã„
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
@@ -82,9 +82,9 @@ public final class UnresolvedConstructorInfo extends
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚È‚Ì‚Å true ‚ğ•Ô‚·
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ãªã®ã§ true ã‚’è¿”ã™
      */
     @Override
     public final boolean isInstanceMember() {
@@ -92,9 +92,9 @@ public final class UnresolvedConstructorInfo extends
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Å‚Í‚È‚¢‚Ì‚Å false ‚ğ•Ô‚·
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã§ã¯ãªã„ã®ã§ false ã‚’è¿”ã™
      */
     @Override
     public final boolean isStaticMember() {

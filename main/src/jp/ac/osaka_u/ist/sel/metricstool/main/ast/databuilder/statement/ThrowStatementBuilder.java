@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * Throw•¶‚Ìî•ñ‚ğ\’z‚·‚éƒNƒ‰ƒX
+ * Throwæ–‡ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -22,10 +22,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThrowStatementInfo> {
 
     /**
-     * \’zÏ‚İ®î•ñƒ}ƒl[ƒWƒƒ[C\’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ğ—^‚¦‚Ä‰Šú‰»
+     * æ§‹ç¯‰æ¸ˆã¿å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ï¼Œæ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param expressionManager \’zÏ‚İ®î•ñƒ}ƒl[ƒWƒƒ[
-     * @param buildDataManager \’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[
+     * @param expressionManager æ§‹ç¯‰æ¸ˆã¿å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+     * @param buildDataManager æ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
      */
     public ThrowStatementBuilder(ExpressionElementManager expressionManager,
             BuildDataManager buildDataManager) {

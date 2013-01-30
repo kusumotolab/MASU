@@ -2,19 +2,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 
 /**
- * Œ¾Œê‚ÌƒtƒBƒ‹ƒ^.
+ * è¨€èªã®ãƒ•ã‚£ãƒ«ã‚¿.
  * 
- * ‚±‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Í
- * {@link LanguageUtil#filterLanguages(LanguageFilter)} ‚É“n‚·‚±‚Æ‚ª‚Å‚«‚é.
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯
+ * {@link LanguageUtil#filterLanguages(LanguageFilter)} ã«æ¸¡ã™ã“ã¨ãŒã§ãã‚‹.
  * 
  * @author rniitani
  */
 public interface LanguageFilter {
     /**
-     * w’è‚³‚ê‚½Œ¾Œê‚ªŒ¾ŒêƒŠƒXƒg‚ÉŠÜ‚Ü‚ê‚é•K—v‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é.
+     * æŒ‡å®šã•ã‚ŒãŸè¨€èªãŒè¨€èªãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹.
      * 
-     * @param language ƒeƒXƒg‘ÎÛ‚ÌŒ¾Œê
-     * @return language ‚ªŠÜ‚Ü‚ê‚é•K—v‚ª‚ ‚éê‡ true
+     * @param language ãƒ†ã‚¹ãƒˆå¯¾è±¡ã®è¨€èª
+     * @return language ãŒå«ã¾ã‚Œã‚‹å¿…è¦ãŒã‚ã‚‹å ´åˆ true
      */
     boolean accept(LANGUAGE language);
 }

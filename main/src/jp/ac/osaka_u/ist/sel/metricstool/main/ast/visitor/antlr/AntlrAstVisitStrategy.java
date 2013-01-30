@@ -9,7 +9,7 @@ import antlr.collections.AST;
 
 
 /**
- * antlr‚ÌAST—p‚ÌƒrƒWƒ^[‚ªŸ‚É‚Ç‚Ìƒm[ƒh‚Éi‚Ş‚×‚«‚©‚ğ—U“±‚·‚é {@link AstVisitStrategy}‚ÌƒfƒtƒHƒ‹ƒgÀ‘•.
+ * antlrã®ASTç”¨ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒæ¬¡ã«ã©ã®ãƒãƒ¼ãƒ‰ã«é€²ã‚€ã¹ãã‹ã‚’èª˜å°ã™ã‚‹ {@link AstVisitStrategy}ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£….
  * 
  * @author kou-tngt
  *
@@ -17,9 +17,9 @@ import antlr.collections.AST;
 public class AntlrAstVisitStrategy implements AstVisitStrategy<AST> {
 
     /**
-     * ƒNƒ‰ƒX‚âƒƒ\ƒbƒh’è‹`‚ğ•\‚·ƒm[ƒh‚Ì“à•”‚ğ–K–â‚³‚¹‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * @param intoClass ƒNƒ‰ƒX’è‹`‚Ì“à•”‚ğ–K–â‚³‚¹‚éê‡‚Ítrue
-     * @param intoMethod@ƒƒ\ƒbƒh’è‹`‚Ì“à•”‚ğ–K–â‚³‚¹‚éê‡‚Ítrue
+     * ã‚¯ãƒ©ã‚¹ã‚„ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã‚’è¨ªå•ã•ã›ã‚‹ã‹ã©ã†ã‹ã‚’æŒ‡å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * @param intoClass ã‚¯ãƒ©ã‚¹å®šç¾©ã®å†…éƒ¨ã‚’è¨ªå•ã•ã›ã‚‹å ´åˆã¯true
+     * @param intoMethodã€€ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©ã®å†…éƒ¨ã‚’è¨ªå•ã•ã›ã‚‹å ´åˆã¯true
      */
     public AntlrAstVisitStrategy(final boolean intoClass, final boolean intoMethod) {
         this.intoClass = intoClass;
@@ -27,12 +27,12 @@ public class AntlrAstVisitStrategy implements AstVisitStrategy<AST> {
     }
 
     /**
-     * ˆø”‚Ìtoken‚ª•\‚·í—Ş‚Ìƒm[ƒh‚É‚Â‚¢‚ÄC‚»‚Ìqƒm[ƒh‚ğ–K–â‚·‚é•K—v‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é.
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚É‚æ‚Á‚ÄC{@link #guide(AstVisitor, AST, AstToken)}ƒƒ\ƒbƒh‚ª
-     * ƒrƒWƒ^[‚ğ—U“±‚·‚éÛ‚ÉCƒm[ƒh‚Ì“à•”‚É—U“±‚·‚é‚©‚Ç‚¤‚©‚ğ§Œä‚·‚é‚±‚Æ‚ª‚Å‚«‚é.
+     * å¼•æ•°ã®tokenãŒè¡¨ã™ç¨®é¡ã®ãƒãƒ¼ãƒ‰ã«ã¤ã„ã¦ï¼Œãã®å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹.
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ï¼Œ{@link #guide(AstVisitor, AST, AstToken)}ãƒ¡ã‚½ãƒƒãƒ‰ãŒ
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã‚’èª˜å°ã™ã‚‹éš›ã«ï¼Œãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã«èª˜å°ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¶å¾¡ã™ã‚‹ã“ã¨ãŒã§ãã‚‹.
      * 
-     * @param token qƒm[ƒh‚ğ–K–â‚·‚é•K—v‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éƒm[ƒh‚Ìƒg[ƒNƒ“
-     * @return –K–â‚·‚é•K—v‚ª‚ ‚éê‡‚Ítrue
+     * @param token å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return è¨ªå•ã™ã‚‹å¿…è¦ãŒã‚ã‚‹å ´åˆã¯true
      */
     public boolean needToVisitChildren(final AST node, final AstToken token) {
         if (token.isClassDefinition()) {
@@ -46,12 +46,12 @@ public class AntlrAstVisitStrategy implements AstVisitStrategy<AST> {
     }
 
     /**
-     * ƒNƒ‰ƒX“à•”‚Ö—U“±‚·‚é‚©‚Ç‚¤‚©‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * ã‚¯ãƒ©ã‚¹å†…éƒ¨ã¸èª˜å°ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final boolean intoClass;
 
     /**
-     * ƒƒ\ƒbƒh“à•”‚Ö—U“±‚·‚é‚©‚Ç‚¤‚©‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã¸èª˜å°ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final boolean intoMethod;
 }

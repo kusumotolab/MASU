@@ -2,12 +2,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * �N���X��C�t�B�[���h�C���\�b�h�̉������`����C���^�[�t�F�[�X�D �ȉ��̉������`����D
+ * クラスや，フィールド，メソッドの可視性を定義するインターフェース． 以下の可視性を定義する．
  * 
  * <ul>
- * <li>�q�N���X����Q�Ɖ\</li>
- * <li>�������O��ԓ�����Q�Ɖ\</li>
- * <li>�ǂ�����ł��Q�Ɖ\</li>
+ * <li>子クラスから参照可能</li>
+ * <li>同じ名前空間内から参照可能</li>
+ * <li>どこからでも参照可能</li>
  * </ul>
  * 
  * @author higo
@@ -16,23 +16,23 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public interface Visualizable {
 
     /**
-     * �������O��Ԃ���Q�Ɖ\���ǂ�����Ԃ�
+     * 同じ名前空間から参照可能かどうかを返す
      * 
-     * @return �������O��Ԃ���Q�Ɖ\�ȏꍇ�� true, �����łȂ��ꍇ�� false
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
     boolean isNamespaceVisible();
 
     /**
-     * �q�N���X����Q�Ɖ\���ǂ�����Ԃ�
+     * 子クラスから参照可能かどうかを返す
      * 
-     * @return �q�N���X����Q�Ɖ\�ȏꍇ�� true, �����łȂ��ꍇ�� false
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     boolean isInheritanceVisible();
 
     /**
-     * �ǂ�����ł��Q�Ɖ\���ǂ�����Ԃ�
+     * どこからでも参照可能かどうかを返す
      * 
-     * @return �ǂ�����ł��Q�Ɖ\�ȏꍇ�� true, �����łȂ��ꍇ�� false
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
     boolean isPublicVisible();
 }

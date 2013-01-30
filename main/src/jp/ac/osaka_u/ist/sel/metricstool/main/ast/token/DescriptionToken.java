@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * ‰½‚©‚ç‚Ì—v‘f‚ª‹Lq‚³‚ê‚Ä‚¢‚é‰ÓŠ‚ð•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX
+ * ä½•ã‹ã‚‰ã®è¦ç´ ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ç®‡æ‰€ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class DescriptionToken extends AstTokenAdapter {
 
     /**
-     * ðŒ•¶‚ÌðŒß‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * æ¡ä»¶æ–‡ã®æ¡ä»¶ç¯€ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken CONDITIONAL_CLAUSE = new DescriptionToken(
             "CONDITIONAL_CLAUSE") {
@@ -21,7 +21,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * for•ª‚Ì‰Šú‰»ß‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * foråˆ†ã®åˆæœŸåŒ–ç¯€ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken FOR_INIT = new DescriptionToken("FOR_INIT") {
         @Override
@@ -31,7 +31,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * for•¶‚ÌŒJ‚è•Ô‚µß‚ð•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX
+     * foræ–‡ã®ç¹°ã‚Šè¿”ã—ç¯€ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken FOR_ITERATOR = new DescriptionToken("FOR_ITERATOR") {
         @Override
@@ -41,7 +41,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * foreach•¶‚Ìß‚ð•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX
+     * foreachæ–‡ã®ç¯€ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken FOREACH_CLAUSE = new DescriptionToken("FOREACH_CLAUSE") {
         @Override
@@ -51,7 +51,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * foreach•¶‚Ì•Ï”‚ð•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX
+     * foreachæ–‡ã®å¤‰æ•°ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken FOREACH_VARIABLE = new DescriptionToken("FOREACH_VARIABLE") {
         @Override
@@ -61,7 +61,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * foreach•¶‚ÌŽ®‚ð•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX
+     * foreachæ–‡ã®å¼ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken FOREACH_EXPRESSION = new DescriptionToken(
             "FOREACH_VARIABLE") {
@@ -72,7 +72,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Ž®‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * å¼è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken EXPRESSION = new DescriptionToken("EXPRESSION") {
         @Override
@@ -82,7 +82,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Š‡ŒÊŽ®‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * æ‹¬å¼§å¼ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken PAREN_EXPR = new DescriptionToken("PAREN_EXPR") {
         @Override
@@ -92,7 +92,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Ž®•¶‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * å¼æ–‡è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken EXPRESSION_STATEMENT = new DescriptionToken(
             "EXPRESSION_STATEMENT") {
@@ -108,7 +108,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒ‰ƒxƒ‹•t‚«•¶‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ãƒ©ãƒ™ãƒ«ä»˜ãæ–‡è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken LABELED_STATEMENT = new DescriptionToken(
             "LABELED_STATEMENT") {
@@ -124,7 +124,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * eƒNƒ‰ƒX‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken INHERITANCE = new DescriptionToken("INHERITANCE") {
         @Override
@@ -134,7 +134,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * eƒNƒ‰ƒX‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken IMPLEMENTS = new DescriptionToken("IMPLEMENTS") {
         @Override
@@ -144,7 +144,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * CüŽq‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ä¿®é£¾å­è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken MODIFIER = new DescriptionToken("MODIFIER") {
         @Override
@@ -154,7 +154,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * –¼‘O‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åå‰è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken NAME = new DescriptionToken("NAME") {
         @Override
@@ -164,7 +164,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åž‹è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken TYPE = new DescriptionToken("TYPE") {
         @Override
@@ -174,7 +174,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^‰ºŒÀ‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åž‹ä¸‹é™è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken TYPE_LOWER_BOUNDS = new DescriptionToken(
             "TYPE_LOWER_BOUNDS") {
@@ -185,7 +185,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^ãŒÀ‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åž‹ä¸Šé™è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken TYPE_UPPER_BOUNDS = new DescriptionToken(
             "TYPE_UPPER_BOUNDS") {
@@ -203,7 +203,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^ˆø”‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * åž‹å¼•æ•°è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken TYPE_ARGUMENT = new DescriptionToken("TYPE_ARGUMENT") {
         @Override
@@ -213,7 +213,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^ˆø”‹Lq•”‚Ì—ñ‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * åž‹å¼•æ•°è¨˜è¿°éƒ¨ã®åˆ—ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken TYPE_ARGUMENTS = new DescriptionToken("TYPE_ARGUMENTS") {
         @Override
@@ -223,7 +223,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒƒCƒ‹ƒhƒJ[ƒhŒ^ˆø”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰åž‹å¼•æ•°ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DescriptionToken TYPE_WILDCARD = new DescriptionToken("TYPE_WILDCARD") {
         @Override
@@ -233,7 +233,7 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * –¼‘O‹óŠÔ—˜—péŒ¾‹Lq•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åå‰ç©ºé–“åˆ©ç”¨å®£è¨€è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DescriptionToken USING = new DescriptionToken("USING") {
         @Override
@@ -250,8 +250,8 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
-     * Žw’è‚³‚ê‚½•¶Žš—ñ‚Å‰Šú‰»‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * @param text ‚±‚Ìƒg[ƒNƒ“‚ð•\‚·•¶Žš—ñ.
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã§åˆæœŸåŒ–ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * @param text ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¡¨ã™æ–‡å­—åˆ—.
      */
     public DescriptionToken(final String text) {
         super(text);

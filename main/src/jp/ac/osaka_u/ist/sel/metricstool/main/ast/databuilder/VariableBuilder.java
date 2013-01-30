@@ -21,24 +21,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 
 
 /**
- * •Ï”ƒf[ƒ^‚ğ\’z‚·‚é’ŠÛƒNƒ‰ƒX.
+ * å¤‰æ•°ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹.
  * 
- * ‚±‚ÌƒNƒ‰ƒX‚ÌƒTƒuƒNƒ‰ƒX‚ÍCƒRƒ“ƒXƒgƒ‰ƒNƒ^‚É•Ï”éŒ¾•”‚Ìó‘ÔŠÇ—‚ğˆµ‚¤ {@link VariableDefinitionStateManager} ‚ğ—^‚¦C
- * {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}ƒƒ\ƒbƒh‚ğÀ‘•‚·‚é‚±‚Æ‚ÅC
- * ”CˆÓ‚Ì•Ï”ƒf[ƒ^‚É‘Î‰‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚éD
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¯ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«å¤‰æ•°å®£è¨€éƒ¨ã®çŠ¶æ…‹ç®¡ç†ã‚’æ‰±ã† {@link VariableDefinitionStateManager} ã‚’ä¸ãˆï¼Œ
+ * {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®Ÿè£…ã™ã‚‹ã“ã¨ã§ï¼Œ
+ * ä»»æ„ã®å¤‰æ•°ãƒ‡ãƒ¼ã‚¿ã«å¯¾å¿œã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
  * 
  * @author kou-tngt
  *
- * @param <TVar> \’z‚·‚é•Ï”‚ÌŒ^
- * @param <TUnit> \’z‚·‚é•Ï”î•ñ‚ğ•Û‘¶‚·‚éƒ†ƒjƒbƒg
+ * @param <TVar> æ§‹ç¯‰ã™ã‚‹å¤‰æ•°ã®å‹
+ * @param <TUnit> æ§‹ç¯‰ã™ã‚‹å¤‰æ•°æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
  */
 public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends CompoundDataBuilder<TVar> {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½\’zƒf[ƒ^ŠÇ—ÒC•Ï”éŒ¾‚ÉŠÖ‚·‚éó‘ÔŠÇ—Ò‚ÆCƒfƒtƒHƒ‹ƒg‚ÌCüqî•ñƒrƒ‹ƒ_[CŒ^î•ñƒrƒ‹ƒ_[C–¼‘Oî•ñƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚éD
-     * @param buildDataManager \’zƒf[ƒ^ŠÇ—Ò
-     * @param stateManager •Ï”éŒ¾‚ÉŠÖ‚·‚éó‘ÔŠÇ—Ò
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ï¼Œå¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹çŠ¶æ…‹ç®¡ç†è€…ã¨ï¼Œãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ä¿®é£¾å­æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œå‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œåå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹ï¼
+     * @param buildDataManager æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…
+     * @param stateManager å¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹çŠ¶æ…‹ç®¡ç†è€…
      */
     public VariableBuilder(final BuildDataManager buildDataManager,
             final VariableDefinitionStateManager stateManager) {
@@ -47,11 +47,11 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½•Ï”éŒ¾‚ÉŠÖ‚·‚éó‘ÔŠÇ—ÒCCüqî•ñƒrƒ‹ƒ_[CŒ^î•ñƒrƒ‹ƒ_[C–¼‘Oî•ñƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚éD
-     * @param variableStateManager •Ï”éŒ¾‚ÉŠÖ‚·‚éó‘ÔŠÇ—Ò
-     * @param modifiersBuilder@Cüqî•ñƒrƒ‹ƒ_[
-     * @param typeBuilder@Œ^î•ñƒrƒ‹ƒ_[
-     * @param nameBuilder@–¼‘Oî•ñƒrƒ‹ƒ_[
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹çŠ¶æ…‹ç®¡ç†è€…ï¼Œä¿®é£¾å­æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œå‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œåå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹ï¼
+     * @param variableStateManager å¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹çŠ¶æ…‹ç®¡ç†è€…
+     * @param modifiersBuilderã€€ä¿®é£¾å­æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼
+     * @param typeBuilderã€€å‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼
+     * @param nameBuilderã€€åå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     public VariableBuilder(final BuildDataManager buildDataManager,
             final VariableDefinitionStateManager variableStateManager,
@@ -74,18 +74,18 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
             throw new IllegalArgumentException("nameBuilder is null.");
         }
 
-        //nullƒ`ƒFƒbƒNI—¹
+        //nullãƒã‚§ãƒƒã‚¯çµ‚äº†
 
         this.buildDataManager = buildDataManager;
 
-        //ó‘Ô’Ê’m‚ğó‚¯æ‚è‚½‚¢‚à‚Ì‚ğ“o˜^
+        //çŠ¶æ…‹é€šçŸ¥ã‚’å—ã‘å–ã‚ŠãŸã„ã‚‚ã®ã‚’ç™»éŒ²
         this.variableStateManager = variableStateManager;
         this.addStateManager(variableStateManager);
         this.addStateManager(this.typeStateManager);
         this.addStateManager(new ModifiersDefinitionStateManager());
         this.addStateManager(new NameStateManager());
 
-        //“à•”ƒrƒ‹ƒ_[‚ğ“o˜^
+        //å†…éƒ¨ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç™»éŒ²
         this.addInnerBuilder(modifiersBuilder);
         this.addInnerBuilder(typeBuilder);
         this.addInnerBuilder(nameBuilder);
@@ -96,8 +96,8 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     }
 
     /**
-     * ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ì’Ê’m‚ğó‚¯æ‚éƒƒ\ƒbƒhD
-     * @param event ó‘Ô•Ï‰»ƒCƒxƒ“ƒg
+     * çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®é€šçŸ¥ã‚’å—ã‘å–ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * @param event çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChanged(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
     @Override
@@ -105,8 +105,8 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
 
-            //•Ï”éŒ¾•”‚©‚ço‚½‚Ì‚ÅC•Ï”î•ñ‚ğ“o˜^‚·‚é
-            //ƒXƒR[ƒv‚ÌŠÖŒWãCéŒ¾‚ªI‚í‚ç‚È‚¢‚Æ“o˜^‚µ‚Ä‚Í‚¢‚¯‚È‚¢
+            //å¤‰æ•°å®£è¨€éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ï¼Œå¤‰æ•°æƒ…å ±ã‚’ç™»éŒ²ã™ã‚‹
+            //ã‚¹ã‚³ãƒ¼ãƒ—ã®é–¢ä¿‚ä¸Šï¼Œå®£è¨€ãŒçµ‚ã‚ã‚‰ãªã„ã¨ç™»éŒ²ã—ã¦ã¯ã„ã‘ãªã„
             final AstVisitEvent trigger = event.getTrigger();
 
             final TUnit currentUnit = this.validateDefinitionSpace(this.buildDataManager
@@ -119,37 +119,37 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
         } else if (this.variableStateManager.isInDefinition()) {
             if (eventType
                     .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.ENTER_MODIFIERS_DEF)) {
-                //Cüqî•ñ‚Ì\’zŠJn
+                //ä¿®é£¾å­æƒ…å ±ã®æ§‹ç¯‰é–‹å§‹
                 if (null != this.modifiersBuilder) {
                     this.modifiersBuilder.activate();
                 }
             } else if (eventType
                     .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)) {
-                //Cüqî•ñ‚Ì\’zI—¹
-                //‚·‚®‚É\’z‚µ‚½ƒf[ƒ^‚ğƒXƒ^ƒbƒN‚Öi•Ï”éŒ¾‚Í‰Šú‰»•”ˆÈ~‚Å“ü‚êq‚É‚È‚é‚±‚Æ‚ª‚ ‚é‚½‚ßC\’z‚µ‚½ƒf[ƒ^‚Í‚³‚Á‚³‚Ææ“¾‚µ‚Ä‚¨‚­j
+                //ä¿®é£¾å­æƒ…å ±ã®æ§‹ç¯‰çµ‚äº†
+                //ã™ãã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã¸ï¼ˆå¤‰æ•°å®£è¨€ã¯åˆæœŸåŒ–éƒ¨ä»¥é™ã§å…¥ã‚Œå­ã«ãªã‚‹ã“ã¨ãŒã‚ã‚‹ãŸã‚ï¼Œæ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã¯ã•ã£ã•ã¨å–å¾—ã—ã¦ãŠãï¼‰
                 if (null != this.modifiersBuilder) {
                     this.modifiersBuilder.deactivate();
                     this.builtModifiersStack.push(this.modifiersBuilder.popLastBuiltData());
                     modifiersBuilder.clearBuiltData();
                 }
             } else if (eventType.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
-                //Œ^î•ñ\’zŠJn
+                //å‹æƒ…å ±æ§‹ç¯‰é–‹å§‹
                 this.typeBuilder.activate();
             } else if (eventType.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)) {
                 if (!this.typeStateManager.isEntered()) {
-                    //Œ^î•ñ‚Í‚»‚ê’P‘Ì‚Å‚·‚ç“ü‚êq‚É‚È‚Á‚Ä‚¢‚é‚Ì‚ÅC
-                    //‚Æ‚è‚ ‚¦‚¸ˆê”ÔŠO‘¤‚ÌŒ^’è‹`‚ªI‚í‚Á‚Ä‚¢‚½‚çŒ^î•ñ\’zI—¹
-                    //\’z‚µ‚½Œ^î•ñ‚ğ‚·‚®‚Éæ“¾‚µ‚ÄƒXƒ^ƒbƒN‚Ö
+                    //å‹æƒ…å ±ã¯ãã‚Œå˜ä½“ã§ã™ã‚‰å…¥ã‚Œå­ã«ãªã£ã¦ã„ã‚‹ã®ã§ï¼Œ
+                    //ã¨ã‚Šã‚ãˆãšä¸€ç•ªå¤–å´ã®å‹å®šç¾©ãŒçµ‚ã‚ã£ã¦ã„ãŸã‚‰å‹æƒ…å ±æ§‹ç¯‰çµ‚äº†
+                    //æ§‹ç¯‰ã—ãŸå‹æƒ…å ±ã‚’ã™ãã«å–å¾—ã—ã¦ã‚¹ã‚¿ãƒƒã‚¯ã¸
                     this.typeBuilder.deactivate();
                     this.pushBuiltType(this.typeBuilder.popLastBuiltData());
                     this.typeBuilder.clearBuiltData();
                 }
             } else if (eventType.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
-                //–¼‘O\’zŠJn
+                //åå‰æ§‹ç¯‰é–‹å§‹
                 this.nameBuilder.activate();
             } else if (eventType.equals(NameStateManager.NAME_STATE.EXIT_NAME)) {
-                //–¼‘O\’zI—¹
-                //“¯‚¶‚­‚³‚Á‚³‚Ææ“¾‚µ‚Ä‚·‚®‚ÉƒXƒ^ƒbƒN‚Ö
+                //åå‰æ§‹ç¯‰çµ‚äº†
+                //åŒã˜ãã•ã£ã•ã¨å–å¾—ã—ã¦ã™ãã«ã‚¹ã‚¿ãƒƒã‚¯ã¸
                 this.nameBuilder.deactivate();
                 this.builtNameStack.push(this.nameBuilder.popLastBuiltData());
                 this.nameBuilder.clearBuiltData();
@@ -162,18 +162,18 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     }
     
     /**
-     * •Ï”ƒf[ƒ^‚ğ\’z‚·‚é’ŠÛƒƒ\ƒbƒhD
-     * \’z‚µ‚½•Ï”ƒf[ƒ^‚ğ\’zƒf[ƒ^ŠÇ—Ò‚É“n‚µ‚½‚¢ê‡‚à‚±‚Ìƒƒ\ƒbƒh‚Ås‚¤D
+     * å¤‰æ•°ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * æ§‹ç¯‰ã—ãŸå¤‰æ•°ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã«æ¸¡ã—ãŸã„å ´åˆã‚‚ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã§è¡Œã†ï¼
      * 
-     * @param name@•Ï”‚Ì–¼‘O
-     * @param type@•Ï”‚ÌŒ^
-     * @param modifiers@•Ï”‚ÌCüq
-     * @param definitionUnit •Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
-     * @param startLine •Ï”’è‹`•”‚ÌŠJns
-     * @param startColumn@•Ï”’è‹`•”‚ÌŠJn—ñ
-     * @param endLine@•Ï”’è‹`•”‚ÌI—¹s
-     * @param endColumn@•Ï”’è‹`•”‚ÌI—¹—ñ
-     * @return@\’z‚µ‚½•Ï”î•ñ
+     * @param nameã€€å¤‰æ•°ã®åå‰
+     * @param typeã€€å¤‰æ•°ã®å‹
+     * @param modifiersã€€å¤‰æ•°ã®ä¿®é£¾å­
+     * @param definitionUnit å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
+     * @param startLine å¤‰æ•°å®šç¾©éƒ¨ã®é–‹å§‹è¡Œ
+     * @param startColumnã€€å¤‰æ•°å®šç¾©éƒ¨ã®é–‹å§‹åˆ—
+     * @param endLineã€€å¤‰æ•°å®šç¾©éƒ¨ã®çµ‚äº†è¡Œ
+     * @param endColumnã€€å¤‰æ•°å®šç¾©éƒ¨ã®çµ‚äº†åˆ—
+     * @returnã€€æ§‹ç¯‰ã—ãŸå¤‰æ•°æƒ…å ±
      */
     protected abstract TVar buildVariable(final String[] name,
             final UnresolvedTypeInfo<? extends TypeInfo> type, final ModifierInfo[] modifiers,
@@ -181,16 +181,16 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
             final int endLine, final int endColumn);
 
     /**
-     * •Ï”’è‹`‚ªI—¹‚µ‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚êC {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}
-     * ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä•Ï”ƒf[ƒ^‚ğ\’z‚·‚éD
+     * å¤‰æ•°å®šç¾©ãŒçµ‚äº†ã—ãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œï¼Œ {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦å¤‰æ•°ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚Å•Ï”’è‹`‚ÌI—¹‚Ì“®ì‚ğ•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§å¤‰æ•°å®šç¾©ã®çµ‚äº†æ™‚ã®å‹•ä½œã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param •Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
-     * @param startLine •Ï”’è‹`•”‚ÌŠJns
-     * @param startColumn@•Ï”’è‹`•”‚ÌŠJn—ñ
-     * @param endLine@•Ï”’è‹`•”‚ÌI—¹s
-     * @param endColumn@•Ï”’è‹`•”‚ÌI—¹—ñ
+     * @param å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
+     * @param startLine å¤‰æ•°å®šç¾©éƒ¨ã®é–‹å§‹è¡Œ
+     * @param startColumnã€€å¤‰æ•°å®šç¾©éƒ¨ã®é–‹å§‹åˆ—
+     * @param endLineã€€å¤‰æ•°å®šç¾©éƒ¨ã®çµ‚äº†è¡Œ
+     * @param endColumnã€€å¤‰æ•°å®šç¾©éƒ¨ã®çµ‚äº†åˆ—
      */
     protected void endVariableBuild(final TUnit definitionUnit, final int startLine,
             final int startColumn, final int endLine, final int endColumn) {
@@ -201,25 +201,25 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚Äƒ†ƒjƒbƒg‚ª•Ï”‚ğ’è‹`‚·‚éƒ†ƒjƒbƒg‚Æ‚µ‚Ä—LŒø‚Å‚ ‚é‚©‚Ç‚¤‚©”»’f‚·‚é
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚Œã¦ãƒ¦ãƒ‹ãƒƒãƒˆãŒå¤‰æ•°ã‚’å®šç¾©ã™ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã¨ã—ã¦æœ‰åŠ¹ã§ã‚ã‚‹ã‹ã©ã†ã‹åˆ¤æ–­ã™ã‚‹
      * 
-     * @param definitionUnit •Ï”‚ğ’è‹`‚·‚éƒ†ƒjƒbƒg
-     * @return •Ï”‚ğ’è‹`‚·‚é‹óŠÔ‚Æ‚µ‚Ä—LŒø‚Å‚ ‚ê‚Î‚»‚Ìƒ†ƒjƒbƒgC—LŒø‚Å‚È‚¯‚ê‚Înull
+     * @param definitionUnit å¤‰æ•°ã‚’å®šç¾©ã™ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
+     * @return å¤‰æ•°ã‚’å®šç¾©ã™ã‚‹ç©ºé–“ã¨ã—ã¦æœ‰åŠ¹ã§ã‚ã‚Œã°ãã®ãƒ¦ãƒ‹ãƒƒãƒˆï¼Œæœ‰åŠ¹ã§ãªã‘ã‚Œã°null
      */
     protected abstract TUnit validateDefinitionSpace(
             final UnresolvedUnitInfo<? extends UnitInfo> definitionUnit);
 
     /**
-     * Å‚àÅŒã‚É\’z‚µ‚½•Ï”–¼‚ğ•Ô‚·D
-     * @return@Å‚àÅŒã‚É\’z‚µ‚½•Ï”–¼
+     * æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°åã‚’è¿”ã™ï¼
+     * @returnã€€æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°å
      */
     private String[] getName() {
         return this.builtNameStack.pop();
     }
 
     /**
-     * Å‚àÅŒã‚É\’z‚µ‚½•Ï”‚ÉŠÖ‚·‚éCüq‚Ì”z—ñ‚ğ•Ô‚·D
-     * @return@Å‚àÅŒã‚É\’z‚µ‚½•Ï”‚ÉŠÖ‚·‚éCüq‚Ì”z—ñ
+     * æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°ã«é–¢ã™ã‚‹ä¿®é£¾å­ã®é…åˆ—ã‚’è¿”ã™ï¼
+     * @returnã€€æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°ã«é–¢ã™ã‚‹ä¿®é£¾å­ã®é…åˆ—
      */
     private ModifierInfo[] getModifiers() {
         if (null != this.builtModifiersStack) {
@@ -230,8 +230,8 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     }
 
     /**
-     * Å‚àÅŒã‚É\’z‚µ‚½•Ï”‚ÌŒ^‚ğ•Ô‚·D
-     * @return@Å‚àÅŒã‚É\’z‚µ‚½•Ï”‚ÌŒ^
+     * æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°ã®å‹ã‚’è¿”ã™ï¼
+     * @returnã€€æœ€ã‚‚æœ€å¾Œã«æ§‹ç¯‰ã—ãŸå¤‰æ•°ã®å‹
      */
     private UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return this.builtTypeStack.pop();
@@ -240,47 +240,47 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     protected final BuildDataManager buildDataManager;
 
     /**
-     * •Ï”’è‹`•”‚ÉŠÖ‚·‚éó‘Ô‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+     * å¤‰æ•°å®šç¾©éƒ¨ã«é–¢ã™ã‚‹çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
      */
     protected final VariableDefinitionStateManager variableStateManager;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‹Lq•”‚ÉŠÖ‚·‚éó‘Ô‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨˜è¿°éƒ¨ã«é–¢ã™ã‚‹çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
      */
     private final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
 
     /**
-     * Cüqî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * ä¿®é£¾å­æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final ModifiersBuilder modifiersBuilder;
 
     /**
-     * Œ^î•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final TypeBuilder typeBuilder;
 
     /**
-     * –¼‘Oî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * åå‰æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final NameBuilder nameBuilder;
 
     /**
-     * \’z‚µ‚½Œ^î•ñ‚ğ\’zŒã‚·‚®‚ÉŠi”[‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ã—ãŸå‹æƒ…å ±ã‚’æ§‹ç¯‰å¾Œã™ãã«æ ¼ç´ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<UnresolvedTypeInfo<? extends TypeInfo>> builtTypeStack = new Stack<UnresolvedTypeInfo<? extends TypeInfo>>();
 
     /**
-     * \’z‚µ‚½Cüqî•ñ‚ğ\’zŒã‚·‚®‚ÉŠi”[‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ã—ãŸä¿®é£¾å­æƒ…å ±ã‚’æ§‹ç¯‰å¾Œã™ãã«æ ¼ç´ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<ModifierInfo[]> builtModifiersStack = new Stack<ModifierInfo[]>();
 
     /**
-     * \’z‚µ‚½–¼‘Oî•ñ‚ğ\’zŒã‚·‚®‚ÉŠi”[‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ã—ãŸåå‰æƒ…å ±ã‚’æ§‹ç¯‰å¾Œã™ãã«æ ¼ç´ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<String[]> builtNameStack = new Stack<String[]>();
 
     /**
-     * ‹ó‚ÌCüq”z—ñ‚ğ•\‚·’è”
+     * ç©ºã®ä¿®é£¾å­é…åˆ—ã‚’è¡¨ã™å®šæ•°
      */
     private static final ModifierInfo[] EMPTY_MODIFIERS = new ModifierInfo[0];
 }

@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ”z—ñŒ^QÆ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºé…åˆ—å‹å‚ç…§ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -22,9 +22,9 @@ public final class UnresolvedArrayTypeReferenceInfo extends
         UnresolvedExpressionInfo<ArrayTypeReferenceInfo> {
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^‚ğ—^‚¦‚Ä‰Šú‰»
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºé…åˆ—å‹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param referencedType QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^
+     * @param referencedType å‚ç…§ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºé…åˆ—å‹
      */
     public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
@@ -50,29 +50,29 @@ public final class UnresolvedArrayTypeReferenceInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // QÆ‚³‚ê‚Ä‚¢‚é”z—ñŒ^‚ğ‰ğŒˆ
+        // å‚ç…§ã•ã‚Œã¦ã„ã‚‹é…åˆ—å‹ã‚’è§£æ±º
         final UnresolvedArrayTypeInfo unresolvedArrayType = this.getType();
         final ArrayTypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -87,15 +87,15 @@ public final class UnresolvedArrayTypeReferenceInfo extends
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^‚ğ•Ô‚·
-     * @return QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºé…åˆ—å‹ã‚’è¿”ã™
+     * @return å‚ç…§ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºé…åˆ—å‹
      */
     public UnresolvedArrayTypeInfo getType() {
         return this.referencedType;
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºé…åˆ—å‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedArrayTypeInfo referencedType;
 

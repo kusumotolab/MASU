@@ -14,9 +14,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<ForeachBlockInfo> {
 
     /**
-     * ŠO‘¤‚ÌƒuƒƒbƒNî•ñ‚ğ—^‚¦‚ÄCforeach ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œforeach ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      * 
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedForeachBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -25,28 +25,28 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ for ƒuƒƒbƒN‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º for ãƒ–ãƒ­ãƒƒã‚¯ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public ForeachBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì foreach•¶‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® foreachæ–‡ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -54,7 +54,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
 
         this.resolvedInfo = new ForeachBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
-        // ŠO‘¤‚Ì‹óŠÔ‚ğæ“¾
+        // å¤–å´ã®ç©ºé–“ã‚’å–å¾—
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -64,9 +64,9 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
     }
 
     /**
-    * •Ï”’è‹`‚ğİ’è‚·‚é
+    * å¤‰æ•°å®šç¾©ã‚’è¨­å®šã™ã‚‹
     * 
-    * @param iteraotorVariableDeclaration •Ï”’è‹`
+    * @param iteraotorVariableDeclaration å¤‰æ•°å®šç¾©
     */
     public void setIteratorVariable(
             final UnresolvedVariableDeclarationStatementInfo iteratorVariable) {
@@ -95,9 +95,9 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
     }
 
     /**
-     * ŒJ‚è•Ô‚µ—p‚Ì®‚ğİ’è‚·‚é
+     * ç¹°ã‚Šè¿”ã—ç”¨ã®å¼ã‚’è¨­å®šã™ã‚‹
      * 
-     * @param iteratorExpression ŒJ‚è•Ô‚µ—p‚Ì®
+     * @param iteratorExpression ç¹°ã‚Šè¿”ã—ç”¨ã®å¼
      */
     public void setIteratorExpression(final UnresolvedExpressionInfo<?> iteratorExpression) {
 
@@ -124,18 +124,18 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
     }
 
     /**
-     * •Ï”’è‹`‚ğ•Ô‚·
+     * å¤‰æ•°å®šç¾©ã‚’è¿”ã™
      * 
-     * @return •Ï”’è‹`
+     * @return å¤‰æ•°å®šç¾©
      */
     public UnresolvedVariableDeclarationStatementInfo getIteratorVariable() {
         return this.iteratorVariable;
     }
 
     /**
-     * ŒJ‚è•Ô‚µ—p‚Ì®‚ğ•Ô‚·
+     * ç¹°ã‚Šè¿”ã—ç”¨ã®å¼ã‚’è¿”ã™
      * 
-     * @return ŒJ‚è•Ô‚µ—p‚Ì®
+     * @return ç¹°ã‚Šè¿”ã—ç”¨ã®å¼
      */
     public UnresolvedExpressionInfo<?> getIteratorExpression() {
         return this.iteratorExpression;

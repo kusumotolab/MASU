@@ -12,20 +12,20 @@ public abstract class AbstractMethodMetricPlugin extends AbstractPlugin {
     protected void execute() {
         setupExecute();
         try {
-            // ƒNƒ‰ƒXî•ñƒAƒNƒZƒT‚ğæ“¾
+            // ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚¢ã‚¯ã‚»ã‚µã‚’å–å¾—
             final MethodInfoAccessor methodAccessor = this.getMethodInfoAccessor();
 
-            // i’»•ñ—p
+            // é€²æ—å ±å‘Šç”¨
             int measuredMethodCount = 0;
             final int maxMethodCount = methodAccessor.getMethodCount();
 
-            // ‘SƒNƒ‰ƒX‚É‚Â‚¢‚Ä
+            // å…¨ã‚¯ãƒ©ã‚¹ã«ã¤ã„ã¦
             for (final TargetMethodInfo targetMethod : methodAccessor) {
                 
-                // ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é
+                // ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
                 registMethodMetric(targetMethod);
 
-                // 1ƒNƒ‰ƒX‚²‚Æ‚É%‚Åi’»•ñ
+                // 1ã‚¯ãƒ©ã‚¹ã”ã¨ã«%ã§é€²æ—å ±å‘Š
                 this.reportProgress(++measuredMethodCount * 100 / maxMethodCount);
             }
         } finally {
@@ -35,28 +35,28 @@ public abstract class AbstractMethodMetricPlugin extends AbstractPlugin {
     }
     
     /**
-     * {@link #execute()} ‚ÌÅ‰‚ÉÀs‚³‚ê‚éˆ—.
+     * {@link #execute()} ã®æœ€åˆã«å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†.
      * 
-     * •K—v‚ª‚ ‚ê‚ÎƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * å¿…è¦ãŒã‚ã‚Œã°ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      */
     protected void setupExecute() {
     }
 
     /**
-     * {@link #execute()} ‚ÌÅŒã‚ÉÀs‚³‚ê‚éˆ—.
+     * {@link #execute()} ã®æœ€å¾Œã«å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†.
      * 
-     * •K—v‚ª‚ ‚ê‚ÎƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * å¿…è¦ãŒã‚ã‚Œã°ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      */
     protected void teardownExecute() {
     }
     
     /**
-     * ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚Ä“o˜^‚·‚é.
+     * ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ã¦ç™»éŒ²ã™ã‚‹.
      * 
-     * {@link MetricAlreadyRegisteredException} ‚É‘Î‚·‚é•W€‚Ì—áŠOˆ—‚ğ’ñ‹Ÿ‚·‚é.
-     * Œv‘ª‚Í {@link #measureClassMetric(TargetClassInfo)} ‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚ÄÀ‘•‚·‚é.
+     * {@link MetricAlreadyRegisteredException} ã«å¯¾ã™ã‚‹æ¨™æº–ã®ä¾‹å¤–å‡¦ç†ã‚’æä¾›ã™ã‚‹.
+     * è¨ˆæ¸¬ã¯ {@link #measureClassMetric(TargetClassInfo)} ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦å®Ÿè£…ã™ã‚‹.
      * 
-     * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
+     * @param targetClass å¯¾è±¡ã®ã‚¯ãƒ©ã‚¹
      */
     protected void registMethodMetric(TargetMethodInfo targetMethod) {
         try {
@@ -67,9 +67,9 @@ public abstract class AbstractMethodMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * ƒƒ\ƒbƒh‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚é.
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹.
      * 
-     * @param targetMethod ‘ÎÛ‚Ìƒƒ\ƒbƒh
+     * @param targetMethod å¯¾è±¡ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     abstract protected Number measureMethodMetric(TargetMethodInfo targetMethod);
     

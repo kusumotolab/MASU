@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 
 
 /**
- * ƒƒ\ƒbƒh’è‹`•”‚Æ‚»‚ÌŒã‚ÌƒuƒƒbƒN‚É‘Î‚·‚éƒrƒWƒ^[‚Ìó‘Ô‚ğŠÇ—‚µCó‘Ô‘JˆÚƒCƒxƒ“ƒg‚ğ”­s‚·‚éƒNƒ‰ƒXD
+ * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã¨ãã®å¾Œã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¯¾ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’ç®¡ç†ã—ï¼ŒçŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author kou-tngt
  *
@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 public abstract class CallableUnitStateManager extends DeclaredBlockStateManager {
 
     /**
-     * ”­s‚·‚éó‘Ô‘JˆÚƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•\‚·Enum
+     * ç™ºè¡Œã™ã‚‹çŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¡¨ã™Enum
      * 
      * @author kou-tngt
      *
@@ -25,8 +25,8 @@ public abstract class CallableUnitStateManager extends DeclaredBlockStateManager
     }
 
     /**
-     * ƒƒ\ƒbƒh’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒƒ\ƒbƒh’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockEnterEventType() {
@@ -34,8 +34,8 @@ public abstract class CallableUnitStateManager extends DeclaredBlockStateManager
     }
 
     /**
-     * ƒƒ\ƒbƒh’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒƒ\ƒbƒh’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockExitEventType() {
@@ -43,8 +43,8 @@ public abstract class CallableUnitStateManager extends DeclaredBlockStateManager
     }
 
     /**
-     * ƒƒ\ƒbƒh’è‹`•”‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒƒ\ƒbƒh’è‹`•”‚É‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã«ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionEnterEventType() {
@@ -52,8 +52,8 @@ public abstract class CallableUnitStateManager extends DeclaredBlockStateManager
     }
 
     /**
-     * ƒƒ\ƒbƒh’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒƒ\ƒbƒh’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionExitEventType() {

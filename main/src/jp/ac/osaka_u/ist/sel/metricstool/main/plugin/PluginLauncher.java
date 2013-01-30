@@ -5,72 +5,72 @@ import java.util.Collection;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“ŽÀs•”‚ÌƒCƒ“ƒ^ƒtƒF[ƒX
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè¡Œéƒ¨ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
  * @author kou-tngt
  *
  */
 public interface PluginLauncher {
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ðŽÀs‚·‚é.
-     * @param plugin ŽÀs‚·‚éƒvƒ‰ƒOƒCƒ“
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹.
+     * @param plugin å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
      */
     public void launch(AbstractPlugin plugin);
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ð‚Ü‚Æ‚ß‚ÄŽÀs‚·‚é
-     * @param plugins ŽÀs‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒRƒŒƒNƒVƒ‡ƒ“
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ã¾ã¨ã‚ã¦å®Ÿè¡Œã™ã‚‹
+     * @param plugins å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
      */
     public void launchAll(Collection<AbstractPlugin> plugins);
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌŽÀs‚ðƒLƒƒƒ“ƒZƒ‹‚·‚é
-     * @param plugin ƒLƒƒƒ“ƒZƒ‹‚·‚éƒvƒ‰ƒOƒCƒ“
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
+     * @param plugin ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
      */
     public boolean cancel(AbstractPlugin plugin);
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌŽÀs‚ð‚Ü‚Æ‚ß‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚é
-     * @param plugins ƒLƒƒƒ“ƒZƒ‹‚·‚éƒvƒ‰ƒOƒCƒ“
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’ã¾ã¨ã‚ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
+     * @param plugins ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
      */
     public void cancelAll(Collection<AbstractPlugin> plugins);
 
     /**
-     * ŽÀs’†CŽÀs‘Ò‚¿‚Ìƒvƒ‰ƒOƒCƒ“‚ÌŽÀs‚ð‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚é
+     * å®Ÿè¡Œä¸­ï¼Œå®Ÿè¡Œå¾…ã¡ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
      */
     public void cancelAll();
 
     /**
-     * ƒvƒ‰ƒOƒCƒ““¯ŽžŽÀsÅ‘å”‚ðÝ’è‚·‚éƒƒ\ƒbƒh
-     * @param num ƒvƒ‰ƒOƒCƒ““¯ŽžŽÀsÅ‘å”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param num ãƒ—ãƒ©ã‚°ã‚¤ãƒ³åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°
      */
     public void setMaximumLaunchingNum(int num);
 
     /**
-     * ƒ‰ƒ“ƒ`ƒƒ[‚ð’âŽ~‚·‚é.
-     * ŽÀs‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCŽÀs’†‚Ìƒ^ƒXƒN‚ÍI‚í‚é‚Ü‚Å‘Ò‚Â.
+     * ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’åœæ­¢ã™ã‚‹.
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã¯çµ‚ã‚ã‚‹ã¾ã§å¾…ã¤.
      */
     public void stopLaunching();
 
     /**
-     * ƒ‰ƒ“ƒ`ƒƒ[‚ð’¼‚¿‚É’âŽ~‚·‚é.
-     * ŽÀs‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCŽÀs’†‚Ìƒ^ƒXƒN‚Í‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚³‚ê‚é.
+     * ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’ç›´ã¡ã«åœæ­¢ã™ã‚‹.
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã¯å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã‚‹.
      */
     public void stopLaunchingNow();
 
     /**
-     * ŽÀs‘Ò‚¿‚Ìƒ^ƒXƒN‚Ì”‚ð•Ô‚·.
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã®æ•°ã‚’è¿”ã™.
      */
     public int getLaunchWaitingTaskNum();
 
     /**
-     * “¯ŽžŽÀsÅ‘å”‚ð•Ô‚·ƒƒ\ƒbƒh
-     * @return “¯ŽžŽÀsÅ‘å”
+     * åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°
      */
     public int getMaximumLaunchingNum();
 
     /**
-     * Œ»ÝŽÀs‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚Ì”‚ð•Ô‚·
-     * @return Œ»ÝŽÀs‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚Ì”
+     * ç¾åœ¨å®Ÿè¡Œã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°ã‚’è¿”ã™
+     * @return ç¾åœ¨å®Ÿè¡Œã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°
      */
     public int getCurrentLaunchingNum();
 }

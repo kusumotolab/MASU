@@ -6,9 +6,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒrƒWƒ^[‚ÌƒuƒƒbƒN‚Ö‚Ìo“ü‚è‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒD
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ã®ãƒ–ãƒ­ãƒƒã‚¯ã¸ã®å‡ºå…¥ã‚Šã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ï¼
  * 
- * ƒrƒWƒ^[‚ªƒuƒƒbƒN‚ğ•\‚·ASTƒg[ƒNƒ“‚Ì’†‚Éo“ü‚è‚·‚éÛ‚ÉCí—ŞBLOCK_STATE_CHANGE‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚éD
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ASTãƒˆãƒ¼ã‚¯ãƒ³ã®ä¸­ã«å‡ºå…¥ã‚Šã™ã‚‹éš›ã«ï¼Œç¨®é¡BLOCK_STATE_CHANGEã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ï¼
  * 
  * @author kou-tngt
  *
@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class BlockStateManager extends EnterExitStateManager {
 
     /**
-     * ƒuƒƒbƒN‚Öo“ü‚è‚·‚éÛ‚É”­s‚³‚ê‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ãƒ–ãƒ­ãƒƒã‚¯ã¸å‡ºå…¥ã‚Šã™ã‚‹éš›ã«ç™ºè¡Œã•ã‚Œã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      * @author kou-tngt
      *
      */
@@ -25,8 +25,8 @@ public class BlockStateManager extends EnterExitStateManager {
     };
 
     /**
-     * ƒuƒƒbƒN‚Ì’†‚É“ü‚Á‚½‚É’Ê’m‚³‚ê‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
-     * @return@ƒuƒƒbƒN‚Ì’†‚É“ü‚Á‚½‚É’Ê’m‚³‚ê‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸­ã«å…¥ã£ãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
+     * @returnã€€ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸­ã«å…¥ã£ãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getEnterEventType() {
@@ -34,8 +34,8 @@ public class BlockStateManager extends EnterExitStateManager {
     }
 
     /**
-     * ƒuƒƒbƒN‚©‚ço‚½‚É’Ê’m‚³‚ê‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
-     * @return@ƒuƒƒbƒN‚©‚ço‚½‚É’Ê’m‚³‚ê‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
+     * @returnã€€ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«é€šçŸ¥ã•ã‚Œã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getExitEventType() {
@@ -43,11 +43,11 @@ public class BlockStateManager extends EnterExitStateManager {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒCƒxƒ“ƒg‚ªƒuƒƒbƒN‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * token.isBlock()‚ªtrue‚Ìê‡‚Ítrue,false‚Ìê‡‚Ífalse‚ğ•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆãŒãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * token.isBlock()ãŒtrueã®å ´åˆã¯true,falseã®å ´åˆã¯falseã‚’è¿”ã™ï¼
      * 
-     * @param event ƒuƒƒbƒN‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚éƒCƒxƒ“ƒg
-     * @return token.isBlock()‚ªtrue‚Ìê‡‚Ítrue,false‚Ìê‡‚Ífalse
+     * @param event ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return token.isBlock()ãŒtrueã®å ´åˆã¯true,falseã®å ´åˆã¯false
      */
     @Override
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {

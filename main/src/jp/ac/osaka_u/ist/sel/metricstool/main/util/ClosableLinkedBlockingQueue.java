@@ -6,10 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * ”CˆÓ‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å•Â‚¶‚é‚±‚Æ‚ªo—ˆ‚éƒuƒƒbƒLƒ“ƒOƒLƒ…[
+ * ä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§é–‰ã˜ã‚‹ã“ã¨ãŒå‡ºæ¥ã‚‹ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ã‚­ãƒ¥ãƒ¼
  * @author kou-tngt
  *
- * @param <E>@ƒLƒ…[‚Ì—v‘f‚ÌŒ^
+ * @param <E>ã€€ã‚­ãƒ¥ãƒ¼ã®è¦ç´ ã®å‹
  */
 public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     /**
@@ -18,9 +18,9 @@ public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     private static final long serialVersionUID = -4159234755316262135L;
 
     /**
-     * ƒLƒ…[‚É“ü‚ê‚é‚±‚Æ‚ª‚Å‚«‚é—v‘f”‚ğ•Ô‚·.
-     * {@link #close()}‚ªŒÄ‚Î‚ê‚½Œã‚Íí‚É0‚ğ•Ô‚·.
-     * @return ƒLƒ…[‚É“ü‚ê‚é‚±‚Æ‚ª‚Å‚«‚é—v‘f”.
+     * ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹ã“ã¨ãŒã§ãã‚‹è¦ç´ æ•°ã‚’è¿”ã™.
+     * {@link #close()}ãŒå‘¼ã°ã‚ŒãŸå¾Œã¯å¸¸ã«0ã‚’è¿”ã™.
+     * @return ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹ã“ã¨ãŒã§ãã‚‹è¦ç´ æ•°.
      * @see java.util.concurrent.LinkedBlockingQueue#remainingCapacity()
      */
     @Override
@@ -33,10 +33,10 @@ public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     }
 
     /**
-     * ƒLƒ…[‚É—v‘f‚ğ’Ç‰Á‚·‚é
-     * {@link #close()}‚ªŒÄ‚Î‚ê‚½Œã‚Íí‚É¸”s‚·‚é.
-     * @param element ƒLƒ…[‚É“ü‚ê‚é—v‘f
-     * @return ƒLƒ…[‚É—v‘f‚ª’Ç‰Á‚Å‚«‚ê‚Îture, ¸”s‚·‚ê‚Îfalse
+     * ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹
+     * {@link #close()}ãŒå‘¼ã°ã‚ŒãŸå¾Œã¯å¸¸ã«å¤±æ•—ã™ã‚‹.
+     * @param element ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹è¦ç´ 
+     * @return ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ãŒè¿½åŠ ã§ãã‚Œã°ture, å¤±æ•—ã™ã‚Œã°false
      * @see java.util.AbstractQueue#add(java.lang.Object)
      */
     @Override
@@ -49,10 +49,10 @@ public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     }
 
     /**
-     * ƒLƒ…[‚É—v‘f‚ğ’Ç‰Á‚·‚é
-     * {@link #close()}‚ªŒÄ‚Î‚ê‚½Œã‚Íí‚É¸”s‚·‚é.
-     * @param element ƒLƒ…[‚É“ü‚ê‚é—v‘f
-     * @return ƒLƒ…[‚É—v‘f‚ª’Ç‰Á‚Å‚«‚ê‚Îture, ¸”s‚·‚ê‚Îfalse
+     * ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹
+     * {@link #close()}ãŒå‘¼ã°ã‚ŒãŸå¾Œã¯å¸¸ã«å¤±æ•—ã™ã‚‹.
+     * @param element ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹è¦ç´ 
+     * @return ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ãŒè¿½åŠ ã§ãã‚Œã°ture, å¤±æ•—ã™ã‚Œã°false
      * @see java.util.concurrent.LinkedBlockingQueue#offer(java.lang.Object)
      */
     @Override
@@ -65,12 +65,12 @@ public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     }
 
     /**
-     * ƒLƒ…[‚É—v‘f‚ª’Ç‰Á‚Å‚«‚é‚Ü‚ÅCˆê’èŠÔ‘Ò‚Âƒƒ\ƒbƒh.
-     * {@link #close()}‚ªŒÄ‚Î‚ê‚½Œã‚Íí‚É‘¦À‚É¸”s‚·‚é.
-     * @param element ƒLƒ…[‚É“ü‚ê‚é—v‘f
-     * @param timeout ƒ^ƒCƒ€ƒAƒEƒg‚·‚éŠÔ
-     * @param unit ƒ^ƒCƒ€ƒAƒEƒg‚·‚éŠÔ‚Ì’PˆÊ
-     * @return ƒLƒ…[‚É—v‘f‚ª’Ç‰Á‚Å‚«‚ê‚Îture, ¸”s‚·‚ê‚Îfalse
+     * ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ãŒè¿½åŠ ã§ãã‚‹ã¾ã§ï¼Œä¸€å®šæ™‚é–“å¾…ã¤ãƒ¡ã‚½ãƒƒãƒ‰.
+     * {@link #close()}ãŒå‘¼ã°ã‚ŒãŸå¾Œã¯å¸¸ã«å³åº§ã«å¤±æ•—ã™ã‚‹.
+     * @param element ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹è¦ç´ 
+     * @param timeout ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹æ™‚é–“
+     * @param unit ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹æ™‚é–“ã®å˜ä½
+     * @return ã‚­ãƒ¥ãƒ¼ã«è¦ç´ ãŒè¿½åŠ ã§ãã‚Œã°ture, å¤±æ•—ã™ã‚Œã°false
      * @see java.util.concurrent.LinkedBlockingQueue#offer(java.lang.Object, long, java.util.concurrent.TimeUnit)
      */
     @Override
@@ -84,22 +84,22 @@ public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     }
 
     /**
-     * ‚±‚ÌƒLƒ…[‚ğ•Â‚¶‚é
+     * ã“ã®ã‚­ãƒ¥ãƒ¼ã‚’é–‰ã˜ã‚‹
      */
     public void close() {
         this.closed = true;
     }
 
     /**
-     * ƒLƒ…[‚ª•Â‚¶‚ç‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * @return •Â‚¶‚ç‚ê‚Ä‚¢‚ê‚Îture, ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
+     * ã‚­ãƒ¥ãƒ¼ãŒé–‰ã˜ã‚‰ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * @return é–‰ã˜ã‚‰ã‚Œã¦ã„ã‚Œã°ture, ãã†ã§ãªã‘ã‚Œã°false
      */
     public boolean isClosed() {
         return this.closed;
     }
 
     /**
-     * •Â‚¶‚ç‚ê‚½‚±‚Æ‚ğ•\‚·ƒtƒ‰ƒO
+     * é–‰ã˜ã‚‰ã‚ŒãŸã“ã¨ã‚’è¡¨ã™ãƒ•ãƒ©ã‚°
      */
     private boolean closed = false;
 }

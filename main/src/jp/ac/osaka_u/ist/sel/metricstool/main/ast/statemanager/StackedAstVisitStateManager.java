@@ -12,25 +12,25 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * AstVisitStateManager ‚ÌŠî–{‚Æ‚È‚é’ŠÛƒNƒ‰ƒX.
+ * AstVisitStateManager ã®åŸºæœ¬ã¨ãªã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹.
  * <p>
- * ƒrƒWƒ^[‚ÌASTƒm[ƒh‚Ö‚Ì“’Bó‹µ‚É‰‚¶‚Äó‘Ô‚Ì•Û‘¶C•œŒ³‚ğs‚¤d‘g‚İ‚ğ’ñ‹Ÿ‚·‚é.
- * AST‚Í–Ø\‘¢‚Å‚ ‚é‚½‚ßC‚»‚ÌƒrƒWƒ^[‚Ì“’Bó‘Ô‚ÍC‚ ‚éƒm[ƒh‚Ì’†‚É“ü‚éC‚ ‚éƒm[ƒh‚Ì’†‚©‚ço‚é‚É•Ï‰»‚·‚é‚Æl‚¦‚ç‚ê‚é.
- * “Á‚ÉCƒm[ƒh‚Ì’†‚Éo“ü‚è‚·‚éÛ‚É‚ÍC’†‚É“ü‚Á‚½‚É•Ï‰»‚µ‚½ó‘Ô‚ğCŠO‚Éo‚é‚É•œŒ³‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
- * ‚»‚±‚ÅC‚±‚ÌƒNƒ‰ƒX‚Íó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚é‚æ‚¤‚ÈASTƒm[ƒh‚É“ü‚é‚ÉƒXƒ^ƒbƒN‚ÉŒ»İ‚Ìó‘Ô‚ğ•Û‘¶‚µ‚Ä‚¨‚«C
- * ƒgƒŠƒK‚Æ‚È‚é‚æ‚¤‚ÈASTƒm[ƒh‚©‚ço‚½‚ÉƒXƒ^ƒbƒN‚©‚ç‰ß‹‚Ìó‘Ô‚ğæ‚èo‚µ‚Äó‘Ô‚ğ•œŒ³‚·‚éd‘g‚İ‚ğ’ñ‹Ÿ‚·‚é.
- * ó‘Ô‚ğ•œŒ³‚·‚é‚É‚ÍC‚»‚Ì‚Ìó‘Ô‚ğ•œŒ³‚Å‚«‚é‚æ‚¤‚Èî•ñ‚ğ‹L˜^‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢‚ªC‚Ç‚Ì‚æ‚¤‚Èî•ñ‚ğ‹L˜^‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢‚©‚ÍC
- * ƒTƒuƒNƒ‰ƒX‚É‚æ‚Á‚ÄˆÙ‚È‚é‚Æl‚¦‚ç‚ê‚é.
- * ‚»‚±‚ÅCŒ^ƒpƒ‰ƒ[ƒ^T‚ğ—p‚¢‚Ä”CˆÓ‚Éî•ñ‚ğ•Û‚·‚éŒ^‚ğw’è‚·‚é‚±‚Æ‚Å,ó‘Ô‚Ì‹L˜^C•œŒ³‚ÉQÆ‚·‚éî•ñ‚ğƒTƒuƒNƒ‰ƒX–ˆ‚Éw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é.
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ã®ASTãƒãƒ¼ãƒ‰ã¸ã®åˆ°é”çŠ¶æ³ã«å¿œã˜ã¦çŠ¶æ…‹ã®ä¿å­˜ï¼Œå¾©å…ƒã‚’è¡Œã†ä»•çµ„ã¿ã‚’æä¾›ã™ã‚‹.
+ * ASTã¯æœ¨æ§‹é€ ã§ã‚ã‚‹ãŸã‚ï¼Œãã®ãƒ“ã‚¸ã‚¿ãƒ¼ã®åˆ°é”çŠ¶æ…‹ã¯ï¼Œã‚ã‚‹ãƒãƒ¼ãƒ‰ã®ä¸­ã«å…¥ã‚‹ï¼Œã‚ã‚‹ãƒãƒ¼ãƒ‰ã®ä¸­ã‹ã‚‰å‡ºã‚‹æ™‚ã«å¤‰åŒ–ã™ã‚‹ã¨è€ƒãˆã‚‰ã‚Œã‚‹.
+ * ç‰¹ã«ï¼Œãƒãƒ¼ãƒ‰ã®ä¸­ã«å‡ºå…¥ã‚Šã™ã‚‹éš›ã«ã¯ï¼Œä¸­ã«å…¥ã£ãŸæ™‚ã«å¤‰åŒ–ã—ãŸçŠ¶æ…‹ã‚’ï¼Œå¤–ã«å‡ºã‚‹æ™‚ã«å¾©å…ƒã—ãªã‘ã‚Œã°ãªã‚‰ãªã„.
+ * ãã“ã§ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã¯çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã‚‹ã‚ˆã†ãªASTãƒãƒ¼ãƒ‰ã«å…¥ã‚‹æ™‚ã«ã‚¹ã‚¿ãƒƒã‚¯ã«ç¾åœ¨ã®çŠ¶æ…‹ã‚’ä¿å­˜ã—ã¦ãŠãï¼Œ
+ * ãƒˆãƒªã‚¬ã¨ãªã‚‹ã‚ˆã†ãªASTãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ã«ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰éå»ã®çŠ¶æ…‹ã‚’å–ã‚Šå‡ºã—ã¦çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹ä»•çµ„ã¿ã‚’æä¾›ã™ã‚‹.
+ * çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹ã«ã¯ï¼Œãã®æ™‚ã®çŠ¶æ…‹ã‚’å¾©å…ƒã§ãã‚‹ã‚ˆã†ãªæƒ…å ±ã‚’è¨˜éŒ²ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ãŒï¼Œã©ã®ã‚ˆã†ãªæƒ…å ±ã‚’è¨˜éŒ²ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‹ã¯ï¼Œ
+ * ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã«ã‚ˆã£ã¦ç•°ãªã‚‹ã¨è€ƒãˆã‚‰ã‚Œã‚‹.
+ * ãã“ã§ï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿Tã‚’ç”¨ã„ã¦ä»»æ„ã«æƒ…å ±ã‚’ä¿æŒã™ã‚‹å‹ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ã§,çŠ¶æ…‹ã®è¨˜éŒ²ï¼Œå¾©å…ƒæ™‚ã«å‚ç…§ã™ã‚‹æƒ…å ±ã‚’ã‚µãƒ–ã‚¯ãƒ©ã‚¹æ¯ã«æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã‚ˆã†ã«ã—ã¦ã„ã‚‹.
  * 
  * <p>
- * ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚·‚éƒNƒ‰ƒX‚Í {@link #isStateChangeTriggerEvent(AstToken)},{@link #getState()},
- * {@link #setState(T)}‚Ì3‚Â‚Ì’ŠÛƒƒ\ƒbƒh‚ğÀ‘•‚·‚é•K—v‚ª‚ ‚é.
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ {@link #isStateChangeTriggerEvent(AstToken)},{@link #getState()},
+ * {@link #setState(T)}ã®3ã¤ã®æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®Ÿè£…ã™ã‚‹å¿…è¦ãŒã‚ã‚‹.
  * <p>
  * 
  * @author kou-tngt
  *
- * @param <T> ó‘Ô‚ğ•œŒ³‚·‚é‚½‚ß‚Ìî•ñ‚ğ•Û‚·‚éŒ^.
+ * @param <T> çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹ãŸã‚ã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹å‹.
  */
 public abstract class StackedAstVisitStateManager<T> implements AstVisitStateManager {
 
@@ -42,9 +42,9 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
     }
 
     /**
-     * ƒrƒWƒ^[‚ªASTƒm[ƒh‚Ì’†‚É“ü‚Á‚½‚ÌƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚Á‚ÄCŒ»İ‚Ìó‘Ô‚ğƒXƒ^ƒbƒN‚É‹L˜^‚·‚é.
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒASTãƒãƒ¼ãƒ‰ã®ä¸­ã«å…¥ã£ãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã£ã¦ï¼Œç¾åœ¨ã®çŠ¶æ…‹ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«è¨˜éŒ²ã™ã‚‹.
      * 
-     * @param event ƒCƒxƒ“ƒg
+     * @param event ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void entered(final AstVisitEvent event) {
         if (this.isStateChangeTriggerEvent(event)) {
@@ -53,9 +53,9 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
     }
 
     /**
-     * ƒrƒWƒ^[‚ªASTƒm[ƒh‚Ì’†‚©‚ço‚½‚ÌƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚Á‚ÄCƒXƒ^ƒbƒN‚©‚ç‰ß‹‚Ìó‘Ô‚ğæ‚èo‚µ•œŒ³‚·‚é.
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒASTãƒãƒ¼ãƒ‰ã®ä¸­ã‹ã‚‰å‡ºãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã£ã¦ï¼Œã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰éå»ã®çŠ¶æ…‹ã‚’å–ã‚Šå‡ºã—å¾©å…ƒã™ã‚‹.
      * 
-     * @param event ƒCƒxƒ“ƒg
+     * @param event ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void exited(final AstVisitEvent event) {
         if (this.isStateChangeTriggerEvent(event)) {
@@ -64,8 +64,8 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
     }
 
     /**
-     * “o˜^Ï‚İ‚Ìó‘Ô•Ï‰»ƒŠƒXƒi[‚ÌƒZƒbƒg‚ğæ“¾‚·‚é
-     * @return “o˜^Ï‚İ‚Ìó‘Ô•Ï‰»ƒŠƒXƒi[‚ÌƒZƒbƒg
+     * ç™»éŒ²æ¸ˆã¿ã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠãƒ¼ã®ã‚»ãƒƒãƒˆã‚’å–å¾—ã™ã‚‹
+     * @return ç™»éŒ²æ¸ˆã¿ã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠãƒ¼ã®ã‚»ãƒƒãƒˆ
      */
     public Set<StateChangeListener<AstVisitEvent>> getListeners() {
         return Collections.unmodifiableSet(this.listeners);
@@ -79,20 +79,20 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
     }
 
     /**
-     * AST‚Ìƒm[ƒh‚É“’B‚µ‚½ƒCƒxƒ“ƒg‚ğó‚¯æ‚é.
-     * “’B‚µ‚½‚¾‚¯‚Å‚ÍƒrƒWƒ^[‚Ìó‘Ô•Ï‰»‚Í”­¶‚µ‚È‚¢‚½‚ß“Á‚É‰½‚à‚µ‚È‚¢.
+     * ASTã®ãƒãƒ¼ãƒ‰ã«åˆ°é”ã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚‹.
+     * åˆ°é”ã—ãŸã ã‘ã§ã¯ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹å¤‰åŒ–ã¯ç™ºç”Ÿã—ãªã„ãŸã‚ç‰¹ã«ä½•ã‚‚ã—ãªã„.
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.AstVisitListener#visited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.AstVisitEvent)
      */
     public final void visited(final AstVisitEvent event) {
-        //‰½‚à‚µ‚È‚¢
+        //ä½•ã‚‚ã—ãªã„
     }
 
     /**
-     * “o˜^Ï‚İ‚Ìó‘Ô•Ï‰»ƒŠƒXƒi[‚É‘Î‚µ‚Äó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚é.
+     * ç™»éŒ²æ¸ˆã¿ã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠãƒ¼ã«å¯¾ã—ã¦çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹.
      * 
-     * @param type ó‘Ô•Ï‰»‚Ìí—Ş
-     * @param triggerEvent ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½AST“’BƒCƒxƒ“ƒg
+     * @param type çŠ¶æ…‹å¤‰åŒ–ã®ç¨®é¡
+     * @param triggerEvent çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸASTåˆ°é”ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     protected final void fireStateChangeEvent(final StateChangeEventType type, final AstVisitEvent triggerEvent) {
         final StateChangeEvent<AstVisitEvent> event = new StateChangeEvent<AstVisitEvent>(this, type,
@@ -103,50 +103,50 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
     }
 
     /**
-     * ó‘Ô‚ğƒXƒ^ƒbƒN‚©‚çæ‚èo‚µ‚Ä•œŒ³‚·‚é.
+     * çŠ¶æ…‹ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å–ã‚Šå‡ºã—ã¦å¾©å…ƒã™ã‚‹.
      */
     private void popState() {
         this.setState(this.stateStack.pop());
     }
 
     /**
-     * Œ»İ‚Ìó‘Ô‚ğƒXƒ^ƒbƒN‚É“ü‚ê‚é.
+     * ç¾åœ¨ã®çŠ¶æ…‹ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«å…¥ã‚Œã‚‹.
      */
     private void pushState() {
         this.stateStack.push(this.getState());
     }
 
     /**
-     * Œ»İ‚Ìó‘Ô‚Ìî•ñ‚ğ•Ô‚·.
-     * @return Œ»İ‚Ìó‘Ô‚Ìî•ñ
+     * ç¾åœ¨ã®çŠ¶æ…‹ã®æƒ…å ±ã‚’è¿”ã™.
+     * @return ç¾åœ¨ã®çŠ¶æ…‹ã®æƒ…å ±
      */
     protected T getState() {
         return this.state;
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½î•ñ‚ğŠî‚Éó‘Ô‚ğ•œŒ³‚·‚é.
-     * @param state ó‘Ô‚ğ•œŒ³‚·‚é‚½‚ß‚Ìî•ñ
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæƒ…å ±ã‚’åŸºã«çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹.
+     * @param state çŠ¶æ…‹ã‚’å¾©å…ƒã™ã‚‹ãŸã‚ã®æƒ…å ±
      */
     protected void setState(T state) {
         this.state = state;
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒg[ƒNƒ“‚ªó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚É‚È‚è“¾‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒˆãƒ¼ã‚¯ãƒ³ãŒçŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã«ãªã‚Šå¾—ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
      * 
-     * @param token ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚è“¾‚é‚©‚Ç‚¤‚©‚ğ’²‚×‚éƒg[ƒNƒ“
-     * @return ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚É‚È‚è“¾‚éê‡‚Ítrue
+     * @param token çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã‚Šå¾—ã‚‹ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã«ãªã‚Šå¾—ã‚‹å ´åˆã¯true
      */
     protected abstract boolean isStateChangeTriggerEvent(AstVisitEvent event);
 
     /**
-     * ó‘Ô•Ï‰»ƒŠƒXƒi‚ÌƒZƒbƒg
+     * çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®ã‚»ãƒƒãƒˆ
      */
     private final Set<StateChangeListener<AstVisitEvent>> listeners = new LinkedHashSet<StateChangeListener<AstVisitEvent>>();
 
     /**
-     * ó‘Ô‚ğ‹L˜^‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * çŠ¶æ…‹ã‚’è¨˜éŒ²ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<T> stateStack = new Stack<T>();
     

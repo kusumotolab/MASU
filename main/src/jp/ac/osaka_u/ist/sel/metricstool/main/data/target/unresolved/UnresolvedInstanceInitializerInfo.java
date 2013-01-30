@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInf
 
 
 /**
- * ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚éƒNƒ‰ƒX
+ * ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -14,17 +14,17 @@ public class UnresolvedInstanceInitializerInfo extends
         UnresolvedInitializerInfo<InstanceInitializerInfo> {
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğŠ—L‚·‚éƒNƒ‰ƒX‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param ownerClass ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğŠ—L‚·‚éƒNƒ‰ƒX
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’æ‰€æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param ownerClass ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’æ‰€æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedInstanceInitializerInfo(UnresolvedClassInfo ownerClass) {
         super(ownerClass);
     }
 
     /**
-     * Š—LƒNƒ‰ƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedInstanceInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
             int fromColumn, int toLine, int toColumn) {

@@ -5,17 +5,17 @@ import java.util.EventListener;
 
 
 /**
- * ó‘Ô•Ï‰»‚Ì’Ê’m‚ğó‚¯æ‚éƒŠƒXƒi
+ * çŠ¶æ…‹å¤‰åŒ–ã®é€šçŸ¥ã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠ
  * 
  * @author kou-tngt
  *
- * @param <T>@ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚é—v‘f‚ÌŒ^
+ * @param <T>ã€€çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã‚‹è¦ç´ ã®å‹
  */
 public interface StateChangeListener<T> extends EventListener {
 
     /**
-     * ó‘Ô•Ï‰»‚ğ’Ê’m‚·‚éƒƒ\ƒbƒh
-     * @param event ó‘Ô•Ï‰»‚ğ•\‚·ƒCƒxƒ“ƒg
+     * çŠ¶æ…‹å¤‰åŒ–ã‚’é€šçŸ¥ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param event çŠ¶æ…‹å¤‰åŒ–ã‚’è¡¨ã™ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void stateChanged(StateChangeEvent<T> event);
 }

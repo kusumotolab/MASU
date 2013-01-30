@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * QÆŒ^‚ğ•\‚·ƒNƒ‰ƒX
+ * å‚ç…§å‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -23,10 +23,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ClassTypeInfo implements ReferenceTypeInfo {
 
     /**
-     * QÆŒ^‚ÌList‚ğƒNƒ‰ƒX‚ÌList‚É•ÏŠ·‚·‚é
+     * å‚ç…§å‹ã®Listã‚’ã‚¯ãƒ©ã‚¹ã®Listã«å¤‰æ›ã™ã‚‹
      * 
-     * @param references QÆŒ^‚ÌList
-     * @return ƒNƒ‰ƒX‚ÌList
+     * @param references å‚ç…§å‹ã®List
+     * @return ã‚¯ãƒ©ã‚¹ã®List
      */
     public static List<ClassInfo> convert(final List<ClassTypeInfo> references) {
 
@@ -39,10 +39,10 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * QÆŒ^‚ÌSortedSet‚ğƒNƒ‰ƒX‚ÌSortedSet‚É•ÏŠ·‚·‚é
+     * å‚ç…§å‹ã®SortedSetã‚’ã‚¯ãƒ©ã‚¹ã®SortedSetã«å¤‰æ›ã™ã‚‹
      * 
-     * @param references QÆŒ^‚ÌSortedSet
-     * @return ƒNƒ‰ƒX‚ÌSortedSet
+     * @param references å‚ç…§å‹ã®SortedSet
+     * @return ã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     public static SortedSet<ClassInfo> convert(final SortedSet<ClassTypeInfo> references) {
 
@@ -55,9 +55,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * QÆ‚³‚ê‚éƒNƒ‰ƒX‚ğ—^‚¦‚Ä‰Šú‰»
+     * å‚ç…§ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param referencedClass QÆ‚³‚ê‚éƒNƒ‰ƒX
+     * @param referencedClass å‚ç…§ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
      */
     public ClassTypeInfo(final ClassInfo referencedClass) {
 
@@ -71,38 +71,38 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Œ^‚ğ“™‚µ‚¢‚©‚Ç‚¤‚©‚ğ”äŠrD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå‹ã‚’ç­‰ã—ã„ã‹ã©ã†ã‹ã‚’æ¯”è¼ƒï¼
      * 
-     * @return “™‚µ‚¢ê‡‚ÍtrueC“™‚µ‚­‚È‚¢ê‡‚Ífalse
+     * @return ç­‰ã—ã„å ´åˆã¯trueï¼Œç­‰ã—ããªã„å ´åˆã¯false
      */
     public boolean equals(TypeInfo typeInfo) {
 
-        // ˆø”‚ª null ‚È‚ç‚ÎC“™‚µ‚­‚È‚¢
+        // å¼•æ•°ãŒ null ãªã‚‰ã°ï¼Œç­‰ã—ããªã„
         if (null == typeInfo) {
             return false;
         }
 
-        // ˆø”‚ªQÆŒ^‚Å‚È‚¯‚ê‚ÎC“™‚µ‚­‚È‚¢
+        // å¼•æ•°ãŒå‚ç…§å‹ã§ãªã‘ã‚Œã°ï¼Œç­‰ã—ããªã„
         if (!(typeInfo instanceof ClassTypeInfo)) {
             return false;
         }
 
-        // ˆø”‚ªQÆŒ^‚Ìê‡C
-        // QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ª“™‚µ‚­‚È‚¢ê‡‚ÍCQÆŒ^‚Í“™‚µ‚­‚È‚¢
+        // å¼•æ•°ãŒå‚ç…§å‹ã®å ´åˆï¼Œ
+        // å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ãŒç­‰ã—ããªã„å ´åˆã¯ï¼Œå‚ç…§å‹ã¯ç­‰ã—ããªã„
         final ClassTypeInfo targetReferenceType = (ClassTypeInfo) typeInfo;
         final ClassInfo targetReferencedClass = targetReferenceType.getReferencedClass();
         if (!this.referencedClass.equals(targetReferencedClass)) {
             return false;
         }
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚Ì”‚ªˆÙ‚È‚éê‡‚ÍC“™‚µ‚­‚È‚¢
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ•°ãŒç•°ãªã‚‹å ´åˆã¯ï¼Œç­‰ã—ããªã„
         final List<TypeInfo> thisTypeParameters = this.typeArguments;
         final List<TypeInfo> targetTypeParameters = targetReferenceType.getTypeArguments();
         if (thisTypeParameters.size() != targetTypeParameters.size()) {
             return false;
         }
 
-        // ‘S‚Ä‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ª“™‚µ‚­‚È‚¯‚ê‚ÎC“™‚µ‚­‚È‚¢
+        // å…¨ã¦ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒç­‰ã—ããªã‘ã‚Œã°ï¼Œç­‰ã—ããªã„
         final Iterator<TypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
         final Iterator<TypeInfo> targetTypeParameterIterator = targetTypeParameters.iterator();
         while (thisTypeParameterIterator.hasNext()) {
@@ -117,9 +117,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ğ•\‚·•¶š—ñ‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã‚’è¡¨ã™æ–‡å­—åˆ—ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ğ•\‚·•¶š—ñ
+     * @return ã“ã®å‚ç…§å‹ã‚’è¡¨ã™æ–‡å­—åˆ—
      */
     public String getTypeName() {
 
@@ -140,45 +140,45 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Ô‚·
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @return QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX
+     * @return å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public ClassInfo getReferencedClass() {
         return this.referencedClass;
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚É—p‚¢‚ç‚ê‚Ä‚¢‚éŒ^ˆø”‚ÌƒŠƒXƒg‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã«ç”¨ã„ã‚‰ã‚Œã¦ã„ã‚‹å‹å¼•æ•°ã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚É—p‚¢‚ç‚ê‚Ä‚¢‚éŒ^ˆø”‚ÌƒŠƒXƒg‚ğ•Ô‚·
+     * @return ã“ã®å‚ç…§å‹ã«ç”¨ã„ã‚‰ã‚Œã¦ã„ã‚‹å‹å¼•æ•°ã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
      */
     public List<TypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚Åw’è‚³‚ê‚½Œ^ˆø”‚ğ•Ô‚·.
+     * ã“ã®å‚ç…§å‹ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã§æŒ‡å®šã•ã‚ŒãŸå‹å¼•æ•°ã‚’è¿”ã™.
      * 
-     * @param index Œ^ˆø”‚ÌƒCƒ“ƒfƒbƒNƒX
-     * @return@‚±‚ÌQÆŒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚Åw’è‚³‚ê‚½Œ^ˆø”
+     * @param index å‹å¼•æ•°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+     * @returnã€€ã“ã®å‚ç…§å‹ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã§æŒ‡å®šã•ã‚ŒãŸå‹å¼•æ•°
      */
     public TypeInfo getTypeArgument(final int index) {
 
         final ClassInfo referencedClass = this.getReferencedClass();
         final List<TypeParameterInfo> typeParameters = referencedClass.getTypeParameters();
 
-        // index ‚ªŒ^ƒpƒ‰ƒ[ƒ^‚ª’è‹`‚³‚ê‚Ä‚¢‚é”ÍˆÍŠO‚Å‚ ‚ê‚Î—áŠO‚ğƒXƒ[
+        // index ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒå®šç¾©ã•ã‚Œã¦ã„ã‚‹ç¯„å›²å¤–ã§ã‚ã‚Œã°ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼
         if ((index < 0) || (typeParameters.size() <= index)) {
             throw new IllegalArgumentException();
         }
 
-        // index‚ªŒ^ˆø”‚ª’è‹`‚³‚ê‚Ä‚¢‚é”ÍˆÍ“à‚Å‚ ‚ê‚ÎC‚»‚ê‚ğ•Ô‚·
+        // indexãŒå‹å¼•æ•°ãŒå®šç¾©ã•ã‚Œã¦ã„ã‚‹ç¯„å›²å†…ã§ã‚ã‚Œã°ï¼Œãã‚Œã‚’è¿”ã™
         if (index < this.typeArguments.size()) {
             return this.typeArguments.get(index);
         }
 
-        //index‚ªŒ^ˆø”‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚¢”ÍˆÍ‚Å‚ ‚ê‚ÎCObject‚ğ•Ô‚·
+        //indexãŒå‹å¼•æ•°ãŒå®šç¾©ã•ã‚Œã¦ã„ãªã„ç¯„å›²ã§ã‚ã‚Œã°ï¼ŒObjectã‚’è¿”ã™
         else {
             final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                     .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -187,7 +187,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Œ^ƒpƒ‰ƒ[ƒ^‚É‘Î‰‚·‚éŒ^ˆø”‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«å¯¾å¿œã™ã‚‹å‹å¼•æ•°ã‚’è¿”ã™
      * @param typeParameter
      * @return
      */
@@ -206,7 +206,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
                 continue;
             }
 
-            // eƒNƒ‰ƒX‚ÌŒ^ˆø”‚ÌŒ^‚ªŒ^ƒpƒ‰ƒ[ƒ^‚¾‚Á‚½ê‡
+            // è¦ªã‚¯ãƒ©ã‚¹ã®å‹å¼•æ•°ã®å‹ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã ã£ãŸå ´åˆ
             if (superTypeArgumentType instanceof TypeParameterTypeInfo) {
                 final TypeParameterInfo superTypeTypeParameter = ((TypeParameterTypeInfo) superTypeArgumentType)
                         .getReferncedTypeParameter();
@@ -216,7 +216,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
                     return this.getTypeArgument(index);
                 }
 
-                // –{—ˆ‚ÍƒGƒ‰[‚ğ•Ô‚·‚×‚«?
+                // æœ¬æ¥ã¯ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã¹ã?
                 else {
                     final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                             .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -224,7 +224,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
                 }
             }
 
-            // eƒNƒ‰ƒX‚ÌŒ^ˆø”‚ÌŒ^‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Å‚È‚©‚Á‚½ê‡
+            // è¦ªã‚¯ãƒ©ã‚¹ã®å‹å¼•æ•°ã®å‹ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ãªã‹ã£ãŸå ´åˆ
             else {
                 return superTypeArgumentType;
             }
@@ -234,21 +234,21 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÉŒ^ˆø”‚ğ’Ç‰Á
+     * ã“ã®å‚ç…§å‹ã«å‹å¼•æ•°ã‚’è¿½åŠ 
      * 
-     * @param argument ’Ç‰Á‚·‚éŒ^ˆø”
+     * @param argument è¿½åŠ ã™ã‚‹å‹å¼•æ•°
      */
     public void addTypeArgument(final TypeInfo argument) {
         this.typeArguments.add(argument);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ª•\‚·ƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®å‚ç…§å‹ãŒè¡¨ã™ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final ClassInfo referencedClass;
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®å‚ç…§å‹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<TypeInfo> typeArguments;
 

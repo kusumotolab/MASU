@@ -26,7 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * C#‚âVB‚ÌƒvƒƒpƒeƒB‚ÌAST‚ğ‰ğÍ‚µ‚ÄC‚»‚ê‚Æ“™‰¿‚Èƒƒ\ƒbƒh‚Ìî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_
+ * C#ã‚„VBã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ASTã‚’è§£æã—ã¦ï¼Œãã‚Œã¨ç­‰ä¾¡ãªãƒ¡ã‚½ãƒƒãƒ‰ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€
  * @author t-miyake
  *
  */

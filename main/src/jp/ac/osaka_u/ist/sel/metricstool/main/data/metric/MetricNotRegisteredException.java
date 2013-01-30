@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
 /**
- * �o�^����Ă��Ȃ����g���N�X���ɃA�N�Z�X�����ꍇ�ɃX���[������O
+ * 登録されていないメトリクス情報にアクセスした場合にスローされる例外
  * 
  * @author higo
  *

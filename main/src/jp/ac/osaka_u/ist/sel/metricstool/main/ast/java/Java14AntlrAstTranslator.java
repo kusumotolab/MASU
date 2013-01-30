@@ -29,7 +29,7 @@ import antlr.collections.AST;
 
 
 /**
- * {@link Java14Parser}‚©‚ç¶¬‚³‚ê‚éASTƒm[ƒh‚ğ {@link AstToken}‚É•ÏŠ·‚·‚éƒNƒ‰ƒX.
+ * {@link Java14Parser}ã‹ã‚‰ç”Ÿæˆã•ã‚Œã‚‹ASTãƒãƒ¼ãƒ‰ã‚’ {@link AstToken}ã«å¤‰æ›ã™ã‚‹ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -37,16 +37,16 @@ import antlr.collections.AST;
 public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
 
     /**
-     *  {@link Java14Parser}‚©‚ç¶¬‚³‚ê‚éASTƒm[ƒh‚ğ {@link AstToken}‚É•ÏŠ·‚·‚é.
+     *  {@link Java14Parser}ã‹ã‚‰ç”Ÿæˆã•ã‚Œã‚‹ASTãƒãƒ¼ãƒ‰ã‚’ {@link AstToken}ã«å¤‰æ›ã™ã‚‹.
      *  
-     *  @param node •ÏŠ·‘ÎÛ‚Ìƒm[ƒh
-     *  @return •ÏŠ·Œ‹‰Ê‚ÌAstToken
+     *  @param node å¤‰æ›å¯¾è±¡ã®ãƒãƒ¼ãƒ‰
+     *  @return å¤‰æ›çµæœã®AstToken
      */
     public AstToken translate(AST node) {
         int type = node.getType();
         AstToken result = null;
 
-        //¯•Êq‚¾‚¯‚Í–¼‘O‚ğg‚Á‚½ê—p‚ÌƒLƒƒƒbƒVƒ…‚ğg‚¤.
+        //è­˜åˆ¥å­ã ã‘ã¯åå‰ã‚’ä½¿ã£ãŸå°‚ç”¨ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ä½¿ã†.
         if (type == Java14TokenTypes.IDENT) {
             String name = node.getText();
             if (identifierTokenMap.containsKey(name)) {
@@ -56,12 +56,12 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
             }
         }
 
-        //‘¼‚ÌŒ^‚ÍƒLƒƒƒbƒVƒ…‚ğ’T‚µ‚Ä•Ô‚·
+        //ä»–ã®å‹ã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’æ¢ã—ã¦è¿”ã™
         if (tokenMap.containsKey(type)) {
             return tokenMap.get(type);
         }
 
-        //ƒLƒƒƒbƒVƒ…‚ª‚È‚¢‚Ì‚Å‘“–‚è
+        //ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãŒãªã„ã®ã§ç·å½“ã‚Š
         switch (type) {
         case Java14TokenTypes.PACKAGE_DEF:
             result = DefinitionToken.NAMESPACE_DEFINITION;
@@ -69,7 +69,7 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java14TokenTypes.ANNOTATIONS:
         case Java14TokenTypes.ANNOTATION_DEF:
             result = VisitControlToken.SKIP;
-            //ƒAƒmƒe[ƒVƒ‡ƒ“ŠÖ˜A‚Í‘S•”–³‹
+            //ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³é–¢é€£ã¯å…¨éƒ¨ç„¡è¦–
             break;
         case Java14TokenTypes.IMPORT:
             //        case Java15TokenTypes.STATIC_IMPORT:
@@ -93,7 +93,7 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java14TokenTypes.INTERFACE_DEF:
             result = JavaAstToken.INTERFACE_DEFINITION;
             break;
-        //        case Java14TokenTypes.ENUM_DEF://enum‚ÍƒNƒ‰ƒX‚Æ‚µ‚Äˆµ‚¤
+        //        case Java14TokenTypes.ENUM_DEF://enumã¯ã‚¯ãƒ©ã‚¹ã¨ã—ã¦æ‰±ã†
         //            result = DefinitionToken.CLASS_DEFINITION;
         //            break;
         //        case Java14TokenTypes.ENUM_CONSTANT_DEF:
@@ -454,7 +454,7 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = SyntaxToken.ASSERT;
             break;
         default:
-            //•ÏŠ·‚Å‚«‚È‚©‚Á‚½ƒm[ƒh‚Íæ‚è‚ ‚¦‚¸‚»‚Ìq‹Ÿ‚Éi‚Ş
+            //å¤‰æ›ã§ããªã‹ã£ãŸãƒãƒ¼ãƒ‰ã¯å–ã‚Šã‚ãˆãšãã®å­ä¾›ã«é€²ã‚€
             result = VisitControlToken.ENTER;
             break;
         }
@@ -465,12 +465,12 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
     }
 
     /**
-     * ƒg[ƒNƒ“‚ÌƒLƒƒƒbƒVƒ…
+     * ãƒˆãƒ¼ã‚¯ãƒ³ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
      */
     private final Map<Integer, AstToken> tokenMap = new HashMap<Integer, AstToken>();
 
     /**
-     * ¯•Êqƒg[ƒNƒ“‚ÌƒLƒƒƒbƒVƒ…
+     * è­˜åˆ¥å­ãƒˆãƒ¼ã‚¯ãƒ³ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
      */
     private final Map<String, AstToken> identifierTokenMap = new HashMap<String, AstToken>();
 }

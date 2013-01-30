@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class StaticInitializerStateManager extends CallableUnitStateManager{
 
     /**
-     * ˆø”‚ÌƒCƒxƒ“ƒg‚ªƒXƒ^ƒeƒBƒbƒNEƒCƒjƒVƒƒƒ‰ƒCƒU’è‹`•”‚ð•\‚·‚©‚Ç‚¤‚©‚©‚ð•Ô‚·
+     * å¼•æ•°ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ»ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‹ã‚’è¿”ã™
      */
     @Override
     protected boolean isDefinitionEvent(AstVisitEvent event) {

@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * void Œ^‚ğ•\‚·ƒNƒ‰ƒXD
+ * void å‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -14,23 +14,23 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidTypeInfo> {
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public static VoidTypeInfo getInstance() {
         return SINGLETON;
     }
 
     /**
-     * void Œ^‚Ì–¼‘O‚ğ•Ô‚·D
+     * void å‹ã®åå‰ã‚’è¿”ã™ï¼
      */
     public String getTypeName() {
         return this.name;
     }
 
     /**
-     * “™‚µ‚¢‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN‚ğs‚¤
+     * ç­‰ã—ã„ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
      */
     public boolean equals(final TypeInfo typeInfo) {
 
@@ -42,32 +42,32 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidType
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åå‰è§£æ±ºã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return í‚É true ‚ğ•Ô‚·
+     * @return å¸¸ã« true ã‚’è¿”ã™
      */
     public boolean alreadyResolved() {
         return true;
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğ•Ô‚·
+     * åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±ã‚’è¿”ã™
      * 
-     * @return ©•ª©g‚ğ•Ô‚·
+     * @return è‡ªåˆ†è‡ªèº«ã‚’è¿”ã™
      */
     public VoidTypeInfo getResolved() {
         return this;
     }
 
     /**
-     * –¢‰ğŒˆvoidî•ñ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İQÆ‚ğ•Ô‚·D
+     * æœªè§£æ±ºvoidæƒ…å ±ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿å‚ç…§ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆˆø”î•ñ‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆˆø”î•ñ‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İvoidî•ñ
+     * @param usingClass æœªè§£æ±ºå¼•æ•°æƒ…å ±ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºå¼•æ•°æƒ…å ±ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿voidæƒ…å ±
      */
     public VoidTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -76,24 +76,24 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidType
     }
 
     /**
-     * void Œ^‚ÌŒ^–¼‚ğ•\‚·’è”
+     * void å‹ã®å‹åã‚’è¡¨ã™å®šæ•°
      */
     public static final String VOID_STRING = "void";
 
     /**
-     * ˆø”‚È‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * å¼•æ•°ãªã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     private VoidTypeInfo() {
         this.name = VOID_STRING;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì’è”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å®šæ•°
      */
     private static final VoidTypeInfo SINGLETON = new VoidTypeInfo();
 
     /**
-     * ‚±‚ÌŒ^‚Ì–¼‘O‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®å‹ã®åå‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String name;
 }

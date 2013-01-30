@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ finally ƒuƒƒbƒNî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±º finally ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -21,10 +21,10 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         implements UnresolvedSubsequentialBlockInfo<UnresolvedTryBlockInfo> {
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒNî•ñ‚ÆŠO‘¤‚ÌƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä finally ƒuƒƒbƒN‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã¨å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ finally ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param ownerTryBlock ‘Î‰‚·‚é try ƒuƒƒbƒN
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param ownerTryBlock å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedFinallyBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock,
             final UnresolvedLocalSpaceInfo<?> outerSpace) {
@@ -38,28 +38,28 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ finally ß‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º finally ç¯€ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public FinallyBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì finally ß‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® finally ç¯€ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -67,7 +67,7 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
 
         this.resolvedInfo = new FinallyBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
-        // ‚±‚Ì finally ß‚ª‘®‚·‚é try ƒuƒƒbƒN‚ğæ“¾
+        // ã“ã® finally ç¯€ãŒå±ã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’å–å¾—
         final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
         final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -82,11 +82,11 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
-     * ‚±‚Ìƒƒ\ƒbƒh‚Í«—ˆ”p~‚³‚ê‚é‚½‚ßCg—p‚Í„§‚³‚ê‚È‚¢
-     * {@link UnresolvedFinallyBlockInfo#getOwnerBlock()} ‚ğg—p‚·‚×‚«‚Å‚ ‚éD
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å°†æ¥å»ƒæ­¢ã•ã‚Œã‚‹ãŸã‚ï¼Œä½¿ç”¨ã¯æ¨å¥¨ã•ã‚Œãªã„
+     * {@link UnresolvedFinallyBlockInfo#getOwnerBlock()} ã‚’ä½¿ç”¨ã™ã¹ãã§ã‚ã‚‹ï¼
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      * @deprecated
      */
     public UnresolvedTryBlockInfo getOwnerTryBlock() {
@@ -94,9 +94,9 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      */
     @Override
     public UnresolvedTryBlockInfo getOwnerBlock() {

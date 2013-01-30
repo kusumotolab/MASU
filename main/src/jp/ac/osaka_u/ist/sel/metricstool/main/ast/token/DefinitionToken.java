@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * ‰½‚©‚Ì—v‘f‚Ì’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX
+ * ä½•ã‹ã®è¦ç´ ã®å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class DefinitionToken extends AstTokenAdapter {
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken CLASS_DEFINITION = new DefinitionToken("CLASS_DEFINITION") {
         @Override
@@ -25,7 +25,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * enum’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * enumå®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken ENUM_DEFINITION = new DefinitionToken("ENUM_DEFINITION") {
         @Override
@@ -40,7 +40,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken CONSTRUCTOR_DEFINITION = new DefinitionToken(
             "CONSTRUCTOR_DEFINITION") {
@@ -56,7 +56,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒvƒƒpƒeƒB’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DefinitionToken PROPERTY_DEFINITION = new DefinitionToken(
             "PROPERTY_DEFINITION") {
@@ -67,7 +67,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DefinitionToken STATIC_INIT = new DefinitionToken("STATIC_INIT") {
 
@@ -78,7 +78,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DefinitionToken INSTANCE_INIT = new DefinitionToken("INSTANCE_INIT") {
 
@@ -89,7 +89,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒtƒB[ƒ‹ƒh’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken FIELD_DEFINITION = new DefinitionToken("FIELD_DEFINITION") {
         @Override
@@ -99,7 +99,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒ[ƒJƒ‹ƒpƒ‰ƒ[ƒ^ifor•¶‚âcatchß‚ÌÅ‰‚ÉéŒ¾‚³‚ê‚é•Ï”j‚Ì’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆforæ–‡ã‚„catchç¯€ã®æœ€åˆã«å®£è¨€ã•ã‚Œã‚‹å¤‰æ•°ï¼‰ã®å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DefinitionToken LOCAL_PARAMETER_DEFINITION = new DefinitionToken(
             "LOCAL_PARAMETER_DEFINITION") {
@@ -115,7 +115,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒ[ƒJƒ‹•Ï”’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken LOCAL_VARIABLE_DEFINITION = new DefinitionToken(
             "LOCAL_VARIABLE_DEFINITION") {
@@ -126,7 +126,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒƒ\ƒbƒh’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken METHOD_DEFINITION = new DefinitionToken("METHOD_DEFINITION") {
         @Override
@@ -141,7 +141,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒƒ\ƒbƒhƒpƒ‰ƒ[ƒ^’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken METHOD_PARAMETER_DEFINITION = new DefinitionToken(
             "METHOD_PARAMETER_DEFINITION") {
@@ -152,7 +152,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒƒ\ƒbƒh‚Ì‰Â•Ï’·ƒpƒ‰ƒ[ƒ^’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã®å¯å¤‰é•·ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final DefinitionToken VARIABLE_PARAMETER_DEFINTION = new DefinitionToken(
             "VARIABLE_PARAMETER_DEFINTION") {
@@ -168,7 +168,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * –¼‘O‹óŠÔ‚Ì’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * åå‰ç©ºé–“ã®å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken NAMESPACE_DEFINITION = new DefinitionToken(
             "NAMESPACE_DEFINITION") {
@@ -179,7 +179,7 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚Ì’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final DefinitionToken TYPE_PARAMETER_DEFINITION = new DefinitionToken(
             "TYPE_PARAMETER_DEFINITION") {
@@ -190,8 +190,8 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
-     * w’è‚³‚ê‚½•¶š—ñ‚Å‰Šú‰»‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * @param text ‚±‚Ìƒg[ƒNƒ“‚ğ•\‚·•¶š—ñ.
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã§åˆæœŸåŒ–ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * @param text ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¡¨ã™æ–‡å­—åˆ—.
      */
     public DefinitionToken(final String text) {
         super(text);

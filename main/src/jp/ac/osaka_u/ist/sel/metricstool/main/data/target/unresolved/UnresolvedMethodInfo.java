@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ˆê“x–Ú‚ÌASTƒp[ƒX‚Åæ“¾‚µ‚½ƒƒ\ƒbƒhî•ñ‚ğˆê“I‚ÉŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD
+ * ä¸€åº¦ç›®ã®ASTãƒ‘ãƒ¼ã‚¹ã§å–å¾—ã—ãŸãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’ä¸€æ™‚çš„ã«æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
  * 
  * 
  * @author higo
@@ -27,12 +27,12 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         implements StaticOrInstance {
 
     /**
-     * –¢‰ğŒˆƒƒ\ƒbƒh’è‹`î•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
-     * @param ownerClass ‚±‚Ìƒƒ\ƒbƒh‚ğéŒ¾‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
+     * @param ownerClass ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®£è¨€ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedMethodInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -44,29 +44,29 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * –¢‰ğŒˆƒƒ\ƒbƒhî•ñ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İQÆ‚ğ•Ô‚·D
+     * æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿å‚ç…§ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆƒƒ\ƒbƒhî•ñ‚Ì’è‹`‚ª‚ ‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆƒƒ\ƒbƒhî•ñ‚Ì’è‹`‚ª‚ ‚éƒƒ\ƒbƒhi‚±‚Ìƒƒ\ƒbƒh‚ªŒÄ‚Î‚ê‚éê‡‚Í’Êí null ‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚é‚Í‚¸j
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İƒƒ\ƒbƒhî•ñ
+     * @param usingClass æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®å®šç¾©ãŒã‚ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®å®šç¾©ãŒã‚ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã°ã‚Œã‚‹å ´åˆã¯é€šå¸¸ null ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã¯ãšï¼‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±
      */
     @Override
     public TargetMethodInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // CüqC–¼‘OCs”C‰Â‹«CƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğæ“¾
+        // ä¿®é£¾å­ï¼Œåå‰ï¼Œè¡Œæ•°ï¼Œå¯è¦–æ€§ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’å–å¾—
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
         final String methodName = this.getMethodName();
 
@@ -76,7 +76,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // MethodInfo ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éD
+        // MethodInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ï¼
         this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, instance, fromLine,
                 fromColumn, toLine, toColumn);
 
@@ -85,8 +85,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                 classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setOuterUnit(ownerClass);
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İƒƒ\ƒbƒhî•ñ‚É’Ç‰Á‚·‚é
-        // Œ^ƒpƒ‰ƒ[ƒ^‚Ìextendsß‚Í‚±‚±‚Å‚Í‰ğŒˆ‚µ‚È‚¢
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã«è¿½åŠ ã™ã‚‹
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®extendsç¯€ã¯ã“ã“ã§ã¯è§£æ±ºã—ãªã„
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
@@ -98,15 +98,15 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * –¢‰ğŒˆ•Ô‚è’lî•ñ‚ğ‰ğŒˆ‚·‚é
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºè¿”ã‚Šå€¤æƒ…å ±ã‚’è§£æ±ºã™ã‚‹
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
      * @param classInfoManager
      * @return
      */
     public final TargetMethodInfo resolveReturnType(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -125,22 +125,22 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh–¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public String getMethodName() {
         return this.methodName;
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğƒZƒbƒg‚·‚é
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param methodName ƒƒ\ƒbƒh–¼
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public void setMethodName(final String methodName) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodName) {
             throw new NullPointerException();
@@ -150,22 +150,22 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * ƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ÌŒ^‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã®å‹ã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ÌŒ^
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã®å‹
      */
     public UnresolvedTypeInfo<?> getReturnType() {
         return this.returnType;
     }
 
     /**
-     * ƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ğƒZƒbƒg‚·‚é
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param returnType ƒƒ\ƒbƒh‚Ì•Ô‚è’l
+     * @param returnType ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤
      */
     public void setReturnType(final UnresolvedTypeInfo<?> returnType) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == returnType) {
             throw new NullPointerException();
@@ -175,12 +175,12 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private String methodName;
 
     /**
-     * ƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private UnresolvedTypeInfo<?> returnType;
 }

@@ -4,11 +4,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 
 /**
- * 未解決条件文を表すクラス
+ * 譛ｪ隗｣豎ｺ譚｡莉ｶ譁�繧定｡ｨ縺吶け繝ｩ繧ｹ
  * 
  * @author higo
  *
- * @param <T> 解決された型を表す型パラメータ
+ * @param <T> 隗｣豎ｺ縺輔ｌ縺溷梛繧定｡ｨ縺吝梛繝代Λ繝｡繝ｼ繧ｿ
  */
 public interface UnresolvedConditionInfo<T extends ConditionInfo> extends
         UnresolvedExecutableElementInfo<T> {

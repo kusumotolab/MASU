@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * ƒAƒNƒZƒXCüq‚ğ•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX.
+ * ã‚¢ã‚¯ã‚»ã‚¹ä¿®é£¾å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -10,12 +10,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class AccessModifierToken extends ModifierToken {
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½•¶š—ñ‚Æ‰Â‹«‚ğ‚Á‚½ƒAƒNƒZƒXCüqƒg[ƒNƒ“‚ğì¬‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã¨å¯è¦–æ€§ã‚’æŒã£ãŸã‚¢ã‚¯ã‚»ã‚¹ä¿®é£¾å­ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * @param text Cüq‚Ì•¶š—ñ
-     * @param publicVisibility ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ªƒpƒuƒŠƒbƒN‚È‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©
-     * @param nameSpaceVisibility ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ª“¯‚¶–¼‘O‹óŠÔ‚©‚ç‚Ì‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©
-     * @param inheritanceVisibility ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ªŒp³ŠÖŒW‚É‚ ‚éƒNƒ‰ƒX‚©‚ç‚Ì‰Â‹«‚ğ‚à‚Â‚©‚Ç‚¤‚©
+     * @param text ä¿®é£¾å­ã®æ–‡å­—åˆ—
+     * @param publicVisibility ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªå¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹
+     * @param nameSpaceVisibility ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒåŒã˜åå‰ç©ºé–“ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹
+     * @param inheritanceVisibility ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒç¶™æ‰¿é–¢ä¿‚ã«ã‚ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®å¯è¦–æ€§ã‚’ã‚‚ã¤ã‹ã©ã†ã‹
      */
     public AccessModifierToken(final String text, final boolean publicVisibility, final boolean nameSpaceVisibility,
             final boolean inheritanceVisibility) {
@@ -31,41 +31,41 @@ public class AccessModifierToken extends ModifierToken {
     }
 
     /**
-     * ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ªƒpƒuƒŠƒbƒN‚È‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return@ƒpƒuƒŠƒbƒN‚È‰Â‹«‚ğ‚Âê‡‚Ítrue
+     * ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªå¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @returnã€€ãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªå¯è¦–æ€§ã‚’æŒã¤å ´åˆã¯true
      */
     public boolean isPublicVisibility() {
         return this.publicVisibility;
     }
 
     /**
-     * ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ª“¯‚¶–¼‘O‹óŠÔ‚©‚ç‚Ì‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚ç‚Ì‰Â‹«‚ğ‚Âê‡‚Ítrue
+     * ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒåŒã˜åå‰ç©ºé–“ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤å ´åˆã¯true
      */
     public boolean isNameSpaceVisibility() {
         return this.nameSpaceVisibility;
     }
 
     /**
-     * ‚±‚ÌCüq‚ğ•t‚¯‚ç‚ê‚½—v‘f‚ªŒp³ŠÖŒW‚É‚ ‚éƒNƒ‰ƒX‚©‚ç‚Ì‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return Œp³ŠÖŒW‚É‚ ‚éƒNƒ‰ƒX‚©‚ç‚Ì‰Â‹«‚ğ‚Âê‡‚Ítrue
+     * ã“ã®ä¿®é£¾å­ã‚’ä»˜ã‘ã‚‰ã‚ŒãŸè¦ç´ ãŒç¶™æ‰¿é–¢ä¿‚ã«ã‚ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return ç¶™æ‰¿é–¢ä¿‚ã«ã‚ã‚‹ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤å ´åˆã¯true
      */
     public boolean isInheritanceVisibility() {
         return this.inheritanceVisibility;
     }
 
     /**
-     * ƒpƒuƒŠƒbƒN‚È‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•\‚·
+     * ãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªå¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean publicVisibility;
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚ç‚Ì‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•\‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean nameSpaceVisibility;
 
     /**
-     * Œp³ŠÖŒW‚©‚ç‚Ì‰Â‹«‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•\‚·
+     * ç¶™æ‰¿é–¢ä¿‚ã‹ã‚‰ã®å¯è¦–æ€§ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean inheritanceVisibility;
 }

@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * switch •¶‚Ì case ƒGƒ“ƒgƒŠ‚ğ•\‚·ƒNƒ‰ƒX
+ * switch æ–‡ã® case ã‚¨ãƒ³ãƒˆãƒªã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -22,16 +22,16 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         UnresolvedStatementInfo<CaseEntryInfo> {
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚Æƒ‰ƒxƒ‹î•ñ‚ğ—^‚¦‚Ä case ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã¨ãƒ©ãƒ™ãƒ«æƒ…å ±ã‚’ä¸ãˆã¦ case ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–
      * 
-     * @param ownerSwitchBlock ‘Î‰‚·‚é switch ƒuƒƒbƒN
-     * @param label ƒ‰ƒxƒ‹
+     * @param ownerSwitchBlock å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
+     * @param label ãƒ©ãƒ™ãƒ«
      * 
      */
     public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
             final UnresolvedCaseLabelInfo label) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerSwitchBlock) || (null == label)) {
             throw new IllegalArgumentException();
@@ -41,15 +41,15 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     }
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä case ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»D
-     * ‚È‚¨C‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í default ƒGƒ“ƒgƒŠ—p‚Ì‚à‚Ì‚Å‚ ‚éD
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ case ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–ï¼
+     * ãªãŠï¼Œã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯ default ã‚¨ãƒ³ãƒˆãƒªç”¨ã®ã‚‚ã®ã§ã‚ã‚‹ï¼
      * 
-     * @param ownerSwitchBlock ‘Î‰‚·‚é switch ƒuƒƒbƒN
+     * @param ownerSwitchBlock å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
      */
     protected UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
@@ -60,66 +60,66 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ case ƒGƒ“ƒgƒŠ‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º case ã‚¨ãƒ³ãƒˆãƒªã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public CaseEntryInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch •¶‚ğæ“¾
+        // ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch æ–‡ã‚’å–å¾—
         final UnresolvedSwitchBlockInfo unresolvedOwnerSwitchBlock = this.getOwnerSwitchBlock();
         final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹‚ğæ“¾
+        // ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«ã‚’å–å¾—
         final UnresolvedCaseLabelInfo unresolvedLabel = this.getLabel();
         final ExpressionInfo label = unresolvedLabel.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        //@‰ğŒˆÏ‚İ case ƒGƒ“ƒgƒŠƒIƒuƒWƒFƒNƒg‚ğì¬
+        //ã€€è§£æ±ºæ¸ˆã¿ case ã‚¨ãƒ³ãƒˆãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
         this.resolvedInfo = new CaseEntryInfo(ownerSwitchBlock, label, fromLine, fromColumn,
                 toLine, toColumn);
         return this.resolvedInfo;
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN‚ğ•Ô‚·
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN
+     * @return ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
      */
     public final UnresolvedSwitchBlockInfo getOwnerSwitchBlock() {
         return this.ownerSwitchBlock;
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹‚ğ•Ô‚·
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹
+     * @return ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«
      */
     public final UnresolvedCaseLabelInfo getLabel() {
         return this.label;
@@ -153,12 +153,12 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedSwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedCaseLabelInfo label;
 

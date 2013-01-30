@@ -15,19 +15,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠÇ—‚·‚éƒNƒ‰ƒXD
- * ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“‚ÅÀ‘•‚³‚ê‚Ä‚¢‚éD
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
+ * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã§å®Ÿè£…ã•ã‚Œã¦ã„ã‚‹ï¼
  * 
  * @author kou-tngt
  */
 public class PluginManager {
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğ“o˜^‚·‚é
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·‚É‚Í“Á•ÊŒ ŒÀ‚ª•K—v‚Å‚ ‚é
-     * @param plugin “o˜^‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚Å‚È‚¢ê‡
-     * @throws NullPointerException plugin‚ªnull‚Ìê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ç™»éŒ²ã™ã‚‹
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã«ã¯ç‰¹åˆ¥æ¨©é™ãŒå¿…è¦ã§ã‚ã‚‹
+     * @param plugin ç™»éŒ²ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã§ãªã„å ´åˆ
+     * @throws NullPointerException pluginãŒnullã®å ´åˆ
      */
     public void addPlugin(final AbstractPlugin plugin) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -59,11 +59,11 @@ public class PluginManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğ“o˜^‚·‚é
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·‚É‚Í“Á•ÊŒ ŒÀ‚ª•K—v‚Å‚ ‚é
-     * @param collection “o˜^‚·‚éƒvƒ‰ƒOƒCƒ“ŒQ‚ğ‚à‚ÂƒRƒŒƒNƒVƒ‡ƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚Å‚È‚¢ê‡
-     * @throws NullPointerException collection‚ªnull‚Ìê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ç™»éŒ²ã™ã‚‹
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã«ã¯ç‰¹åˆ¥æ¨©é™ãŒå¿…è¦ã§ã‚ã‚‹
+     * @param collection ç™»éŒ²ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç¾¤ã‚’ã‚‚ã¤ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã§ãªã„å ´åˆ
+     * @throws NullPointerException collectionãŒnullã®å ´åˆ
      */
     public void addPlugins(final Collection<AbstractPlugin> collection) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -78,11 +78,11 @@ public class PluginManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚ğƒL[‚É‚µ‚ÄC‘Î‰‚·‚éƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @param info ƒL[‚Æ‚È‚éƒvƒ‰ƒOƒCƒ“î•ñ
-     * @return ‘Î‰‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’ã‚­ãƒ¼ã«ã—ã¦ï¼Œå¯¾å¿œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @param info ã‚­ãƒ¼ã¨ãªã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±
+     * @return å¯¾å¿œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public AbstractPlugin getPlugin(final PluginInfo info) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -90,18 +90,18 @@ public class PluginManager {
     }
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚Ì”‚ğ•Ô‚·.
-     * @return “o˜^‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚Ì”.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°ã‚’è¿”ã™.
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°.
      */
     public int getPluginCount() {
         return this.plugins.size();
     }
 
     /**
-     * ‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ğŠÜ‚ñ‚¾•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @return ƒvƒ‰ƒOƒCƒ“‚ÌSet
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å«ã‚“ã ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public Set<AbstractPlugin> getPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -109,10 +109,10 @@ public class PluginManager {
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚Ì•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @return ƒtƒ@ƒCƒ‹’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌSet
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public Set<AbstractPlugin> getFileMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -120,10 +120,10 @@ public class PluginManager {
     }
 
     /**
-     * ƒNƒ‰ƒX’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚Ì•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @return ƒNƒ‰ƒX’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌSet
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * ã‚¯ãƒ©ã‚¹å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @return ã‚¯ãƒ©ã‚¹å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public Set<AbstractPlugin> getClassMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -131,10 +131,10 @@ public class PluginManager {
     }
 
     /**
-     * ƒƒ\ƒbƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚Ì•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @return ƒƒ\ƒbƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌSet
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * ãƒ¡ã‚½ãƒƒãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public Set<AbstractPlugin> getMethodMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -142,10 +142,10 @@ public class PluginManager {
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚Ì•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
-     * @return ƒtƒB[ƒ‹ƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌSet
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Ìê‡
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã®å ´åˆ
      */
     public Set<AbstractPlugin> getFieldMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -153,18 +153,18 @@ public class PluginManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚Ì•ÒW•s‰Â‚ÈSet‚ğ•Ô‚·
-     * @return ƒvƒ‰ƒOƒCƒ“î•ñ‚ÌSet
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®ç·¨é›†ä¸å¯ãªSetã‚’è¿”ã™
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®Set
      */
     public Set<PluginInfo> getPluginInfos() {
         return Collections.unmodifiableSet(this.pluginInfos);
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğíœ‚·‚é
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚Ì‚İ‚©‚çŒÄ‚Ño‚¹‚é.
-     * @param plugin íœ‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å‰Šé™¤ã™ã‚‹
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã‹ã‚‰å‘¼ã³å‡ºã›ã‚‹.
+     * @param plugin å‰Šé™¤ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„å ´åˆ
      */
     public void removePlugin(final AbstractPlugin plugin) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -192,10 +192,10 @@ public class PluginManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğíœ‚·‚é
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚Ì‚İ‚©‚çŒÄ‚Ño‚¹‚é.
-     * @param plugins íœ‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌCollection
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚¢ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å‰Šé™¤ã™ã‚‹
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã‹ã‚‰å‘¼ã³å‡ºã›ã‚‹.
+     * @param plugins å‰Šé™¤ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Collection
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã„å ´åˆ
      */
     public void removePlugins(final Collection<AbstractPlugin> plugins) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -208,7 +208,7 @@ public class PluginManager {
     }
 
     /**
-     * ƒVƒ“ƒOƒ‹ƒgƒ“—pC‹ó‚ÌprivateƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ç”¨ï¼Œç©ºã®privateã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     public PluginManager() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -222,37 +222,37 @@ public class PluginManager {
     };
 
     /**
-     * ‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ÌSet
+     * å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®Set
      */
     private final Set<AbstractPlugin> plugins;
 
     /**
-     * ƒtƒ@ƒCƒ‹’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒZƒbƒg
+     * ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<AbstractPlugin> filePlugins;
 
     /**
-     * ƒNƒ‰ƒX’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒZƒbƒg
+     * ã‚¯ãƒ©ã‚¹å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<AbstractPlugin> classPlugins;
 
     /**
-     * ƒƒ\ƒbƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒZƒbƒg
+     * ãƒ¡ã‚½ãƒƒãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<AbstractPlugin> methodPlugins;
 
     /**
-     * ƒtƒB[ƒ‹ƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒZƒbƒg
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<AbstractPlugin> fieldPlugins;
 
     /**
-     * ‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“î•ñ‚ÌSet
+     * å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®Set
      */
     private final Set<PluginInfo> pluginInfos;
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚©‚çƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ö‚Ìƒ}ƒbƒsƒ“ƒO
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‹ã‚‰ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¸ã®ãƒãƒƒãƒ”ãƒ³ã‚°
      */
     private final Map<PluginInfo, AbstractPlugin> info2pluginMap;
 }

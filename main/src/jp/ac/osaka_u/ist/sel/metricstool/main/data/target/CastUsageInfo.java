@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒLƒƒƒXƒg‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ã‚­ãƒ£ã‚¹ãƒˆã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -17,15 +17,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class CastUsageInfo extends ExpressionInfo {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param castType ƒLƒƒƒXƒg‚ÌŒ^
-     * @param castedUsage ƒLƒƒƒXƒg‚³‚ê‚é—v‘f
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param castType ã‚­ãƒ£ã‚¹ãƒˆã®å‹
+     * @param castedUsage ã‚­ãƒ£ã‚¹ãƒˆã•ã‚Œã‚‹è¦ç´ 
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public CastUsageInfo(final TypeInfo castType, final ExpressionInfo castedUsage,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -33,7 +33,7 @@ public final class CastUsageInfo extends ExpressionInfo {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == castType || null == castedUsage) {
             throw new IllegalArgumentException();
@@ -46,9 +46,9 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒLƒƒƒXƒg‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®ã‚­ãƒ£ã‚¹ãƒˆã®å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒLƒƒƒXƒg‚ÌŒ^
+     * @return ã“ã®ã‚­ãƒ£ã‚¹ãƒˆã®å‹
      */
     @Override
     public TypeInfo getType() {
@@ -56,18 +56,18 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ƒLƒƒƒXƒg‚³‚ê‚é—v‘f‚ğ•Ô‚·
+     * ã‚­ãƒ£ã‚¹ãƒˆã•ã‚Œã‚‹è¦ç´ ã‚’è¿”ã™
      * 
-     * @return ƒLƒƒƒXƒg‚³‚ê‚é—v‘f
+     * @return ã‚­ãƒ£ã‚¹ãƒˆã•ã‚Œã‚‹è¦ç´ 
      */
     public ExpressionInfo getCastedUsage() {
         return this.castedUsage;
     }
 
     /**
-     * ‚±‚Ì®iƒLƒƒƒXƒgg—pj‚É‚¨‚¯‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·
+     * ã“ã®å¼ï¼ˆã‚­ãƒ£ã‚¹ãƒˆä½¿ç”¨ï¼‰ã«ãŠã‘ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -75,9 +75,9 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -85,9 +85,9 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒLƒƒƒXƒgg—p‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®ã‚­ãƒ£ã‚¹ãƒˆä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒLƒƒƒXƒgg—p‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®ã‚­ãƒ£ã‚¹ãƒˆä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -108,9 +108,9 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 
 
 /**
- * JavaŒ¾Œê—p‚ÌŒ^•ÏŠ·ƒ†[ƒeƒBƒŠƒeƒB
+ * Javaè¨€èªžç”¨ã®åž‹å¤‰æ›ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
  * 
  * @author higo
  */
@@ -17,10 +17,10 @@ final public class JavaTypeConverter extends TypeConverter {
     static final JavaTypeConverter SINGLETON = new JavaTypeConverter();
 
     /**
-     * ƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX‚ð•Ô‚·
+     * ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–åž‹ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @param primitiveType ƒ‰ƒbƒp[ƒNƒ‰ƒX‚ðŽæ“¾‚µ‚½‚¢ƒvƒŠƒ~ƒeƒBƒuŒ^
-     * @return Žw’è‚µ‚½ƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX
+     * @param primitiveType ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’å–å¾—ã—ãŸã„ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–åž‹
+     * @return æŒ‡å®šã—ãŸãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–åž‹ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
      */
     @Override
     public ClassInfo getWrapperClass(final PrimitiveTypeInfo primitiveType) {

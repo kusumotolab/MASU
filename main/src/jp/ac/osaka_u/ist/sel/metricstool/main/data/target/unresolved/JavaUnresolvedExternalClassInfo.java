@@ -12,10 +12,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * �o�C�g�R�[�h����͂�����Ԃł̖��������C�u�����N���X���i�[���邽�߂̏��D
- * ���݂́C�Ώی��ꂪJava�݂̂̂��߁C���̂悤�ȊȒP�Ȏ����ɂȂ��Ă��邪�C
- * ���̌���ɑ΂��Ă����C�u�����N���X���쐬����ꍇ�́C
- * ���ʂ̒��ۃN���X���쐬����ȂǁC�A�[�L�e�N�`���̕ύX���K�v�D
+ * バイトコードを解析した状態での未解決ライブラリクラスを格納するための情報．
+ * 現在は，対象言語がJavaのみのため，このような簡単な実装になっているが，
+ * 他の言語に対してもライブラリクラスを作成する場合は，
+ * 共通の抽象クラスを作成するなど，アーキテクチャの変更が必要．
  * 
  * @author higo
  *

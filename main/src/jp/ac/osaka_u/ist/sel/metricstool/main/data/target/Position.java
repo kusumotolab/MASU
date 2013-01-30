@@ -2,37 +2,37 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * ƒtƒ@ƒCƒ‹“à‚Å‚ÌˆÊ’u‚ğ•\‚·‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒF[ƒXD
+ * ãƒ•ã‚¡ã‚¤ãƒ«å†…ã§ã®ä½ç½®ã‚’è¡¨ã™ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ï¼
  * 
  * @author higo
  */
 public interface Position extends Comparable<Position>{
 
     /**
-     * ŠJns‚ğ•Ô‚·
+     * é–‹å§‹è¡Œã‚’è¿”ã™
      * 
-     * @return ŠJns
+     * @return é–‹å§‹è¡Œ
      */
     int getFromLine();
 
     /**
-     * ŠJn—ñ‚ğ•\‚·
+     * é–‹å§‹åˆ—ã‚’è¡¨ã™
      * 
-     * @return ŠJn—ñ
+     * @return é–‹å§‹åˆ—
      */
     int getFromColumn();
 
     /**
-     * I—¹s‚ğ•Ô‚·
+     * çµ‚äº†è¡Œã‚’è¿”ã™
      * 
-     * @return I—¹s
+     * @return çµ‚äº†è¡Œ
      */
     int getToLine();
 
     /**
-     * I—¹—ñ‚ğ•\‚·
+     * çµ‚äº†åˆ—ã‚’è¡¨ã™
      * 
-     * @return I—¹—ñ
+     * @return çµ‚äº†åˆ—
      */
     int getToColumn();
 }

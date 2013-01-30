@@ -37,19 +37,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ASTƒp[ƒX‚Åæ“¾‚µ‚½ƒNƒ‰ƒXî•ñ‚ğˆê“I‚ÉŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD ˆÈ‰º‚Ìî•ñ‚ğ‚Â
+ * ASTãƒ‘ãƒ¼ã‚¹ã§å–å¾—ã—ãŸã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ä¸€æ™‚çš„ã«æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤
  * 
  * <ul>
- * <li>Cüq</li>
- * <li>–¢‰ğŒˆ–¼‘O‹óŠÔ</li>
- * <li>Œ^ƒpƒ‰ƒ[ƒ^–¼ˆê——</li>
- * <li>ƒNƒ‰ƒX–¼</li>
- * <li>s”</li>
- * <li>–¢‰ğŒˆeƒNƒ‰ƒX–¼ˆê——</li>
- * <li>–¢‰ğŒˆqƒNƒ‰ƒX–¼ˆê——</li>
- * <li>–¢‰ğŒˆƒCƒ“ƒi[ƒNƒ‰ƒXˆê——</li>
- * <li>–¢‰ğŒˆ’è‹`ƒƒ\ƒbƒhˆê——</li>
- * <li>–¢‰ğŒˆ’è‹`ƒtƒB[ƒ‹ƒhˆê——</li>
+ * <li>ä¿®é£¾å­</li>
+ * <li>æœªè§£æ±ºåå‰ç©ºé–“</li>
+ * <li>å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åä¸€è¦§</li>
+ * <li>ã‚¯ãƒ©ã‚¹å</li>
+ * <li>è¡Œæ•°</li>
+ * <li>æœªè§£æ±ºè¦ªã‚¯ãƒ©ã‚¹åä¸€è¦§</li>
+ * <li>æœªè§£æ±ºå­ã‚¯ãƒ©ã‚¹åä¸€è¦§</li>
+ * <li>æœªè§£æ±ºã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§</li>
+ * <li>æœªè§£æ±ºå®šç¾©ãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§</li>
+ * <li>æœªè§£æ±ºå®šç¾©ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§</li>
  * </ul>
  * 
  * @author higo
@@ -59,10 +59,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         Visualizable, StaticOrInstance, ModifierSetting, UnresolvedHavingOuterUnit {
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ª‹Lq‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ª‹Lq‚³‚ê‚¢‚Ä‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param outerUnit ‚±‚ÌƒNƒ‰ƒX‚ÌŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ãŒè¨˜è¿°ã•ã‚Œã„ã¦ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param outerUnit ã“ã®ã‚¯ãƒ©ã‚¹ã®å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     public UnresolvedClassInfo(final FileInfo fileInfo,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
@@ -99,13 +99,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * Cüq‚ğ’Ç‰Á‚·‚é
+     * ä¿®é£¾å­ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param modifier ’Ç‰Á‚·‚éCüq
+     * @param modifier è¿½åŠ ã™ã‚‹ä¿®é£¾å­
      */
     public void addModifier(final ModifierInfo modifier) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == modifier) {
             throw new NullPointerException();
@@ -115,9 +115,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á‚·‚é
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param type ’Ç‰Á‚·‚é–¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^
+     * @param type è¿½åŠ ã™ã‚‹æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     public void addTypeParameter(final UnresolvedTypeParameterInfo type) {
 
@@ -130,9 +130,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –¢‰ğŒˆƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ’Ç‰Á
+     * æœªè§£æ±ºã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿½åŠ 
      * 
-     * @param instanceInitializer –¢‰ğŒˆƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU
+     * @param instanceInitializer æœªè§£æ±ºã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public void addInstanceInitializer(final UnresolvedInstanceInitializerInfo instanceInitializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -143,9 +143,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –¢‰ğŒˆƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ’Ç‰Á
+     * æœªè§£æ±ºã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿½åŠ 
      * 
-     * @param staticInitialzer –¢‰ğŒˆƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU
+     * @param staticInitialzer æœªè§£æ±ºã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public void addStaticInitializer(final UnresolvedStaticInitializerInfo staticInitialzer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -156,9 +156,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Æ‘ÎÛƒNƒ‰ƒX‚ª“™‚µ‚¢‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã¨å¯¾è±¡ã‚¯ãƒ©ã‚¹ãŒç­‰ã—ã„ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param o ”äŠr‘ÎÛƒNƒ‰ƒX
+     * @param o æ¯”è¼ƒå¯¾è±¡ã‚¯ãƒ©ã‚¹
      */
     @Override
     public boolean equals(final Object o) {
@@ -189,9 +189,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌƒnƒbƒVƒ…ƒR[ƒh
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      */
     @Override
     public int hashCode() {
@@ -206,36 +206,36 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ª‹Lq‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ª‹Lq‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
      */
     public FileInfo getFileInfo() {
         return this.fileInfo;
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Ô‚·
+     * åå‰ç©ºé–“åã‚’è¿”ã™
      * 
-     * @return –¼‘O‹óŠÔ–¼
+     * @return åå‰ç©ºé–“å
      */
     public String[] getNamespace() {
         return Arrays.<String> copyOf(this.namespace, this.namespace.length);
     }
 
     /**
-     * ƒNƒ‰ƒX–¼‚ğæ“¾‚·‚é
+     * ã‚¯ãƒ©ã‚¹åã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ƒNƒ‰ƒX–¼
+     * @return ã‚¯ãƒ©ã‚¹å
      */
     public String getClassName() {
         return this.className;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SCü–¼‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨ä¿®é£¾åã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SCü–¼
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨ä¿®é£¾å
      */
     public String[] getFullQualifiedName() {
 
@@ -262,31 +262,31 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * Cüq‚Ì Set ‚ğ•Ô‚·
+     * ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return Cüq‚Ì Set
+     * @return ä¿®é£¾å­ã® Set
      */
     public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™
      * 
-     * @return –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     public List<UnresolvedTypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Û‘¶‚·‚é.–¼‘O‹óŠÔ–¼‚ª‚È‚¢ê‡‚Í’·‚³0‚Ì”z—ñ‚ğ—^‚¦‚é‚±‚ÆD
+     * åå‰ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹.åå‰ç©ºé–“åãŒãªã„å ´åˆã¯é•·ã•0ã®é…åˆ—ã‚’ä¸ãˆã‚‹ã“ã¨ï¼
      * 
-     * @param namespace –¼‘O‹óŠÔ–¼
+     * @param namespace åå‰ç©ºé–“å
      */
     public void setNamespace(final String[] namespace) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == namespace) {
             throw new NullPointerException();
@@ -296,13 +296,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ƒNƒ‰ƒX–¼‚ğ•Û‘¶‚·‚é
+     * ã‚¯ãƒ©ã‚¹åã‚’ä¿å­˜ã™ã‚‹
      * 
      * @param className
      */
     public void setClassName(final String className) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == className) {
             throw new NullPointerException();
@@ -312,13 +312,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * eƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚é
+     * è¦ªã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param superClass eƒNƒ‰ƒX–¼
+     * @param superClass è¦ªã‚¯ãƒ©ã‚¹å
      */
     public void addSuperClass(final UnresolvedClassTypeInfo superClass) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == superClass) {
             throw new NullPointerException();
@@ -328,13 +328,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚é
+     * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param innerClass ƒCƒ“ƒi[ƒNƒ‰ƒX
+     * @param innerClass ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹
      */
     public void addInnerClass(final UnresolvedClassInfo innerClass) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
             throw new NullPointerException();
@@ -344,13 +344,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ’Ç‰Á‚·‚é
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param definedMethod ’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param definedMethod å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void addDefinedMethod(final UnresolvedMethodInfo definedMethod) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedMethod) {
             throw new NullPointerException();
@@ -360,13 +360,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ’Ç‰Á‚·‚é
+     * å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param definedConstructor ’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^ƒƒ\ƒbƒh
+     * @param definedConstructor å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void addDefinedConstructor(final UnresolvedConstructorInfo definedConstructor) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedConstructor) {
             throw new NullPointerException();
@@ -376,13 +376,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ’Ç‰Á‚·‚é
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param definedField ’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh
+     * @param definedField å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     public void addDefinedField(final UnresolvedFieldInfo definedField) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedField) {
             throw new NullPointerException();
@@ -392,13 +392,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¢‚Ä—˜—p‰Â”\‚ÈiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éjƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦åˆ©ç”¨å¯èƒ½ãªï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ï¼‰ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param importStatement ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¢‚Ä—˜—p‰Â”\‚ÈiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éjƒNƒ‰ƒX
+     * @param importStatement ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦åˆ©ç”¨å¯èƒ½ãªï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ï¼‰ã‚¯ãƒ©ã‚¹
      */
     public void addImportStatement(final UnresolvedClassImportStatementInfo importStatement) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == importStatement) {
             throw new IllegalArgumentException();
@@ -408,13 +408,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¢‚Ä—˜—p‰Â”\‚ÈiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éjƒNƒ‰ƒXŒQ‚ğ’Ç‰Á‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦åˆ©ç”¨å¯èƒ½ãªï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ï¼‰ã‚¯ãƒ©ã‚¹ç¾¤ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param importStatements ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¢‚Ä—˜—p‰Â”\‚ÈiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éjƒNƒ‰ƒXŒQ
+     * @param importStatements ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦åˆ©ç”¨å¯èƒ½ãªï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ï¼‰ã‚¯ãƒ©ã‚¹ç¾¤
      */
     public void addImportStatements(final List<UnresolvedImportStatementInfo<?>> importStatements) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == importStatements) {
             throw new IllegalArgumentException();
@@ -424,27 +424,27 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * eƒNƒ‰ƒX–¼‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * è¦ªã‚¯ãƒ©ã‚¹åã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return eƒNƒ‰ƒX–¼‚ÌƒZƒbƒg
+     * @return è¦ªã‚¯ãƒ©ã‚¹åã®ã‚»ãƒƒãƒˆ
      */
     public List<UnresolvedClassTypeInfo> getSuperClasses() {
         return Collections.unmodifiableList(this.superClasses);
     }
 
     /**
-     * ƒCƒ“ƒi[ƒNƒ‰ƒX‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒi[ƒNƒ‰ƒX‚ÌƒZƒbƒg
+     * @return ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®ã‚»ãƒƒãƒˆ
      */
     public Set<UnresolvedClassInfo> getInnerClasses() {
         return Collections.unmodifiableSet(this.innerClasses);
     }
 
     /**
-     * ŠO‘¤‚ÌŠ—LÒ‚ğ•Ô‚·
+     * å¤–å´ã®æ‰€æœ‰è€…ã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚ÌŠ—LÒ. ‚È‚¢ê‡‚Ínull
+     * @return å¤–å´ã®æ‰€æœ‰è€…. ãªã„å ´åˆã¯null
      */
     @Override
     public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
@@ -452,9 +452,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğƒZƒbƒg‚·‚é
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param outerUnit ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @param outerUnit å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     @Override
     public void setOuterUnit(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
@@ -462,9 +462,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     @Override
     public final UnresolvedClassInfo getOuterClass() {
@@ -473,7 +473,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         while (true) {
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚È‚Ì‚Å‚©‚È‚ç‚¸ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚ ‚é
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ãªã®ã§ã‹ãªã‚‰ãšå¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹
             if (null == outer) {
                 throw new IllegalStateException();
             }
@@ -487,9 +487,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ŠO‘¤‚Ìƒƒ\ƒbƒh‚ğ•Ô‚·.
+     * å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚Ìƒƒ\ƒbƒh
+     * @returnã€€å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
@@ -515,79 +515,79 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ÌƒZƒbƒg
+     * @return å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚»ãƒƒãƒˆ
      */
     public Set<UnresolvedMethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSet(this.definedMethods);
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌƒZƒbƒg
+     * @return å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ã‚»ãƒƒãƒˆ
      */
     public Set<UnresolvedConstructorInfo> getDefinedConstructors() {
         return Collections.unmodifiableSet(this.definedConstructors);
     }
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ÌƒZƒbƒg
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚»ãƒƒãƒˆ
      * 
-     * @return ’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ÌƒZƒbƒg
+     * @return å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚»ãƒƒãƒˆ
      */
     public Set<UnresolvedFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSet(this.definedFields);
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ÌƒZƒbƒg‚ğ•Ô‚·
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ÌƒZƒbƒg
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ã‚»ãƒƒãƒˆ
      */
     public final Set<UnresolvedInstanceInitializerInfo> getInstanceInitializers() {
         return Collections.unmodifiableSet(this.instanceInitializers);
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ÌƒZƒbƒg‚ğ•Ô‚·
-     * @return ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ÌƒZƒbƒg
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ã‚»ãƒƒãƒˆ
      */
     public final Set<UnresolvedStaticInitializerInfo> getStaticInitializers() {
         return Collections.unmodifiableSet(this.staticInitializers);
     }
 
     /**
-     * —˜—p‰Â”\‚ÈƒNƒ‰ƒXiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒXj‚Æƒƒ“ƒoiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒƒ“ƒoj‚ÌList‚ğ•Ô‚·
+     * åˆ©ç”¨å¯èƒ½ãªã‚¯ãƒ©ã‚¹ï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ï¼‰ã¨ãƒ¡ãƒ³ãƒï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ãƒ¡ãƒ³ãƒï¼‰ã®Listã‚’è¿”ã™
      * 
-     * @return@—˜—p‰Â”\‚ÈƒNƒ‰ƒXiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒXj‚Æƒƒ“ƒoiƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒƒ“ƒoj‚ÌList‚ğ•Ô‚·
+     * @returnã€€åˆ©ç”¨å¯èƒ½ãªã‚¯ãƒ©ã‚¹ï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ï¼‰ã¨ãƒ¡ãƒ³ãƒï¼ˆã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ãƒ¡ãƒ³ãƒï¼‰ã®Listã‚’è¿”ã™
      */
     public List<UnresolvedImportStatementInfo<?>> getImportStatements() {
         return Collections.unmodifiableList(this.importStatements);
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ‰ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU
+     * @return ã‚¤ãƒ³ã‚¹ãƒ©ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public UnresolvedInstanceInitializerInfo getImplicitInstanceInitializer() {
         return this.implicitInstanceInitializer;
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public UnresolvedStaticInitializerInfo getImplicitStaticInitializer() {
         return this.implicitStaticInitializer;
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public boolean isInheritanceVisible() {
@@ -595,9 +595,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public boolean isNamespaceVisible() {
@@ -605,18 +605,18 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public boolean isPublicVisible() {
         return ModifierInfo.isPublicVisible(this.modifiers);
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public boolean isInstanceMember() {
@@ -624,9 +624,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public boolean isStaticMember() {
@@ -634,25 +634,25 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ƒCƒ“ƒ^[ƒtƒF[ƒX‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å ´åˆã¯true, ãã†ã§ãªã„å ´åˆã¯false
      */
     public final boolean isInterface() {
         return CLASS_CATEGORY.INTERFACE == this.classCategory;
     }
 
     /**
-     * —ñ‹“Œ^‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åˆ—æŒ™å‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å ´åˆã¯true, ãã†ã§ãªã„å ´åˆã¯false
      */
     public final boolean isEnum() {
         return CLASS_CATEGORY.ENUM == this.classCategory;
     }
 
     /**
-     * ƒCƒ“ƒ^[ƒtƒF[ƒX‚Å‚ ‚é‚Æ‚¢‚¤î•ñ‚ğƒZƒbƒg‚·‚éD
+     * ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã§ã‚ã‚‹ã¨ã„ã†æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ï¼
      * 
      */
     public void setIsInterface() {
@@ -664,46 +664,46 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –³–¼ƒNƒ‰ƒX‚©‚Ç‚¤‚©‚ğƒZƒbƒg‚·‚é
+     * ç„¡åã‚¯ãƒ©ã‚¹ã‹ã©ã†ã‹ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param anonymous –³–¼ƒNƒ‰ƒX‚Ìê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param anonymous ç„¡åã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public void setAnonymous(final boolean anonymous) {
         this.anonymous = anonymous;
     }
 
     /**
-     * –³–¼ƒNƒ‰ƒX‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ç„¡åã‚¯ãƒ©ã‚¹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return –³–¼ƒNƒ‰ƒX‚Å‚ ‚éê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @return ç„¡åã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯true, ãã†ã§ãªã„å ´åˆã¯false
      */
     public boolean isAnonymous() {
         return this.anonymous;
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒXC‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌÛ‚Í null ‚³ƒZƒbƒg‚³‚ê‚Ä‚¢‚é‚Æv‚í‚ê‚éD
-     * @param usingMethod Š‘®ƒƒ\ƒbƒhC‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌÛ‚Í null ‚³ƒZƒbƒg‚³‚ê‚Ä‚¢‚é‚Æv‚í‚ê‚éD
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®éš›ã¯ null ã•ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã¨æ€ã‚ã‚Œã‚‹ï¼
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®éš›ã¯ null ã•ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã¨æ€ã‚ã‚Œã‚‹ï¼
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public TargetClassInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // CüqCŠ®‘SŒÀ’è–¼Cs”C‰Â‹«CƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğæ“¾
+        // ä¿®é£¾å­ï¼Œå®Œå…¨é™å®šåï¼Œè¡Œæ•°ï¼Œå¯è¦–æ€§ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’å–å¾—
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String[] fullQualifiedName = this.getFullQualifiedName();
         final int fromLine = this.getFromLine();
@@ -713,41 +713,41 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         final boolean isInterface = this.isInterface();
         final boolean isEnum = this.isEnum();
 
-        // ClassInfo ƒIƒuƒWƒFƒNƒg‚ğì¬‚µCClassInfoManager‚É“o˜^
+        // ClassInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ï¼ŒClassInfoManagerã«ç™»éŒ²
 
         final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
 
-        // Š—LÒ‚ª‚ ‚éê‡‚Í ƒCƒ“ƒi[ƒNƒ‰ƒX‚©–³–¼ƒNƒ‰ƒX
+        // æ‰€æœ‰è€…ãŒã‚ã‚‹å ´åˆã¯ ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ç„¡åã‚¯ãƒ©ã‚¹
         if (null != unresolvedOuterUnit) {
 
-            // –³–¼ƒNƒ‰ƒX‚Ì‚Æ‚«
+            // ç„¡åã‚¯ãƒ©ã‚¹ã®ã¨ã
             if (this.isAnonymous()) {
                 this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, this.fileInfo,
                         fromLine, fromColumn, toLine, toColumn);
             }
 
-            //@ƒCƒ“ƒi[ƒNƒ‰ƒX‚Ì‚Æ‚«
+            //ã€€ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®ã¨ã
             else {
                 this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                         isInterface, isEnum, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
-        // Š—LÒ‚ª‚È‚¢ê‡‚ÍÅ‚àŠO‘¤‚ÌƒNƒ‰ƒX
+        // æ‰€æœ‰è€…ãŒãªã„å ´åˆã¯æœ€ã‚‚å¤–å´ã®ã‚¯ãƒ©ã‚¹
         else {
 
             this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, isInterface,
                     isEnum, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
-        // “à•”ƒNƒ‰ƒX‚ğ‰ğŒˆ
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã‚’è§£æ±º
         for (final UnresolvedClassInfo unresolvedInnerClass : this.getInnerClasses()) {
             final TargetClassInfo innerClass = unresolvedInnerClass.resolve(this.resolvedInfo,
                     null, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerClass((InnerClassInfo) innerClass);
         }
 
-        // ƒ^ƒCƒvƒpƒ‰ƒ[ƒ^‚ª‚ ‚éê‡‚Í‰ğŒˆ‚·‚éD‚½‚¾‚µ‚±‚±‚Å‚ÍCexntends ‚Ü‚Å‚Í‰ğŒˆ‚µ‚È‚¢
+        // ã‚¿ã‚¤ãƒ—ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã‚ã‚‹å ´åˆã¯è§£æ±ºã™ã‚‹ï¼ãŸã ã—ã“ã“ã§ã¯ï¼Œexntends ã¾ã§ã¯è§£æ±ºã—ãªã„
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(
                     this.resolvedInfo, usingMethod, classInfoManager, fieldInfoManager,
@@ -755,7 +755,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
-        //@‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ‰ğŒˆ
+        //ã€€ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è§£æ±º
         for (final UnresolvedMethodInfo unresolvedMethod : this.getDefinedMethods()) {
             final TargetMethodInfo method = unresolvedMethod.resolve(this.resolvedInfo, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -763,7 +763,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             methodInfoManager.add(method);
         }
 
-        //@‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ‰ğŒˆ
+        //ã€€ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è§£æ±º
         for (final UnresolvedConstructorInfo unresolvedConstructor : this.getDefinedConstructors()) {
             final TargetConstructorInfo constructor = unresolvedConstructor.resolve(
                     this.resolvedInfo, null, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -771,7 +771,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             methodInfoManager.add(constructor);
         }
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ª‘S‚­’è‹`‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ1‚Â—pˆÓ
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒå…¨ãå®šç¾©ã•ã‚Œã¦ã„ãªã„å ´åˆã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’1ã¤ç”¨æ„
         if (0 == this.getDefinedConstructors().size()) {
             final TargetConstructorInfo constructor = new TargetConstructorInfo(
                     Collections.<ModifierInfo> emptySet(), 0, 0, 0, 0);
@@ -779,7 +779,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
 
-        //@‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ‰ğŒˆ
+        //ã€€ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’è§£æ±º
         for (final UnresolvedFieldInfo unresolvedConstructor : this.getDefinedFields()) {
             final TargetFieldInfo field = unresolvedConstructor.resolve(this.resolvedInfo, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -787,7 +787,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             fieldInfoManager.add(field);
         }
 
-        // ‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ‰ğŒˆ
+        // ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è§£æ±º
         for (final UnresolvedInstanceInitializerInfo unresolvedInitializer : this
                 .getInstanceInitializers()) {
             final InstanceInitializerInfo initializer = unresolvedInitializer.resolve(
@@ -795,7 +795,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo.addInstanceInitializer(initializer);
         }
 
-        // ‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ‰ğŒˆ
+        // ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è§£æ±º
         for (final UnresolvedStaticInitializerInfo unresolvedInitializer : this
                 .getStaticInitializers()) {
             final StaticInitializerInfo initializer = unresolvedInitializer.resolve(
@@ -803,7 +803,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo.addStaticInitializer(initializer);
         }
 
-        // ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒ|[ƒg•¶‚ğ‰ğŒˆC“o˜^
+        // ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã‚’è§£æ±ºï¼Œç™»éŒ²
         for (final UnresolvedImportStatementInfo<?> unresolvedImport : this.getImportStatements()) {
             this.resolvedInfo.addImportStatement(unresolvedImport.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager));
@@ -813,14 +813,14 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ‰ğŒˆ‚·‚é
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è§£æ±ºã™ã‚‹
      * 
      * @param classInfoManager
      * @return
      */
     public TargetClassInfo resolveOuterUnit(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -839,16 +839,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –¢‰ğŒˆƒX[ƒp[ƒNƒ‰ƒXî•ñ‚ğ‰ğŒˆ‚·‚éD
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
-     * Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚à\’z‚·‚éD
+     * æœªè§£æ±ºã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è§£æ±ºã™ã‚‹ï¼
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æƒ…å ±ã‚‚æ§‹ç¯‰ã™ã‚‹ï¼
      * 
      * @param classInfoManager
      * @return
      */
     public TargetClassInfo resolveSuperClass(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -858,13 +858,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
 
-            // ƒX[ƒp[ƒNƒ‰ƒX‚ğİ’è
+            // ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¨­å®š
             final ReferenceTypeInfo superType = unresolvedSuperType.resolveAsSuperType(resolved,
                     null, classInfoManager, null, null);
             final ClassTypeInfo superClassType = (ClassTypeInfo) superType;
             resolved.addSuperClass(superClassType);
 
-            // ƒTƒuƒNƒ‰ƒX‚ğİ’è
+            // ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’è¨­å®š
             final ClassInfo superClass = superClassType.getReferencedClass();
             superClass.addSubClass(resolved);
         }
@@ -873,15 +873,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ‰ğŒˆ‚·‚éD
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’è§£æ±ºã™ã‚‹ï¼
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
      * @param classInfoManager
      * @return
      */
     public TargetClassInfo resolveTypeParameter(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -905,7 +905,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
     public TargetClassInfo resolveAvailableTypeParameters(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -922,13 +922,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
 
-            // ƒX[ƒp[ƒNƒ‰ƒX‚ğæ“¾
+            // ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’å–å¾—
             final ReferenceTypeInfo superType = unresolvedSuperType.resolveAsSuperType(resolved,
                     null, classInfoManager, null, null);
             final ClassTypeInfo superClassType = (ClassTypeInfo) superType;
             final ClassInfo superClass = superClassType.getReferencedClass();
 
-            // Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ\’z
+            // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ§‹ç¯‰
             if (superClass instanceof TargetClassInfo) {
 
                 final List<TypeInfo> typeArguments = superClassType.getTypeArguments();
@@ -946,7 +946,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     //
     //    public TargetClassInfo resolveAvailableTypeParameters() {
     //
-    //        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+    //        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
     //        MetricsToolSecurityManager.getInstance().checkAccess();
     //
     //        final TargetClassInfo resolved = this.getResolved();
@@ -963,13 +963,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     //    }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒX’è‹`î•ñ‚Ì–¢‰ğŒˆQÆŒ^‚ğ•Ô‚·
+     * ã“ã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹å®šç¾©æƒ…å ±ã®æœªè§£æ±ºå‚ç…§å‹ã‚’è¿”ã™
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ 
-     * @return ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒX’è‹`î•ñ‚Ì–¢‰ğŒˆQÆŒ^
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ— 
+     * @return ã“ã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹å®šç¾©æƒ…å ±ã®æœªè§£æ±ºå‚ç…§å‹
      */
     public UnresolvedClassReferenceInfo getClassReference(
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
@@ -982,7 +982,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         classReference.setToLine(toLine);
         classReference.setToColumn(toColumn);
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚Ì”‚¾‚¯CŒ^ˆø”‚ğ’Ç‰Á
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ•°ã ã‘ï¼Œå‹å¼•æ•°ã‚’è¿½åŠ 
         for (final UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
             classReference.addTypeArgument(new UnresolvedClassTypeInfo(new String[] { "java",
                     "lang", "Object" }));
@@ -1008,94 +1008,94 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * ƒNƒ‰ƒX‚ª‹Lq‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¯ãƒ©ã‚¹ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final FileInfo fileInfo;
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åå‰ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private String[] namespace;
 
     /**
-     * ƒNƒ‰ƒX–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¯ãƒ©ã‚¹åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private String className;
 
     /**
-     * Cüq‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä¿®é£¾å­ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Set<ModifierInfo> modifiers;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedTypeParameterInfo> typeParameters;
 
     /**
-     * eƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒŠƒXƒg
+     * è¦ªã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ãƒªã‚¹ãƒˆ
      */
     private final List<UnresolvedClassTypeInfo> superClasses;
 
     /**
-     * ƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<UnresolvedClassInfo> innerClasses;
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Û‚·‚é•Ï”
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿æŒã™ã‚‹å¤‰æ•°
      */
     private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<UnresolvedMethodInfo> definedMethods;
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * å®šç¾©ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<UnresolvedConstructorInfo> definedConstructors;
 
     /**
-     * ’è‹`‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * å®šç¾©ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<UnresolvedFieldInfo> definedFields;
 
     /**
-     * ˆÃ–Ù‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æš—é»™ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedStaticInitializerInfo implicitStaticInitializer;
 
     /**
-     * ˆÃ–Ù‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æš—é»™ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedInstanceInitializerInfo implicitInstanceInitializer;
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Set<UnresolvedStaticInitializerInfo> staticInitializers;
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Set<UnresolvedInstanceInitializerInfo> instanceInitializers;
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final List<UnresolvedImportStatementInfo<?>> importStatements;
 
     /**
-     * –³–¼ƒNƒ‰ƒX‚©‚Ç‚¤‚©‚ğ•\‚·•Ï”
+     * ç„¡åã‚¯ãƒ©ã‚¹ã‹ã©ã†ã‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private boolean anonymous;
 
     private UnresolvedClassTypeInfo classType = null;
 
     /**
-     * ƒNƒ‰ƒX‚Ìí—Ş‚ªƒNƒ‰ƒXCƒCƒ“ƒ^[ƒtƒF[ƒXC—ñ‹“‚Ì‚Ç‚ê‚©‚ğ•\‚·
+     * ã‚¯ãƒ©ã‚¹ã®ç¨®é¡ãŒã‚¯ãƒ©ã‚¹ï¼Œã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ï¼Œåˆ—æŒ™ã®ã©ã‚Œã‹ã‚’è¡¨ã™
      * @author a-saitoh
      *
      */

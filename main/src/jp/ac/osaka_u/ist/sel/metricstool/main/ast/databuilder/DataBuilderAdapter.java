@@ -9,18 +9,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒf[ƒ^ƒrƒ‹ƒ_[‚ÌƒAƒ_ƒvƒgÀ‘•D
+ * ãƒ‡ãƒ¼ã‚¿ãƒ“ãƒ«ãƒ€ãƒ¼ã®ã‚¢ãƒ€ãƒ—ãƒˆå®Ÿè£…ï¼
  * 
- * ƒrƒ‹ƒ_‚ÌƒAƒNƒeƒBƒuC”ñƒAƒNƒeƒBƒu‚ÌØ‚è‘Ö‚¦ˆ—‚âC‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚ÌŠÇ—Cæ“¾‚È‚Ç‚ğs‚¤ƒƒ\ƒbƒhŒQ‚ğÀ‘•‚·‚éD
+ * ãƒ“ãƒ«ãƒ€ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ï¼Œéã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã®åˆ‡ã‚Šæ›¿ãˆå‡¦ç†ã‚„ï¼Œéå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†ï¼Œå–å¾—ãªã©ã‚’è¡Œã†ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’å®Ÿè£…ã™ã‚‹ï¼
  * 
  * @author kou-tngt, t-miyake
  * 
- * @param <T> ƒrƒ‹ƒh‚³‚ê‚éƒf[ƒ^‚ÌŒ^
+ * @param <T> ãƒ“ãƒ«ãƒ‰ã•ã‚Œã‚‹ãƒ‡ãƒ¼ã‚¿ã®å‹
  */
 public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
 
     /**
-     * ƒrƒ‹ƒ_‚ğƒAƒNƒeƒBƒu‚É‚·‚éD
+     * ãƒ“ãƒ«ãƒ€ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#activate()
      */
@@ -29,7 +29,7 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚ğƒXƒ^ƒbƒN‚©‚çíœ‚·‚éD
+     * éå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å‰Šé™¤ã™ã‚‹ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#clearBuiltData()
      */
@@ -38,7 +38,7 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒrƒ‹ƒ_‚ğ”ñƒAƒNƒeƒBƒu‚É‚·‚éD
+     * ãƒ“ãƒ«ãƒ€ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹ï¼
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#deactivate()
      */
     public final void deactivate() {
@@ -63,8 +63,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚Ì”‚ğ•Ô‚·D
-     * @return \’z‚µ‚½ƒf[ƒ^‚Ì”
+     * ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã®æ•°ã‚’è¿”ã™ï¼
+     * @return æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã®æ•°
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#getBuiltDataCount()
      */
     public int getBuiltDataCount() {
@@ -72,8 +72,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àŒÃ‚­\’z‚³‚ê‚½ƒf[ƒ^‚ğ•Ô‚·D
-     * @return ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àŒÃ‚­\’z‚³‚ê‚½ƒf[ƒ^Cƒf[ƒ^‚ª–³‚¯‚ê‚Înull‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚å¤ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™ï¼
+     * @return ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚å¤ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ï¼Œãƒ‡ãƒ¼ã‚¿ãŒç„¡ã‘ã‚Œã°nullã‚’è¿”ã™
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#getFirstBuiltData()
      */
     public T getFirstBuiltData() {
@@ -85,8 +85,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àV‚µ‚­\’z‚³‚ê‚½ƒf[ƒ^‚ğ•Ô‚·D
-     * @return ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àV‚µ‚­\’z‚³‚ê‚½ƒf[ƒ^Cƒf[ƒ^‚ª–³‚¯‚ê‚Înull‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚æ–°ã—ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™ï¼
+     * @return ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚æ–°ã—ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ï¼Œãƒ‡ãƒ¼ã‚¿ãŒç„¡ã‘ã‚Œã°nullã‚’è¿”ã™
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#getLastBuildData()
      */
     public T getLastBuildData() {
@@ -98,8 +98,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àV‚µ‚­\’z‚³‚ê‚½ƒf[ƒ^‚ğƒXƒ^ƒbƒN‚©‚çæ‚èo‚µ‚Ä•Ô‚·D
-     * @return ƒXƒ^ƒbƒN“à‚Éc‚Á‚Ä‚¢‚éƒf[ƒ^‚ÅCÅ‚àV‚µ‚­\’z‚³‚ê‚½ƒf[ƒ^Cƒf[ƒ^‚ª–³‚¯‚ê‚Înull‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚æ–°ã—ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å–ã‚Šå‡ºã—ã¦è¿”ã™ï¼
+     * @return ã‚¹ã‚¿ãƒƒã‚¯å†…ã«æ®‹ã£ã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã§ï¼Œæœ€ã‚‚æ–°ã—ãæ§‹ç¯‰ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ï¼Œãƒ‡ãƒ¼ã‚¿ãŒç„¡ã‘ã‚Œã°nullã‚’è¿”ã™
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#popLastBuiltData()
      */
     public T popLastBuiltData() {
@@ -111,8 +111,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚ğˆê‚ÂˆÈã‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * @return ‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚ğˆê‚ÂˆÈã‚Á‚Ä‚¢‚éê‡‚Ítrue
+     * éå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ä¸€ã¤ä»¥ä¸ŠæŒã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * @return éå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ä¸€ã¤ä»¥ä¸ŠæŒã£ã¦ã„ã‚‹å ´åˆã¯true
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#hasBuiltData()
      */
     public boolean hasBuiltData() {
@@ -120,7 +120,7 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒrƒ‹ƒ_‚ªŒ»İƒAƒNƒeƒBƒuó‘Ô‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * ãƒ“ãƒ«ãƒ€ãŒç¾åœ¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#isActive()
      */
     public boolean isActive() {
@@ -128,8 +128,8 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ƒrƒ‹ƒ_‚ğ‰Šú‰»‚·‚éD
-     * ‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚Ííœ‚³‚ê‚éD
+     * ãƒ“ãƒ«ãƒ€ã‚’åˆæœŸåŒ–ã™ã‚‹ï¼
+     * éå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã¯å‰Šé™¤ã•ã‚Œã‚‹ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#reset()
      */
@@ -138,29 +138,29 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     }
 
     /**
-     * ‰½‚à‚µ‚È‚¢D
+     * ä½•ã‚‚ã—ãªã„ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener#visited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     public final void visited(final AstVisitEvent e) {
-        // g‚í‚È‚¢‚±‚Æ‚É‚·‚é
+        // ä½¿ã‚ãªã„ã“ã¨ã«ã™ã‚‹
     }
 
     /**
-     * \’z‚µ‚½ƒf[ƒ^‚ğƒXƒ^ƒbƒN‚É“o˜^‚·‚é
-     * @param data “o˜^‚µ‚½‚¢ƒf[ƒ^
+     * æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ç™»éŒ²ã™ã‚‹
+     * @param data ç™»éŒ²ã—ãŸã„ãƒ‡ãƒ¼ã‚¿
      */
     protected final void registBuiltData(final T data) {
         this.builtDataStack.add(data);
     }
 
     /**
-     * ‚±‚Ìƒrƒ‹ƒ_‚ªŒ»İƒAƒNƒeƒBƒu‚Å‚ ‚é‚©‚Ç‚¤‚©
+     * ã“ã®ãƒ“ãƒ«ãƒ€ãŒç¾åœ¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã§ã‚ã‚‹ã‹ã©ã†ã‹
      */
     private boolean active = true;
 
     /**
-     * \’z‚µ‚½ƒf[ƒ^‚ğŠÇ—‚·‚éƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ç®¡ç†ã™ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<T> builtDataStack = new Stack<T>();
 }

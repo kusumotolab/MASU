@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolve
 
 
 /**
- * ƒoƒCƒgƒR[ƒh‚©‚ç“¾‚½–¢‰ğŒˆî•ñ‚ğ–¼‘O‰ğŒˆ‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‹ã‚‰å¾—ãŸæœªè§£æ±ºæƒ…å ±ã‚’åå‰è§£æ±ºã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -30,8 +30,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolve
 public class JavaByteCodeNameResolver {
 
     /**
-     * –¢‰ğŒˆ–¼‘Oî•ñ‚ğ–¼‘O‰ğŒˆ‚·‚éƒƒ\ƒbƒh
-     * ‰ğŒˆ‚µ‚½–¼‘O‚ÌFull Qualified Name‚ğ•Ô‚·
+     * æœªè§£æ±ºåå‰æƒ…å ±ã‚’åå‰è§£æ±ºã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * è§£æ±ºã—ãŸåå‰ã®Full Qualified Nameã‚’è¿”ã™
      * 
      * @param unresolvedName
      * @return
@@ -41,14 +41,14 @@ public class JavaByteCodeNameResolver {
     }
 
     /**
-     * –¢‰ğŒˆŒ^î•ñ‚ğ–¼‘O‰ğŒˆ‚·‚éƒƒ\ƒbƒhD
-     * ‘æ“ñC‘æOˆø”‚ÍCTypeParameter‚ğ‰ğŒˆ‚·‚éê‡‚Ì‚İw’è‚·‚ê‚Î‚æ‚¢.
-     * ‚µ‚©‚µC‰ğŒˆ‚·‚éŒ^‚ª“à•”‚ÉƒWƒFƒlƒŠƒNƒX‚ğŠÜ‚ñ‚Å‚¢‚éê‡‚ª‚ ‚é‚Ì‚ÅC
-     * ‘æOˆø”‚Í‚«‚¿‚ñ‚Æw’è‚·‚é‚±‚Æ‚ªd—v
-     * ## ‘æ“ñˆø”‚Ííœ‚³‚ê‚Ü‚µ‚½.
+     * æœªè§£æ±ºå‹æƒ…å ±ã‚’åå‰è§£æ±ºã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ç¬¬äºŒï¼Œç¬¬ä¸‰å¼•æ•°ã¯ï¼ŒTypeParameterã‚’è§£æ±ºã™ã‚‹å ´åˆã®ã¿æŒ‡å®šã™ã‚Œã°ã‚ˆã„.
+     * ã—ã‹ã—ï¼Œè§£æ±ºã™ã‚‹å‹ãŒå†…éƒ¨ã«ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹ã‚’å«ã‚“ã§ã„ã‚‹å ´åˆãŒã‚ã‚‹ã®ã§ï¼Œ
+     * ç¬¬ä¸‰å¼•æ•°ã¯ãã¡ã‚“ã¨æŒ‡å®šã™ã‚‹ã“ã¨ãŒé‡è¦
+     * ## ç¬¬äºŒå¼•æ•°ã¯å‰Šé™¤ã•ã‚Œã¾ã—ãŸ.
      * 
      * @param unresolvedType
-     * @param thisTypeParameter Œ^ƒpƒ‰ƒ[ƒ^‚ÌextendsType‚ğ‰ğŒˆ‚·‚é‚Æ‚«‚Ì‚İ•K{
+     * @param thisTypeParameter å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®extendsTypeã‚’è§£æ±ºã™ã‚‹ã¨ãã®ã¿å¿…é ˆ
      * @param ownerUnit
      * 
      * @return
@@ -60,17 +60,17 @@ public class JavaByteCodeNameResolver {
             throw new IllegalArgumentException();
         }
 
-        // ˆê•¶š‚È‚ç‚ÎCprimitiveType‚©Void‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+        // ä¸€æ–‡å­—ãªã‚‰ã°ï¼ŒprimitiveTypeã‹Voidã§ãªã‘ã‚Œã°ãªã‚‰ãªã„
         if (1 == unresolvedType.length()) {
             return translateSingleCharacterType(unresolvedType.charAt(0));
         }
 
-        // '['‚Ån‚Ü‚Á‚Ä‚¢‚é‚Æ‚«‚Í”z—ñ
+        // '['ã§å§‹ã¾ã£ã¦ã„ã‚‹ã¨ãã¯é…åˆ—
         else if ('[' == unresolvedType.charAt(0)) {
             final TypeInfo subType = resolveType(unresolvedType.substring(1), thisTypeParameter,
                     ownerUnit);
 
-            // ‚à‚Æ‚à‚Æ”z—ñ‚È‚ç‚ÎŸŒ³‚ğ1‚Â‘‚â‚·
+            // ã‚‚ã¨ã‚‚ã¨é…åˆ—ãªã‚‰ã°æ¬¡å…ƒã‚’1ã¤å¢—ã‚„ã™
             if (subType instanceof ArrayTypeInfo) {
                 final ArrayTypeInfo subArrayType = (ArrayTypeInfo) subType;
                 final TypeInfo ElementType = subArrayType.getElementType();
@@ -78,13 +78,13 @@ public class JavaByteCodeNameResolver {
                 return ArrayTypeInfo.getType(ElementType, dimension + 1);
             }
 
-            //@”z—ñ‚Å‚È‚¢‚È‚ç”z—ñ‚É‚·‚é
+            //ã€€é…åˆ—ã§ãªã„ãªã‚‰é…åˆ—ã«ã™ã‚‹
             else {
                 return ArrayTypeInfo.getType(subType, 1);
             }
         }
 
-        // ”z—ñ‚Å‚È‚¢QÆŒ^‚Ìê‡
+        // é…åˆ—ã§ãªã„å‚ç…§å‹ã®å ´åˆ
         else if ('L' == unresolvedType.charAt(0)) {
 
             final ClassInfoManager classInfoManager = DataManager.getInstance()
@@ -120,7 +120,7 @@ public class JavaByteCodeNameResolver {
             return type;
         }
 
-        // ƒWƒFƒlƒŠƒNƒX(TE(•Ê‚ÉE‚¶‚á‚È‚­‚Ä‚à‚¢‚¢‚¯‚Ç);)‚Ìê‡
+        // ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹(TE(åˆ¥ã«Eã˜ã‚ƒãªãã¦ã‚‚ã„ã„ã‘ã©);)ã®å ´åˆ
         else if ('T' == unresolvedType.charAt(0)) {
 
             final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
@@ -136,7 +136,7 @@ public class JavaByteCodeNameResolver {
             }
         }
 
-        // ƒWƒFƒlƒŠƒNƒX(-)‚Ìê‡
+        // ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹(-)ã®å ´åˆ
         else if ('-' == unresolvedType.charAt(0)) {
 
             final String unresolvedSuperType = unresolvedType.substring(1);
@@ -146,7 +146,7 @@ public class JavaByteCodeNameResolver {
             return new SuperTypeInfo((ReferenceTypeInfo) superType);
         }
 
-        // ƒWƒFƒlƒŠƒNƒX(+)‚Ìê‡
+        // ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹(+)ã®å ´åˆ
         else if ('+' == unresolvedType.charAt(0)) {
 
             final String unresolvedExtendsType = unresolvedType.substring(1);
@@ -160,14 +160,14 @@ public class JavaByteCodeNameResolver {
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ–¼‘O‰ğŒˆ‚·‚éƒNƒ‰ƒX.
-     * ‘æ“ñC‘æOˆø”‚ÍCTypeParameter‚ğ‰ğŒˆ‚·‚éê‡‚Ì‚İw’è‚·‚ê‚Î‚æ‚¢.
-     * ‚µ‚©‚µC‰ğŒˆ‚·‚éŒ^‚ª“à•”‚ÉƒWƒFƒlƒŠƒNƒX‚ğŠÜ‚ñ‚Å‚¢‚éê‡‚ª‚ ‚é‚Ì‚ÅC
-     * ‘æOˆø”‚Í‚«‚¿‚ñ‚Æw’è‚·‚é‚±‚Æ‚ªd—v
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’åå‰è§£æ±ºã™ã‚‹ã‚¯ãƒ©ã‚¹.
+     * ç¬¬äºŒï¼Œç¬¬ä¸‰å¼•æ•°ã¯ï¼ŒTypeParameterã‚’è§£æ±ºã™ã‚‹å ´åˆã®ã¿æŒ‡å®šã™ã‚Œã°ã‚ˆã„.
+     * ã—ã‹ã—ï¼Œè§£æ±ºã™ã‚‹å‹ãŒå†…éƒ¨ã«ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹ã‚’å«ã‚“ã§ã„ã‚‹å ´åˆãŒã‚ã‚‹ã®ã§ï¼Œ
+     * ç¬¬ä¸‰å¼•æ•°ã¯ãã¡ã‚“ã¨æŒ‡å®šã™ã‚‹ã“ã¨ãŒé‡è¦
      * 
-     * @param unresolvedTypeParameter –¢‰ğŒˆŒ^‚Ì•¶š—ñ
-     * @param index Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒXi‡”Ôj
-     * @param ownerUnit Œ^ƒpƒ‰ƒ[ƒ^‚ğŠ—L‚·‚éƒ†ƒjƒbƒgiƒNƒ‰ƒX or ƒƒ\ƒbƒh or ƒRƒ“ƒXƒgƒ‰ƒNƒ^j
+     * @param unresolvedTypeParameter æœªè§£æ±ºå‹ã®æ–‡å­—åˆ—
+     * @param index å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆé †ç•ªï¼‰
+     * @param ownerUnit å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ‰€æœ‰ã™ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆï¼ˆã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰ or ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼‰
      * @return
      */
     public static TypeParameterInfo resolveTypeParameter(final String unresolvedTypeParameter,
@@ -211,7 +211,7 @@ public class JavaByteCodeNameResolver {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ˆê•¶šŒ^‚ğ•\‚·•¶š‚ğ‚à‚Æ‚ÉCŒ^‚ğ•\‚·ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸä¸€æ–‡å­—å‹ã‚’è¡¨ã™æ–‡å­—ã‚’ã‚‚ã¨ã«ï¼Œå‹ã‚’è¡¨ã™ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
      * 
      * @param c
      * @return

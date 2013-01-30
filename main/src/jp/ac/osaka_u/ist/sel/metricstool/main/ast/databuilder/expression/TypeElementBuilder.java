@@ -102,10 +102,10 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
     }
 
     /**
-     * Œ^ˆø”‚ğ•\‚·®—v‘f‚ğ\’z‚·‚éD
+     * å‹å¼•æ•°ã‚’è¡¨ã™å¼è¦ç´ ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
      */
     protected void buildTypeArgument() {
-        //—˜—p‚Å‚«‚é‘S—v‘f‚ğæ“¾
+        //åˆ©ç”¨ã§ãã‚‹å…¨è¦ç´ ã‚’å–å¾—
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (elements.length > 0) : "Illegal state: type arguments were not created.";
@@ -118,15 +118,15 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
             assert (element instanceof TypeElement) : "Illegal state: unspecified type argument.";
 
             if (element instanceof TypeElement) {
-                //ˆê”ÔÅŒã‚ªŒ^—v‘f‚¾‚Á‚½‚çŒ^ˆø”—v‘f‚ğì¬
+                //ä¸€ç•ªæœ€å¾ŒãŒå‹è¦ç´ ã ã£ãŸã‚‰å‹å¼•æ•°è¦ç´ ã‚’ä½œæˆ
                 TypeArgumentElement argument = new TypeArgumentElement(
                         ((TypeElement) element).getType());
-                //‚»‚êˆÈŠO‚Ì—v‘f‚ğ‘S•”‚à‚Æ‚É–ß‚·D
+                //ãã‚Œä»¥å¤–ã®è¦ç´ ã‚’å…¨éƒ¨ã‚‚ã¨ã«æˆ»ã™ï¼
                 int size = elements.length - 1;
                 for (int i = 0; i < size; i++) {
                     pushElement(elements[i]);
                 }
-                //ÅŒã‚ÉŒ^ˆø”—v‘f‚ğ“o˜^‚·‚é
+                //æœ€å¾Œã«å‹å¼•æ•°è¦ç´ ã‚’ç™»éŒ²ã™ã‚‹
                 pushElement(argument);
             }
         }
@@ -164,7 +164,7 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
             }
         }
 
-        //ˆê‰Œ³‚É–ß‚µ‚Ä‚İ‚é
+        //ä¸€å¿œå…ƒã«æˆ»ã—ã¦ã¿ã‚‹
         int size = elements.length - 1;
         for (int i = 0; i < size; i++) {
             pushElement(elements[i]);
@@ -196,7 +196,7 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
             return typeParameter;
         }
 
-        //TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÉŒ^ˆø”‚ª•t‚­Œ¾Œê‚ª‚ ‚Á‚½‚ç‚»‚ê‚ğ“o˜^‚·‚éd‘g‚İ‚ğì‚é•K—v‚ª‚ ‚é‚©‚à
+        //TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«å‹å¼•æ•°ãŒä»˜ãè¨€èªãŒã‚ã£ãŸã‚‰ãã‚Œã‚’ç™»éŒ²ã™ã‚‹ä»•çµ„ã¿ã‚’ä½œã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã‚‚
 
         UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(
                 UnresolvedClassImportStatementInfo.getClassImportStatements(this.buildDataManager
@@ -206,7 +206,7 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
             assert (elements[i] instanceof TypeArgumentElement) : "Illegal state: type argument was unexpected type";
             TypeArgumentElement typeArugument = (TypeArgumentElement) elements[i];
 
-            // TODO C#‚È‚Ç‚ÍQÆŒ^ˆÈ‚Å‚àŒ^ˆø”‚ğw’è‚Å‚«‚é‚Ì‚ÅA‚»‚Ì‘Îˆ‚ª•K—v‚©‚à           
+            // TODO C#ãªã©ã¯å‚ç…§å‹ä»¥ã§ã‚‚å‹å¼•æ•°ã‚’æŒ‡å®šã§ãã‚‹ã®ã§ã€ãã®å¯¾å‡¦ãŒå¿…è¦ã‹ã‚‚           
             assert typeArugument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state: type argument was not reference type.";
             resultType.addTypeArgument((UnresolvedReferenceTypeInfo<?>) typeArugument.getType());
         }

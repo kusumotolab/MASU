@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 
 
 /***
- * For-Eachブロックのビルダー
+ * For-Each繝悶Ο繝�繧ｯ縺ｮ繝薙Ν繝繝ｼ
  * @author a-saitoh
  *
  */
@@ -50,7 +50,7 @@ public class ForeachBlockBuilder extends
             this.getBuildingBlock().setIteratorVariable(
                     this.iteratorVariableBuilder.getLastBuildData());
         } else if (type.equals(FOREACH_BLOCK_STATE_CHANGE.ENTER_FOREACH_EXPRESSION)) {
-            // なにもしないでOK
+            // 縺ｪ縺ｫ繧ゅ＠縺ｪ縺�縺ｧOK
         } else if (type.equals(FOREACH_BLOCK_STATE_CHANGE.EXIT_FOREACH_EXPRESSION)) {
             final UnresolvedExpressionInfo<? extends ExpressionInfo> iteratorExpression = null == this.expressionManager
                     .getPeekExpressionElement() ? null : this.expressionManager

@@ -17,16 +17,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ try ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±º try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
 public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockInfo> {
 
     /**
-     * ŠO‘¤‚ÌƒuƒƒbƒNî•ñ‚ğ—^‚¦‚ÄCtry ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œtry ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      * 
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -36,28 +36,28 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ try ƒuƒƒbƒN‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public TryBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì for ƒGƒ“ƒgƒŠ‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® for ã‚¨ãƒ³ãƒˆãƒªã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -70,7 +70,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
                 classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setOuterUnit(outerSpace);
 
-        // ‘Î‰‚·‚éfinallyß‚ğ‰ğŒˆ
+        // å¯¾å¿œã™ã‚‹finallyç¯€ã‚’è§£æ±º
         if (this.hasFinallyBlock()) {
             final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
             final FinallyBlockInfo finallyBlock = unresolvedFinallyBlock.resolve(usingClass,
@@ -78,7 +78,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
             this.resolvedInfo.setSequentFinallyBlock(finallyBlock);
         }
 
-        // ‘Î‰‚·‚écatchß‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İtryƒuƒƒbƒNƒIƒuƒWƒFƒNƒg‚É’Ç‰Á
+        // å¯¾å¿œã™ã‚‹catchç¯€ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿tryãƒ–ãƒ­ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¿½åŠ 
         for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
             final CatchBlockInfo catchBlock = unresolvedCatchBlock.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -89,13 +89,13 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚ÌƒCƒ“ƒi[—Ìˆæ‚ğ–¼‘O‰ğŒˆ‚·‚é
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®ã‚¤ãƒ³ãƒŠãƒ¼é ˜åŸŸã‚’åå‰è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager ƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager ƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager ƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     public void resolveInnerBlock(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -104,14 +104,14 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // ‘Î‰‚·‚éfinallyß‚ğ‰ğŒˆ
+        // å¯¾å¿œã™ã‚‹finallyç¯€ã‚’è§£æ±º
         if (this.hasFinallyBlock()) {
             final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
             unresolvedFinallyBlock.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
                     fieldInfoManager, methodInfoManager);
         }
 
-        // ‘Î‰‚·‚écatchß‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İtryƒuƒƒbƒNƒIƒuƒWƒFƒNƒg‚É’Ç‰Á
+        // å¯¾å¿œã™ã‚‹catchç¯€ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿tryãƒ–ãƒ­ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¿½åŠ 
         for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
             unresolvedCatchBlock.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
                     fieldInfoManager, methodInfoManager);
@@ -119,8 +119,8 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ğ’Ç‰Á‚·‚é
-     * @param catchBlock ‘Î‰‚·‚écatchƒuƒƒbƒN
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿½åŠ ã™ã‚‹
+     * @param catchBlock å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯
      */
     public void addSequentCatchBlock(final UnresolvedCatchBlockInfo catchBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -133,24 +133,24 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ÌSet‚ğ•Ô‚·
-     * @return ‘Î‰‚·‚écatchƒuƒƒbƒN‚ÌSet
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã®Setã‚’è¿”ã™
+     * @return å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã®Set
      */
     public Set<UnresolvedCatchBlockInfo> getSequentCatchBlocks() {
         return this.sequentCatchBlocks;
     }
 
     /**
-     * ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ğ•Ô‚·
-     * @return ‘Î‰‚·‚éfinallyƒuƒƒbƒNDfinallyƒuƒƒbƒN‚ªéŒ¾‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚Ínull
+     * å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * @return å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ï¼finallyãƒ–ãƒ­ãƒƒã‚¯ãŒå®£è¨€ã•ã‚Œã¦ã„ãªã„ã¨ãã¯null
      */
     public UnresolvedFinallyBlockInfo getSequentFinallyBlock() {
         return this.sequentFinallyBlock;
     }
 
     /**
-     * ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ğƒZƒbƒg‚·‚é
-     * @param finallyBlock ‘Î‰‚·‚éfinallyƒuƒƒbƒN
+     * å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param finallyBlock å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯
      */
     public void setSequentFinallyBlock(final UnresolvedFinallyBlockInfo finallyBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -162,20 +162,20 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
-     * ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©•Ô‚·
-     * @return ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ª‘¶İ‚·‚é‚È‚çtrue
+     * å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹è¿”ã™
+     * @return å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ãªã‚‰true
      */
     public boolean hasFinallyBlock() {
         return null != this.sequentFinallyBlock;
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ğ•Û‘¶‚·‚é•Ï”
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final Set<UnresolvedCatchBlockInfo> sequentCatchBlocks;
 
     /**
-     * ‘Î‰‚·‚é finally ƒuƒƒbƒN‚ğ•Û‘¶‚·‚é•Ï”
+     * å¯¾å¿œã™ã‚‹ finally ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private UnresolvedFinallyBlockInfo sequentFinallyBlock;
 

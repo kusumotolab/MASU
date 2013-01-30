@@ -3,17 +3,17 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 
 /**
- * ElseBlock, CatchBlock, FinallyBLock ‚Ì‚æ‚¤‚¤‚ÉC
- * ‚ ‚éBlock‚Ì‘¶İ‰º‚Å‚Ì‚İ’è‹`‚³‚ê‚é–¢‰ğŒˆƒuƒƒbƒN‚Å‚ ‚é‚±‚Æ‚ğ•\‚·ƒCƒ“ƒ^ƒtƒFƒCƒX
+ * ElseBlock, CatchBlock, FinallyBLock ã®ã‚ˆã†ã†ã«ï¼Œ
+ * ã‚ã‚‹Blockã®å­˜åœ¨ä¸‹ã§ã®ã¿å®šç¾©ã•ã‚Œã‚‹æœªè§£æ±ºãƒ–ãƒ­ãƒƒã‚¯ã§ã‚ã‚‹ã“ã¨ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ã‚¤ã‚¹
  * @author g-yamada
  *
- * @param <T> ‚±‚ÌƒuƒƒbƒN‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆƒuƒƒbƒN‚ÌŒ^
+ * @param <T> ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºãƒ–ãƒ­ãƒƒã‚¯ã®å‹
  */
 public interface UnresolvedSubsequentialBlockInfo<T extends UnresolvedBlockInfo<? extends BlockInfo>>{
 /**
- * ‚±‚ÌƒuƒƒbƒN‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆƒuƒƒbƒN‚ğ•Ô‚·
+ * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
  * 
- * @return ‚±‚ÌƒuƒƒbƒN‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆƒuƒƒbƒN
+ * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºãƒ–ãƒ­ãƒƒã‚¯
  */
     public T getOwnerBlock();
 

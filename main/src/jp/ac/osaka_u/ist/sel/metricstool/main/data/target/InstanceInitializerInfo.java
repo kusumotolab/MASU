@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•\‚·ƒNƒ‰ƒX
+ * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -15,12 +15,12 @@ public class InstanceInitializerInfo extends InitializerInfo {
     private static final long serialVersionUID = 5833181372993442712L;
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public InstanceInitializerInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {

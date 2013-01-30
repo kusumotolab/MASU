@@ -8,9 +8,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ’ŠÛ\•¶–Ø‚ÌƒrƒWƒ^[‚ªJava‚Ì“½–¼ƒNƒ‰ƒX“ž’B‚µ‚½Žž‚Ìó‘Ô‚ðŠÇ—‚·‚é.
+ * æŠ½è±¡æ§‹æ–‡æœ¨ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒJavaã®åŒ¿åã‚¯ãƒ©ã‚¹åˆ°é”ã—ãŸæ™‚ã®çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹.
  * 
- * ƒCƒ“ƒXƒ^ƒ“ƒX‰»•¶inew•¶j‚Ì’†‚ÅƒNƒ‰ƒXƒuƒƒbƒN‚ªŠJŽn‚³‚ê‚½Žž‚É“½–¼ƒNƒ‰ƒX‚Æ‚Ý‚È‚·.
+ * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–æ–‡ï¼ˆnewæ–‡ï¼‰ã®ä¸­ã§ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ãŒé–‹å§‹ã•ã‚ŒãŸæ™‚ã«åŒ¿åã‚¯ãƒ©ã‚¹ã¨ã¿ãªã™.
  * @author kou-tngt
  *
  */

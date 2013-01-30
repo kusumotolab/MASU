@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒƒ\ƒbƒh‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -23,15 +23,15 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         StaticOrInstance {
 
     /**
-     * ƒƒ\ƒbƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param modifiers Cüq‚ÌSet
-     * @param methodName ƒƒ\ƒbƒh–¼
-     * @param instance ƒCƒ“ƒXƒ^ƒ“ƒX‚©ƒXƒ^ƒeƒBƒbƒN‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®Set
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
+     * @param instance ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‹ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     MethodInfo(final Set<ModifierInfo> modifiers, final String methodName, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -53,11 +53,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ªCˆø”‚Å—^‚¦‚ç‚ê‚½î•ñ‚ğg‚Á‚ÄŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒï¼Œå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæƒ…å ±ã‚’ä½¿ã£ã¦å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param methodName ƒƒ\ƒbƒh–¼
-     * @param actualParameters Àˆø”‚ÌƒŠƒXƒg
-     * @return ŒÄ‚Ño‚¹‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
+     * @param actualParameters å®Ÿå¼•æ•°ã®ãƒªã‚¹ãƒˆ
+     * @return å‘¼ã³å‡ºã›ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean canCalledWith(final String methodName,
             final List<ExpressionInfo> actualParameters) {
@@ -66,7 +66,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
             throw new IllegalArgumentException();
         }
 
-        // ƒƒ\ƒbƒh–¼‚ª“™‚µ‚­‚È‚¢ê‡‚ÍŠY“–‚µ‚È‚¢
+        // ãƒ¡ã‚½ãƒƒãƒ‰åãŒç­‰ã—ããªã„å ´åˆã¯è©²å½“ã—ãªã„
         if (!methodName.equals(this.getMethodName())) {
             return false;
         }
@@ -75,10 +75,10 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒIƒuƒWƒFƒNƒgiƒƒ\ƒbƒhj‚Æ“™‚µ‚¢‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆãƒ¡ã‚½ãƒƒãƒ‰ï¼‰ã¨ç­‰ã—ã„ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param o ”äŠr‘ÎÛƒIƒuƒWƒFƒNƒgiƒƒ\ƒbƒhj
-     * @return “™‚µ‚¢ê‡‚Í true, “™‚µ‚­‚È‚¢ê‡‚Í false
+     * @param o æ¯”è¼ƒå¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆãƒ¡ã‚½ãƒƒãƒ‰ï¼‰
+     * @return ç­‰ã—ã„å ´åˆã¯ true, ç­‰ã—ããªã„å ´åˆã¯ false
      */
     @Override
     public final boolean equals(Object o) {
@@ -95,9 +95,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰
      */
     @Override
     public final String getMeasuredUnitName() {
@@ -152,18 +152,18 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚Ì–¼‘O‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh–¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public final String getMethodName() {
         return this.methodName;
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã®å‹ã‚’è¿”ã™
      * 
-     * @return •Ô‚è’l‚ÌŒ^
+     * @return è¿”ã‚Šå€¤ã®å‹
      */
     public final TypeInfo getReturnType() {
 
@@ -175,9 +175,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ğƒZƒbƒg‚·‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ï¼
      * 
-     * @param returnType ‚±‚Ìƒƒ\ƒbƒh‚Ì•Ô‚è’l
+     * @param returnType ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤
      */
     public void setReturnType(final TypeInfo returnType) {
 
@@ -190,9 +190,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ªƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param overridee ’Ç‰Á‚·‚éƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param overridee è¿½åŠ ã™ã‚‹ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void addOverridee(final MethodInfo overridee) {
 
@@ -205,9 +205,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param overrider ’Ç‰Á‚·‚éƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param overrider è¿½åŠ ã™ã‚‹ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
      */
     public void addOverrider(final MethodInfo overrider) {
@@ -221,27 +221,27 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ªƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚ªƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet
      */
     public SortedSet<MethodInfo> getOverridees() {
         return Collections.unmodifiableSortedSet(this.overridees);
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet
      */
     public SortedSet<MethodInfo> getOverriders() {
         return Collections.unmodifiableSortedSet(this.overriders);
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public final boolean isInstanceMember() {
@@ -249,9 +249,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public final boolean isStaticMember() {
@@ -259,27 +259,27 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String methodName;
 
     /**
-     * •Ô‚è’l‚ÌŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * è¿”ã‚Šå€¤ã®å‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private TypeInfo returnType;
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ªƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒhˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected final SortedSet<MethodInfo> overridees;
 
     /**
-     * ƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected final SortedSet<MethodInfo> overriders;
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final boolean instance;
 }

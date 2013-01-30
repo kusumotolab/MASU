@@ -40,22 +40,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒƒgƒŠƒNƒXŒv‘ªƒvƒ‰ƒOƒCƒ“À‘•—p‚Ì’ŠÛƒNƒ‰ƒX
+ * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè£…ç”¨ã®æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * <p>
- * Šeƒvƒ‰ƒOƒCƒ“‚Í‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚ğ1‚Â‚à‚½‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D ‚Ü‚½C‚»‚ÌƒNƒ‰ƒX–¼‚ğplugin.xmlƒtƒ@ƒCƒ‹‚Éw’è‚ÌŒ`®‚Å‹Lq‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+ * å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã‚’1ã¤ã‚‚ãŸãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼ ã¾ãŸï¼Œãã®ã‚¯ãƒ©ã‚¹åã‚’plugin.xmlãƒ•ã‚¡ã‚¤ãƒ«ã«æŒ‡å®šã®å½¢å¼ã§è¨˜è¿°ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
  * <p>
- * mainƒ‚ƒWƒ…[ƒ‹‚ÍŠeƒvƒ‰ƒOƒCƒ“ƒfƒBƒŒƒNƒgƒŠ‚©‚çplugin.xmlƒtƒ@ƒCƒ‹‚ğ’Tõ‚µA ‚»‚±‚É‹Lq‚³‚ê‚Ä‚¢‚éC‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µA
- * Šeƒƒ\ƒbƒh‚ğ’Ê‚¶‚Äî•ñ‚ğæ“¾‚µ‚½ŒãAexecuteƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚ÄƒƒgƒŠƒNƒX’l‚ğŒv‘ª‚·‚é
+ * mainãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¯å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰plugin.xmlãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¢ç´¢ã—ã€ ãã“ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã€
+ * å„ãƒ¡ã‚½ãƒƒãƒ‰ã‚’é€šã˜ã¦æƒ…å ±ã‚’å–å¾—ã—ãŸå¾Œã€executeãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’è¨ˆæ¸¬ã™ã‚‹
  * 
  * @author kou-tngt
  */
 public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ìî•ñ‚ğ•Û‘¶‚·‚é“à•”•s•ÏƒNƒ‰ƒXD AbstractPlugin‚©‚ç‚Ì‚İƒCƒ“ƒXƒ^ƒ“ƒX‰»‚Å‚«‚éD
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å†…éƒ¨ä¸å¤‰ã‚¯ãƒ©ã‚¹ï¼ AbstractPluginã‹ã‚‰ã®ã¿ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã§ãã‚‹ï¼
      * <p>
-     * ƒvƒ‰ƒOƒCƒ“‚Ìî•ñ‚ğ“®“I‚É•ÏX‚³‚ê‚é‚Æ¢‚é‚Ì‚ÅA‚±‚Ì“à•”ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ—p‚¢‚Ä î•ñ‚ğ‚â‚è‚Æ‚·‚é‚±‚Æ‚Åƒvƒ‰ƒOƒCƒ“î•ñ‚Ì•s•Ï«‚ğÀŒ»‚·‚éD
-     * Šeƒvƒ‰ƒOƒCƒ“‚Ìî•ñ‚ğ•Û‘¶‚·‚éPluginInfoƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾‚É‚Í {@link AbstractPlugin#getPluginInfo()}‚ğ—p‚¢‚éD
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æƒ…å ±ã‚’å‹•çš„ã«å¤‰æ›´ã•ã‚Œã‚‹ã¨å›°ã‚‹ã®ã§ã€ã“ã®å†…éƒ¨ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”¨ã„ã¦ æƒ…å ±ã‚’ã‚„ã‚Šã¨ã™ã‚‹ã“ã¨ã§ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®ä¸å¤‰æ€§ã‚’å®Ÿç¾ã™ã‚‹ï¼
+     * å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹PluginInfoã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—ã«ã¯ {@link AbstractPlugin#getPluginInfo()}ã‚’ç”¨ã„ã‚‹ï¼
      * 
      * @author kou-tngt
      * 
@@ -63,7 +63,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     public class PluginInfo {
 
         /**
-         * ƒfƒtƒHƒ‹ƒg‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+         * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
          */
         private PluginInfo() {
             final LANGUAGE[] languages = AbstractPlugin.this.getMeasurableLanguages();
@@ -81,38 +81,38 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÌŠÈˆÕà–¾‚ğ‚Ps‚Å•Ô‚·i‚Å‚«‚ê‚Î‰pŒê‚Åj. ƒfƒtƒHƒ‹ƒg‚ÌÀ‘•‚Å‚Í "Measure ƒƒgƒŠƒNƒX–¼ metrics." ‚Æ•Ô‚·
-         * Šeƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğ”CˆÓ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç°¡æ˜“èª¬æ˜ã‚’ï¼‘è¡Œã§è¿”ã™ï¼ˆã§ãã‚Œã°è‹±èªã§ï¼‰. ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®Ÿè£…ã§ã¯ "Measure ãƒ¡ãƒˆãƒªã‚¯ã‚¹å metrics." ã¨è¿”ã™
+         * å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»»æ„ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
          * 
-         * @return ŠÈˆÕà–¾•¶š—ñ
+         * @return ç°¡æ˜“èª¬æ˜æ–‡å­—åˆ—
          */
         public String getDescription() {
             return this.description;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÚ×à–¾‚ğ•Ô‚·i‚Å‚«‚ê‚Î‰pŒê‚Åj. ƒfƒtƒHƒ‹ƒg‚ÌÀ‘•‚Å‚Í‹ó•¶š—ñ‚ğ•Ô‚· Šeƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğ”CˆÓ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è©³ç´°èª¬æ˜ã‚’è¿”ã™ï¼ˆã§ãã‚Œã°è‹±èªã§ï¼‰. ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®Ÿè£…ã§ã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã™ å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»»æ„ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
          * 
-         * @return Ú×à–¾•¶š—ñ
+         * @return è©³ç´°èª¬æ˜æ–‡å­—åˆ—
          */
         public String getDetailDescription() {
             return this.detailDescription;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒgƒŠƒNƒX‚ğŒv‘ª‚Å‚«‚éŒ¾Œê‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã§ãã‚‹è¨€èªã‚’è¿”ã™ï¼
          * 
-         * @return Œv‘ª‰Â”\‚ÈŒ¾Œê‚ğ‘S‚ÄŠÜ‚Ş”z—ñD
+         * @return è¨ˆæ¸¬å¯èƒ½ãªè¨€èªã‚’å…¨ã¦å«ã‚€é…åˆ—ï¼
          */
         public LANGUAGE[] getMeasurableLanguages() {
             return this.measurableLanguages;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªˆø”‚Åw’è‚³‚ê‚½Œ¾Œê‚Å—˜—p‰Â”\‚Å‚ ‚é‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒå¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸè¨€èªã§åˆ©ç”¨å¯èƒ½ã§ã‚ã‚‹ã‹ã‚’è¿”ã™ï¼
          * 
-         * @param language —˜—p‰Â”\‚Å‚ ‚é‚©‚ğ’²‚×‚½‚¢Œ¾Œê
-         * @return —˜—p‰Â”\‚Å‚ ‚éê‡‚Í trueC—˜—p‚Å‚«‚È‚¢ê‡‚Í falseD
+         * @param language åˆ©ç”¨å¯èƒ½ã§ã‚ã‚‹ã‹ã‚’èª¿ã¹ãŸã„è¨€èª
+         * @return åˆ©ç”¨å¯èƒ½ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œåˆ©ç”¨ã§ããªã„å ´åˆã¯ falseï¼
          */
         public boolean isMeasurable(final LANGUAGE language) {
             final LANGUAGE[] measurableLanguages = this.getMeasurableLanguages();
@@ -125,18 +125,18 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªŒv‘ª‚·‚éƒƒgƒŠƒNƒX‚Ì–¼‘O‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒè¨ˆæ¸¬ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®åå‰ã‚’è¿”ã™ï¼
          * 
-         * @return ƒƒgƒŠƒNƒX–¼
+         * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹å
          */
         public String getMetricName() {
             return this.metricName;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªŒv‘ª‚·‚éƒƒgƒŠƒNƒX‚Ìƒ^ƒCƒv‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒè¨ˆæ¸¬ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
          * 
-         * @return ƒƒgƒŠƒNƒXƒ^ƒCƒv
+         * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚¿ã‚¤ãƒ—
          * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
          */
         public METRIC_TYPE getMetricType() {
@@ -144,45 +144,45 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
          * 
-         * @return ƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+         * @return ã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
          */
         public boolean isUseClassInfo() {
             return this.useClassInfo;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
          * 
-         * @return ƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+         * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
          */
         public boolean isUseFieldInfo() {
             return this.useFieldInfo;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
          * 
-         * @return ƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+         * @return ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
          */
         public boolean isUseFileInfo() {
             return this.useFileInfo;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒ\ƒbƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
          * 
-         * @return ƒƒ\ƒbƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+         * @return ãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
          */
         public boolean isUseMethodInfo() {
             return this.useMethodInfo;
         }
 
         /**
-         * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒ\ƒbƒh“à•”‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+         * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
          * 
-         * @return ƒƒ\ƒbƒh“à•”‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+         * @return ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
          */
         public boolean isUseMethodLocalInfo() {
             return this.useMethodLocalInfo;
@@ -210,10 +210,10 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌÀs‚É‹–‰Â‚³‚ê‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ’Ç‰Á‚·‚é. “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©ŒÄ‚Ño‚¹‚È‚¢.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œæ™‚ã«è¨±å¯ã•ã‚Œã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¿½åŠ ã™ã‚‹. ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å‘¼ã³å‡ºã›ãªã„.
      * 
-     * @param permission ‹–‰Â‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚µ‚½ê‡
+     * @param permission è¨±å¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã—ãŸå ´åˆ
      */
     public final void addPermission(final Permission permission) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -221,9 +221,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX“¯m‚ğ”äŠr‚·‚é. ƒNƒ‰ƒX‚Ì•W€–¼‚ªæ‚ê‚é‚È‚ç‚»‚ê‚ğ—p‚¢‚Ä”äŠr‚·‚é. æ‚ê‚È‚¢ê‡‚ÍC {@link Class}ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì‚ğ”äŠr‚·‚é.
-     * ‚½‚¾‚µC’Êí‚Ì‹@”\‚ğ—p‚¢‚Äƒ[ƒh‚³‚ê‚éƒvƒ‰ƒOƒCƒ“‚ª“½–¼ƒNƒ‰ƒX‚Å‚ ‚é‚±‚Æ‚Í‚ ‚è‚¦‚È‚¢.
-     * ‚æ‚Á‚ÄC“¯ˆêƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Í•Ê‚ÌƒNƒ‰ƒXƒ[ƒ_‚©‚çƒ[ƒh‚³‚ê‚Ä‚à“¯ˆê‚Å‚ ‚é‚Æ”»’è‚³‚ê‚é.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒå£«ã‚’æ¯”è¼ƒã™ã‚‹. ã‚¯ãƒ©ã‚¹ã®æ¨™æº–åãŒå–ã‚Œã‚‹ãªã‚‰ãã‚Œã‚’ç”¨ã„ã¦æ¯”è¼ƒã™ã‚‹. å–ã‚Œãªã„å ´åˆã¯ï¼Œ {@link Class}ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚’æ¯”è¼ƒã™ã‚‹.
+     * ãŸã ã—ï¼Œé€šå¸¸ã®æ©Ÿèƒ½ã‚’ç”¨ã„ã¦ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒåŒ¿åã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã“ã¨ã¯ã‚ã‚Šãˆãªã„.
+     * ã‚ˆã£ã¦ï¼ŒåŒä¸€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯åˆ¥ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ€ã‹ã‚‰ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã‚‚åŒä¸€ã§ã‚ã‚‹ã¨åˆ¤å®šã•ã‚Œã‚‹.
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      * @see #hashCode()
@@ -234,13 +234,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             final String myClassName = this.getClass().getCanonicalName();
             final String otherClassName = o.getClass().getCanonicalName();
             if (null != myClassName && null != otherClassName) {
-                // ‚Ç‚¿‚ç‚à“½–¼ƒNƒ‰ƒX‚¶‚á‚È‚¢ê‡
+                // ã©ã¡ã‚‰ã‚‚åŒ¿åã‚¯ãƒ©ã‚¹ã˜ã‚ƒãªã„å ´åˆ
                 return myClassName.equals(otherClassName);
             } else if (null != myClassName || null != otherClassName) {
-                // ‚Ç‚Á‚¿‚©‚Í“½–¼ƒNƒ‰ƒX‚¾‚¯‚ÇC‚Ç‚Á‚¿‚©‚Íˆá‚¤
+                // ã©ã£ã¡ã‹ã¯åŒ¿åã‚¯ãƒ©ã‚¹ã ã‘ã©ï¼Œã©ã£ã¡ã‹ã¯é•ã†
                 return false;
             } else {
-                // —¼•û‚Æ‚à“½–¼ƒNƒ‰ƒX
+                // ä¸¡æ–¹ã¨ã‚‚åŒ¿åã‚¯ãƒ©ã‚¹
                 return this.getClass().equals(o.getClass());
             }
         }
@@ -249,9 +249,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·. ƒNƒ‰ƒX‚Ì•W€–¼‚ªæ‚ê‚é‚È‚ç‚»‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğg‚¤. æ‚ê‚È‚¢ê‡‚ÍC {@link Class}ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğg‚¤.
-     * ‚½‚¾‚µC’Êí‚Ì‹@”\‚ğ—p‚¢‚Ä‚¢ƒ[ƒh‚³‚ê‚éƒvƒ‰ƒOƒCƒ“‚ª“½–¼ƒNƒ‰ƒX‚Å‚ ‚é‚±‚Æ‚Í‚ ‚è‚¦‚È‚¢.
-     * ‚æ‚Á‚ÄC“¯ˆêƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Í•Ê‚ÌƒNƒ‰ƒXƒ[ƒ_‚©‚çƒ[ƒh‚³‚ê‚Ä‚à“¯ˆê‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™. ã‚¯ãƒ©ã‚¹ã®æ¨™æº–åãŒå–ã‚Œã‚‹ãªã‚‰ãã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’ä½¿ã†. å–ã‚Œãªã„å ´åˆã¯ï¼Œ {@link Class}ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’ä½¿ã†.
+     * ãŸã ã—ï¼Œé€šå¸¸ã®æ©Ÿèƒ½ã‚’ç”¨ã„ã¦ã„ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒåŒ¿åã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã“ã¨ã¯ã‚ã‚Šãˆãªã„.
+     * ã‚ˆã£ã¦ï¼ŒåŒä¸€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯åˆ¥ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ€ã‹ã‚‰ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã‚‚åŒä¸€ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™.
      * 
      * @see java.lang.Object#hashCode()(java.lang.Object)
      * @see #equals(Object)
@@ -264,11 +264,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚ğƒZƒbƒg‚·‚é ˆê“xƒZƒbƒg‚³‚ê‚½’l‚ğ•ÏX‚·‚é‚±‚Æ‚Ío—ˆ‚È‚¢.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ã‚»ãƒƒãƒˆã™ã‚‹ ä¸€åº¦ã‚»ãƒƒãƒˆã•ã‚ŒãŸå€¤ã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ã¯å‡ºæ¥ãªã„.
      * 
-     * @param rootDir ƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
-     * @throws NullPointerException rootDir‚ªnull‚Ìê‡
-     * @throws IllegalStateException rootDir‚ªŠù‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚éê‡
+     * @param rootDir ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @throws NullPointerException rootDirãŒnullã®å ´åˆ
+     * @throws IllegalStateException rootDirãŒæ—¢ã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹å ´åˆ
      */
     public final synchronized void setPluginRootdir(final File rootDir) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -284,9 +284,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ‘—MÒ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return é€ä¿¡è€…ã¨ã—ã¦ã®åå‰
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
      */
     public String getMessageSourceName() {
@@ -294,9 +294,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚É‹–‰Â‚³‚ê‚Ä‚¢‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ì•s•Ï‚ÈW‡‚ğ•Ô‚·.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«è¨±å¯ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®ä¸å¤‰ãªé›†åˆã‚’è¿”ã™.
      * 
-     * @return ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚É‹–‰Â‚³‚ê‚Ä‚¢‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚ÌW‡.
+     * @return ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«è¨±å¯ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®é›†åˆ.
      */
     public final Permissions getPermissions() {
         final Permissions permissions = new Permissions();
@@ -310,10 +310,10 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚ğ•Û‘¶‚µ‚Ä‚¢‚é{@link PluginInfo}ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·D
-     * “¯ˆê‚ÌAbstractPluginƒCƒ“ƒXƒ^ƒ“ƒX‚É‘Î‚·‚é‚±‚Ìƒƒ\ƒbƒh‚Í•K‚¸“¯ˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚µC ‚»‚Ì“à•”‚É•Û‘¶‚³‚ê‚Ä‚¢‚éî•ñ‚Í•s•Ï‚Å‚ ‚éD
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’ä¿å­˜ã—ã¦ã„ã‚‹{@link PluginInfo}ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™ï¼
+     * åŒä¸€ã®AbstractPluginã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«å¯¾ã™ã‚‹ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å¿…ãšåŒä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã—ï¼Œ ãã®å†…éƒ¨ã«ä¿å­˜ã•ã‚Œã¦ã„ã‚‹æƒ…å ±ã¯ä¸å¤‰ã§ã‚ã‚‹ï¼
      * 
-     * @return ƒvƒ‰ƒOƒCƒ“î•ñ‚ğ•Û‘¶‚µ‚Ä‚¢‚é{@link PluginInfo}ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’ä¿å­˜ã—ã¦ã„ã‚‹{@link PluginInfo}ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public final PluginInfo getPluginInfo() {
         if (null == this.pluginInfo) {
@@ -328,18 +328,18 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ•Ô‚·
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¿”ã™
      * 
-     * @return ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
      */
     public final File getPluginRootDir() {
         return this.pluginRootDir;
     }
 
     /**
-     * i’»î•ñ‘—MÒ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * é€²æ—æƒ…å ±é€ä¿¡è€…ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return i’»î•ñ‘—MÒ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return é€²æ—æƒ…å ±é€ä¿¡è€…ã¨ã—ã¦ã®åå‰
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.ProgressSource#getProgressSourceName()
      */
     public String getProgressSourceName() {
@@ -347,58 +347,58 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚ªŠù‚É\’zÏ‚İ‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ãŒæ—¢ã«æ§‹ç¯‰æ¸ˆã¿ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒvƒ‰ƒOƒCƒ“î•ñ‚ªŠù‚É\’zÏ‚İ‚È‚çtrue,‚»‚¤‚Å‚È‚¯‚ê‚Îfalse
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ãŒæ—¢ã«æ§‹ç¯‰æ¸ˆã¿ãªã‚‰true,ãã†ã§ãªã‘ã‚Œã°false
      */
     public final boolean isPluginInfoCreated() {
         return null != this.pluginInfo;
     }
 
     /**
-     * ƒƒgƒŠƒNƒX‰ğÍ‚ğƒXƒ^[ƒg‚·‚é’ŠÛƒƒ\ƒbƒhD
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è§£æã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã™ã‚‹æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ï¼
      */
     protected abstract void execute();
 
     /**
-     * ƒtƒ@ƒCƒ‹î•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT‚ğæ“¾‚·‚é.
+     * ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µã‚’å–å¾—ã™ã‚‹.
      * 
-     * @return ƒtƒ@ƒCƒ‹î•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     protected final FileInfoAccessor getFileInfoAccessor() {
         return this.fileInfoAccessor;
     }
 
     /**
-     * ƒNƒ‰ƒXî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT‚ğæ“¾‚·‚é.
+     * ã‚¯ãƒ©ã‚¹æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µã‚’å–å¾—ã™ã‚‹.
      * 
-     * @return ƒNƒ‰ƒXî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * @return ã‚¯ãƒ©ã‚¹æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     protected final ClassInfoAccessor getClassInfoAccessor() {
         return this.classInfoAccessor;
     }
 
     /**
-     * ƒƒ\ƒbƒhî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT‚ğæ“¾‚·‚é.
+     * ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µã‚’å–å¾—ã™ã‚‹.
      * 
-     * @return ƒƒ\ƒbƒhî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     protected final MethodInfoAccessor getMethodInfoAccessor() {
         return this.methodInfoAccessor;
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÌŠÈˆÕà–¾‚ğ‚Ps‚Å•Ô‚·i‚Å‚«‚ê‚Î‰pŒê‚Åj ƒfƒtƒHƒ‹ƒg‚ÌÀ‘•‚Å‚Í "Measuring the ƒƒgƒŠƒNƒX–¼ metric." ‚Æ•Ô‚·
-     * Šeƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğ”CˆÓ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç°¡æ˜“èª¬æ˜ã‚’ï¼‘è¡Œã§è¿”ã™ï¼ˆã§ãã‚Œã°è‹±èªã§ï¼‰ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®Ÿè£…ã§ã¯ "Measuring the ãƒ¡ãƒˆãƒªã‚¯ã‚¹å metric." ã¨è¿”ã™
+     * å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»»æ„ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      * 
-     * @return ŠÈˆÕà–¾•¶š—ñ
+     * @return ç°¡æ˜“èª¬æ˜æ–‡å­—åˆ—
      */
     protected String getDescription() {
         return "Measuring the " + this.getMetricName() + " metric.";
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÚ×à–¾‚ğ•Ô‚·i‚Å‚«‚ê‚Î‰pŒê‚Åj ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Í‹ó•¶š—ñ‚ğ•Ô‚·. Šeƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğ”CˆÓ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è©³ç´°èª¬æ˜ã‚’è¿”ã™ï¼ˆã§ãã‚Œã°è‹±èªã§ï¼‰ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã™. å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»»æ„ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      * 
      * @return
      */
@@ -407,9 +407,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒgƒŠƒNƒX‚ğŒv‘ª‚Å‚«‚éŒ¾Œê‚ğ•Ô‚· —˜—p‚Å‚«‚éŒ¾Œê‚É§ŒÀ‚Ì‚ ‚éƒvƒ‰ƒOƒCƒ“‚ÍA‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é•K—v‚ª‚ ‚éD
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã§ãã‚‹è¨€èªã‚’è¿”ã™ åˆ©ç”¨ã§ãã‚‹è¨€èªã«åˆ¶é™ã®ã‚ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ï¼
      * 
-     * @return Œv‘ª‰Â”\‚ÈŒ¾Œê‚ğ‘S‚ÄŠÜ‚Ş”z—ñ
+     * @return è¨ˆæ¸¬å¯èƒ½ãªè¨€èªã‚’å…¨ã¦å«ã‚€é…åˆ—
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE
      */
     protected LANGUAGE[] getMeasurableLanguages() {
@@ -417,26 +417,26 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªŒv‘ª‚·‚éƒƒgƒŠƒNƒX‚Ì–¼‘O‚ğ•Ô‚·’ŠÛƒƒ\ƒbƒhD
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒè¨ˆæ¸¬ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®åå‰ã‚’è¿”ã™æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ï¼
      * 
-     * @return ƒƒgƒŠƒNƒX–¼
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹å
      */
     protected abstract String getMetricName();
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªŒv‘ª‚·‚éƒƒgƒŠƒNƒX‚Ìƒ^ƒCƒv‚ğ•Ô‚·’ŠÛƒƒ\ƒbƒhD
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒè¨ˆæ¸¬ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ï¼
      * 
-     * @return ƒƒgƒŠƒNƒXƒ^ƒCƒv
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚¿ã‚¤ãƒ—
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
      */
     protected abstract METRIC_TYPE getMetricType();
 
     /**
-     * ƒtƒ@ƒCƒ‹’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh.
+     * ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @param fileInfo ƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒtƒ@ƒCƒ‹
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException Šù‚É‚±‚Ìƒvƒ‰ƒOƒCƒ“‚©‚ç‚±‚Ìƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éƒƒgƒŠƒNƒX’l‚Ì•ñ‚ª‚³‚ê‚Ä‚¢‚éê‡.
+     * @param fileInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException æ—¢ã«ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã®å ±å‘ŠãŒã•ã‚Œã¦ã„ã‚‹å ´åˆ.
      */
     protected final void registMetric(final FileInfo fileInfo, final Number value)
             throws MetricAlreadyRegisteredException {
@@ -456,11 +456,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒNƒ‰ƒX’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh.
+     * ã‚¯ãƒ©ã‚¹å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @param classInfo ƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒNƒ‰ƒX
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException Šù‚É‚±‚Ìƒvƒ‰ƒOƒCƒ“‚©‚ç‚±‚ÌƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒƒgƒŠƒNƒX’l‚Ì•ñ‚ª‚³‚ê‚Ä‚¢‚éê‡.
+     * @param classInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException æ—¢ã«ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã“ã®ã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã®å ±å‘ŠãŒã•ã‚Œã¦ã„ã‚‹å ´åˆ.
      */
     protected final void registMetric(final TargetClassInfo classInfo, final Number value)
             throws MetricAlreadyRegisteredException {
@@ -480,11 +480,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒƒ\ƒbƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh.
+     * ãƒ¡ã‚½ãƒƒãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @param methodInfo ƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException Šù‚É‚±‚Ìƒvƒ‰ƒOƒCƒ“‚©‚ç‚±‚Ìƒƒ\ƒbƒh‚ÉŠÖ‚·‚éƒƒgƒŠƒNƒX’l‚Ì•ñ‚ª‚³‚ê‚Ä‚¢‚éê‡.
+     * @param methodInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException æ—¢ã«ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã®å ±å‘ŠãŒã•ã‚Œã¦ã„ã‚‹å ´åˆ.
      */
     protected final void registMetric(final TargetMethodInfo methodInfo, final Number value)
             throws MetricAlreadyRegisteredException {
@@ -504,11 +504,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh.
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @param fieldInfo ƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException Šù‚É‚±‚Ìƒvƒ‰ƒOƒCƒ“‚©‚ç‚±‚Ìƒƒ\ƒbƒh‚ÉŠÖ‚·‚éƒƒgƒŠƒNƒX’l‚Ì•ñ‚ª‚³‚ê‚Ä‚¢‚éê‡.
+     * @param fieldInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException æ—¢ã«ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã®å ±å‘ŠãŒã•ã‚Œã¦ã„ã‚‹å ´åˆ.
      */
     protected final void registMetric(final TargetFieldInfo fieldInfo, final Number value)
             throws MetricAlreadyRegisteredException {
@@ -528,9 +528,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ìi’»î•ñ‚ğ‘—‚éƒƒ\ƒbƒh
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®é€²æ—æƒ…å ±ã‚’é€ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param percentage i’»î•ñ’l
+     * @param percentage é€²æ—æƒ…å ±å€¤
      */
     protected final void reportProgress(final int percentage) {
         if (this.reporter != null) {
@@ -539,57 +539,57 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒhD ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Ífalse‚ğ•Ô‚·D
-     * ƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰[ƒh‚µ‚Ätrue‚ğ•Ô‚³‚È‚¯‚ê‚Î¬‚ç‚È‚¢D
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯falseã‚’è¿”ã™ï¼
+     * ã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ¼ãƒ‰ã—ã¦trueã‚’è¿”ã•ãªã‘ã‚Œã°æˆã‚‰ãªã„ï¼
      * 
-     * @return ƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+     * @return ã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
      */
     protected boolean useClassInfo() {
         return false;
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒhD ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Ífalse‚ğ•Ô‚·D
-     * ƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰[ƒh‚µ‚Ätrue‚ğ•Ô‚³‚È‚¯‚ê‚Î¬‚ç‚È‚¢D
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯falseã‚’è¿”ã™ï¼
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ¼ãƒ‰ã—ã¦trueã‚’è¿”ã•ãªã‘ã‚Œã°æˆã‚‰ãªã„ï¼
      * 
-     * @return ƒtƒB[ƒ‹ƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
      */
     protected boolean useFieldInfo() {
         return false;
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒhD ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Ífalse‚ğ•Ô‚·D
-     * ƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰[ƒh‚µ‚Ätrue‚ğ•Ô‚³‚È‚¯‚ê‚Î¬‚ç‚È‚¢D
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯falseã‚’è¿”ã™ï¼
+     * ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ¼ãƒ‰ã—ã¦trueã‚’è¿”ã•ãªã‘ã‚Œã°æˆã‚‰ãªã„ï¼
      * 
-     * @return ƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
      */
     protected boolean useFileInfo() {
         return false;
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒ\ƒbƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒhD ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Ífalse‚ğ•Ô‚·D
-     * ƒƒ\ƒbƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰[ƒh‚µ‚Ätrue‚ğ•Ô‚³‚È‚¯‚ê‚Î¬‚ç‚È‚¢D
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯falseã‚’è¿”ã™ï¼
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ¼ãƒ‰ã—ã¦trueã‚’è¿”ã•ãªã‘ã‚Œã°æˆã‚‰ãªã„ï¼
      * 
-     * @return ƒƒ\ƒbƒh‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
      */
     protected boolean useMethodInfo() {
         return false;
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒ\ƒbƒh“à•”‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒhD ƒfƒtƒHƒ‹ƒgÀ‘•‚Å‚Ífalse‚ğ•Ô‚·D
-     * ƒƒ\ƒbƒh“à•”‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éƒvƒ‰ƒOƒCƒ“‚Í‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰[ƒh‚µ‚Ätrue‚ğ•Ô‚³‚È‚¯‚ê‚Î¬‚ç‚È‚¢D
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã§ã¯falseã‚’è¿”ã™ï¼
+     * ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ¼ãƒ‰ã—ã¦trueã‚’è¿”ã•ãªã‘ã‚Œã°æˆã‚‰ãªã„ï¼
      * 
-     * @return ƒƒ\ƒbƒh“à•”‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚éê‡‚ÍtrueD
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹å ´åˆã¯trueï¼
      */
     protected boolean useMethodLocalInfo() {
         return false;
     }
 
     /**
-     * Às‘OŒã‚Ì‹¤’Êˆ—‚ğ‚µ‚Ä‚©‚çC {@link #execute()}‚ğŒÄ‚Ño‚·.
+     * å®Ÿè¡Œå‰å¾Œã®å…±é€šå‡¦ç†ã‚’ã—ã¦ã‹ã‚‰ï¼Œ {@link #execute()}ã‚’å‘¼ã³å‡ºã™.
      */
     final synchronized void executionWrapper() {
         assert (null == this.reporter) : "Illegal state : previous reporter was not removed.";
@@ -599,7 +599,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             assert (null == this.reporter) : "Illegal state : previous reporter was still connected.";
         }
 
-        // ‚±‚ÌƒXƒŒƒbƒh‚Éƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚é‚æ‚¤‚É—v¿
+        // ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹ã‚ˆã†ã«è¦è«‹
         MetricsToolSecurityManager.getInstance().requestPluginPermission(this);
 
         try {
@@ -609,53 +609,53 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         if (null != this.reporter) {
-            // i’»•ñ‚ÌI—¹ƒCƒxƒ“ƒg‚ğ‘—‚é
-            // ƒvƒ‰ƒOƒCƒ“‘¤‚ÅŠù‚É‘—‚ç‚ê‚Ä‚¢‚½‚ç‰½‚à‚¹‚¸‚É•Ô‚Á‚Ä‚­‚é
+            // é€²æ—å ±å‘Šã®çµ‚äº†ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€ã‚‹
+            // ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å´ã§æ—¢ã«é€ã‚‰ã‚Œã¦ã„ãŸã‚‰ä½•ã‚‚ã›ãšã«è¿”ã£ã¦ãã‚‹
             this.reporter.reportProgressEnd();
             this.reporter = null;
         }
 
-        // ‚±‚ÌƒXƒŒƒbƒh‚©‚çƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‰ğœ‚·‚é‚æ‚¤‚É—v¿
+        // ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è§£é™¤ã™ã‚‹ã‚ˆã†ã«è¦è«‹
         MetricsToolSecurityManager.getInstance().removePluginPermission(this);
     }
 
     /**
-     * ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^[
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿ãƒ¼
      */
     protected final MessagePrinter out = new DefaultMessagePrinter(this, MESSAGE_TYPE.OUT);
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^[
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿ãƒ¼
      */
     protected final MessagePrinter err = new DefaultMessagePrinter(this, MESSAGE_TYPE.ERROR);
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     private final FileInfoAccessor fileInfoAccessor = new DefaultFileInfoAccessor();
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒXî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     private final ClassInfoAccessor classInfoAccessor = new DefaultClassInfoAccessor();
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒhî•ñ‚ÉƒAƒNƒZƒX‚·‚éƒfƒtƒHƒ‹ƒg‚ÌƒAƒNƒZƒT.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ã‚¯ã‚»ã‚µ.
      */
     private final MethodInfoAccessor methodInfoAccessor = new DefaultMethodInfoAccessor();
 
     /**
-     * ƒtƒ@ƒCƒ‹’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒŒƒWƒXƒ^.
+     * ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¬ã‚¸ã‚¹ã‚¿.
      */
     private FileMetricsRegister fileMetricsRegister;
 
     /**
-     * ƒNƒ‰ƒX’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒŒƒWƒXƒ^.
+     * ã‚¯ãƒ©ã‚¹å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¬ã‚¸ã‚¹ã‚¿.
      */
     private ClassMetricsRegister classMetricsRegister;
 
     /**
-     * ƒƒ\ƒbƒh’PˆÊ‚ÌƒƒgƒŠƒNƒX’l‚ğ“o˜^‚·‚éƒŒƒWƒXƒ^.
+     * ãƒ¡ã‚½ãƒƒãƒ‰å˜ä½ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’ç™»éŒ²ã™ã‚‹ãƒ¬ã‚¸ã‚¹ã‚¿.
      */
     private MethodMetricsRegister methodMetricsRegister;
     
@@ -665,28 +665,28 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     private FieldMetricsRegister fieldMetricsRegister; 
 
     /**
-     * i’»î•ñ‘—M—p‚ÌƒŒƒ|[ƒ^[
+     * é€²æ—æƒ…å ±é€ä¿¡ç”¨ã®ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼
      */
     private ProgressReporter reporter;
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÀs‚Ì‹–‰Â‚³‚ê‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œæ™‚ã®è¨±å¯ã•ã‚Œã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
      */
     private final Permissions permissions = new Permissions();
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ìî•ñ‚ğ•Û‘¶‚·‚é{@link PluginInfo}ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX getPluginInfoƒƒ\ƒbƒh‚Ì‰‰ñ‚ÌŒÄ‚Ño‚µ‚É‚æ‚Á‚Äì¬‚³‚êD
-     * ‚»‚êˆÈ~A‚±‚ÌƒtƒB[ƒ‹ƒh‚Íí‚É“¯‚¶ƒCƒ“ƒXƒ^ƒ“ƒX‚ğQÆ‚·‚éD
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹{@link PluginInfo}ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ getPluginInfoãƒ¡ã‚½ãƒƒãƒ‰ã®åˆå›ã®å‘¼ã³å‡ºã—ã«ã‚ˆã£ã¦ä½œæˆã•ã‚Œï¼
+     * ãã‚Œä»¥é™ã€ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯å¸¸ã«åŒã˜ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å‚ç…§ã™ã‚‹ï¼
      */
     private PluginInfo pluginInfo;
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
      */
     private File pluginRootDir;
 
     /**
-     * {@link MessageSource}‚Æ {@link ProgressSource}—p‚Ì–¼‘O
+     * {@link MessageSource}ã¨ {@link ProgressSource}ç”¨ã®åå‰
      */
     private String sourceName = "";
 }

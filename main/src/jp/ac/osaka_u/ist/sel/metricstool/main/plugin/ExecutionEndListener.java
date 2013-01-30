@@ -5,13 +5,13 @@ import java.util.EventListener;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ÌÀsI—¹‚ÉŒÄ‚Ño‚³‚ê‚éƒŠƒXƒiƒCƒ“ƒ^ƒtƒF[ƒX
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œçµ‚äº†æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
  * @author kou-tngt
  *
  */
 public interface ExecutionEndListener extends EventListener {
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌÀsI—¹‚ÉŒÄ‚Ño‚³‚ê‚éƒŠƒXƒi
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œçµ‚äº†æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒªã‚¹ãƒŠ
      * @param plugin
      */
     public void executionEnd(AbstractPlugin plugin);

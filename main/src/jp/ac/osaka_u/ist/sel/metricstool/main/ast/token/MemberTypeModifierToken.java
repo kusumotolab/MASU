@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * ƒNƒ‰ƒXƒƒ“ƒo‚ÌŽí—Þ‚ðŽw’è‚·‚éCüŽq‚ð•\‚·ƒg[ƒNƒ“
+ * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒ³ãƒã®ç¨®é¡žã‚’æŒ‡å®šã™ã‚‹ä¿®é£¾å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
  * 
  * @author kou-tngt
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class MemberTypeModifierToken extends ModifierToken{
 
     /**
-     * staticƒƒ“ƒo‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * staticãƒ¡ãƒ³ãƒã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final MemberTypeModifierToken STATIC = new MemberTypeModifierToken("static");
     
@@ -22,8 +22,8 @@ public class MemberTypeModifierToken extends ModifierToken{
     }
     
     /**
-     * staticƒƒ“ƒo‚©‚Ç‚¤‚©‚ð•Ô‚·
-     * @return staticƒƒ“ƒo‚Å‚ ‚ê‚Îtrue,‚»‚¤‚Å‚È‚¢‚È‚çfalse
+     * staticãƒ¡ãƒ³ãƒã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return staticãƒ¡ãƒ³ãƒã§ã‚ã‚Œã°true,ãã†ã§ãªã„ãªã‚‰false
      */
     public boolean isStaticMember(){
         return this.equals(STATIC);

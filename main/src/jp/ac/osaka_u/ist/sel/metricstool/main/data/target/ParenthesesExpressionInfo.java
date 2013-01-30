@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * Š‡ŒÊ‚ÅŠ‡‚ç‚ê‚½®‚ğ•\‚·ƒNƒ‰ƒX
+ * æ‹¬å¼§ã§æ‹¬ã‚‰ã‚ŒãŸå¼ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -19,14 +19,14 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     private static final long serialVersionUID = -742042745531180181L;
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»@
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã€€
      * 
-     * @param parentheticExpression Š‡ŒÊ“à‚Ì®
-     * @param ownerMethod Š—Lƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param parentheticExpression æ‹¬å¼§å†…ã®å¼
+     * @param ownerMethod æ‰€æœ‰ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ParenthesesExpressionInfo(final ExpressionInfo parentheticExpression,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -42,18 +42,18 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * Š‡ŒÊ‚Ì“à‘¤‚Ì®‚ğ•Ô‚·
+     * æ‹¬å¼§ã®å†…å´ã®å¼ã‚’è¿”ã™
      * 
-     * @return Š‡ŒÊ‚Ì“à‘¤‚Ì®
+     * @return æ‹¬å¼§ã®å†…å´ã®å¼
      */
     public ExpressionInfo getParnentheticExpression() {
         return this.parentheticExpression;
     }
 
     /**
-     * ®‚ÌŒ^‚ğ•Ô‚·
+     * å¼ã®å‹ã‚’è¿”ã™
      * 
-     * @return ®‚ÌŒ^
+     * @return å¼ã®å‹
      */
     @Override
     public TypeInfo getType() {
@@ -61,9 +61,9 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ®‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * å¼ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      * 
-     * @return ®‚ÌƒeƒLƒXƒg•\Œ»
+     * @return å¼ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      */
     @Override
     public String getText() {
@@ -80,9 +80,9 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ®“à‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µˆê——‚ğ•Ô‚·
+     * å¼å†…ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ®“à‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µˆê——
+     * @return å¼å†…ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ä¸€è¦§
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -90,9 +90,9 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ®“à‚Ì•Ï”g—pˆê——‚ğ•Ô‚·
+     * å¼å†…ã®å¤‰æ•°ä½¿ç”¨ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ®“à‚Ì•Ï”g—pˆê——
+     * @return å¼å†…ã®å¤‰æ•°ä½¿ç”¨ä¸€è¦§
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -100,9 +100,9 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

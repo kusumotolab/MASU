@@ -47,8 +47,8 @@ public class JavaBuildManager extends DefaultBuildDataManager {
         //            }
         //            
         //            if (!hasConstructor && ! currentClassName.contains(JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER)){
-        //                //ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ‚Á‚Ä‚¢‚È‚¢@‚©‚Â@“½–¼ƒNƒ‰ƒX‚Å‚Í‚È‚¢ê‡
-        //                //ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğì¬‚µ‚Ä’Ç‰Á‚·‚é.
+        //                //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’æŒã£ã¦ã„ãªã„ã€€ã‹ã¤ã€€åŒ¿åã‚¯ãƒ©ã‚¹ã§ã¯ãªã„å ´åˆ
+        //                //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ä½œæˆã—ã¦è¿½åŠ ã™ã‚‹.
         //                UnresolvedMethodInfo defaultCostructor = new UnresolvedMethodInfo(currentClassName,currentClass,currentClass,true);
         //                defaultCostructor.setInheritanceVisible(true);
         //                defaultCostructor.setNamespaceVisible(true);

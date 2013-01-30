@@ -5,11 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class ConstructorStateManager extends CallableUnitStateManager {
 
     /**
-     * ˆø”‚ÌƒCƒxƒ“ƒg‚ªƒRƒ“ƒXƒgƒ‰ƒNƒ^’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isConstructorDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isConstructorDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param event@ƒRƒ“ƒXƒgƒ‰ƒNƒ^’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ASTƒCƒxƒ“ƒg
-     * @return ƒRƒ“ƒXƒgƒ‰ƒNƒ^’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param eventã€€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ASTã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {

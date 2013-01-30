@@ -16,10 +16,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ”z—ñŒ^‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXDˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * æœªè§£æ±ºé…åˆ—å‹ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * <ul>
- * <li>–¢‰ğŒˆŒ^ (UnresolvedTypeInfo)</li>
- * <li>ŸŒ³ (int)</li>
+ * <li>æœªè§£æ±ºå‹ (UnresolvedTypeInfo)</li>
+ * <li>æ¬¡å…ƒ (int)</li>
  * </ul>
  * 
  * @author higo
@@ -28,9 +28,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<ArrayTypeInfo> {
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ”z—ñg—p‚ª‰ğŒˆÏ‚İ‚©‚Ç‚¤‚©•Ô‚·
+     * ã“ã®æœªè§£æ±ºé…åˆ—ä½¿ç”¨ãŒè§£æ±ºæ¸ˆã¿ã‹ã©ã†ã‹è¿”ã™
      * 
-     * @return ‰ğŒˆÏ‚İ‚Ìê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return è§£æ±ºæ¸ˆã¿ã®å ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean alreadyResolved() {
@@ -38,10 +38,10 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * ‰ğŒˆÏ‚İ”z—ñŒ^‚ğ•Ô‚·
+     * è§£æ±ºæ¸ˆã¿é…åˆ—å‹ã‚’è¿”ã™
      * 
-     * @return ‰ğŒˆÏ‚İ”z—ñŒ^
-     * @throws NotResolvedException –¢‰ğŒˆ‚Ìê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @return è§£æ±ºæ¸ˆã¿é…åˆ—å‹
+     * @throws NotResolvedException æœªè§£æ±ºã®å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     @Override
     public final ArrayTypeInfo getResolved() {
@@ -49,27 +49,27 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * –¢‰ğŒˆ”z—ñŒ^‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İ”z—ñŒ^‚ğ•Ô‚·D
+     * æœªè§£æ±ºé…åˆ—å‹ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿é…åˆ—å‹ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆ”z—ñŒ^‚ª‘¶İ‚·‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆ”z—ñŒ^‚ª‘¶İ‚·‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İ”z—ñŒ^
+     * @param usingClass æœªè§£æ±ºé…åˆ—å‹ãŒå­˜åœ¨ã™ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºé…åˆ—å‹ãŒå­˜åœ¨ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿é…åˆ—å‹
      */
     @Override
     public ArrayTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -81,12 +81,12 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert elementType != null : "resolveEntityUsage returned null!";
 
-        // —v‘f‚ÌŒ^‚ª•s–¾‚Ì‚Æ‚«‚Í UnnownTypeInfo ‚ğ•Ô‚·
+        // è¦ç´ ã®å‹ãŒä¸æ˜ã®ã¨ãã¯ UnnownTypeInfo ã‚’è¿”ã™
         if (elementType instanceof UnknownTypeInfo) {
             this.resolvedInfo = ArrayTypeInfo.getType(UnknownTypeInfo.getInstance(), dimension);
             return this.resolvedInfo;
 
-            // —v‘f‚ÌŒ^‚ª‰ğŒˆ‚Å‚«‚½ê‡‚Í‚»‚Ì”z—ñŒ^‚ğì¬‚µ•Ô‚·
+            // è¦ç´ ã®å‹ãŒè§£æ±ºã§ããŸå ´åˆã¯ãã®é…åˆ—å‹ã‚’ä½œæˆã—è¿”ã™
         } else {
             this.resolvedInfo = ArrayTypeInfo.getType(elementType, dimension);
             return this.resolvedInfo;
@@ -94,18 +94,18 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * ”z—ñ‚Ì—v‘f‚Ì–¢‰ğŒˆŒ^‚ğ•Ô‚·
+     * é…åˆ—ã®è¦ç´ ã®æœªè§£æ±ºå‹ã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚Ì—v‘f‚Ì–¢‰ğŒˆŒ^
+     * @return é…åˆ—ã®è¦ç´ ã®æœªè§£æ±ºå‹
      */
     public final UnresolvedTypeInfo<? extends TypeInfo> getElementType() {
         return this.type;
     }
 
     /**
-     * ”z—ñ‚ÌŸŒ³‚ğ•Ô‚·
+     * é…åˆ—ã®æ¬¡å…ƒã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚ÌŸŒ³
+     * @return é…åˆ—ã®æ¬¡å…ƒ
      */
     public final int getDimension() {
         return this.dimension;
@@ -121,20 +121,20 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª•\‚·”z—ñ‚ÌŸŒ³‚ğ1‘å‚«‚­‚µ‚½”z—ñ‚ğ•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·D
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¡¨ã™é…åˆ—ã®æ¬¡å…ƒã‚’1å¤§ããã—ãŸé…åˆ—ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª•\‚·”z—ñ‚ÌŸŒ³‚ğ1‘å‚«‚­‚µ‚½”z—ñ
+     * @return ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¡¨ã™é…åˆ—ã®æ¬¡å…ƒã‚’1å¤§ããã—ãŸé…åˆ—
      */
     public final UnresolvedArrayTypeInfo getDimensionInclementedArrayType() {
         return getType(getElementType(), getDimension() + 1);
     }
 
     /**
-     * UnresolvedArrayTypeInfo ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·‚½‚ß‚Ìƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒhD
+     * UnresolvedArrayTypeInfo ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™ãŸã‚ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰ï¼
      * 
-     * @param type –¢‰ğŒˆŒ^‚ğ•\‚·•Ï”
-     * @param dimension ŸŒ³‚ğ•\‚·•Ï”
-     * @return ¶¬‚µ‚½ UnresolvedArrayTypeInfo ƒIƒuƒWƒFƒNƒg
+     * @param type æœªè§£æ±ºå‹ã‚’è¡¨ã™å¤‰æ•°
+     * @param dimension æ¬¡å…ƒã‚’è¡¨ã™å¤‰æ•°
+     * @return ç”Ÿæˆã—ãŸ UnresolvedArrayTypeInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public static UnresolvedArrayTypeInfo getType(
             final UnresolvedTypeInfo<? extends TypeInfo> type, final int dimension) {
@@ -157,10 +157,10 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * –¢‰ğŒˆ”z—ñŒ^ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¤D”z—ñ‚Ì—v‘f‚Ì–¢‰ğŒˆŒ^‚Æ”z—ñ‚ÌŸŒ³‚ª—^‚¦‚ç‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºé…åˆ—å‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼é…åˆ—ã®è¦ç´ ã®æœªè§£æ±ºå‹ã¨é…åˆ—ã®æ¬¡å…ƒãŒä¸ãˆã‚‰ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
-     * @param type ”z—ñ‚Ì—v‘f‚Ì–¢‰ğŒˆŒ^
-     * @param dimension ”z—ñ‚ÌŸŒ³
+     * @param type é…åˆ—ã®è¦ç´ ã®æœªè§£æ±ºå‹
+     * @param dimension é…åˆ—ã®æ¬¡å…ƒ
      */
     UnresolvedArrayTypeInfo(final UnresolvedTypeInfo<?> type, final int dimension) {
 
@@ -178,47 +178,47 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     }
 
     /**
-     * ”z—ñ‚Ì—v‘f‚ÌŒ^‚ğ•Û‘¶‚·‚é•Ï”
+     * é…åˆ—ã®è¦ç´ ã®å‹ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedTypeInfo<?> type;
 
     /**
-     * ”z—ñ‚ÌŸŒ³‚ğ•Û‘¶‚·‚é•Ï”
+     * é…åˆ—ã®æ¬¡å…ƒã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final int dimension;
 
     /**
-     * ‰ğŒˆÏ‚İ”z—ñg—p‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * è§£æ±ºæ¸ˆã¿é…åˆ—ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private ArrayTypeInfo resolvedInfo;
 
     /**
-     * UnresolvedArrayTypeInfo ƒIƒuƒWƒFƒNƒg‚ğˆêŒ³ŠÇ—‚·‚é‚½‚ß‚Ì MapDƒIƒuƒWƒFƒNƒg‚Íƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒh‚Å¶¬‚³‚ê‚éD
+     * UnresolvedArrayTypeInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸€å…ƒç®¡ç†ã™ã‚‹ãŸã‚ã® Mapï¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰ã§ç”Ÿæˆã•ã‚Œã‚‹ï¼
      */
     private static final ConcurrentMap<Key, UnresolvedArrayTypeInfo> ARRAY_TYPE_MAP = new ConcurrentHashMap<Key, UnresolvedArrayTypeInfo>();
 
     /**
-     * •Ï”‚ÌŒ^‚ÆŸŒ³‚ğ—p‚¢‚ÄƒL[‚Æ‚È‚éƒNƒ‰ƒXD
+     * å¤‰æ•°ã®å‹ã¨æ¬¡å…ƒã‚’ç”¨ã„ã¦ã‚­ãƒ¼ã¨ãªã‚‹ã‚¯ãƒ©ã‚¹ï¼
      * 
      * @author higo
      */
     static class Key {
 
         /**
-         * ‘æˆêƒL[
+         * ç¬¬ä¸€ã‚­ãƒ¼
          */
         private final UnresolvedTypeInfo<?> type;
 
         /**
-         * ‘æ“ñƒL[
+         * ç¬¬äºŒã‚­ãƒ¼
          */
         private final int dimension;
 
         /**
-         * ‘æˆêC‘æ“ñƒL[‚©‚çCƒL[ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
+         * ç¬¬ä¸€ï¼Œç¬¬äºŒã‚­ãƒ¼ã‹ã‚‰ï¼Œã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
          * 
-         * @param type ‘æˆêƒL[
-         * @param dimension ‘æ“ñƒL[
+         * @param type ç¬¬ä¸€ã‚­ãƒ¼
+         * @param dimension ç¬¬äºŒã‚­ãƒ¼
          */
         Key(final UnresolvedTypeInfo<?> type, final int dimension) {
 
@@ -234,7 +234,7 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
         }
 
         /**
-         * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·D
+         * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ï¼
          */
         @Override
         public int hashCode() {
@@ -242,25 +242,25 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
         }
 
         /**
-         * ‚±‚ÌƒL[ƒIƒuƒWƒFƒNƒg‚Ì‘æˆêƒL[‚ğ•Ô‚·D
+         * ã“ã®ã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¬¬ä¸€ã‚­ãƒ¼ã‚’è¿”ã™ï¼
          * 
-         * @return ‘æˆêƒL[
+         * @return ç¬¬ä¸€ã‚­ãƒ¼
          */
         public UnresolvedTypeInfo<?> getFirstKey() {
             return this.type;
         }
 
         /**
-         * ‚±‚ÌƒL[ƒIƒuƒWƒFƒNƒg‚Ì‘æ“ñƒL[‚ğ•Ô‚·D
+         * ã“ã®ã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¬¬äºŒã‚­ãƒ¼ã‚’è¿”ã™ï¼
          * 
-         * @return ‘æ“ñƒL[
+         * @return ç¬¬äºŒã‚­ãƒ¼
          */
         public int getSecondKey() {
             return this.dimension;
         }
 
         /**
-         * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚Æˆø”‚Åw’è‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ª“™‚µ‚¢‚©‚ğ•Ô‚·D
+         * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç­‰ã—ã„ã‹ã‚’è¿”ã™ï¼
          */
         @Override
         public boolean equals(Object o) {

@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒtƒB[ƒ‹ƒh‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -23,17 +23,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param qualifierExpression ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚ée‚Ì®
-     * @param usedField g—p‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param qualifierExpression ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹è¦ªã®å¼
+     * @param usedField ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     protected FieldUsageInfo(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
@@ -45,7 +45,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         this.qualifierExpression = qualifierExpression;
         this.qualifierType = qualifierType;
 
-        // ƒtƒB[ƒ‹ƒh‚Ìg—pî•ñ‚ğŠi”[
+        // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ä½¿ç”¨æƒ…å ±ã‚’æ ¼ç´
         if (reference) {
             usedField.addReferencer(ownerMethod);
         }
@@ -62,26 +62,26 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒhg—p‚ÌeC‚Â‚Ü‚è‚±‚ÌƒtƒB[ƒ‹ƒhg—p‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é®‚ğ•Ô‚·
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®è¦ªï¼Œã¤ã¾ã‚Šã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒãã£ã¤ã„ã¦ã„ã‚‹å¼ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒtƒB[ƒ‹ƒhg—p‚Ìe
+     * @return ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®è¦ª
      */
     public final TypeInfo getQualifierType() {
         return this.qualifierType;
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚ée‚Ì®‚ğ•Ô‚·
-     * @return ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚ée‚Ì®
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹è¦ªã®å¼ã‚’è¿”ã™
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹è¦ªã®å¼
      */
     public final ExpressionInfo getQualifierExpression() {
         return this.qualifierExpression;
     }
 
     /**
-     * ‚±‚Ì•Ï”g—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì•Ï”g—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®å¤‰æ•°ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -101,9 +101,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * ‚±‚Ì®iƒtƒB[ƒ‹ƒhg—pj‚É‚¨‚¯‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·
+     * ã“ã®å¼ï¼ˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ï¼‰ã«ãŠã‘ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -146,9 +146,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -158,24 +158,24 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     private final TypeInfo qualifierType;
 
     /**
-     * ƒtƒB[ƒ‹ƒhQÆ‚ªÀs‚³‚ê‚ée‚Ì®("."‚Ì‘O‚Ì‚â‚Â)‚ğ•Û‘¶‚·‚é•Ï”
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãŒå®Ÿè¡Œã•ã‚Œã‚‹è¦ªã®å¼("."ã®å‰ã®ã‚„ã¤)ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final ExpressionInfo qualifierExpression;
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄCƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
      *
-     * @param qualifierExpression e‚Ì®
-     * @param qualifierType eƒGƒ“ƒeƒBƒeƒB‚ÌŒ^
-     * @param usedField g—p‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
-     * @return ƒtƒB[ƒ‹ƒhg—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param qualifierExpression è¦ªã®å¼
+     * @param qualifierType è¦ªã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®å‹
+     * @param usedField ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static FieldUsageInfo getInstance(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
@@ -189,8 +189,8 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğƒtƒB[ƒ‹ƒh‚©‚çƒtƒB[ƒ‹ƒhg—p‚Ö‚Ìƒ}ƒbƒv‚É’Ç‰Á
-     * @param fieldUsage ƒtƒB[ƒ‹ƒhg—p
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã¸ã®ãƒãƒƒãƒ—ã«è¿½åŠ 
+     * @param fieldUsage ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨
      */
     private static void addFieldUsage(final FieldUsageInfo fieldUsage) {
 
@@ -212,9 +212,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒtƒB[ƒ‹ƒh‚Ìg—pî•ñ‚ÌƒZƒbƒg‚ğæ“¾
-     * @param field g—pî•ñ‚ğæ“¾‚µ‚½‚¢ƒtƒB[ƒ‹ƒh
-     * @return ƒtƒB[ƒ‹ƒhg—p‚ÌƒZƒbƒgDˆø”‚Å—^‚¦‚ç‚ê‚½ƒtƒB[ƒ‹ƒh‚ªg—p‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ä½¿ç”¨æƒ…å ±ã®ã‚»ãƒƒãƒˆã‚’å–å¾—
+     * @param field ä½¿ç”¨æƒ…å ±ã‚’å–å¾—ã—ãŸã„ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®ã‚»ãƒƒãƒˆï¼å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒä½¿ç”¨ã•ã‚Œã¦ã„ãªã„å ´åˆã¯null
      */
     public final static Set<FieldUsageInfo> getUsages(final FieldInfo field) {
         if (USAGE_MAP.containsKey(field)) {
@@ -225,10 +225,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éƒtƒB[ƒ‹ƒh—˜—p‚ÌSet‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åˆ©ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”—˜—p‚ÌCollection
-     * @return —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éƒtƒB[ƒ‹ƒh—˜—p‚ÌSet
+     * @param variableUsages å¤‰æ•°åˆ©ç”¨ã®Collection
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åˆ©ç”¨ã®Set
      */
     public final static Set<FieldUsageInfo> getFieldUsages(
             Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {

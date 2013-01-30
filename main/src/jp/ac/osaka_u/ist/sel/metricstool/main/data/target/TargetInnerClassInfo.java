@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ•\‚·ƒNƒ‰ƒXD
+ * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  */
@@ -29,17 +29,17 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ƒCƒ“ƒi[ƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param modifiers Cüq–¼‚Ì Set
-     * @param namespace –¼‘O‹óŠÔ
-     * @param className ƒNƒ‰ƒX–¼
-     * @param isInterface ƒCƒ“ƒ^ƒtƒF[ƒX‚©‚Ç‚¤‚©
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­åã® Set
+     * @param namespace åå‰ç©ºé–“
+     * @param className ã‚¯ãƒ©ã‚¹å
+     * @param isInterface ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‹ã©ã†ã‹
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final boolean isInterface, final boolean isEnum,
@@ -53,16 +53,16 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ƒCƒ“ƒi[ƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param modifiers Cüq–¼‚Ì Set
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
-     * @param isInterface ƒCƒ“ƒ^ƒtƒF[ƒX‚©‚Ç‚¤‚©
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­åã® Set
+     * @param fullQualifiedName å®Œå…¨é™å®šå
+     * @param isInterface ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‹ã©ã†ã‹
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
             final String[] fullQualifiedName, final boolean isInterface, final boolean isEnum,
@@ -76,9 +76,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @return å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     @Override
     public UnitInfo getOuterUnit() {
@@ -87,9 +87,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğİ’è‚·‚é
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹
      * 
-     * @param ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @param å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     @Override
     public void setOuterUnit(final UnitInfo outerUnit) {
@@ -103,9 +103,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     @Override
     public final ClassInfo getOuterClass() {
@@ -114,7 +114,7 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
 
         while (true) {
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚È‚Ì‚Å‚©‚È‚ç‚¸ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚ ‚é
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ãªã®ã§ã‹ãªã‚‰ãšå¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹
             if (null == outer) {
                 throw new IllegalStateException();
             }
@@ -128,9 +128,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ŠO‘¤‚Ìƒƒ\ƒbƒh‚ğ•Ô‚·.
+     * å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚Ìƒƒ\ƒbƒh
+     * @returnã€€å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final CallableUnitInfo getOuterCallableUnit() {
@@ -161,7 +161,7 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é•Ï”
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private UnitInfo outerUnit;
 }

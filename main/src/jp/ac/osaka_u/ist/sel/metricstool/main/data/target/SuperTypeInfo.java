@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * super‚ğ—˜—p‚µ‚½Œ^‚ğ•\‚·ƒNƒ‰ƒX
- * List<? super T> ‚Ì ? super T@‚Ì•”•ª‚ğ•\‚·D
+ * superã‚’åˆ©ç”¨ã—ãŸå‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
+ * List<? super T> ã® ? super Tã€€ã®éƒ¨åˆ†ã‚’è¡¨ã™ï¼
  *
  * @author higo
  *

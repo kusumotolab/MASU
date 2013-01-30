@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * 特定のインスタンスを指定するトークンクラス
+ * 迚ｹ螳壹�ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ繧呈欠螳壹☆繧九ヨ繝ｼ繧ｯ繝ｳ繧ｯ繝ｩ繧ｹ
  * 
  * @author kou-tngt
  *
@@ -10,12 +10,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class InstanceToken extends AstTokenAdapter {
 
     /**
-     * 自分自身を指定する定数.
+     * 閾ｪ蛻�閾ｪ霄ｫ繧呈欠螳壹☆繧句ｮ壽焚.
      */
     public static final InstanceToken THIS = new InstanceToken("this");
 
     /**
-     * 空のインスタンスを指定する定数.
+     * 遨ｺ縺ｮ繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ繧呈欠螳壹☆繧句ｮ壽焚.
      */
     public static final InstanceToken NULL = new InstanceToken("null");
 

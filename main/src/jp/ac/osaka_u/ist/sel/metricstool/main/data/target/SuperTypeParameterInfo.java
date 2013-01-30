@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * Œ^ƒpƒ‰ƒ[ƒ^i•\‹L–@®‚ª <X super Y>j‚ğ•\‚·ƒNƒ‰ƒX
+ * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆè¡¨è¨˜æ³•å¼ãŒ <X super Y>ï¼‰ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -14,13 +14,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class SuperTypeParameterInfo extends TypeParameterInfo {
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼C”h¶ƒNƒ‰ƒXŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åï¼Œæ´¾ç”Ÿã‚¯ãƒ©ã‚¹å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerUnit ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ÌŠ—Lƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
-     * @param name Œ^ƒpƒ‰ƒ[ƒ^–¼
-     * @param index ‰½”Ô–Ú‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚ğ•\‚·
-     * @param extendsType Šî’êƒNƒ‰ƒXŒ^
-     * @param superType ”h¶ƒNƒ‰ƒXŒ^
+     * @param ownerUnit ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ‰€æœ‰ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
+     * @param name å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+     * @param index ä½•ç•ªç›®ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚’è¡¨ã™
+     * @param extendsType åŸºåº•ã‚¯ãƒ©ã‚¹å‹
+     * @param superType æ´¾ç”Ÿã‚¯ãƒ©ã‚¹å‹
      */
     public SuperTypeParameterInfo(final TypeParameterizable ownerUnit, final String name,
             final int index, final TypeInfo extendsType, final TypeInfo superType) {
@@ -36,16 +36,16 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
     }
 
     /**
-     * ”h¶ƒNƒ‰ƒXŒ^‚ğ•Ô‚·
+     * æ´¾ç”Ÿã‚¯ãƒ©ã‚¹å‹ã‚’è¿”ã™
      * 
-     * @return ”h¶ƒNƒ‰ƒXŒ^
+     * @return æ´¾ç”Ÿã‚¯ãƒ©ã‚¹å‹
      */
     public TypeInfo getSuperType() {
         return this.superType;
     }
 
     /**
-     * –¢‰ğŒˆ”h¶ƒNƒ‰ƒXŒ^‚ğ•Û‘¶‚·‚é
+     * æœªè§£æ±ºæ´¾ç”Ÿã‚¯ãƒ©ã‚¹å‹ã‚’ä¿å­˜ã™ã‚‹
      */
     private final TypeInfo superType;
 }

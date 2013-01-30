@@ -11,24 +11,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
 
 /**
- * –¢‰ğŒˆ•Ï”g—p‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºå¤‰æ•°ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>
         extends UnresolvedExpressionInfo<T> {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param usedVariableName •Ï”–¼
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedVariableName å¤‰æ•°å
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
             final boolean assignment, final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
@@ -50,33 +50,33 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
     }
 
     /**
-     * ‚±‚Ì•Ï”g—p‚ªQÆ‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°ä½¿ç”¨ãŒå‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return QÆ‚Å‚ ‚éê‡‚Í trueC‘ã“ü‚Å‚ ‚éê‡‚Í false
+     * @return å‚ç…§ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œä»£å…¥ã§ã‚ã‚‹å ´åˆã¯ false
      */
     public final boolean isReference() {
         return this.reference;
     }
 
     /**
-     * ‚±‚Ì•Ï”g—p‚ª‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°ä½¿ç”¨ãŒä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‘ã“ü‚Å‚ ‚éê‡‚Í trueCQÆ‚Å‚ ‚éê‡‚Í false
+     * @return ä»£å…¥ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œå‚ç…§ã§ã‚ã‚‹å ´åˆã¯ false
      */
     public final boolean isAssignment() {
         return this.assignment;
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚é•Ï”‚Ì–¼‘O‚ğ•Ô‚·
-     * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”‚Ì–¼‘O
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åå‰ã‚’è¿”ã™
+     * @return ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åå‰
      */
     public String getUsedVariableName() {
         return this.usedVariableName;
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚é•Ï”‚Ì–¼‘O‚ğ•Û‘¶‚·‚é•Ï”
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åå‰ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final String usedVariableName;
 
@@ -85,7 +85,7 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
     private boolean assignment;
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     protected static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {

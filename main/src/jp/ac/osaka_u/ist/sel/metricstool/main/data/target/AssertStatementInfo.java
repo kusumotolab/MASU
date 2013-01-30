@@ -9,24 +9,24 @@ import java.util.TreeSet;
 
 
 /**
- * assert•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * assertæ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
- * @author t-miyakeChigo
+ * @author t-miyakeï¼Œhigo
  *
  */
 @SuppressWarnings("serial")
 public final class AssertStatementInfo extends SingleStatementInfo {
 
     /**
-     * ƒAƒT[ƒg•¶‚ğ¶¬
+     * ã‚¢ã‚µãƒ¼ãƒˆæ–‡ã‚’ç”Ÿæˆ
      * 
-     * @param ownerSpace ŠO‘¤‚ÌƒuƒƒbƒN
-     * @param assertedExpression ŒŸØ®
-     * @param messageExpression ƒƒbƒZ[ƒW
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
+     * @param assertedExpression æ¤œè¨¼å¼
+     * @param messageExpression ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public AssertStatementInfo(final LocalSpaceInfo ownerSpace,
             final ExpressionInfo assertedExpression, final ExpressionInfo messageExpression,
@@ -48,18 +48,18 @@ public final class AssertStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ŒŸØ®‚ğ•Ô‚·
+     * æ¤œè¨¼å¼ã‚’è¿”ã™
      * 
-     * @return@ŒŸØ®
+     * @returnã€€æ¤œè¨¼å¼
      */
     public final ExpressionInfo getAssertedExpression() {
         return this.assertedExpression;
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
      * 
-     * @return@ƒƒbƒZ[ƒW
+     * @returnã€€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public final ExpressionInfo getMessageExpression() {
         return this.messageExpression;
@@ -74,9 +74,9 @@ public final class AssertStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -84,9 +84,9 @@ public final class AssertStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -99,9 +99,9 @@ public final class AssertStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚ÌƒAƒT[ƒg•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®ã‚¢ã‚µãƒ¼ãƒˆæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒAƒT[ƒg•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®ã‚¢ã‚µãƒ¼ãƒˆæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -123,9 +123,9 @@ public final class AssertStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

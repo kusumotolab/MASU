@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 
 /**
- * Member ƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ—˜—p‚µ‚½ˆ—‚ğs‚¤ƒNƒ‰ƒXD
+ * Member ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’åˆ©ç”¨ã—ãŸå‡¦ç†ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -17,11 +17,11 @@ import java.util.TreeSet;
 public class StaticOrInstanceProcessing {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒƒ“ƒo[‚Ì‚¤‚¿CƒXƒ^ƒeƒBƒbƒN‚È‚à‚Ì‚¾‚¯‚ğ’Šo‚µ‚Ä•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ãƒ³ãƒãƒ¼ã®ã†ã¡ï¼Œã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãªã‚‚ã®ã ã‘ã‚’æŠ½å‡ºã—ã¦è¿”ã™ï¼
      * 
-     * @param <T> ƒƒ“ƒo[‚ÌŒ^
-     * @param members ƒƒ“ƒo[‚Ì List
-     * @return ƒXƒ^ƒeƒBƒbƒN‚Èƒƒ“ƒo[‚Ì List
+     * @param <T> ãƒ¡ãƒ³ãƒãƒ¼ã®å‹
+     * @param members ãƒ¡ãƒ³ãƒãƒ¼ã® List
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãªãƒ¡ãƒ³ãƒãƒ¼ã® List
      */
     public static final <T extends StaticOrInstance> List<T> getInstanceMembers(final List<T> members) {
 
@@ -36,11 +36,11 @@ public class StaticOrInstanceProcessing {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒƒ“ƒo[‚Ì‚¤‚¿CƒCƒ“ƒXƒ^ƒ“ƒX‚È‚à‚Ì‚¾‚¯‚ğ’Šo‚µ‚Ä•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ãƒ³ãƒãƒ¼ã®ã†ã¡ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãªã‚‚ã®ã ã‘ã‚’æŠ½å‡ºã—ã¦è¿”ã™ï¼
      * 
-     * @param <T> ƒƒ“ƒo[‚ÌŒ^
-     * @param members ƒƒ“ƒo[‚Ì List
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ì List
+     * @param <T> ãƒ¡ãƒ³ãƒãƒ¼ã®å‹
+     * @param members ãƒ¡ãƒ³ãƒãƒ¼ã® List
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã® List
      */
     public static final <T extends StaticOrInstance> List<T> getStaticMembers(final List<T> members) {
 
@@ -55,11 +55,11 @@ public class StaticOrInstanceProcessing {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒƒ“ƒo[‚Ì‚¤‚¿CƒXƒ^ƒeƒBƒbƒN‚È‚à‚Ì‚¾‚¯‚ğ’Šo‚µ‚Ä•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ãƒ³ãƒãƒ¼ã®ã†ã¡ï¼Œã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãªã‚‚ã®ã ã‘ã‚’æŠ½å‡ºã—ã¦è¿”ã™ï¼
      * 
-     * @param <T> ƒƒ“ƒo[‚ÌŒ^
-     * @param members ƒƒ“ƒo[‚Ì SortedSet
-     * @return ƒXƒ^ƒeƒBƒbƒN‚Èƒƒ“ƒo[‚Ì SortedSet
+     * @param <T> ãƒ¡ãƒ³ãƒãƒ¼ã®å‹
+     * @param members ãƒ¡ãƒ³ãƒãƒ¼ã® SortedSet
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãªãƒ¡ãƒ³ãƒãƒ¼ã® SortedSet
      */
     public static final <T extends StaticOrInstance> SortedSet<T> getInstanceMembers(
             final SortedSet<T> members) {
@@ -75,11 +75,11 @@ public class StaticOrInstanceProcessing {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒƒ“ƒo[‚Ì‚¤‚¿CƒCƒ“ƒXƒ^ƒ“ƒX‚È‚à‚Ì‚¾‚¯‚ğ’Šo‚µ‚Ä•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ãƒ³ãƒãƒ¼ã®ã†ã¡ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãªã‚‚ã®ã ã‘ã‚’æŠ½å‡ºã—ã¦è¿”ã™ï¼
      * 
-     * @param <T> ƒƒ“ƒo[‚ÌŒ^
-     * @param members ƒƒ“ƒo[‚Ì SortedSet
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ì SortedSet
+     * @param <T> ãƒ¡ãƒ³ãƒãƒ¼ã®å‹
+     * @param members ãƒ¡ãƒ³ãƒãƒ¼ã® SortedSet
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã® SortedSet
      */
     public static final <T extends StaticOrInstance> SortedSet<T> getStaticMembers(final SortedSet<T> members) {
 

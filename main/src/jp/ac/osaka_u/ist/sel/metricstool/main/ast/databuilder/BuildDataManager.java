@@ -30,14 +30,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 
 
 /**
- * ƒrƒ‹ƒ_[‚ª\’z‚·‚éî•ñ‚ğŠÇ—‚µ‚ÄCî•ñ‘S‘Ì‚Ì®‡«‚ğæ‚éƒCƒ“ƒ^ƒtƒF[ƒXD
- * ˆÈ‰º‚Ì3í—Ş‚Ì‹@”\‚ğ˜AŒg‚µ‚Äs‚¤.
+ * ãƒ“ãƒ«ãƒ€ãƒ¼ãŒæ§‹ç¯‰ã™ã‚‹æƒ…å ±ã‚’ç®¡ç†ã—ã¦ï¼Œæƒ…å ±å…¨ä½“ã®æ•´åˆæ€§ã‚’å–ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ï¼
+ * ä»¥ä¸‹ã®3ç¨®é¡ã®æ©Ÿèƒ½ã‚’é€£æºã—ã¦è¡Œã†.
  * 
- * 1. \’z’†‚Ìƒf[ƒ^‚ÉŠÖ‚·‚éî•ñ‚ÌŠÇ—C’ñ‹Ÿ‹y‚Ñ\’zó‘Ô‚ÌŠÇ—
+ * 1. æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã«é–¢ã™ã‚‹æƒ…å ±ã®ç®¡ç†ï¼Œæä¾›åŠã³æ§‹ç¯‰çŠ¶æ…‹ã®ç®¡ç†
  * 
- * 2. –¼‘O‹óŠÔCƒGƒCƒŠƒAƒXC•Ï”‚È‚Ç‚ÌƒXƒR[ƒvŠÇ—
+ * 2. åå‰ç©ºé–“ï¼Œã‚¨ã‚¤ãƒªã‚¢ã‚¹ï¼Œå¤‰æ•°ãªã©ã®ã‚¹ã‚³ãƒ¼ãƒ—ç®¡ç†
  * 
- * 3. ƒNƒ‰ƒXî•ñCƒƒ\ƒbƒhî•ñC•Ï”‘ã“üC•Ï”QÆCƒƒ\ƒbƒhŒÄ‚Ño‚µî•ñ‚È‚Ç‚Ì“o˜^ì‹Æ‚Ì‘ãs
+ * 3. ã‚¯ãƒ©ã‚¹æƒ…å ±ï¼Œãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ï¼Œå¤‰æ•°ä»£å…¥ï¼Œå¤‰æ•°å‚ç…§ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—æƒ…å ±ãªã©ã®ç™»éŒ²ä½œæ¥­ã®ä»£è¡Œ
  * 
  * @author kou-tngt
  *
@@ -45,14 +45,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 public interface BuildDataManager {
 
     /**
-     * \’z’†‚ÌƒNƒ‰ƒX‚ÉƒtƒB[ƒ‹ƒhî•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹ã«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param field
      */
     public void addField(UnresolvedFieldInfo field);
 
     /**
-     * \’z’†‚Ìƒƒ\ƒbƒh‚ÉƒtƒB[ƒ‹ƒhg—pî•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param usage
      */
@@ -60,52 +60,52 @@ public interface BuildDataManager {
             UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usage);
 
     /**
-     * \’z’†‚Ìƒƒ\ƒbƒh‚Éƒ[ƒJƒ‹ƒpƒ‰ƒ[ƒ^ifor•¶’†‚ÅéŒ¾‚³‚ê‚é•Ï”‚Ì‚æ‚¤‚ÉC
-     * éŒ¾‚³‚ê‚½êŠ‚©‚çŸ‚ÌƒuƒƒbƒN‚ÌI‚í‚è‚Ü‚ÅƒXƒR[ƒv‚ª—LŒø‚È•Ï”jî•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆforæ–‡ä¸­ã§å®£è¨€ã•ã‚Œã‚‹å¤‰æ•°ã®ã‚ˆã†ã«ï¼Œ
+     * å®£è¨€ã•ã‚ŒãŸå ´æ‰€ã‹ã‚‰æ¬¡ã®ãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚ã‚ã‚Šã¾ã§ã‚¹ã‚³ãƒ¼ãƒ—ãŒæœ‰åŠ¹ãªå¤‰æ•°ï¼‰æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param localParameter
      */
     public void addLocalParameter(UnresolvedLocalVariableInfo localParameter);
 
     /**
-     * \’z’†‚Ìƒƒ\ƒbƒh‚Éƒ[ƒJƒ‹•Ï”î•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param localVariable
      */
     public void addLocalVariable(UnresolvedLocalVariableInfo localVariable);
 
     /**
-     * \’z’†‚Ìƒƒ\ƒbƒh‚Éƒƒ\ƒbƒhŒÄ‚Ño‚µî•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * @param memberCall
      */
     public void addMethodCall(
             UnresolvedCallInfo<? extends CallInfo<? extends CallableUnitInfo>> memberCall);
 
     /**
-     * \’z’†‚Ìƒƒ\ƒbƒh‚Éˆø”î•ñ‚ğ’Ç‰Á‚·‚é
+     * æ§‹ç¯‰ä¸­ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«å¼•æ•°æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param parameter
      */
     public void addMethodParameter(UnresolvedParameterInfo parameter);
 
     /**
-     * \’z’†‚Ìƒf[ƒ^‚É“KØ‚ÉŒ^ƒpƒ‰ƒ[ƒ^‚ğƒZƒbƒg‚·‚éD
-     * @param typeParameter@ƒZƒbƒg‚·‚éŒ^ƒpƒ‰ƒ[ƒ^
+     * æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã«é©åˆ‡ã«å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ï¼
+     * @param typeParameterã€€ã‚»ãƒƒãƒˆã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     public void addTypeParameger(UnresolvedTypeParameterInfo typeParameter);
 
     /**
-     * Œ»İ‚ÌƒuƒƒbƒNƒXƒR[ƒv“à‚Å—LŒø‚È–¼‘OƒGƒCƒŠƒAƒX‚ğ’Ç‰Á‚·‚é
+     * ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚³ãƒ¼ãƒ—å†…ã§æœ‰åŠ¹ãªåå‰ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param alias ƒCƒ“ƒ|[ƒg•¶‚É‚æ‚è’u‚«Š·‚¦‚ç‚ê‚½–¼‘O 
-     * @param importStatement –¢‰ğŒˆƒCƒ“ƒ|[ƒg•¶
+     * @param alias ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã«ã‚ˆã‚Šç½®ãæ›ãˆã‚‰ã‚ŒãŸåå‰ 
+     * @param importStatement æœªè§£æ±ºã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡
      */
     public void addUsingAlias(String alias, final UnresolvedImportStatementInfo<?> importStatement);
 
     /**
-     * Œ»İ‚ÌƒuƒƒbƒNƒXƒR[ƒv“à‚Å—LŒø‚ÈC–¼‘O‹óŠÔ—˜—pî•ñ‚ğ’Ç‰Á‚·‚é
+     * ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚³ãƒ¼ãƒ—å†…ã§æœ‰åŠ¹ãªï¼Œåå‰ç©ºé–“åˆ©ç”¨æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param importStatement –¢‰ğŒˆƒCƒ“ƒ|[ƒg•¶
+     * @param importStatement æœªè§£æ±ºã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡
      */
     public void addUsingNameSpace(final UnresolvedImportStatementInfo<?> importStatement);
 
@@ -116,8 +116,8 @@ public interface BuildDataManager {
     public UnresolvedLabelInfo getAvailableLabel(final String labelName);
 
     /**
-     * ƒNƒ‰ƒX\’z‚ªI—¹‚·‚é‚ÉŒÄ‚Î‚ê‚éD
-     * \’z’†‚Ì
+     * ã‚¯ãƒ©ã‚¹æ§‹ç¯‰ãŒçµ‚äº†ã™ã‚‹æ™‚ã«å‘¼ã°ã‚Œã‚‹ï¼
+     * æ§‹ç¯‰ä¸­ã®
      * 
      * @return
      */

@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * O€‰‰Zg—p‚Ì–¢‰ğŒˆî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * ä¸‰é …æ¼”ç®—ä½¿ç”¨ã®æœªè§£æ±ºæƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -21,11 +21,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<TernaryOperationInfo> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param condition ğŒ®
-     * @param trueExpression true‚Ìê‡‚Ì®
-     * @param falseExpression false‚Ìê‡‚Ì®
+     * @param condition æ¡ä»¶å¼
+     * @param trueExpression trueã®å ´åˆã®å¼
+     * @param falseExpression falseã®å ´åˆã®å¼
      */
     public UnresolvedTernaryOperationInfo(
             final UnresolvedConditionInfo<? extends ConditionInfo> condition,
@@ -45,14 +45,14 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
     public TernaryOperationInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -69,7 +69,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
         final ExpressionInfo falseExpression = this.falseExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -95,17 +95,17 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
     }
 
     /**
-     * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚Ì‚İ‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼(ç¬¬ä¸€é …)ã®ã¿è§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedConditionInfo<? extends ConditionInfo> condition;
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒtrueã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬äºŒé …)ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> trueExpression;
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªfalse‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æO€)‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒfalseã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> falseExpression;
 

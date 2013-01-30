@@ -8,7 +8,7 @@ import java.util.SortedSet;
 
 
 /**
- * ForeachƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * Foreachãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -17,12 +17,12 @@ import java.util.SortedSet;
 public final class ForeachBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚ÄForeachƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦Foreachãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ForeachBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -30,7 +30,7 @@ public final class ForeachBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚ÌForeachƒuƒƒbƒN‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * ã“ã®Foreachãƒ–ãƒ­ãƒƒã‚¯ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      */
     @Override
     public String getText() {
@@ -61,9 +61,9 @@ public final class ForeachBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

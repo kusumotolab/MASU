@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
 
 /**
- * ƒƒbƒZ[ƒWƒCƒxƒ“ƒgƒNƒ‰ƒX
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¤ãƒ™ãƒ³ãƒˆã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -20,10 +20,10 @@ public class MessageEvent extends EventObject {
     private static final long serialVersionUID = -4711363868655969016L;
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @param source ƒƒbƒZ[ƒW‘—MÒ
-     * @param messageType ƒƒbƒZ[ƒW‚Ìí—Ş
-     * @param message ƒƒbƒZ[ƒW
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @param source ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
+     * @param messageType ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ç¨®é¡
+     * @param message ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public MessageEvent(final MessageSource source, final MESSAGE_TYPE messageType,
             final String message) {
@@ -34,24 +34,24 @@ public class MessageEvent extends EventObject {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğæ“¾‚·‚éƒƒ\ƒbƒh
-     * @return ƒƒbƒZ[ƒW
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public String getMessage() {
         return this.message;
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚Ìí—Ş‚ğæ“¾‚·‚éƒƒ\ƒbƒh
-     * @return ƒƒbƒZ[ƒW‚Ìí—Ş
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ç¨®é¡ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ç¨®é¡
      */
     public MESSAGE_TYPE getMessageType() {
         return this.messageType;
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ‚ğæ“¾‚·‚éƒƒ\ƒbƒh
-     * @return ƒƒbƒZ[ƒW‘—MÒ
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
      * @see java.util.EventObject#getSource()
      */
     @Override
@@ -60,17 +60,17 @@ public class MessageEvent extends EventObject {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
      */
     private final MessageSource source;
 
     /**
-     * ƒƒbƒZ[ƒW‚Ìí—Ş
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ç¨®é¡
      */
     private final MESSAGE_TYPE messageType;
 
     /**
-     * ƒƒbƒZ[ƒW
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     private final String message;
 

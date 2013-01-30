@@ -5,22 +5,22 @@ import java.util.Set;
 
 
 /**
- * ‘ÎÛƒƒ\ƒbƒh‚Ìî•ñ‚ğ•Û—L‚·‚éƒNƒ‰ƒXD ˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã®æƒ…å ±ã‚’ä¿æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼ ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * <ul>
- * <li>ƒƒ\ƒbƒh–¼</li>
- * <li>Cüq</li>
- * <li>•Ô‚è’l‚ÌŒ^</li>
- * <li>ˆø”‚ÌƒŠƒXƒg</li>
- * <li>s”</li>
- * <li>ƒRƒ“ƒgƒ[ƒ‹ƒOƒ‰ƒti‚µ‚Î‚ç‚­‚Í–¢À‘•j</li>
- * <li>ƒ[ƒJƒ‹•Ï”</li>
- * <li>Š‘®‚µ‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>ŒÄ‚Ño‚µ‚Ä‚¢‚éƒƒ\ƒbƒh</li>
- * <li>ŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh</li>
- * <li>ƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚éƒƒ\ƒbƒh</li>
- * <li>ƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh</li>
- * <li>QÆ‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh</li>
- * <li>‘ã“ü‚µ‚Ä‚¢‚éƒtƒB[ƒ‹ƒh</li>
+ * <li>ãƒ¡ã‚½ãƒƒãƒ‰å</li>
+ * <li>ä¿®é£¾å­</li>
+ * <li>è¿”ã‚Šå€¤ã®å‹</li>
+ * <li>å¼•æ•°ã®ãƒªã‚¹ãƒˆ</li>
+ * <li>è¡Œæ•°</li>
+ * <li>ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚°ãƒ©ãƒ•ï¼ˆã—ã°ã‚‰ãã¯æœªå®Ÿè£…ï¼‰</li>
+ * <li>ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°</li>
+ * <li>æ‰€å±ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰</li>
+ * <li>å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰</li>
+ * <li>ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰</li>
+ * <li>ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰</li>
+ * <li>å‚ç…§ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰</li>
+ * <li>ä»£å…¥ã—ã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰</li>
  * </ul>
  * 
  * @author higo
@@ -30,15 +30,15 @@ import java.util.Set;
 public final class TargetMethodInfo extends MethodInfo implements StaticOrInstance {
 
     /**
-     * ƒƒ\ƒbƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param modifiers Cüq
-     * @param name ƒƒ\ƒbƒh–¼
-     * @param instance ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­
+     * @param name ãƒ¡ã‚½ãƒƒãƒ‰å
+     * @param instance ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
             final boolean instance, final int fromLine, final int fromColumn, final int toLine,

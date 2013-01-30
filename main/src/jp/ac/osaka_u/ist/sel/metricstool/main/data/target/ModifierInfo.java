@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 
 
 /**
- * ƒNƒ‰ƒXCƒƒ\ƒbƒhCƒtƒB[ƒ‹ƒh‚È‚Ç‚ÌCüq‚ğ•\‚·ƒNƒ‰ƒXDŒ»İˆÈ‰º‚ÌCCüqî•ñ‚ğ‚Â
+ * ã‚¯ãƒ©ã‚¹ï¼Œãƒ¡ã‚½ãƒƒãƒ‰ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãªã©ã®ä¿®é£¾å­ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼ç¾åœ¨ä»¥ä¸‹ã®ï¼Œä¿®é£¾å­æƒ…å ±ã‚’æŒã¤
  * <ul>
  * <li>public</li>
  * <li>private</li>
@@ -79,9 +79,9 @@ public class ModifierInfo implements Serializable {
     }
 
     /**
-     * Cüq–¼‚ğ•Ô‚·
+     * ä¿®é£¾å­åã‚’è¿”ã™
      * 
-     * @return Cüq–¼
+     * @return ä¿®é£¾å­å
      */
     public String getName() {
         return this.name;

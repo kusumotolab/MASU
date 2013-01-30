@@ -25,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒNƒ‰ƒXQÆ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‚ç…§ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -33,16 +33,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<ExpressionInfo> {
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼CQÆ–¼‚ğ—^‚¦‚Ä‰Šú‰»
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åï¼Œå‚ç…§åã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param availableNamespaces –¼‘O‹óŠÔ–¼
-     * @param referenceName QÆ–¼
+     * @param availableNamespaces åå‰ç©ºé–“å
+     * @param referenceName å‚ç…§å
      */
     public UnresolvedClassReferenceInfo(
             final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == availableNamespaces) || (null == referenceName)) {
             throw new NullPointerException();
@@ -56,17 +56,17 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     }
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼CQÆ–¼‚ğ—^‚¦‚Ä‰Šú‰»
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åï¼Œå‚ç…§åã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param availableNamespaces –¼‘O‹óŠÔ–¼
-     * @param referenceName QÆ–¼
-     * @param ownerUsage eQÆ
+     * @param availableNamespaces åå‰ç©ºé–“å
+     * @param referenceName å‚ç…§å
+     * @param ownerUsage è¦ªå‚ç…§
      */
     public UnresolvedClassReferenceInfo(
             final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == availableNamespaces) || (null == referenceName) || (null == ownerUsage)) {
             throw new NullPointerException();
@@ -89,24 +89,24 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -124,7 +124,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
             NEXT_NAME: for (int i = 0; i < referenceName.length; i++) {
 
-                // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
                     this.resolvedInfo = new UnknownEntityUsageInfo(referenceName, usingMethod,
@@ -132,13 +132,13 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
 
-                    // e‚ª‘ÎÛƒNƒ‰ƒX(TargetClassInfo)‚Ìê‡
+                    // è¦ªãŒå¯¾è±¡ã‚¯ãƒ©ã‚¹(TargetClassInfo)ã®å ´åˆ
                 } else if (classReference.getType() instanceof ClassTypeInfo) {
 
                     final ClassInfo ownerClass = ((ClassTypeInfo) classReference.getType())
                             .getReferencedClass();
 
-                    // ƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·‚Ì‚Åˆê——‚ğæ“¾
+                    // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™ã®ã§ä¸€è¦§ã‚’å–å¾—
                     final SortedSet<InnerClassInfo> innerClasses = NameResolver
                             .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                     .getType()).getReferencedClass());
@@ -146,11 +146,11 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                         final ClassInfo innerClassInfo = (ClassInfo) innerClass;
 
-                        // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                        // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                         if (referenceName[i].equals(innerClassInfo.getClassName())) {
-                            // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                            // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
-                            // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ’Ç‹L‚·‚éˆ—‚ª•K—v
+                            // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’è¿½è¨˜ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                             final ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                             classReference = new ClassReferenceInfo(reference, usingMethod,
                                     fromLine, fromColumn, toLine, toColumn);
@@ -159,7 +159,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         }
                     }
 
-                    // Œ©‚Â‚©‚ç‚È‚­‚Ä‚àŠO•”ƒNƒ‰ƒX‚Ìê‡‚Í‚µ‚å‚¤‚ª‚È‚¢
+                    // è¦‹ã¤ã‹ã‚‰ãªãã¦ã‚‚å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ã—ã‚‡ã†ãŒãªã„
                     if (ownerClass instanceof ExternalClassInfo) {
                         classReference = new UnknownEntityUsageInfo(referenceName, usingMethod,
                                 fromLine, fromColumn, toLine, toColumn);
@@ -178,7 +178,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
         } else {
 
-            // –¢‰ğŒˆQÆŒ^‚ª UnresolvedFullQualifiedNameReferenceTypeInfo ‚È‚ç‚ÎCŠ®‘SŒÀ’è–¼QÆ‚Å‚ ‚é‚Æ”»’f‚Å‚«‚é
+            // æœªè§£æ±ºå‚ç…§å‹ãŒ UnresolvedFullQualifiedNameReferenceTypeInfo ãªã‚‰ã°ï¼Œå®Œå…¨é™å®šåå‚ç…§ã§ã‚ã‚‹ã¨åˆ¤æ–­ã§ãã‚‹
             if (this instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
 
                 ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
@@ -187,7 +187,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     classInfoManager.add(classInfo);
                 }
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ’Ç‹L‚·‚éˆ—‚ª•K—v
+                // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’è¿½è¨˜ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                 final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                 this.resolvedInfo = new ClassReferenceInfo(reference, usingMethod, fromLine,
                         fromColumn, toLine, toColumn);
@@ -195,12 +195,12 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 return this.resolvedInfo;
             }
 
-            // QÆ–¼‚ªŠ®‘SŒÀ’è–¼‚Å‚ ‚é‚Æ‚µ‚ÄŒŸõ
+            // å‚ç…§åãŒå®Œå…¨é™å®šåã§ã‚ã‚‹ã¨ã—ã¦æ¤œç´¢
             {
                 final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
                 if (null != classInfo) {
 
-                    // TODO@Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ’Ç‹L‚·‚éˆ—‚ª•K—v
+                    // TODOã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’è¿½è¨˜ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                     final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                     this.resolvedInfo = new ClassReferenceInfo(reference, usingMethod, fromLine,
                             fromColumn, toLine, toColumn);
@@ -209,7 +209,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 }
             }
 
-            // —˜—p‰Â”\‚ÈƒCƒ“ƒi[ƒNƒ‰ƒX–¼‚©‚ç’T‚·
+            // åˆ©ç”¨å¯èƒ½ãªã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹åã‹ã‚‰æ¢ã™
             {
                 final ClassInfo outestClass;
                 if (usingClass instanceof InnerClassInfo) {
@@ -223,8 +223,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                     if (innerClassInfo.getClassName().equals(referenceName[0])) {
 
-                        // availableField.getType() ‚©‚çŸ‚Ìword(name[i])‚ğ–¼‘O‰ğŒˆ
-                        // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                        // availableField.getType() ã‹ã‚‰æ¬¡ã®word(name[i])ã‚’åå‰è§£æ±º
+                        // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                         ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                         ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                 usingMethod, fromLine, fromColumn, toLine, toColumn);
@@ -232,7 +232,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
-                            // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                            // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                             if (classReference.getType() instanceof UnknownTypeInfo) {
 
                                 this.resolvedInfo = new UnknownEntityUsageInfo(referenceName,
@@ -240,23 +240,23 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
 
-                                // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                             } else if (classReference.getType() instanceof ClassTypeInfo) {
 
                                 final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                         .getType()).getReferencedClass();
 
-                                // ƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·‚Ì‚Åˆê——‚ğæ“¾
+                                // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™ã®ã§ä¸€è¦§ã‚’å–å¾—
                                 final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                         .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                 .getType()).getReferencedClass());
                                 for (final ClassInfo innerClass : ClassInfo.convert(innerClasses)) {
 
-                                    // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                    // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                     if (referenceName[i].equals(innerClass.getClassName())) {
-                                        // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                        // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
-                                        // TODO@Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                                        // TODOã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                                         reference = new ClassTypeInfo(innerClass);
                                         classReference = new ClassReferenceInfo(reference,
                                                 usingMethod, fromLine, fromColumn, toLine, toColumn);
@@ -266,7 +266,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                     }
                                 }
 
-                                // e‚ªŠO•”ƒNƒ‰ƒX(ExternalClassInfo)‚Ìê‡
+                                // è¦ªãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹(ExternalClassInfo)ã®å ´åˆ
                                 if (ownerClass instanceof ExternalClassInfo) {
 
                                     classReference = new UnknownEntityUsageInfo(referenceName,
@@ -286,24 +286,24 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 }
             }
 
-            // —˜—p‰Â”\‚È–¼‘O‹óŠÔ‚©‚çŒ^–¼‚ğ’T‚·
+            // åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‹ã‚‰å‹åã‚’æ¢ã™
             {
                 for (final UnresolvedClassImportStatementInfo availableNamespace : this
                         .getAvailableNamespaces()) {
 
-                    // –¼‘O‹óŠÔ–¼.* ‚Æ‚È‚Á‚Ä‚¢‚éê‡
+                    // åå‰ç©ºé–“å.* ã¨ãªã£ã¦ã„ã‚‹å ´åˆ
                     if (availableNamespace.isAll()) {
                         final String[] namespace = availableNamespace.getNamespace();
 
-                        // –¼‘O‹óŠÔ‚Ì‰º‚É‚ ‚éŠeƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+                        // åå‰ç©ºé–“ã®ä¸‹ã«ã‚ã‚‹å„ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
                         for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
 
-                            // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                            // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                             final String className = classInfo.getClassName();
                             if (className.equals(referenceName[0])) {
 
-                                // availableField.getType() ‚©‚çŸ‚Ìword(name[i])‚ğ–¼‘O‰ğŒˆ
-                                // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                                // availableField.getType() ã‹ã‚‰æ¬¡ã®word(name[i])ã‚’åå‰è§£æ±º
+                                // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                                 ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                                 ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                         usingMethod, fromLine, fromColumn, toLine, toColumn);
@@ -311,7 +311,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
-                                    // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                                    // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                                     if (classReference.getType() instanceof UnknownTypeInfo) {
 
                                         this.resolvedInfo = new UnknownEntityUsageInfo(
@@ -321,24 +321,24 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         return this.resolvedInfo;
 
-                                        // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                        // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                                     } else if (classReference.getType() instanceof ClassTypeInfo) {
 
                                         final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                                 .getType()).getReferencedClass();
 
-                                        // ƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·‚Ì‚Åˆê——‚ğæ“¾
+                                        // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™ã®ã§ä¸€è¦§ã‚’å–å¾—
                                         final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                         .getType()).getReferencedClass());
                                         for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
-                                            // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                            // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                             if (referenceName[i].equals(innerClass.getClassName())) {
-                                                // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                                // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
-                                                // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                                                // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                                                 reference = new ClassTypeInfo(innerClass);
                                                 classReference = new ClassReferenceInfo(reference,
                                                         usingMethod, fromLine, fromColumn, toLine,
@@ -349,7 +349,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                             }
                                         }
 
-                                        // e‚ªŠO•”ƒNƒ‰ƒX(ExternalClassInfo)‚Ìê‡
+                                        // è¦ªãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹(ExternalClassInfo)ã®å ´åˆ
                                         if (ownerClass instanceof ExternalClassInfo) {
 
                                             classReference = new UnknownEntityUsageInfo(
@@ -369,12 +369,12 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                             }
                         }
 
-                        // –¼‘O‹óŠÔ.ƒNƒ‰ƒX–¼ ‚Æ‚È‚Á‚Ä‚¢‚éê‡
+                        // åå‰ç©ºé–“.ã‚¯ãƒ©ã‚¹å ã¨ãªã£ã¦ã„ã‚‹å ´åˆ
                     } else {
 
                         final String[] importName = availableNamespace.getImportName();
 
-                        // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                        // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                         if (importName[importName.length - 1].equals(referenceName[0])) {
 
                             ClassInfo specifiedClassInfo = classInfoManager
@@ -384,7 +384,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 classInfoManager.add(specifiedClassInfo);
                             }
 
-                            // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                            // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                             ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
                             ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                     usingMethod, fromLine, fromColumn, toLine, toColumn);
@@ -392,7 +392,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
-                                // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                                // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
                                     this.resolvedInfo = new UnknownEntityUsageInfo(referenceName,
@@ -401,24 +401,24 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                     return this.resolvedInfo;
 
-                                    // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                    // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                                 } else if (classReference.getType() instanceof ClassTypeInfo) {
 
                                     final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                             .getType()).getReferencedClass();
 
-                                    // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                    // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                     final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                     .getType()).getReferencedClass());
                                     for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
-                                        // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                        // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                         if (referenceName[i].equals(innerClass.getClassName())) {
-                                            // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                            // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
-                                            // TODO Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğŠi”[‚·‚éˆ—‚ª•K—v
+                                            // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å‡¦ç†ãŒå¿…è¦
                                             reference = new ClassTypeInfo(innerClass);
                                             classReference = new ClassReferenceInfo(reference,
                                                     usingMethod, fromLine, fromColumn, toLine,
@@ -429,7 +429,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                         }
                                     }
 
-                                    // e‚ªŠO•”ƒNƒ‰ƒX(ExternalClassInfo)‚Ìê‡
+                                    // è¦ªãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹(ExternalClassInfo)ã®å ´åˆ
                                     if (ownerClass instanceof ExternalClassInfo) {
 
                                         classReference = new UnknownEntityUsageInfo(referenceName,
@@ -461,7 +461,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
          * usingMethod.getMethodName() + "\"."); }
          */
 
-        // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCUknownTypeInfo ‚ğ•Ô‚·
+        // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼ŒUknownTypeInfo ã‚’è¿”ã™
         this.resolvedInfo = new UnknownEntityUsageInfo(referenceName, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
@@ -469,13 +469,13 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^g—p‚ğ’Ç‰Á‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeArgument ’Ç‰Á‚·‚éŒ^ƒpƒ‰ƒ[ƒ^g—p
+     * @param typeArgument è¿½åŠ ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨
      */
     public final void addTypeArgument(final UnresolvedTypeInfo<?> typeArgument) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeArgument) {
             throw new NullPointerException();
@@ -485,55 +485,55 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚Åg—p‚³‚ê‚Ä‚¢‚éŒ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒXQÆ‚Åg—p‚³‚ê‚Ä‚¢‚éŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     public final List<UnresolvedTypeInfo<?>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚Ìowner‚àŠÜ‚ß‚½QÆ–¼‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®ownerã‚‚å«ã‚ãŸå‚ç…§åã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚Ìowner‚àŠÜ‚ß‚½QÆ–¼‚ğ•Ô‚·
+     * @return ã“ã®å‚ç…§å‹ã®ownerã‚‚å«ã‚ãŸå‚ç…§åã‚’è¿”ã™
      */
     public final String[] getFullReferenceName() {
         return Arrays.<String> copyOf(this.fullReferenceName, this.fullReferenceName.length);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğ•Ô‚·
+     * @return ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’è¿”ã™
      */
     public final String[] getReferenceName() {
         return Arrays.<String> copyOf(this.referenceName, this.referenceName.length);
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆQÆŒ^‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºå‚ç…§å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆQÆŒ^
+     * @return ã“ã®å‚ç…§å‹ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºå‚ç…§å‹
      */
     public final UnresolvedClassReferenceInfo getQualifierUsage() {
         return this.qualifierUsage;
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ªC‘¼‚ÌQÆŒ^‚É‚­‚Á‚Â‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ãŒï¼Œä»–ã®å‚ç…§å‹ã«ãã£ã¤ã„ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚­‚Á‚Â‚¢‚Ä‚¢‚éê‡‚Í trueC‚­‚Á‚Â‚¢‚Ä‚¢‚È‚¢ê‡‚Í false
+     * @return ãã£ã¤ã„ã¦ã„ã‚‹å ´åˆã¯ trueï¼Œãã£ã¤ã„ã¦ã„ãªã„å ´åˆã¯ false
      */
     public final boolean hasOwnerReference() {
         return null != this.qualifierUsage;
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğˆø”‚Å—^‚¦‚ç‚ê‚½•¶š‚ÅŒ‹‡‚µ‚Ä•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—ã§çµåˆã—ã¦è¿”ã™
      * 
-     * @param delimiter Œ‹‡‚É—p‚¢‚é•¶š
-     * @return ‚±‚ÌQÆŒ^‚ÌQÆ–¼‚ğˆø”‚Å—^‚¦‚ç‚ê‚½•¶š‚ÅŒ‹‡‚µ‚½•¶š—ñ
+     * @param delimiter çµåˆã«ç”¨ã„ã‚‹æ–‡å­—
+     * @return ã“ã®å‚ç…§å‹ã®å‚ç…§åã‚’å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—ã§çµåˆã—ãŸæ–‡å­—åˆ—
      */
     public final String getReferenceName(final String delimiter) {
 
@@ -551,20 +551,20 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     }
 
     /**
-     * ‚±‚ÌQÆŒ^‚ÌŠ®‘SŒÀ’è–¼‚Æ‚µ‚Ä‰Â”\«‚Ì‚ ‚é–¼‘O‹óŠÔ–¼‚Ìˆê——‚ğ•Ô‚·
+     * ã“ã®å‚ç…§å‹ã®å®Œå…¨é™å®šåã¨ã—ã¦å¯èƒ½æ€§ã®ã‚ã‚‹åå‰ç©ºé–“åã®ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌQÆŒ^‚ÌŠ®‘SŒÀ’è–¼‚Æ‚µ‚Ä‰Â”\«‚Ì‚ ‚é–¼‘O‹óŠÔ–¼‚Ìˆê——
+     * @return ã“ã®å‚ç…§å‹ã®å®Œå…¨é™å®šåã¨ã—ã¦å¯èƒ½æ€§ã®ã‚ã‚‹åå‰ç©ºé–“åã®ä¸€è¦§
      */
     public final List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½–¢‰ğŒˆŒ^î•ñ‚ğ•\‚·‰ğŒˆÏ‚İŒ^î•ñƒNƒ‰ƒX‚ğ¶¬‚·‚éD ‚±‚±‚Åˆø”‚Æ‚µ‚Ä—^‚¦‚ç‚ê‚é‚Ì‚ÍCƒ\[ƒXƒR[ƒh‚ªƒp[ƒX‚³‚ê‚Ä‚¢‚È‚¢Œ^‚Å‚ ‚é‚Ì‚ÅC¶¬‚·‚é‰ğŒˆÏ‚İŒ^î•ñƒNƒ‰ƒX‚Í
-     * ExternalClassInfo ‚Æ‚È‚éD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæœªè§£æ±ºå‹æƒ…å ±ã‚’è¡¨ã™è§£æ±ºæ¸ˆã¿å‹æƒ…å ±ã‚¯ãƒ©ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ï¼ ã“ã“ã§å¼•æ•°ã¨ã—ã¦ä¸ãˆã‚‰ã‚Œã‚‹ã®ã¯ï¼Œã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ãŒãƒ‘ãƒ¼ã‚¹ã•ã‚Œã¦ã„ãªã„å‹ã§ã‚ã‚‹ã®ã§ï¼Œç”Ÿæˆã™ã‚‹è§£æ±ºæ¸ˆã¿å‹æƒ…å ±ã‚¯ãƒ©ã‚¹ã¯
+     * ExternalClassInfo ã¨ãªã‚‹ï¼
      * 
-     * @param unresolvedReferenceType –¢‰ğŒˆŒ^î•ñ
-     * @return ‰ğŒˆÏ‚İŒ^î•ñ
+     * @param unresolvedReferenceType æœªè§£æ±ºå‹æƒ…å ±
+     * @return è§£æ±ºæ¸ˆã¿å‹æƒ…å ±
      */
     public static ExternalClassInfo createExternalClassInfo(
             final UnresolvedClassReferenceInfo unresolvedReferenceType) {
@@ -573,22 +573,22 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
             throw new IllegalArgumentException();
         }
 
-        // –¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ÌQÆ–¼‚ğæ“¾
+        // æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã®å‚ç…§åã‚’å–å¾—
         final String[] referenceName = unresolvedReferenceType.getReferenceName();
 
-        // —˜—p‰Â”\‚È–¼‘O‹óŠÔ‚ğŒŸõ‚µC–¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ÌŠ®‘SŒÀ’è–¼‚ğŒˆ’è
+        // åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’æ¤œç´¢ã—ï¼Œæœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã®å®Œå…¨é™å®šåã‚’æ±ºå®š
         for (final UnresolvedClassImportStatementInfo availableNamespace : unresolvedReferenceType
                 .getAvailableNamespaces()) {
 
-            // –¼‘O‹óŠÔ–¼.* ‚Æ‚È‚Á‚Ä‚¢‚éê‡‚ÍCŒ©‚Â‚¯‚é‚±‚Æ‚ª‚Å‚«‚È‚¢
+            // åå‰ç©ºé–“å.* ã¨ãªã£ã¦ã„ã‚‹å ´åˆã¯ï¼Œè¦‹ã¤ã‘ã‚‹ã“ã¨ãŒã§ããªã„
             if (availableNamespace.isAll()) {
                 continue;
             }
 
-            // –¼‘O‹óŠÔ.ƒNƒ‰ƒX–¼ ‚Æ‚È‚Á‚Ä‚¢‚éê‡
+            // åå‰ç©ºé–“.ã‚¯ãƒ©ã‚¹å ã¨ãªã£ã¦ã„ã‚‹å ´åˆ
             final String[] importName = availableNamespace.getImportName();
 
-            // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+            // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
             if (importName[importName.length - 1].equals(referenceName[0])) {
 
                 final String[] namespace = availableNamespace.getNamespace();
@@ -603,21 +603,21 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
             }
         }
 
-        // Œ©‚Â‚©‚ç‚È‚¢ê‡‚ÍC–¼‘O‹óŠÔ‚ª UNKNOWN ‚È ŠO•”ƒNƒ‰ƒXî•ñ‚ğì¬
+        // è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ï¼Œåå‰ç©ºé–“ãŒ UNKNOWN ãª å¤–éƒ¨ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ä½œæˆ
         final ExternalClassInfo unknownClassInfo = new ExternalClassInfo(
                 referenceName[referenceName.length - 1]);
         return unknownClassInfo;
     }
 
     /**
-     * –¢‰ğŒˆQÆŒ^‚ğ—^‚¦‚é‚ÆC‚»‚Ì–¢‰ğŒˆƒNƒ‰ƒXQÆ‚ğ•Ô‚·
+     * æœªè§£æ±ºå‚ç…§å‹ã‚’ä¸ãˆã‚‹ã¨ï¼Œãã®æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‚ç…§ã‚’è¿”ã™
      * 
-     * @param referenceType –¢‰ğŒˆQÆŒ^
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
-     * @return –¢‰ğŒˆƒNƒ‰ƒXQÆ
+     * @param referenceType æœªè§£æ±ºå‚ç…§å‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
+     * @return æœªè§£æ±ºã‚¯ãƒ©ã‚¹å‚ç…§
      */
     public final static UnresolvedClassReferenceInfo createClassReference(
             final UnresolvedClassTypeInfo referenceType,
@@ -636,27 +636,27 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     }
 
     /**
-     * —˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”C–¼‘O‰ğŒˆˆ—‚ÌÛ‚É—p‚¢‚é
+     * åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼Œåå‰è§£æ±ºå‡¦ç†ã®éš›ã«ç”¨ã„ã‚‹
      */
     private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
 
     /**
-     * QÆ–¼‚ğ•Û‘¶‚·‚é•Ï”
+     * å‚ç…§åã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final String[] referenceName;
 
     /**
-     * owner‚àŠÜ‚ß‚½QÆ–¼‚ğ•Û‘¶‚·‚é•Ï”
+     * ownerã‚‚å«ã‚ãŸå‚ç…§åã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final String[] fullReferenceName;
 
     /**
-     * ‚±‚ÌQÆ‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é–¢‰ğŒˆQÆŒ^‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã®å‚ç…§ãŒãã£ã¤ã„ã¦ã„ã‚‹æœªè§£æ±ºå‚ç…§å‹ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedClassReferenceInfo qualifierUsage;
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^g—p‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedTypeInfo<?>> typeArguments;
 

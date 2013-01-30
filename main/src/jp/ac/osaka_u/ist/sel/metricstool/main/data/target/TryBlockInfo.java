@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * try ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -17,12 +17,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class TryBlockInfo extends BlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä try ƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TryBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -34,9 +34,9 @@ public final class TryBlockInfo extends BlockInfo {
     }
 
     /**
-     * ‘Î‰‚·‚é finally •¶‚ğƒZƒbƒg‚·‚é
+     * å¯¾å¿œã™ã‚‹ finally æ–‡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param sequentFinallyBlock ‘Î‰‚·‚é finally •¶
+     * @param sequentFinallyBlock å¯¾å¿œã™ã‚‹ finally æ–‡
      */
     public void setSequentFinallyBlock(final FinallyBlockInfo sequentFinallyBlock) {
 
@@ -49,17 +49,17 @@ public final class TryBlockInfo extends BlockInfo {
     }
 
     /**
-     * ‘Î‰‚·‚é finally •¶‚ğ•Ô‚·
+     * å¯¾å¿œã™ã‚‹ finally æ–‡ã‚’è¿”ã™
      * 
-     * @return ‘Î‰‚·‚é finally •¶
+     * @return å¯¾å¿œã™ã‚‹ finally æ–‡
      */
     public FinallyBlockInfo getSequentFinallyBlock() {
         return this.sequentFinallyBlock;
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ğ’Ç‰Á‚·‚é
-     * @param catchBlock ‘Î‰‚·‚écatchƒuƒƒbƒN
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿½åŠ ã™ã‚‹
+     * @param catchBlock å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯
      */
     public void addSequentCatchBlock(final CatchBlockInfo catchBlock) {
 
@@ -72,25 +72,25 @@ public final class TryBlockInfo extends BlockInfo {
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ÌSet‚ğ•Ô‚·
-     * @return ‘Î‰‚·‚écatchƒuƒƒbƒN‚ÌSet
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã®Setã‚’è¿”ã™
+     * @return å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã®Set
      */
     public SortedSet<CatchBlockInfo> getSequentCatchBlocks() {
         return this.sequentCatchBlocks;
     }
 
     /**
-     * ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©•Ô‚·
-     * @return ‘Î‰‚·‚éfinallyƒuƒƒbƒN‚ª‘¶İ‚·‚é‚È‚çtrue
+     * å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹è¿”ã™
+     * @return å¯¾å¿œã™ã‚‹finallyãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ãªã‚‰true
      */
     public boolean hasFinallyBlock() {
         return null != this.sequentFinallyBlock;
     }
 
     /**
-     * ‚±‚Ìtry•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®tryæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìtry•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®tryæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -140,7 +140,7 @@ public final class TryBlockInfo extends BlockInfo {
     }
 
     /**
-     * ‘Î‰‚·‚écatchƒuƒƒbƒN‚ğ•Û‘¶‚·‚é•Ï”
+     * å¯¾å¿œã™ã‚‹catchãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final SortedSet<CatchBlockInfo> sequentCatchBlocks;
 

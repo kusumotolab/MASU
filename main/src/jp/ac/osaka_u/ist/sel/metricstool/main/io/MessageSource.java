@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * �e�L�X�g�\�����ւ̃��b�Z�[�W���M�҂�\���C���^�t�F�[�X
+ * テキスト表示部へのメッセージ送信者を表すインタフェース
  * 
  * @author kou-tngt
  *
@@ -10,8 +10,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface MessageSource {
 
     /**
-     * ���M�҂̖��O��Ԃ�
-     * @return ���M�҂̖��O
+     * 送信者の名前を返す
+     * @return 送信者の名前
      */
     public String getMessageSourceName();
 }

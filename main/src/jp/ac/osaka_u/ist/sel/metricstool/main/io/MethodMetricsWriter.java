@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒƒ\ƒbƒh‚ÌƒƒgƒŠƒNƒX‚ð‘‚«o‚·ƒNƒ‰ƒX‚ªŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface MethodMetricsWriter extends MetricsWriter {
 
     /**
-     * ƒƒ\ƒbƒh–¼‚Ìƒ^ƒCƒgƒ‹•¶Žš—ñ
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã®ã‚¿ã‚¤ãƒˆãƒ«æ–‡å­—åˆ—
      */
     String METHOD_NAME = new String("\"Method Name\"");
 }

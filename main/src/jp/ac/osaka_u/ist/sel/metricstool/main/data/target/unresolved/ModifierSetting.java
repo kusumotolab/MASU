@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 
 
 /**
- * Cüq‚ğƒZƒbƒg‚·‚é‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ä¿®é£¾å­ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -14,9 +14,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 public interface ModifierSetting extends Modifier {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Cüq‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸä¿®é£¾å­ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param modifier ’Ç‰Á‚·‚éCüq
+     * @param modifier è¿½åŠ ã™ã‚‹ä¿®é£¾å­
      */
     void addModifier(final ModifierInfo modifier);
 }

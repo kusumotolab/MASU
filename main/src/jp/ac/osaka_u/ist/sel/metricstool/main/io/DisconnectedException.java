@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * Ú‘±‚ªØ’f‚³‚ê‚½ê‡‚É”­¶‚·‚é
+ * æ¥ç¶šãŒåˆ‡æ–­ã•ã‚ŒãŸå ´åˆã«ç™ºç”Ÿã™ã‚‹
  * 
  * @author kou-tngt
  *

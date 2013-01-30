@@ -5,8 +5,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * ASTƒrƒWƒ^[‚ªƒƒ\ƒbƒh“à•”‚Ìƒpƒ‰ƒ[ƒ^’è‹`•”ifor•¶’†‚Ì•Ï”’è‹`‚È‚Ç‚Ì‚æ‚¤‚ÉC’è‹`‚³‚ê‚½êŠ‚©‚çŸ‚ÌƒuƒƒbƒN‚ÌI‚í‚è‚Ü‚Å—LŒø‚È•Ï”’è‹`•”j
- * ‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ï¼ˆforæ–‡ä¸­ã®å¤‰æ•°å®šç¾©ãªã©ã®ã‚ˆã†ã«ï¼Œå®šç¾©ã•ã‚ŒãŸå ´æ‰€ã‹ã‚‰æ¬¡ã®ãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚ã‚ã‚Šã¾ã§æœ‰åŠ¹ãªå¤‰æ•°å®šç¾©éƒ¨ï¼‰
+ * ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
  * 
  * @author kou-tngt
  *
@@ -14,11 +14,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public class LocalParameterStateManager extends VariableDefinitionStateManager {
 
     /**
-     * ƒg[ƒNƒ“‚ªƒ[ƒJƒ‹ƒpƒ‰ƒ[ƒ^’è‹`•”‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * ”»’è‚É‚Ítoken.isLocalParameterDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚é
+     * ãƒˆãƒ¼ã‚¯ãƒ³ãŒãƒ­ãƒ¼ã‚«ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * åˆ¤å®šã«ã¯token.isLocalParameterDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã‚‹
      * 
-     * @param token@ƒ[ƒJƒ‹ƒpƒ‰ƒ[ƒ^’è‹`•”‚Ç‚¤‚©”»’è‚·‚éƒg[ƒNƒ“
-     * @return ƒ[ƒJƒ‹ƒpƒ‰ƒ[ƒ^’è‹`•”‚Å‚ ‚ê‚Îtrue.
+     * @param tokenã€€ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã©ã†ã‹åˆ¤å®šã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã§ã‚ã‚Œã°true.
      */
     @Override
     protected boolean isDefinitionToken(AstToken token) {

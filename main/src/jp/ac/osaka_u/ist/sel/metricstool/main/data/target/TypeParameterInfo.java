@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * Œ^ƒpƒ‰ƒ[ƒ^‚ğ•\‚·’ŠÛƒNƒ‰ƒX
+ * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¡¨ã™æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -17,11 +17,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class TypeParameterInfo {
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param ownerUnit Œ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
-     * @param name Œ^ƒpƒ‰ƒ[ƒ^–¼
-     * @param index ‰½”Ô–Ú‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚ğ•\‚·
+     * @param ownerUnit å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
+     * @param name å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+     * @param index ä½•ç•ªç›®ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚’è¡¨ã™
      */
     public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name, final int index) {
 
@@ -37,10 +37,10 @@ public class TypeParameterInfo {
     }
 
     /**
-     * ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ªˆø”‚Å—^‚¦‚ç‚ê‚½Œ^‚Æ“™‚µ‚¢‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+     * ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå‹ã¨ç­‰ã—ã„ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param o ”äŠr‘ÎÛŒ^î•ñ
-     * @return “™‚µ‚¢ê‡‚Í trueC“™‚µ‚­‚È‚¢ê‡‚Í false;
+     * @param o æ¯”è¼ƒå¯¾è±¡å‹æƒ…å ±
+     * @return ç­‰ã—ã„å ´åˆã¯ trueï¼Œç­‰ã—ããªã„å ´åˆã¯ false;
      */
     public boolean equals(final TypeInfo o) {
 
@@ -56,27 +56,27 @@ public class TypeParameterInfo {
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)ã‚’è¿”ã™
      * 
-     * @return  Œ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
+     * @return  å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
      */
     public final TypeParameterizable getOwnerUnit() {
         return this.ownerUnit;
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’è¿”ã™
      * 
-     * @return Œ^ƒpƒ‰ƒ[ƒ^–¼
+     * @return å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
      */
     public final String getName() {
         return this.name;
     }
 
     /**
-     * Œ^–¼iÀÛ‚É‚ÍŒ^ƒpƒ‰ƒ[ƒ^–¼j‚ğ•Ô‚·
+     * å‹åï¼ˆå®Ÿéš›ã«ã¯å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åï¼‰ã‚’è¿”ã™
      * 
-     * @return Œ^–¼
+     * @return å‹å
      */
     public final String getTypeName() {
 
@@ -96,18 +96,18 @@ public class TypeParameterInfo {
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
      * 
-     * @return@Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @returnã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public final int getIndex() {
         return this.index;
     }
 
     /**
-     * Šî’êƒNƒ‰ƒXŒ^‚ÌList‚ğ•Ô‚·
+     * åŸºåº•ã‚¯ãƒ©ã‚¹å‹ã®Listã‚’è¿”ã™
      * 
-     * @return Šî’êƒNƒ‰ƒXŒ^‚ÌList
+     * @return åŸºåº•ã‚¯ãƒ©ã‚¹å‹ã®List
      */
     public final List<TypeInfo> getExtendsTypes() {
         return Collections.unmodifiableList(this.extendsTypes);
@@ -123,31 +123,31 @@ public class TypeParameterInfo {
     }
 
     /**
-     * * Šî’êƒNƒ‰ƒX‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * * åŸºåº•ã‚¯ãƒ©ã‚¹ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return Šî’êƒNƒ‰ƒX‚ğ‚Âê‡‚Í true,‚½‚È‚¢ê‡‚Í false
+     * @return åŸºåº•ã‚¯ãƒ©ã‚¹ã‚’æŒã¤å ´åˆã¯ true,æŒãŸãªã„å ´åˆã¯ false
      */
     public final boolean hasExtendsType() {
         return 0 != this.extendsTypes.size();
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğŠ—L‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ‰€æœ‰ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final TypeParameterizable ownerUnit;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String name;
 
     /**
-     * ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ª‰½”Ô–Ú‚Ì‚à‚Ì‚©‚ğ•\‚·•Ï”
+     * ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒä½•ç•ªç›®ã®ã‚‚ã®ã‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private final int index;
 
     /**
-     * Šî’êƒNƒ‰ƒXŒ^‚ÌList‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åŸºåº•ã‚¯ãƒ©ã‚¹å‹ã®Listã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private List<TypeInfo> extendsTypes;
 }

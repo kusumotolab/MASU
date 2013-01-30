@@ -8,8 +8,8 @@ import java.util.List;
 public class JavaByteCodeUtility {
 
     /**
-     * �����ŗ^����ꂽFull Qualified Name��\��������𕪊����āC��z��Ƃ��ĕԂ�
-     * �^���������Ă��Ă��C��菜�����̏����͂��Ȃ�
+     * 引数で与えられたFull Qualified Nameを表す文字列を分割して，を配列として返す
+     * 型引数がついていても，取り除く等の処理はしない
      * 
      * @param name
      * @return
@@ -44,8 +44,8 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �^����ꂽ�^�i���O�j����^��������菜�������̂�Ԃ�
-     * �^�p�����[�^���Ȃ��ꍇ�͂��̂܂ܕԂ�
+     * 与えられた型（名前）から型引数を取り除いたものを返す
+     * 型パラメータがない場合はそのまま返す
      * 
      * @param type
      * @return
@@ -56,8 +56,8 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �^����ꂽ�^�i���O�j����^���������𒊏o���ĕԂ�
-     * �^�p�����[�^���Ȃ��ꍇ��null��Ԃ�
+     * 与えられた型（名前）から型引数部分を抽出して返す
+     * 型パラメータがない場合はnullを返す
      * 
      * @param type
      * @return
@@ -70,7 +70,7 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �����Ƃ��ė^����ꂽ�^�̕����񂩂�C�e�^��؂�o���Ĕz��Ƃ��ĕԂ�
+     * 引数として与えられた型の文字列から，各型を切り出して配列として返す
      * 
      * @param text
      * @return
@@ -93,16 +93,16 @@ public class JavaByteCodeUtility {
                 nestLevel--;
             }
 
-            // �X���[������O�̂��߂̕���C���ɏ����͂Ȃ�
+            // スローされる例外のための分岐，特に処理はない
             else if ('^' == text.charAt(index)) {
 
             }
 
-            //�ꕶ���̌^�̂Ƃ�
+            //一文字の型のとき
             else if ((0 == nestLevel) && isSingleCharacterType(text.charAt(index))) {
                 final String type = String.valueOf(text.charAt(index));
                 final StringBuilder sb = new StringBuilder();
-                for (int i = 1; i <= dimension; i++) { //�z����l��
+                for (int i = 1; i <= dimension; i++) { //配列を考慮
                     sb.append('[');
                 }
                 sb.append(type);
@@ -110,11 +110,11 @@ public class JavaByteCodeUtility {
                 dimension = 0;
             }
 
-            // ���������̌^�̂Ƃ�
+            // 複数文字の型のとき
             else if ((0 == nestLevel) && isMultipleCharactersType(text.charAt(index))) {
                 final String type = extractMultipleCharactersType(text.substring(index));
                 final StringBuilder sb = new StringBuilder();
-                for (int i = 1; i <= dimension; i++) { //�z����l��
+                for (int i = 1; i <= dimension; i++) { //配列を考慮
                     sb.append('[');
                 }
                 sb.append(type);
@@ -127,7 +127,7 @@ public class JavaByteCodeUtility {
                 dimension++;
             }
 
-            // ����ȊO�̂Ƃ��͏�Ԉُ�
+            // それ以外のときは状態異常
             else
                 throw new IllegalStateException();
         }
@@ -136,7 +136,7 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �����ŗ^����ꂽ�������ꕶ���^��\���ꍇ��true,�����łȂ��ꍇ��false��Ԃ�
+     * 引数で与えられた文字が一文字型を表す場合はtrue,そうでない場合はfalseを返す
      * 
      * @param c
      * @return
@@ -161,7 +161,7 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �����ŗ^����ꂽ���������������^��\���ꍇ��true,�����łȂ��ꍇ��false��Ԃ�
+     * 引数で与えられた文字が複数文字型を表す場合はtrue,そうでない場合はfalseを返す
      * 
      * @param c
      * @return
@@ -180,7 +180,7 @@ public class JavaByteCodeUtility {
     }
 
     /**
-     * �����Ƃ��ė^����ꂽ������̐擪�Ɍ���镡���^��؂�o���ĕԂ�
+     * 引数として与えられた文字列の先頭に現れる複数型を切り出して返す
      * 
      * @param text
      * @return

@@ -26,15 +26,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒƒ“ƒo(ƒƒ\ƒbƒhCƒRƒ“ƒXƒgƒ‰ƒNƒ^)ŒÄ‚Ño‚µ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ¡ãƒ³ãƒ(ãƒ¡ã‚½ãƒƒãƒ‰ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿)å‘¼ã³å‡ºã—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends UnresolvedExpressionInfo<T> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      */
     public UnresolvedCallInfo() {
 
@@ -46,9 +46,9 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^g—p‚ğ’Ç‰Á‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeParameterUsage ’Ç‰Á‚·‚éŒ^ƒpƒ‰ƒ[ƒ^g—p
+     * @param typeParameterUsage è¿½åŠ ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨
      */
     public final void addTypeArgument(final UnresolvedReferenceTypeInfo<?> typeParameterUsage) {
 
@@ -61,12 +61,12 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
     }
 
     /**
-     * ˆø”‚ğ’Ç‰Á
+     * å¼•æ•°ã‚’è¿½åŠ 
      * 
      * @param argument
      */
     public void addArgument(final UnresolvedExpressionInfo<? extends ExpressionInfo> argument) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == argument) {
             throw new NullPointerException();
@@ -76,18 +76,18 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
     }
 
     /**
-     * ˆø”‚Ì List ‚ğ•Ô‚·
+     * å¼•æ•°ã® List ã‚’è¿”ã™
      * 
-     * @return ˆø”‚Ì List
+     * @return å¼•æ•°ã® List
      */
     public final List<UnresolvedExpressionInfo<?>> getArguments() {
         return Collections.unmodifiableList(this.arguments);
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^g—p‚Ì List ‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã® List ã‚’è¿”ã™
      * 
-     * @return Œ^ƒpƒ‰ƒ[ƒ^g—p‚Ì List
+     * @return å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã® List
      */
     public final List<UnresolvedReferenceTypeInfo<?>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
@@ -102,13 +102,13 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
         }
 
-        //@‰ğŒˆÏ‚İÀˆø”‚ğŠi”[‚·‚é‚½‚ß‚Ì•Ï”
+        //ã€€è§£æ±ºæ¸ˆã¿å®Ÿå¼•æ•°ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®å¤‰æ•°
         final List<ExpressionInfo> parameters = new LinkedList<ExpressionInfo>();
 
         for (final UnresolvedExpressionInfo<?> unresolvedParameter : this.getArguments()) {
@@ -120,7 +120,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
 
             if (parameter instanceof UnknownEntityUsageInfo) {
 
-                // ƒNƒ‰ƒXQÆ‚¾‚Á‚½ê‡
+                // ã‚¯ãƒ©ã‚¹å‚ç…§ã ã£ãŸå ´åˆ
                 if (unresolvedParameter instanceof UnresolvedClassReferenceInfo) {
 
                     final ExternalClassInfo externalClassInfo = UnresolvedClassReferenceInfo
@@ -134,13 +134,13 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
                         referenceType.addTypeArgument(typeArgument);
                     }
 
-                    // g—pˆÊ’u‚ğæ“¾
+                    // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
                     final int fromLine = this.getFromLine();
                     final int fromColumn = this.getFromColumn();
                     final int toLine = this.getToLine();
                     final int toColumn = this.getToColumn();
 
-                    /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+                    /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
                     final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                             .getOwnerExecutableElement();
                     final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -165,7 +165,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        //@‰ğŒˆÏ‚İŒ^ˆø”‚ğŠi”[‚·‚é‚½‚ß‚Ì•Ï”
+        //ã€€è§£æ±ºæ¸ˆã¿å‹å¼•æ•°ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®å¤‰æ•°
         final List<ReferenceTypeInfo> typeArguments = new LinkedList<ReferenceTypeInfo>();
 
         for (final UnresolvedReferenceTypeInfo<?> unresolvedTypeArgument : this.getTypeArguments()) {
@@ -182,17 +182,17 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^g—p‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected List<UnresolvedReferenceTypeInfo<?>> typeArguments;
 
     /**
-     * ˆø”‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¼•æ•°ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected List<UnresolvedExpressionInfo<?>> arguments;
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     protected static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {

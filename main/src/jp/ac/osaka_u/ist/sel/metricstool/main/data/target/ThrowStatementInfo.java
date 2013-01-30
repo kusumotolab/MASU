@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * throw•¶‚Ìî•ñ‚ğ•Û—L‚·‚éƒNƒ‰ƒX
+ * throwæ–‡ã®æƒ…å ±ã‚’ä¿æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -16,14 +16,14 @@ import java.util.Set;
 public class ThrowStatementInfo extends SingleStatementInfo {
 
     /**
-     * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ğ•\‚·®‚ÆˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¼ã¨ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param ownerSpace •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
-     * @param thrownEpression throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ğ•\‚·®
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSpace æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
+     * @param thrownEpression throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¼
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ThrowStatementInfo(final LocalSpaceInfo ownerSpace, ExpressionInfo thrownEpression,
             int fromLine, int fromColumn, int toLine, int toColumn) {
@@ -38,9 +38,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ğ•\‚·®‚ğ•Ô‚·
+     * throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¼ã‚’è¿”ã™
      * 
-     * @return throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ğ•\‚·®
+     * @return throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¼
      */
     public final ExpressionInfo getThrownExpression() {
         return this.thrownEpression;
@@ -52,9 +52,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -62,9 +62,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -72,9 +72,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ìthrow•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®throwæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìthrow•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®throwæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -92,9 +92,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -122,7 +122,7 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ğ•\‚·®
+     * throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¼
      */
     private final ExpressionInfo thrownEpression;
 

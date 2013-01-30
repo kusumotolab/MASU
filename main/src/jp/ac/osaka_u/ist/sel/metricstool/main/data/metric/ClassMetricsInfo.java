@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
- * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é‚½‚ß‚Ìƒf[ƒ^ƒNƒ‰ƒX
+ * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãŸã‚ã®ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -13,18 +13,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public final class ClassMetricsInfo extends MetricsInfo<TargetClassInfo> {
 
     /**
-     * Œv‘ª‘ÎÛƒNƒ‰ƒX‚ğ—^‚¦‚Ä‰Šú‰»
+     * è¨ˆæ¸¬å¯¾è±¡ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param classInfo Œv‘ª‘ÎÛƒNƒ‰ƒX
+     * @param classInfo è¨ˆæ¸¬å¯¾è±¡ã‚¯ãƒ©ã‚¹
      */
     public ClassMetricsInfo(final TargetClassInfo classInfo) {
         super(classInfo);
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚Ì‘—MÒ–¼‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡è€…åã‚’è¿”ã™
      * 
-     * @return ƒƒbƒZ[ƒW‚Ì‘—MÒ–¼
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡è€…å
      */
     public String getMessageSourceName() {
         return this.getClass().getName();

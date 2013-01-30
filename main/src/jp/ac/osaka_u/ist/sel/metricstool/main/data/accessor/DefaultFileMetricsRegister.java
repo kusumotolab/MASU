@@ -11,16 +11,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ªƒtƒ@ƒCƒ‹ƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é‚½‚ß‚É—p‚¢‚éƒNƒ‰ƒXD
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ•ã‚¡ã‚¤ãƒ«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  */
 public class DefaultFileMetricsRegister implements FileMetricsRegister {
 
     /**
-     * “o˜^ˆ——p‚ÌƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¤Dƒvƒ‰ƒOƒCƒ“‚Í©g‚ğˆø”‚Æ‚µ‚Ä—^‚¦‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * ç™»éŒ²å‡¦ç†ç”¨ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯è‡ªèº«ã‚’å¼•æ•°ã¨ã—ã¦ä¸ãˆãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      * 
-     * @param plugin ‰Šú‰»‚ğs‚¤ƒvƒ‰ƒOƒCƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param plugin åˆæœŸåŒ–ã‚’è¡Œã†ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public DefaultFileMetricsRegister(final AbstractPlugin plugin) {
 
@@ -36,11 +36,11 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
     }
 
     /**
-     * ‘æˆêˆø”‚Ìƒtƒ@ƒCƒ‹‚ÌƒƒgƒŠƒNƒX’li‘æ“ñˆø”j‚ğ“o˜^‚·‚é
+     * ç¬¬ä¸€å¼•æ•°ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ï¼ˆç¬¬äºŒå¼•æ•°ï¼‰ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param fileInfo ƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚éƒtƒ@ƒCƒ‹
-     * @param value “o˜^‚·‚éƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException ‚·‚Å‚ÉƒƒgƒŠƒNƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÉƒXƒ[‚³‚ê‚é—áŠO
+     * @param fileInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
+     * @param value ç™»éŒ²ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ã™ã§ã«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–
      */
     @Override
     public void registMetric(final FileInfo fileInfo, final Number value)
@@ -56,7 +56,7 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒIƒuƒWƒFƒNƒg‚ğ•Û‘¶‚µ‚Ä‚¨‚­‚½‚ß‚Ì•Ï”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã—ã¦ãŠããŸã‚ã®å¤‰æ•°
      */
     private final AbstractPlugin plugin;
 }

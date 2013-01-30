@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 /**
- * 可変長であることを表すインタフェース
+ * 蜿ｯ螟蛾聞縺ｧ縺ゅｋ縺薙→繧定｡ｨ縺吶う繝ｳ繧ｿ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  *

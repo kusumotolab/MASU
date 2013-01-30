@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•\‚·ƒNƒ‰ƒX
+ * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -15,13 +15,13 @@ import java.util.Set;
 public abstract class ConstructorInfo extends CallableUnitInfo {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param modifiers ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌCüq
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ä¿®é£¾å­
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     ConstructorInfo(final Set<ModifierInfo> modifiers, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
@@ -31,10 +31,10 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
     }
 
     /**
-     * ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ªCˆø”‚Å—^‚¦‚ç‚ê‚½î•ñ‚ğg‚Á‚ÄŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+     * ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒï¼Œå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæƒ…å ±ã‚’ä½¿ã£ã¦å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param actualParameters ˆø”‚ÌŒ^‚ÌƒŠƒXƒg
-     * @return ŒÄ‚Ño‚¹‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param actualParameters å¼•æ•°ã®å‹ã®ãƒªã‚¹ãƒˆ
+     * @return å‘¼ã³å‡ºã›ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean canCalledWith(final List<ExpressionInfo> actualParameters) {

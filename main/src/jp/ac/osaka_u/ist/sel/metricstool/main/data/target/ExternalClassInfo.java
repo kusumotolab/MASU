@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * ŠO•”ƒNƒ‰ƒXî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * å¤–éƒ¨ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -15,10 +15,10 @@ import java.util.Set;
 public class ExternalClassInfo extends ClassInfo {
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ÆƒNƒ‰ƒX–¼‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * åå‰ç©ºé–“åã¨ã‚¯ãƒ©ã‚¹åã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param namespace –¼‘O‹óŠÔ–¼
-     * @param className ƒNƒ‰ƒX–¼
+     * @param namespace åå‰ç©ºé–“å
+     * @param className ã‚¯ãƒ©ã‚¹å
      */
     public ExternalClassInfo(final NamespaceInfo namespace, final String className) {
 
@@ -26,9 +26,9 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * CüqCŠ®‘SŒÀ’è–¼CƒAƒNƒZƒX§Œäq‚ğ—^‚¦‚ÄCƒNƒ‰ƒXî•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä¿®é£¾å­ï¼Œå®Œå…¨é™å®šåï¼Œã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡å­ã‚’ä¸ãˆã¦ï¼Œã‚¯ãƒ©ã‚¹æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
+     * @param fullQualifiedName å®Œå…¨é™å®šå
      */
     public ExternalClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final boolean isInterface, final boolean isEnum) {
@@ -37,9 +37,9 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * Š®‘SŒÀ’è–¼‚ğ—^‚¦‚ÄCƒNƒ‰ƒXî•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å®Œå…¨é™å®šåã‚’ä¸ãˆã¦ï¼Œã‚¯ãƒ©ã‚¹æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
+     * @param fullQualifiedName å®Œå…¨é™å®šå
      */
     public ExternalClassInfo(final String[] fullQualifiedName) {
 
@@ -47,9 +47,9 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * –¼‘O‹óŠÔ‚ª•s–¾‚ÈŠO•”ƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * åå‰ç©ºé–“ãŒä¸æ˜ãªå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param className ƒNƒ‰ƒX–¼
+     * @param className ã‚¯ãƒ©ã‚¹å
      */
     public ExternalClassInfo(final String className) {
         super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, false, 0, 0, 0,
@@ -57,7 +57,7 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * ExternalClassInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
+     * ExternalClassInfo ã§ã¯åˆ©ç”¨ã§ããªã„
      */
     @Override
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -65,7 +65,7 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * ExternalClassInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
+     * ExternalClassInfo ã§ã¯åˆ©ç”¨ã§ããªã„
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -73,7 +73,7 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * ExternalClassInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
+     * ExternalClassInfo ã§ã¯åˆ©ç”¨ã§ããªã„
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -81,7 +81,7 @@ public class ExternalClassInfo extends ClassInfo {
     }
 
     /**
-     * •s–¾‚ÈŠO•”ƒNƒ‰ƒX‚ğ•\‚·‚½‚ß‚Ì’è”
+     * ä¸æ˜ãªå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã‚’è¡¨ã™ãŸã‚ã®å®šæ•°
      */
     public static final ExternalClassInfo UNKNOWN = new ExternalClassInfo("UNKNOWN");
 }

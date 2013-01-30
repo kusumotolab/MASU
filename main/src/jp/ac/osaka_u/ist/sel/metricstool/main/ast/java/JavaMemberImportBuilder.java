@@ -38,7 +38,7 @@ public class JavaMemberImportBuilder extends CompoundDataBuilder<Object> {
         super.entered(event);
 
         if (this.isActive() && stateManager.isEntered()) {
-            if (event.getToken().equals(OperatorToken.ARITHMETICH_BINOMIAL)) {//*‚ª—ˆ‚½
+            if (event.getToken().equals(OperatorToken.ARITHMETICH_BINOMIAL)) {//*ãŒæ¥ãŸ
                 lastTokenIsAsterisk = true;
             } else {
                 lastTokenIsAsterisk = false;

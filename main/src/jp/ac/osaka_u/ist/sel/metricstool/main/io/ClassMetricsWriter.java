@@ -2,14 +2,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ðƒtƒ@ƒCƒ‹‚É‘‚«o‚·ƒNƒ‰ƒX‚ªŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  */
 public interface ClassMetricsWriter extends MetricsWriter {
 
     /**
-     * ƒNƒ‰ƒX–¼‚Ìƒ^ƒCƒgƒ‹•¶Žš—ñ
+     * ã‚¯ãƒ©ã‚¹åã®ã‚¿ã‚¤ãƒˆãƒ«æ–‡å­—åˆ—
      */
     String CLASS_NAME = new String("\"Class Name\"");
 }

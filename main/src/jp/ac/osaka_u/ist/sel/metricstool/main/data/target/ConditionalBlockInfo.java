@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * if@‚â while ‚È‚ÇCğŒß‚ğ‚Á‚½ƒuƒƒbƒN•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * ifã€€ã‚„ while ãªã©ï¼Œæ¡ä»¶ç¯€ã‚’æŒã£ãŸãƒ–ãƒ­ãƒƒã‚¯æ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -18,12 +18,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class ConditionalBlockInfo extends BlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     ConditionalBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -33,9 +33,9 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * •Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
+     * å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -46,9 +46,9 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -59,9 +59,9 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µˆê——‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µˆê——
+     * @return å‘¼ã³å‡ºã—ä¸€è¦§
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -75,9 +75,9 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * ğŒß‚ğİ’è‚·‚é
+     * æ¡ä»¶ç¯€ã‚’è¨­å®šã™ã‚‹
      * 
-     * @param conditionalClause ğŒß
+     * @param conditionalClause æ¡ä»¶ç¯€
      */
     public final void setConditionalClause(final ConditionalClauseInfo conditionalClause) {
 
@@ -90,18 +90,18 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * ‚±‚ÌğŒ•tƒuƒƒbƒN‚ÌğŒß‚ğ•Ô‚·
+     * ã“ã®æ¡ä»¶ä»˜ãƒ–ãƒ­ãƒƒã‚¯ã®æ¡ä»¶ç¯€ã‚’è¿”ã™
      * 
-     * @return@‚±‚ÌğŒ•tƒuƒƒbƒN‚ÌğŒß
+     * @returnã€€ã“ã®æ¡ä»¶ä»˜ãƒ–ãƒ­ãƒƒã‚¯ã®æ¡ä»¶ç¯€
      */
     public final ConditionalClauseInfo getConditionalClause() {
         return this.conditionalClause;
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

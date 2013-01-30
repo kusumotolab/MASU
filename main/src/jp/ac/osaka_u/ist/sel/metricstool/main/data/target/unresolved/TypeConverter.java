@@ -7,17 +7,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * Œ^•ÏŠ·ƒ†[ƒeƒBƒŠƒeƒBD–¼‘O‰ğŒˆ‚É—p‚¢‚éD
+ * å‹å¤‰æ›ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ï¼åå‰è§£æ±ºã«ç”¨ã„ã‚‹ï¼
  * 
  * @author higo
  */
 public abstract class TypeConverter {
 
     /**
-     * ŠeŒ¾ŒêŒü‚¯‚ÌŒ^•ÏŠ·Ší‚ğ•Ô‚·ƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒhi‚Ì‚æ‚¤‚È‚à‚Ìj
+     * å„è¨€èªå‘ã‘ã®å‹å¤‰æ›å™¨ã‚’è¿”ã™ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆã®ã‚ˆã†ãªã‚‚ã®ï¼‰
      * 
-     * @param language Œ¾Œê
-     * @return ‚»‚ÌŒ¾Œê—p‚ÌŒ^•ÏŠ·Ší
+     * @param language è¨€èª
+     * @return ãã®è¨€èªç”¨ã®å‹å¤‰æ›å™¨
      */
     public static final TypeConverter getTypeConverter(final LANGUAGE language) {
 
@@ -36,10 +36,10 @@ public abstract class TypeConverter {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @param primitiveType ƒvƒŠƒ~ƒeƒBƒuŒ^
-     * @return ‘Î‰‚·‚éƒ‰ƒbƒp[ƒNƒ‰ƒX
+     * @param primitiveType ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹
+     * @return å¯¾å¿œã™ã‚‹ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
      */
     public abstract ClassInfo getWrapperClass(PrimitiveTypeInfo primitiveType);
 

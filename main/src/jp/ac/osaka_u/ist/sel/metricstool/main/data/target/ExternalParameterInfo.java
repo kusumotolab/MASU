@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * ŠO•”ƒƒ\ƒbƒh‚Ìˆø”î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -16,11 +16,11 @@ import java.util.List;
 public class ExternalParameterInfo extends ParameterInfo {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ExpressionInfo‚Ì List ‚©‚çCˆø”‚ÌŒ^‚Ì List ‚ğì¬‚µC•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸExpressionInfoã® List ã‹ã‚‰ï¼Œå¼•æ•°ã®å‹ã® List ã‚’ä½œæˆã—ï¼Œè¿”ã™
      * 
-     * @param expressions ƒGƒ“ƒeƒBƒeƒB‚ÌList
-     * @param ownerMethod ˆø”‚ğéŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @return ˆø”‚ÌŒ^‚Ì List
+     * @param expressions ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®List
+     * @param ownerMethod å¼•æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return å¼•æ•°ã®å‹ã® List
      */
     public static List<ParameterInfo> createParameters(final List<ExpressionInfo> expressions,
             final ExternalMethodInfo ownerMethod) {
@@ -40,11 +40,11 @@ public class ExternalParameterInfo extends ParameterInfo {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ExpressionInfo‚Ì List ‚©‚çCˆø”‚ÌŒ^‚Ì List ‚ğì¬‚µC•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸExpressionInfoã® List ã‹ã‚‰ï¼Œå¼•æ•°ã®å‹ã® List ã‚’ä½œæˆã—ï¼Œè¿”ã™
      * 
-     * @param expressions ƒGƒ“ƒeƒBƒeƒB‚ÌList
-     * @param ownerConstructor ˆø”‚ğéŒ¾‚µ‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @return ˆø”‚ÌŒ^‚Ì List
+     * @param expressions ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®List
+     * @param ownerConstructor å¼•æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @return å¼•æ•°ã®å‹ã® List
      */
     public static List<ParameterInfo> createParameters(final List<ExpressionInfo> expressions,
             final ExternalConstructorInfo ownerConstructor) {
@@ -65,17 +65,17 @@ public class ExternalParameterInfo extends ParameterInfo {
     }
 
     /**
-     * ˆø”‚ÌŒ^‚ğw’è‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»DŠO•”’è‹`‚Ìƒƒ\ƒbƒh–¼‚È‚Ì‚Åˆø”–¼‚Í•s–¾D
+     * å¼•æ•°ã®å‹ã‚’æŒ‡å®šã—ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ï¼å¤–éƒ¨å®šç¾©ã®ãƒ¡ã‚½ãƒƒãƒ‰åãªã®ã§å¼•æ•°åã¯ä¸æ˜ï¼
      * 
-     * @param type ˆø”‚ÌŒ^
-     * @param definitionMethod éŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param type å¼•æ•°ã®å‹
+     * @param definitionMethod å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public ExternalParameterInfo(final TypeInfo type, final CallableUnitInfo definitionMethod) {
         super(new HashSet<ModifierInfo>(), UNKNOWN_NAME, type, definitionMethod, 0, 0, 0, 0);
     }
 
     /**
-     * •s–¾‚Èˆø”–¼‚ğ•\‚·’è”
+     * ä¸æ˜ãªå¼•æ•°åã‚’è¡¨ã™å®šæ•°
      */
     public final static String UNKNOWN_NAME = "unknown";
 }

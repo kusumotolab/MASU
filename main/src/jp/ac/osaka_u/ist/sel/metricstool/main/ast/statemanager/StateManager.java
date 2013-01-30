@@ -2,21 +2,21 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
 /**
- * ó‘Ô‚ğŠÇ—‚·‚éƒCƒ“ƒ^ƒtƒF[ƒX.
+ * çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * 
  * @author kou-tngt
  * 
- * @param <T> ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚É‚È‚é—v‘f‚ÌŒ^
+ * @param <T> çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã«ãªã‚‹è¦ç´ ã®å‹
  */
 public interface StateManager<T> {
 
     /**
-     * ó‘Ô•Ï‰»‚ğ’Ê’m‚·‚éƒŠƒXƒi‚ğ’Ç‰Á‚·‚é
+     * çŠ¶æ…‹å¤‰åŒ–ã‚’é€šçŸ¥ã™ã‚‹ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
      * @param listener
      */
     public void addStateChangeListener(StateChangeListener<T> listener);
 
-    /**ó‘Ô•Ï‰»‚ğ’Ê’m‚·‚éƒŠƒXƒi‚ğíœ‚·‚é
+    /**çŠ¶æ…‹å¤‰åŒ–ã‚’é€šçŸ¥ã™ã‚‹ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
      * @param listener
      */
     public void removeStateChangeListener(StateChangeListener<T> listener);

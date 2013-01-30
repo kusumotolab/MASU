@@ -35,7 +35,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚Æ‚ÍCƒpƒbƒP[ƒW–¼‚âƒNƒ‰ƒX–¼‚ÌQÆ ‚ğ•\‚·D
+ * æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã¨ã¯ï¼Œãƒ‘ãƒƒã‚±ãƒ¼ã‚¸åã‚„ã‚¯ãƒ©ã‚¹åã®å‚ç…§ ã‚’è¡¨ã™ï¼
  * 
  * @author higo
  * 
@@ -43,14 +43,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<ExpressionInfo> {
 
     /**
-     * –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—pƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚éD
+     * æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹ï¼
      * 
-     * @param availableNamespaces —˜—p‰Â”\‚È–¼‘O‹óŠÔ
-     * @param name –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p–¼
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param availableNamespaces åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“
+     * @param name æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨å
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedUnknownUsageInfo(
             final List<UnresolvedImportStatementInfo<?>> availableNamespaces, final String[] name,
@@ -73,57 +73,57 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ƒGƒ“ƒeƒBƒeƒBQÆ–¼‚ğæ“¾
+        // ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£å‚ç…§åã‚’å–å¾—
         final String[] name = this.getName();
 
-        // ˆÊ’uî•ñ‚ğæ“¾
+        // ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        // —˜—p‰Â”\‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒtƒB[ƒ‹ƒh–¼‚©‚çƒGƒ“ƒeƒBƒeƒB–¼‚ğŒŸõ
+        // åˆ©ç”¨å¯èƒ½ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‹ã‚‰ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£åã‚’æ¤œç´¢
         {
-            // ‚±‚ÌƒNƒ‰ƒX‚Å—˜—p‰Â”\‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+            // ã“ã®ã‚¯ãƒ©ã‚¹ã§åˆ©ç”¨å¯èƒ½ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
             final List<FieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
                     .<FieldInfo> getInstanceMembers(NameResolver.getAvailableFields(usingClass,
                             usingClass));
 
             for (final FieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
-                // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                 if (name[0].equals(availableFieldOfThisClass.getName())) {
                     // usingMethod.addReferencee(availableFieldOfThisClass);
                     // availableFieldOfThisClass.addReferencer(usingMethod);
 
-                    // e‚ÌŒ^‚ğ¶¬
+                    // è¦ªã®å‹ã‚’ç”Ÿæˆ
                     final ClassTypeInfo usingClassType = new ClassTypeInfo(usingClass);
 
-                    // ˆÃ–Ù“I‚ÈƒNƒ‰ƒXQÆ‚È‚Ì‚ÅˆÊ’uî•ñ‚Í‚·‚×‚Ä0
+                    // æš—é»™çš„ãªã‚¯ãƒ©ã‚¹å‚ç…§ãªã®ã§ä½ç½®æƒ…å ±ã¯ã™ã¹ã¦0
                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                             usingClassType, usingMethod, 0, 0, 0, 0);
                     /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
-                    // availableField.getType() ‚©‚çŸ‚Ìword(name[i])‚ğ–¼‘O‰ğŒˆ
+                    // availableField.getType() ã‹ã‚‰æ¬¡ã®word(name[i])ã‚’åå‰è§£æ±º
                     ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, false, usingMethod,
                             fromLine, fromColumn, toLine, toColumn);
@@ -131,7 +131,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     for (int i = 1; i < name.length; i++) {
 
-                        // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                        // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                             this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
@@ -139,23 +139,23 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
-                            // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                            // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                             final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
                                     .getReferencedClass();
 
-                            // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                            // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                             boolean found = false;
                             {
-                                // —˜—p‰Â”\‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                // åˆ©ç”¨å¯èƒ½ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                 final List<FieldInfo> availableFields = StaticOrInstanceProcessing
                                         .getInstanceMembers(NameResolver.getAvailableFields(
                                                 ownerClass, usingClass));
 
                                 for (final FieldInfo availableField : availableFields) {
 
-                                    // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                    // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                     if (name[i].equals(availableField.getName())) {
                                         // usingMethod.addReferencee(availableField);
                                         // availableField.addReferencer(usingMethod);
@@ -172,8 +172,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                            // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                            // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                            // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                             {
                                 if (!found) {
 
@@ -202,7 +202,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                            // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                             {
                                 if (!found && (ownerClass instanceof ExternalClassInfo)) {
                                     final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -224,29 +224,29 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        // —˜—p‰Â”\‚ÈƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh–¼‚©‚çƒGƒ“ƒeƒBƒeƒB–¼‚ğŒŸõ
+        // åˆ©ç”¨å¯èƒ½ãªã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‹ã‚‰ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£åã‚’æ¤œç´¢
         {
-            // ‚±‚ÌƒNƒ‰ƒX‚Å—˜—p‰Â”\‚ÈƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+            // ã“ã®ã‚¯ãƒ©ã‚¹ã§åˆ©ç”¨å¯èƒ½ãªã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
             final List<FieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
                     .<FieldInfo> getStaticMembers(NameResolver.getAvailableFields(usingClass,
                             usingClass));
 
             for (final FieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
-                // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                 if (name[0].equals(availableFieldOfThisClass.getName())) {
                     // usingMethod.addReferencee(availableFieldOfThisClass);
                     // availableFieldOfThisClass.addReferencer(usingMethod);
 
-                    // e‚ÌŒ^‚ğ¶¬
+                    // è¦ªã®å‹ã‚’ç”Ÿæˆ
                     final ClassTypeInfo usingClassType = new ClassTypeInfo(usingClass);
 
-                    // ˆÃ–Ù“I‚ÈƒNƒ‰ƒXQÆ‚È‚Ì‚ÅˆÊ’uî•ñ‚Í‚·‚×‚Ä0
+                    // æš—é»™çš„ãªã‚¯ãƒ©ã‚¹å‚ç…§ãªã®ã§ä½ç½®æƒ…å ±ã¯ã™ã¹ã¦0
                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                             usingClassType, usingMethod, 0, 0, 0, 0);
                     /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
-                    // availableField.getType() ‚©‚çŸ‚Ìword(name[i])‚ğ–¼‘O‰ğŒˆ
+                    // availableField.getType() ã‹ã‚‰æ¬¡ã®word(name[i])ã‚’åå‰è§£æ±º
                     ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, false, usingMethod,
                             fromLine, fromColumn, toLine, toColumn);
@@ -254,7 +254,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     for (int i = 1; i < name.length; i++) {
 
-                        // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                        // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                             this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
@@ -262,23 +262,23 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
-                            // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                            // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                             final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
                                     .getReferencedClass();
 
-                            // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                            // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                             boolean found = false;
                             {
-                                // —˜—p‰Â”\‚ÈƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                // åˆ©ç”¨å¯èƒ½ãªã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                 final List<FieldInfo> availableFields = StaticOrInstanceProcessing
                                         .getStaticMembers(NameResolver.getAvailableFields(
                                                 ownerClass, usingClass));
 
                                 for (final FieldInfo availableField : availableFields) {
 
-                                    // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                    // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                     if (name[i].equals(availableField.getName())) {
                                         // usingMethod.addReferencee(availableField);
                                         // availableField.addReferencer(usingMethod);
@@ -296,18 +296,18 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                            // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                             {
                                 if (!found) {
-                                    // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                    // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                     final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(ownerClass);
                                     for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
-                                        // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                        // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                         if (name[i].equals(innerClass.getClassName())) {
-                                            // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                            // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                             final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                     innerClass);
@@ -323,8 +323,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                            // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                            // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                            // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                             {
                                 if (!found) {
 
@@ -352,7 +352,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                                // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                                 {
                                     if (!found && (ownerClass instanceof ExternalClassInfo)) {
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -376,12 +376,12 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        // ƒGƒ“ƒeƒBƒeƒB–¼‚ªŠ®‘SŒÀ’è–¼‚Å‚ ‚éê‡‚ğŒŸõ
+        // ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£åãŒå®Œå…¨é™å®šåã§ã‚ã‚‹å ´åˆã‚’æ¤œç´¢
         {
 
             for (int length = 1; length <= name.length; length++) {
 
-                // ŒŸõ‚·‚é–¼‘O(String[])‚ğì¬
+                // æ¤œç´¢ã™ã‚‹åå‰(String[])ã‚’ä½œæˆ
                 final String[] searchingName = new String[length];
                 System.arraycopy(name, 0, searchingName, 0, length);
 
@@ -396,7 +396,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     for (int i = length; i < name.length; i++) {
 
-                        // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                        // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                             this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
@@ -404,23 +404,23 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
-                            // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                            // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                             final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
                                     .getReferencedClass();
 
-                            // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                            // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                             boolean found = false;
                             {
-                                // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                 final List<FieldInfo> availableFields = StaticOrInstanceProcessing
                                         .getStaticMembers(NameResolver.getAvailableFields(
                                                 ownerClass, usingClass));
 
                                 for (final FieldInfo availableField : availableFields) {
 
-                                    // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                    // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                     if (name[i].equals(availableField.getName())) {
                                         // usingMethod.addReferencee(availableField);
                                         // availableField.addReferencer(usingMethod);
@@ -437,19 +437,19 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                            // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                             {
                                 if (!found) {
 
-                                    // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                    // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                     final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(ownerClass);
                                     for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
-                                        // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                        // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                         if (name[i].equals(innerClass.getClassName())) {
-                                            // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                            // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                             final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                     innerClass);
@@ -465,8 +465,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                            // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                            // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                            // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                             {
                                 if (!found) {
 
@@ -495,7 +495,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 }
                             }
 
-                            // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                            // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                             {
                                 if (!found && (ownerClass instanceof ExternalClassInfo)) {
                                     final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -518,23 +518,23 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        // —˜—p‰Â”\‚ÈƒNƒ‰ƒX–¼‚©‚çƒGƒ“ƒeƒBƒeƒB–¼‚ğŒŸõ
+        // åˆ©ç”¨å¯èƒ½ãªã‚¯ãƒ©ã‚¹åã‹ã‚‰ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£åã‚’æ¤œç´¢
         {
 
-            // —˜—p‰Â”\‚È–¼‘O‹óŠÔ‚©‚çŒŸõ
+            // åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‹ã‚‰æ¤œç´¢
             {
                 for (final UnresolvedClassImportStatementInfo availableNamespace : UnresolvedClassImportStatementInfo
                         .getClassImportStatements(this.getAvailableNamespaces())) {
 
-                    // –¼‘O‹óŠÔ–¼.* ‚Æ‚È‚Á‚Ä‚¢‚éê‡
+                    // åå‰ç©ºé–“å.* ã¨ãªã£ã¦ã„ã‚‹å ´åˆ
                     if (availableNamespace.isAll()) {
                         final String[] namespace = availableNamespace.getNamespace();
 
-                        // –¼‘O‹óŠÔ‚Ì‰º‚É‚ ‚éŠeƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+                        // åå‰ç©ºé–“ã®ä¸‹ã«ã‚ã‚‹å„ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
                         for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
                             final String className = classInfo.getClassName();
 
-                            // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                            // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                             if (className.equals(name[0])) {
 
                                 final ClassReferenceInfo classReference = new ClassReferenceInfo(
@@ -545,7 +545,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                 for (int i = 1; i < name.length; i++) {
 
-                                    // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                                    // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                                     if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                                         this.resolvedInfo = new UnknownEntityUsageInfo(name,
@@ -554,22 +554,22 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         return this.resolvedInfo;
 
-                                        // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                        // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                                     } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                                         final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
                                                 .getType()).getReferencedClass();
 
-                                        // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                        // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                         boolean found = false;
                                         {
-                                            // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                            // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                             final List<FieldInfo> availableFields = NameResolver
                                                     .getAvailableFields(ownerClass, usingClass);
 
                                             for (FieldInfo availableField : availableFields) {
 
-                                                // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                                // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                                 if (name[i].equals(availableField.getName())) {
                                                     // usingMethod.addReferencee(availableField);
                                                     // availableField.addReferencer(usingMethod);
@@ -587,18 +587,18 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                             }
                                         }
 
-                                        // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                                        // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                                         {
                                             if (!found) {
-                                                // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                                // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                                 final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                         .getAvailableDirectInnerClasses(ownerClass);
                                                 for (final ClassInfo innerClass : ClassInfo
                                                         .convert(innerClasses)) {
 
-                                                    // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                                    // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                                     if (name[i].equals(innerClass.getClassName())) {
-                                                        // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                                        // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                                         final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                                 innerClass);
@@ -615,8 +615,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                             }
                                         }
 
-                                        // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                                        // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                                        // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                                        // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                                         {
                                             if (!found) {
 
@@ -645,7 +645,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                             }
                                         }
 
-                                        // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                                        // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                                         {
                                             if (!found && (ownerClass instanceof ExternalClassInfo)) {
                                                 final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -667,12 +667,12 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             }
                         }
 
-                        // –¼‘O‹óŠÔ.ƒNƒ‰ƒX–¼ ‚Æ‚È‚Á‚Ä‚¢‚éê‡
+                        // åå‰ç©ºé–“.ã‚¯ãƒ©ã‚¹å ã¨ãªã£ã¦ã„ã‚‹å ´åˆ
                     } else {
 
                         final String[] importName = availableNamespace.getImportName();
 
-                        // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                        // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                         if (importName[importName.length - 1].equals(name[0])) {
 
                             ClassInfo specifiedClassInfo = classInfoManager
@@ -690,7 +690,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                             for (int i = 1; i < name.length; i++) {
 
-                                // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                                // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                                 if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                                     this.resolvedInfo = new UnknownEntityUsageInfo(name,
@@ -699,22 +699,22 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                     return this.resolvedInfo;
 
-                                    // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                    // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                                 } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                                     final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
                                             .getType()).getReferencedClass();
 
-                                    // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                    // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                     boolean found = false;
                                     {
-                                        // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                        // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                         final List<FieldInfo> availableFields = NameResolver
                                                 .getAvailableFields(ownerClass, usingClass);
 
                                         for (final FieldInfo availableField : availableFields) {
 
-                                            // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                            // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                             if (name[i].equals(availableField.getName())) {
                                                 // usingMethod.addReferencee(availableField);
                                                 // availableField.addReferencer(usingMethod);
@@ -731,18 +731,18 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         }
                                     }
 
-                                    // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                                    // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                                     {
                                         if (!found) {
-                                            // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                             final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                     .getAvailableDirectInnerClasses(ownerClass);
                                             for (final ClassInfo innerClass : ClassInfo
                                                     .convert(innerClasses)) {
 
-                                                // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                                // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                                 if (name[i].equals(innerClass.getClassName())) {
-                                                    // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                                    // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                                     final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                             innerClass);
@@ -758,8 +758,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         }
                                     }
 
-                                    // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                                    // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                                    // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                                    // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                                     {
                                         if (!found) {
 
@@ -787,7 +787,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         }
                                     }
 
-                                    // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                                    // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                                     {
                                         if (ownerClass instanceof ExternalClassInfo) {
                                             final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -811,7 +811,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 }
             }
 
-            // “à•”ƒNƒ‰ƒX–¼‚©‚çŒŸõ
+            // å†…éƒ¨ã‚¯ãƒ©ã‚¹åã‹ã‚‰æ¤œç´¢
             {
                 final ClassInfo outestClass;
                 if (usingClass instanceof InnerClassInfo) {
@@ -823,7 +823,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 for (final ClassInfo innerClassInfo : ClassInfo.convert(NameResolver
                         .getAvailableInnerClasses(outestClass))) {
 
-                    // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                    // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                     final String innerClassName = innerClassInfo.getClassName();
                     if (innerClassName.equals(name[0])) {
 
@@ -834,7 +834,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         ExpressionInfo entityUsage = innerClassReference;
                         for (int i = 1; i < name.length; i++) {
 
-                            // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                            // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                             if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                                 this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
@@ -842,22 +842,22 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
 
-                                // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                                 final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
                                         .getReferencedClass();
 
-                                // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                 boolean found = false;
                                 {
-                                    // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                    // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                     final List<FieldInfo> availableFields = NameResolver
                                             .getAvailableFields(ownerClass, usingClass);
 
                                     for (final FieldInfo availableField : availableFields) {
 
-                                        // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                        // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                         if (name[i].equals(availableField.getName())) {
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
@@ -874,18 +874,18 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                                // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                                 {
                                     if (!found) {
-                                        // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                        // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                         final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(ownerClass);
                                         for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
-                                            // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                            // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                             if (name[i].equals(innerClass.getClassName())) {
-                                                // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                                // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                                 final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                         innerClassInfo);
@@ -901,8 +901,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                                // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                                // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                                // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                                 {
                                     if (!found) {
 
@@ -928,7 +928,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
 
                                         } else {
-                                            // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ğs‚¤
+                                            // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå‡¦ç†ã‚’è¡Œã†
                                             // assert false : "Can't resolve entity usage3.5 : " + this.toString();
                                             usingMethod.addUnresolvedUsage(this);
                                             this.resolvedInfo = new UnknownEntityUsageInfo(name,
@@ -953,7 +953,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 }
             }
 
-            // import•¶‚ğ—p‚¢‚È‚¢”ÍˆÍ‚Å—˜—p‰Â”\‚ÈƒNƒ‰ƒX‚©‚çŒŸõ
+            // importæ–‡ã‚’ç”¨ã„ãªã„ç¯„å›²ã§åˆ©ç”¨å¯èƒ½ãªã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¤œç´¢
             for (final ClassInfo availableClass : NameResolver.getAvailableClasses(usingClass)) {
                 if (availableClass.isSuffixMatch(name)) {
                     this.resolvedInfo = new ClassReferenceInfo(new ClassTypeInfo(availableClass),
@@ -962,8 +962,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 }
             }
 
-            //—˜—p‰Â”\‚È–¼‘O‹óŠÔ‚©‚çŒŸõ
-            // —˜—p‰Â”\‚È–¼‘O‹óŠÔ‚©‚çŒŸõ
+            //åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‹ã‚‰æ¤œç´¢
+            // åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‹ã‚‰æ¤œç´¢
             {
                 for (final UnresolvedMemberImportStatementInfo availableNamespace : UnresolvedMemberImportStatementInfo
                         .getMemberImportStatements(this.getAvailableNamespaces())) {
@@ -999,13 +999,13 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 }
             }
 
-            //@eƒNƒ‰ƒX‚©‚çŒŸõ
+            //ã€€è¦ªã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¤œç´¢
             {
-                // —˜—p‰Â”\‚ÈŠeeƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+                // åˆ©ç”¨å¯èƒ½ãªå„è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
                 for (final ClassInfo classInfo : NameResolver.getAvailableClasses(usingClass)) {
                     final String className = classInfo.getClassName();
 
-                    // ƒNƒ‰ƒX–¼‚ÆQÆ–¼‚Ìæ“ª‚ª“™‚µ‚¢ê‡‚ÍC‚»‚ÌƒNƒ‰ƒX–¼‚ªQÆæ‚Å‚ ‚é‚ÆŒˆ’è‚·‚é
+                    // ã‚¯ãƒ©ã‚¹åã¨å‚ç…§åã®å…ˆé ­ãŒç­‰ã—ã„å ´åˆã¯ï¼Œãã®ã‚¯ãƒ©ã‚¹åãŒå‚ç…§å…ˆã§ã‚ã‚‹ã¨æ±ºå®šã™ã‚‹
                     if (className.equals(name[0])) {
 
                         final ClassReferenceInfo classReference = new ClassReferenceInfo(
@@ -1016,7 +1016,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                         for (int i = 1; i < name.length; i++) {
 
-                            // e‚ª UnknownTypeInfo ‚¾‚Á‚½‚çC‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+                            // è¦ªãŒ UnknownTypeInfo ã ã£ãŸã‚‰ï¼Œã©ã†ã—ã‚ˆã†ã‚‚ãªã„
                             if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
                                 this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
@@ -1024,22 +1024,22 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
 
-                                // e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+                                // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                                 final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
                                         .getReferencedClass();
 
-                                // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                 boolean found = false;
                                 {
-                                    // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                                    // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                                     final List<FieldInfo> availableFields = NameResolver
                                             .getAvailableFields(ownerClass, usingClass);
 
                                     for (final FieldInfo availableField : availableFields) {
 
-                                        // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                        // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                         if (name[i].equals(availableField.getName())) {
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
@@ -1056,18 +1056,18 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // ƒXƒ^ƒeƒBƒbƒNƒtƒB[ƒ‹ƒh‚ÅŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ç’T‚·
+                                // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ¢ã™
                                 {
                                     if (!found) {
-                                        // ƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğæ“¾
+                                        // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
                                         final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(ownerClass);
                                         for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
-                                            // ˆê’v‚·‚éƒNƒ‰ƒX–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                                            // ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                                             if (name[i].equals(innerClass.getClassName())) {
-                                                // TODO —˜—pŠÖŒW‚ğ\’z‚·‚éƒR[ƒh‚ª•K—vH
+                                                // TODO åˆ©ç”¨é–¢ä¿‚ã‚’æ§‹ç¯‰ã™ã‚‹ã‚³ãƒ¼ãƒ‰ãŒå¿…è¦ï¼Ÿ
 
                                                 final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                         innerClass);
@@ -1083,8 +1083,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-                                // ‚»‚ÌƒNƒ‰ƒX‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                                // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+                                // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                                 {
                                     if (!found) {
 
@@ -1113,7 +1113,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     }
                                 }
 
-                                // ownerClass‚ªExternalClass‚Å‚ ‚ê‚ÎCƒtƒB[ƒ‹ƒh‚ğì¬‚µC‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ—˜—p‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+                                // ownerClassãŒExternalClassã§ã‚ã‚Œã°ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½œæˆã—ï¼Œãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
                                 {
                                     if (!found && (ownerClass instanceof ExternalClassInfo)) {
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -1137,7 +1137,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        // javaŒ¾Œê‚Ìê‡‚ÍCjava‚©javax‚Ån‚Ü‚èC’·‚³‚ª3ˆÈã‚ÌUnknownEntityUsageInfo‚ÍJDK“à‚ÌƒNƒ‰ƒX‚Æ‚İ‚È‚·
+        // javaè¨€èªã®å ´åˆã¯ï¼Œjavaã‹javaxã§å§‹ã¾ã‚Šï¼Œé•·ã•ãŒ3ä»¥ä¸Šã®UnknownEntityUsageInfoã¯JDKå†…ã®ã‚¯ãƒ©ã‚¹ã¨ã¿ãªã™
         final Settings settings = Settings.getInstance();
         if (settings.getLanguage().equals(LANGUAGE.JAVA15)
                 || settings.getLanguage().equals(LANGUAGE.JAVA14)
@@ -1157,7 +1157,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 + " column:" + this.getFromColumn() + " on \""
                 + usingClass.getOwnerFile().getName() + "\"");
 
-        // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ğs‚¤
+        // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå‡¦ç†ã‚’è¡Œã†
         usingMethod.addUnresolvedUsage(this);
 
         this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod, fromLine, fromColumn,
@@ -1167,9 +1167,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
     }
 
     /**
-     * –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p–¼‚ğ•Ô‚·D
+     * æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨åã‚’è¿”ã™ï¼
      * 
-     * @return –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p–¼
+     * @return æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨å
      */
     public String[] getName() {
         return Arrays.<String> copyOf(this.name, this.name.length);
@@ -1186,26 +1186,26 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ª—˜—p‚·‚é‚±‚Æ‚Ì‚Å‚«‚é–¼‘O‹óŠÔ‚ğ•Ô‚·D
+     * ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ãŒåˆ©ç”¨ã™ã‚‹ã“ã¨ã®ã§ãã‚‹åå‰ç©ºé–“ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ª—˜—p‚·‚é‚±‚Æ‚Ì‚Å‚«‚é–¼‘O‹óŠÔ
+     * @return ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ãŒåˆ©ç”¨ã™ã‚‹ã“ã¨ã®ã§ãã‚‹åå‰ç©ºé–“
      */
     public List<UnresolvedImportStatementInfo<?>> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ª—˜—p‚·‚é‚±‚Æ‚Ì‚Å‚«‚é–¼‘O‹óŠÔ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ãŒåˆ©ç”¨ã™ã‚‹ã“ã¨ã®ã§ãã‚‹åå‰ç©ºé–“ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedImportStatementInfo<?>> availableNamespaces;
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String[] name;
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {

@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * �A�m�e�[�V�����̏�Ԃ�\���X�e�[�g�}�l�[�W��
+ * アノテーションの状態を表すステートマネージャ
  * @author a-saitoh
  *
  */
@@ -24,7 +24,7 @@ public class AnnotationStateManager extends
     public static enum ANNOTATION_STATE implements StateChangeEventType {
         ENTER_ANNOTATION, ENTER_ANNOTATION_STRING, EXIT_ANNOTATION, EXIT_ANNOTATION_STRING,
 
-        /* �^�ʖڂɃA�m�e�[�V��������͂����K�NANNOTATION_STRING�̑���ɂ����̏�Ԃ��g��
+        /* 真面目にアノテーションを解析する薔薇ANNOTATION_STRINGの代わりにこれらの状態を使う
         EXIT_ANNOTATION_MEMBER, EXIT_ANNOTATION_MEMBER_VALUE_PAIR,
         EXIT_ANNOTATION_ARRAY_INIT,ENTER_ANNOTATION_MEMBER, ENTER_ANNOTATION_MEMBER_VALUE_PAIR,
         ENTER_ANNOTATION_ARRAY_INIT,
@@ -45,7 +45,7 @@ public class AnnotationStateManager extends
             this.fireStateChangeEvent(ANNOTATION_STATE.ENTER_ANNOTATION, event);
         } else if (this.isInAnnotation() && token.isAnnotationString()) {
             this.fireStateChangeEvent(ANNOTATION_STATE.ENTER_ANNOTATION_STRING, event);
-        }/* �^�ʖڂɃA�m�e�[�V��������͂���ꍇ�͂�������g��
+        }/* 真面目にアノテーションを解析する場合はこちらを使う
          else if (this.isInAnnotation() && token.isAnnotationMember()) {
             this.fireStateChangeEvent(ANNOTATION_STATE.ENTER_ANNOTATION_MEMBER, event);
          } else if (this.isInAnnotation() && token.isAnnotationMemberValuePair()) {
@@ -67,7 +67,7 @@ public class AnnotationStateManager extends
         } else if (this.isInAnnotation() && token.isAnnotationString()) {
             this.fireStateChangeEvent(ANNOTATION_STATE.EXIT_ANNOTATION_STRING, event);
         }
-        /* �^�ʖڂɃA�m�e�[�V��������͂���ꍇ�͂�������g��
+        /* 真面目にアノテーションを解析する場合はこちらを使う
           else if (this.isInAnnotation() && token.isAnnotationMember()) {
             this.fireStateChangeEvent(ANNOTATION_STATE.EXIT_ANNOTATION_MEMBER, event);
         } else if (this.isInAnnotation() && token.isAnnotationMemberValuePair()) {

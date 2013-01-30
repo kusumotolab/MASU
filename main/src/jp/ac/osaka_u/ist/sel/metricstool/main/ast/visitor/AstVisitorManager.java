@@ -6,18 +6,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 
 
 /**
- * {@link AstVisitor} ‚Ö‚Ì‘€ì‚Æİ’è‚ğŠÇ—‚·‚éƒCƒ“ƒ^ƒtƒF[ƒX.
+ * {@link AstVisitor} ã¸ã®æ“ä½œã¨è¨­å®šã‚’ç®¡ç†ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * 
  * @author kou-tngt
  *
- * @param <T>@ŠÇ—‚·‚éƒrƒWƒ^[‚ª–K–â‚·‚éAST‚Ìƒm[ƒh‚ÌŒ^
+ * @param <T>ã€€ç®¡ç†ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ãŒè¨ªå•ã™ã‚‹ASTã®ãƒãƒ¼ãƒ‰ã®å‹
  */
 public interface AstVisitorManager<T> {
 
     /**
-     * ˆø”node‚ª•\‚·ƒm[ƒh‚©‚çŠÇ—‚·‚éƒrƒWƒ^[‚Ì–K–â‚ğŠJn‚·‚é.
+     * å¼•æ•°nodeãŒè¡¨ã™ãƒãƒ¼ãƒ‰ã‹ã‚‰ç®¡ç†ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®è¨ªå•ã‚’é–‹å§‹ã™ã‚‹.
      * 
-     * @param node@ƒrƒWƒ^[‚Ì–K–â‚ğŠJn‚·‚éƒm[ƒh
+     * @param nodeã€€ãƒ“ã‚¸ã‚¿ãƒ¼ã®è¨ªå•ã‚’é–‹å§‹ã™ã‚‹ãƒãƒ¼ãƒ‰
      */
     public void visitStart(T node) throws ASTParseException;
     

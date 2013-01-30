@@ -3,8 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 /**
  * 
- * ���̗�O�́C�v���O�C�������[�h���邽�߂̃N���X���[�_�������ł��Ȃ��ꍇ��C
- * �v���O�C���N���X�̃��[�h�Ɏ��s�����ꍇ�ɓ�������D
+ * この例外は，プラグインをロードするためのクラスローダが生成できない場合や，
+ * プラグインクラスのロードに失敗した場合に投げられる．
  * 
  * @author kou-tngt
  */

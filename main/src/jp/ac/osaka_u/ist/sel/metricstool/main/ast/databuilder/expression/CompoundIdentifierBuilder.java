@@ -66,7 +66,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
             ExpressionElement left = elements[0];
             ExpressionElement right = elements[1];
             if (right instanceof SingleIdentifierElement) {
-                //‰E‘¤‚Í•’Ê‚Í’Pˆê‚Ì¯•Êq‚Ì‚Í‚¸
+                //å³å´ã¯æ™®é€šã¯å˜ä¸€ã®è­˜åˆ¥å­ã®ã¯ãš
 
                 SingleIdentifierElement rightIdentifier = (SingleIdentifierElement) right;
                 String rightName = rightIdentifier.getName();
@@ -84,12 +84,12 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                 }
 
                 if (null != leftElementType) {
-                    //¶‘¤‚ÌŒ^‚ªŒˆ’è‚Å‚«‚½‚Ì‚Å‰E‘¤‚ÍƒtƒB[ƒ‹ƒh–¼‚©ƒƒ\ƒbƒh–¼‚¾‚ë‚¤
+                    //å·¦å´ã®å‹ãŒæ±ºå®šã§ããŸã®ã§å³å´ã¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‹ãƒ¡ã‚½ãƒƒãƒ‰åã ã‚ã†
                     pushElement(new FieldOrMethodElement(leftElementType, rightName,
                             rightIdentifier.getFromLine(), rightIdentifier.getFromColumn(),
                             rightIdentifier.getToLine(), rightIdentifier.getToColumn()));
                 } else if (left instanceof IdentifierElement) {
-                    //‘S‘Ì‚ğ‚È‚ñ‚©‚æ‚­•ª‚©‚ç‚ñ¯•Êq‚Æ‚µ‚Äˆµ‚¤
+                    //å…¨ä½“ã‚’ãªã‚“ã‹ã‚ˆãåˆ†ã‹ã‚‰ã‚“è­˜åˆ¥å­ã¨ã—ã¦æ‰±ã†
                     IdentifierElement leftIdentifier = (IdentifierElement) left;
                     pushElement(new CompoundIdentifierElement(leftIdentifier, rightName,
                             rightIdentifier.getFromLine(), rightIdentifier.getFromColumn(),
@@ -98,7 +98,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                     assert (false) : "Illegal state: unknown left element type.";
                 }
             } else if (right instanceof UsageElement && ((UsageElement) right).isMemberCall()) {
-                //a.new X ‚Æ‚¢‚¤Java‚Ì“à•”ƒNƒ‰ƒX‚Ìnew•¶‚Á‚Û‚¢ƒP[ƒX‚Ìê‡
+                //a.new X ã¨ã„ã†Javaã®å†…éƒ¨ã‚¯ãƒ©ã‚¹ã®newæ–‡ã£ã½ã„ã‚±ãƒ¼ã‚¹ã®å ´åˆ
                 pushElement(right);
             } else {
                 assert (false) : "Illegal state: unexpected element type.";

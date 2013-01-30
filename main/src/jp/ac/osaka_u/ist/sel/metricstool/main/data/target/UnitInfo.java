@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒvƒƒOƒ‰ƒ€ƒ†ƒjƒbƒg‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -16,12 +16,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class UnitInfo implements Position, Serializable {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     UnitInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
@@ -34,30 +34,30 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * ‚±‚Ìƒ†ƒjƒbƒg“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ†ƒjƒbƒg“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet
+     * @return ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Set
      */
     public abstract Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
 
     /**
-     * ‚±‚Ìƒ†ƒjƒbƒg“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ†ƒjƒbƒg“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
     /**
-     * ‚±‚Ìƒ†ƒjƒbƒg“à‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ†ƒjƒbƒg“à‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet
+     * @return ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Set
      */
     public abstract Set<CallInfo<? extends CallableUnitInfo>> getCalls();
 
     /**
-     * ŠJns‚ğ•Ô‚·
+     * é–‹å§‹è¡Œã‚’è¿”ã™
      * 
-     * @return ŠJns
+     * @return é–‹å§‹è¡Œ
      */
     @Override
     public final int getFromLine() {
@@ -65,9 +65,9 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * ŠJn—ñ‚ğ•Ô‚·
+     * é–‹å§‹åˆ—ã‚’è¿”ã™
      * 
-     * @return ŠJn—ñ
+     * @return é–‹å§‹åˆ—
      */
     @Override
     public final int getFromColumn() {
@@ -75,9 +75,9 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * I—¹s‚ğ•Ô‚·
+     * çµ‚äº†è¡Œã‚’è¿”ã™
      * 
-     * @return I—¹s
+     * @return çµ‚äº†è¡Œ
      */
     @Override
     public final int getToLine() {
@@ -85,9 +85,9 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * I—¹—ñ‚ğ•Ô‚·
+     * çµ‚äº†åˆ—ã‚’è¿”ã™
      * 
-     * @return I—¹—ñ
+     * @return çµ‚äº†åˆ—
      */
     @Override
     public final int getToColumn() {
@@ -95,16 +95,16 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * ‚±‚Ìƒ†ƒjƒbƒg‚Ìs”‚ğ•Ô‚·
+     * ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆã®è¡Œæ•°ã‚’è¿”ã™
      * 
-     * @return@‚±‚Ìƒ†ƒjƒbƒg‚Ìs”
+     * @returnã€€ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆã®è¡Œæ•°
      */
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
-     * qƒNƒ‰ƒX‚É‚æ‚éƒI[ƒo[ƒ‰ƒCƒh‚ğ”ğ‚¯‚é‚½‚ß‚Ìˆ’u
+     * å­ã‚¯ãƒ©ã‚¹ã«ã‚ˆã‚‹ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã‚’é¿ã‘ã‚‹ãŸã‚ã®å‡¦ç½®
      */
     public abstract int hashCode();
 
@@ -133,22 +133,22 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
-     * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int fromColumn;
 
     /**
-     * I—¹s‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * çµ‚äº†è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int toLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int toColumn;
 }

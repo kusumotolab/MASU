@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒtƒB[ƒ‹ƒhƒƒgƒŠƒNƒX‚ð‘‚«o‚·ƒNƒ‰ƒX‚ªŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface FieldMetricsWriter extends MetricsWriter {
 
     /**
-     * ƒtƒB[ƒ‹ƒh–¼‚Ìƒ^ƒCƒgƒ‹•¶Žš—ñ
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã®ã‚¿ã‚¤ãƒˆãƒ«æ–‡å­—åˆ—
      */
     String FIELD_NAME = new String("\"Field Name\"");
 }

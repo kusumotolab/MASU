@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 public class MemberImportStatementInfo extends ImportStatementInfo<Member> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      *
      * @param fromLine 
      * @param fromColumn
@@ -27,9 +27,9 @@ public class MemberImportStatementInfo extends ImportStatementInfo<Member> {
     }
 
     /**
-     * ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return@ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet
+     * @returnã€€ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     @Override
     public Set<Member> getImportedUnits() {

@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ•Ï”éŒ¾•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºå¤‰æ•°å®£è¨€æ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -25,10 +25,10 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         UnresolvedConditionInfo<VariableDeclarationStatementInfo> {
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”Ci‚à‚µ‚ ‚ê‚Îj‰Šú‰»‚Ì®‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ï¼Œï¼ˆã‚‚ã—ã‚ã‚Œã°ï¼‰åˆæœŸåŒ–ã®å¼ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param variableDeclaration éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”
-     * @param initializationExpression i‚à‚µ‚ ‚ê‚Îj‰Šú‰»‚Ì®
+     * @param variableDeclaration å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
+     * @param initializationExpression ï¼ˆã‚‚ã—ã‚ã‚Œã°ï¼‰åˆæœŸåŒ–ã®å¼
      */
     public UnresolvedVariableDeclarationStatementInfo(
             final UnresolvedLocalVariableUsageInfo variableDeclaration,
@@ -51,14 +51,14 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -84,27 +84,27 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
     }
 
     /**
-     * ’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚Ä‚¢‚é•Ï”
+     * @return å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
      */
     public final UnresolvedLocalVariableInfo getDeclaredLocalVariable() {
         return this.variableDeclaration.getUsedVariable();
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®‚ğ•Ô‚·
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
      * 
-     * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®D‰Šú‰»‚³‚ê‚Ä‚¢ê‡‚Ínull
+     * @return å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ï¼åˆæœŸåŒ–ã•ã‚Œã¦ã„å ´åˆã¯null
      */
     public final UnresolvedExpressionInfo<? extends ExpressionInfo> getInitializationExpression() {
         return this.initializationExpression;
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚ê‚Îtrue
+     * @return å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã‚Œã°true
      */
     public boolean isInitialized() {
         return null != this.initializationExpression;
@@ -124,12 +124,12 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
     }
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final UnresolvedLocalVariableUsageInfo variableDeclaration;
 
     /**
-     * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚Ì‰Šú‰»®‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * å®£è¨€ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression;
 }

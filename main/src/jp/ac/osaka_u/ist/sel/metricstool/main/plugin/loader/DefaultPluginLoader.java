@@ -27,42 +27,42 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * PluginLoaderƒCƒ“ƒ^ƒtƒF[ƒX‚ðŽÀ‘•‚µ‚½‚ÌƒfƒtƒHƒ‹ƒg‚Ìƒvƒ‰ƒOƒCƒ“ƒ[ƒ_D
+ * PluginLoaderã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å®Ÿè£…ã—ãŸã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ­ãƒ¼ãƒ€ï¼Ž
  * <p>
- * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ðì¬‚µ‚½ŒãCloadPluginC‚Ü‚½‚ÍloadPluginsƒƒ\ƒbƒhŒQ‚ð—p‚¢‚ÄC
- * ”CˆÓ‚ÌƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
- * ’P‚ÉƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éê‡‚ÍloadPlugins()ƒƒ\ƒbƒh‚ðŽg‚¤D
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã—ãŸå¾Œï¼ŒloadPluginï¼Œã¾ãŸã¯loadPluginsãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’ç”¨ã„ã¦ï¼Œ
+ * ä»»æ„ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼Ž
+ * å˜ã«ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å ´åˆã¯loadPlugins()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ã†ï¼Ž
  * <p>
- * ‚Ü‚½CŠeƒvƒ‰ƒOƒCƒ“‚ÍŒÂ•Ê‚ÌXMLƒtƒ@ƒCƒ‹‚ð—p‚¢‚ÄC—˜—p‚·‚éƒNƒ‰ƒXŒQ‚ÉƒNƒ‰ƒXƒpƒX‚ðŽw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚ªC
- * ‚±‚ÌƒNƒ‰ƒX‚Ìƒƒ\ƒbƒhŒQ‚ð—˜—p‚·‚é‚±‚Æ‚ÅCƒfƒtƒHƒ‹ƒg‚ÅƒNƒ‰ƒXƒpƒX‚ð’Ê‚·ƒtƒ@ƒCƒ‹‚ÌÝ’è‚ð‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
- * ‚Ü‚¸CaddLibraryExtensionƒƒ\ƒbƒh—p‚¢‚ÄCƒfƒtƒHƒ‹ƒg‚Åƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚Ý‚È‚·ƒtƒ@ƒCƒ‹‚ÌŠg’£ŽqŒQ‚ðŽw’è‚·‚éD
- * ‚±‚ê‚É‚æ‚Á‚ÄCŠeƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ’¼‰º‚É‚ ‚éƒtƒ@ƒCƒ‹‚ÅCÝ’è‚µ‚½Šg’£Žq‚ðŽ‚Âƒtƒ@ƒCƒ‹ŒQ‚É‚ÍXML‚ÅŽw’è‚µ‚È‚­‚Ä‚à
- * ƒpƒX‚ð’Ê‚·‚±‚Æ‚ª‚Å‚«‚éDŽŸ‚ÉCaddLibraryDirectoryNameƒƒ\ƒbƒh‚ð—p‚¢‚ÄC
- * Šeƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠˆÈŠO‚ÌƒfƒBƒŒƒNƒgƒŠ‚ðƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚Ì’u‚«ê‚Æ‚Ý‚È‚µ‚ÄCŽw’è‚µ‚½Šg’£Žq‚ðŽ‚Âƒtƒ@ƒCƒ‹ŒQ‚É
- * ƒpƒX‚ð’Ê‚·‚±‚Æ‚ª‚Å‚«‚éD
- * —á‚¦‚ÎC
+ * ã¾ãŸï¼Œå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯å€‹åˆ¥ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç”¨ã„ã¦ï¼Œåˆ©ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹ç¾¤ã«ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ãŒï¼Œ
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨ã§ï¼Œãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’é€šã™ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®šã‚’ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼Ž
+ * ã¾ãšï¼ŒaddLibraryExtensionãƒ¡ã‚½ãƒƒãƒ‰ç”¨ã„ã¦ï¼Œãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã¿ãªã™ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ç¾¤ã‚’æŒ‡å®šã™ã‚‹ï¼Ž
+ * ã“ã‚Œã«ã‚ˆã£ã¦ï¼Œå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›´ä¸‹ã«ã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã§ï¼Œè¨­å®šã—ãŸæ‹¡å¼µå­ã‚’æŒã¤ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ã«ã¯XMLã§æŒ‡å®šã—ãªãã¦ã‚‚
+ * ãƒ‘ã‚¹ã‚’é€šã™ã“ã¨ãŒã§ãã‚‹ï¼Žæ¬¡ã«ï¼ŒaddLibraryDirectoryNameãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦ï¼Œ
+ * å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥å¤–ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®ç½®ãå ´ã¨ã¿ãªã—ã¦ï¼ŒæŒ‡å®šã—ãŸæ‹¡å¼µå­ã‚’æŒã¤ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ã«
+ * ãƒ‘ã‚¹ã‚’é€šã™ã“ã¨ãŒã§ãã‚‹ï¼Ž
+ * ä¾‹ãˆã°ï¼Œ
  * <pre>
  *    addLibraryExtensions("jar");
  *    addLibraryDirectoryName("lib");
  * </pre>
- * ‚Æ‚·‚é‚ÆCXML‚ÅŽw’è‚µ‚È‚­‚Ä‚àŠeƒvƒ‰ƒOƒCƒ“’¼‰º‚Ìjarƒtƒ@ƒCƒ‹‚ÆlibƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚Ìjarƒtƒ@ƒCƒ‹‚ÉƒNƒ‰ƒXƒpƒX‚ð
- * ’Ê‚·‚±‚Æ‚ª‚Å‚«‚éD 
+ * ã¨ã™ã‚‹ã¨ï¼ŒXMLã§æŒ‡å®šã—ãªãã¦ã‚‚å„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç›´ä¸‹ã®jarãƒ•ã‚¡ã‚¤ãƒ«ã¨libãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã®jarãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’
+ * é€šã™ã“ã¨ãŒã§ãã‚‹ï¼Ž 
  * 
  * @author kou-tngt
  */
 public class DefaultPluginLoader implements PluginLoader {
 
     /**
-     * ƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ð’u‚­ƒfƒtƒHƒ‹ƒgƒfƒBƒŒƒNƒgƒŠ–¼‚ð’Ç‰Á‚·‚éƒƒ\ƒbƒhD
-     * @param libraryDir ’Ç‰Á‚·‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒfƒBƒŒƒNƒgƒŠ–¼
+     * ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç½®ããƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param libraryDir è¿½åŠ ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
      */
     public void addLibraryDirectoryName(final String libraryDir) {
         this.libraryDirectoryNames.add(libraryDir);
     }
 
     /**
-     * ƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚ð’Ç‰Á‚·‚éƒƒ\ƒbƒhD
-     * @param extension ’Ç‰Á‚·‚éƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq–¼D
+     * ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‚’è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param extension è¿½åŠ ã™ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­åï¼Ž
      */
     public void addLibraryExtension(String extension) {
         if (!extension.startsWith(".")) {
@@ -72,25 +72,25 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒfƒBƒŒƒNƒgƒŠ–¼‚ÌƒZƒbƒg‚ð•Ô‚·ƒƒ\ƒbƒh
-     * @return “o˜^‚³‚ê‚Ä‚¢‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒfƒBƒŒƒNƒgƒŠ–¼ƒZƒbƒg
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã®ã‚»ãƒƒãƒˆã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚»ãƒƒãƒˆ
      */
     public Set<String> getLibraryDirectoryNames() {
         return Collections.unmodifiableSet(this.libraryDirectoryNames);
     }
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚ð•Ô‚·ƒƒ\ƒbƒh
-     * @return “o˜^‚³‚ê‚Ä‚¢‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­
      */
     public Set<String> getLibraryExtensions() {
         return Collections.unmodifiableSet(this.libraryExtensions);
     }
 
     /**
-     * –{ƒc[ƒ‹‚ÌƒNƒ‰ƒXƒtƒ@ƒCƒ‹ŒQ‚ª’u‚©‚ê‚Ä‚¢‚éêŠ‚ÌeƒfƒBƒŒƒNƒgƒŠ’¼‰º‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚ð•Ô‚·ƒƒ\ƒbƒh
-     * Œ©‚Â‚©‚ç‚È‚¯‚ê‚Înull‚ð•Ô‚·D
-     * @return@–{ƒc[ƒ‹‚ÌƒNƒ‰ƒXƒtƒ@ƒCƒ‹ŒQ‚ª’u‚©‚ê‚Ä‚¢‚éêŠ‚ÌeƒfƒBƒŒƒNƒgƒŠ’¼‰º‚ÌpluginsƒfƒBƒŒƒNƒgƒŠD”­Œ©‚Å‚«‚È‚¯‚ê‚ÎnullD
+     * æœ¬ãƒ„ãƒ¼ãƒ«ã®ã‚¯ãƒ©ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ãŒç½®ã‹ã‚Œã¦ã„ã‚‹å ´æ‰€ã®è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›´ä¸‹ã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°nullã‚’è¿”ã™ï¼Ž
+     * @returnã€€æœ¬ãƒ„ãƒ¼ãƒ«ã®ã‚¯ãƒ©ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ãŒç½®ã‹ã‚Œã¦ã„ã‚‹å ´æ‰€ã®è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›´ä¸‹ã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªï¼Žç™ºè¦‹ã§ããªã‘ã‚Œã°nullï¼Ž
      */
     public File getPluginsDirectory() {
         if (null != this.pluginsDirectory) {
@@ -105,22 +105,22 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“\¬Ý’è‚ð‹Lq‚·‚éXMLƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹–¼‚ðŽæ“¾‚·‚éƒƒ\ƒbƒhD
-     * @return@ƒvƒ‰ƒOƒCƒ“\¬Ý’è‚ð‹Lq‚·‚éXMLƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹–¼
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æ§‹æˆè¨­å®šã‚’è¨˜è¿°ã™ã‚‹XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @returnã€€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æ§‹æˆè¨­å®šã‚’è¨˜è¿°ã™ã‚‹XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«å
      */
     public String getPluginXmlFileName() {
         return this.pluginXmlFileName;
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚çApluginDirName‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ–¼‚ðŽ‚Âƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é
-     * @param pluginDirName ƒvƒ‰ƒOƒCƒ“ƒfƒBƒŒƒNƒgƒŠ–¼
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã€pluginDirNameã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’æŒã¤ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+     * @param pluginDirName ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
      */
     public AbstractPlugin loadPlugin(final String pluginDirName) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
@@ -129,17 +129,17 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * pluginsDir‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚©‚çCpluginName‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ–¼‚ðŽ‚Âƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é
-     * @param pluginsDir ƒvƒ‰ƒOƒCƒ“‚ª”z’u‚³‚ê‚éƒfƒBƒŒƒNƒgƒŠ
-     * @param pluginDirName ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
-     * @throws NullPointerException pluginsDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginsDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * pluginsDirã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã‹ã‚‰ï¼ŒpluginNameã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’æŒã¤ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+     * @param pluginsDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒé…ç½®ã•ã‚Œã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @param pluginDirName ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
+     * @throws NullPointerException pluginsDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginsDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public AbstractPlugin loadPlugin(final File pluginsDir, final String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
@@ -161,22 +161,22 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“Ž©‘Ì‚ÌƒfƒBƒŒƒNƒgƒŠ‚ð’¼ÚpluginRootDir‚ÅŽw’è‚µ‚Äƒ[ƒh‚·‚éƒƒ\ƒbƒhD
-     * @param pluginRootDir ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
-     * @throws NullPointerException pluginRootDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginRootDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è‡ªä½“ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ç›´æŽ¥pluginRootDirã§æŒ‡å®šã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param pluginRootDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
+     * @throws NullPointerException pluginRootDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginRootDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException, PluginResponseException {
 
-        //ƒAƒNƒZƒXŒ ŒÀ‚ðƒ`ƒFƒbƒN
+        //ã‚¢ã‚¯ã‚»ã‚¹æ¨©é™ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == pluginRootDir) {
@@ -189,30 +189,30 @@ public class DefaultPluginLoader implements PluginLoader {
             throw new IllegalArgumentException(pluginRootDir.getAbsolutePath()
                     + " is not directory.");
         }
-        //ˆø”ƒ`ƒFƒbƒNI—¹
+        //å¼•æ•°ãƒã‚§ãƒƒã‚¯çµ‚äº†
 
-        //ƒfƒtƒHƒ‹ƒg‚Åƒ‰ƒCƒuƒ‰ƒŠ‚Æ”FŽ¯‚µ‚Äƒ[ƒh‚·‚é‚æ‚¤‚ÉŽw’è‚³‚ê‚Ä‚éƒtƒ@ƒCƒ‹‚ðŽæ“¾
+        //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨èªè­˜ã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã‚ˆã†ã«æŒ‡å®šã•ã‚Œã¦ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
         final File[] defaultLibraryFiles = this.detectSpecifiedLibraryFiles(pluginRootDir);
 
-        //xml‚ðŽæ“¾
+        //xmlã‚’å–å¾—
         final File pluginXml = this.detectPluginXmlFile(pluginRootDir);
         if (null == pluginXml) {
-            //xml‚ª‚È‚©‚Á‚½
+            //xmlãŒãªã‹ã£ãŸ
             throw new IllegalPluginDirectoryStructureException(this.pluginXmlFileName
                     + " is not found in " + pluginRootDir.getName() + ".");
         }
 
-        //xml‚ª‚ ‚Á‚½
+        //xmlãŒã‚ã£ãŸ
 
         String pluginClassName = null;
         String[] classpathStrings = null;
         try {
-            //xml‚ð‰ðÍ
+            //xmlã‚’è§£æž
             final PluginXmlInterpreter interpreter = new DefaultPluginXmlInterpreter(pluginXml);
-            //ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX–¼‚ÆƒNƒ‰ƒXƒpƒXŒQ‚ðŽæ“¾
+            //ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹åã¨ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ç¾¤ã‚’å–å¾—
             pluginClassName = interpreter.getPluginClassName();
             classpathStrings = interpreter.getClassPathAttributeNames();
-        } catch (final FileNotFoundException e) {//‚ ‚è‚¦‚È‚¢
+        } catch (final FileNotFoundException e) {//ã‚ã‚Šãˆãªã„
             throw new IllegalPluginDirectoryStructureException(this.pluginXmlFileName
                     + " is not found in " + pluginRootDir.getName() + ".", e);
         } catch (final IOException e) {
@@ -222,21 +222,21 @@ public class DefaultPluginLoader implements PluginLoader {
         }
 
         if (null == pluginClassName || 0 == pluginClassName.length()) {
-            //pluginƒNƒ‰ƒX‚ªŽw’è‚³‚ê‚È‚©‚Á‚½
+            //pluginã‚¯ãƒ©ã‚¹ãŒæŒ‡å®šã•ã‚Œãªã‹ã£ãŸ
             throw new IllegalPluginXmlFormatException("Plugin entry class is not specifed in "
                     + pluginXml.getAbsolutePath());
         }
 
-        //pluginƒNƒ‰ƒX‚ªŽw’è‚³‚ê‚½
+        //pluginã‚¯ãƒ©ã‚¹ãŒæŒ‡å®šã•ã‚ŒãŸ
 
-        //ƒNƒ‰ƒXƒpƒX‚ð’Ê‚·êŠ‚ÌURL‚ðì‚é
+        //ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’é€šã™å ´æ‰€ã®URLã‚’ä½œã‚‹
         final Set<URL> libraryClassPathSet = new LinkedHashSet<URL>();
         for (final File defaultLibrary : defaultLibraryFiles) {
             try {
                 libraryClassPathSet.add(defaultLibrary.toURL());
             } catch (final MalformedURLException e) {
-                //Ž©“®“I‚Éƒ[ƒh‚·‚éƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚µ‚ÄCƒfƒBƒŒƒNƒgƒŠ‚ð’T‚µ‚ÄŒ©‚Â‚¯‚½ƒtƒ@ƒCƒ‹‚ÌURL‚ªì‚ê‚È‚©‚Á‚½D
-                //‘½•ª‚±‚ÌƒP[ƒX‚Í—L‚è“¾‚È‚¢‚µC–œ‚ªˆê‹N‚±‚Á‚Ä‚à–³Ž‹‚·‚éD
+                //è‡ªå‹•çš„ã«ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦ï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŽ¢ã—ã¦è¦‹ã¤ã‘ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®URLãŒä½œã‚Œãªã‹ã£ãŸï¼Ž
+                //å¤šåˆ†ã“ã®ã‚±ãƒ¼ã‚¹ã¯æœ‰ã‚Šå¾—ãªã„ã—ï¼Œä¸‡ãŒä¸€èµ·ã“ã£ã¦ã‚‚ç„¡è¦–ã™ã‚‹ï¼Ž
             }
         }
 
@@ -245,7 +245,7 @@ public class DefaultPluginLoader implements PluginLoader {
                 try {
                     libraryClassPathSet.add((new File(pluginRootDir, classpath)).toURL());
                 } catch (final MalformedURLException e) {
-                    //ƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚µ‚ÄXML‚ÅŽw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ÌURL‚ªì‚ê‚È‚©‚Á‚½D‘½•ªXML‚ÌƒpƒXŽw’è‚ª‚¨‚©‚µ‚¢
+                    //ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦XMLã§æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®URLãŒä½œã‚Œãªã‹ã£ãŸï¼Žå¤šåˆ†XMLã®ãƒ‘ã‚¹æŒ‡å®šãŒãŠã‹ã—ã„
                     throw new IllegalPluginXmlFormatException("Failed to allocate classpath value "
                             + classpath + " specifed in " + pluginXml.getAbsolutePath());
                 }
@@ -256,36 +256,36 @@ public class DefaultPluginLoader implements PluginLoader {
         libraryClassPathSet.toArray(libraryClassPathArray);
 
         try {
-            //‚±‚Ìƒvƒ‰ƒOƒCƒ“ê—p‚ÌURLƒNƒ‰ƒXƒ[ƒ_‚ðì¬
+            //ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å°‚ç”¨ã®URLã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ€ã‚’ä½œæˆ
             final URLClassLoader loader = new URLClassLoader(libraryClassPathArray);
-            //‚»‚ê‚ðŽg‚Á‚Äƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ðƒ[ƒh‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            //ãã‚Œã‚’ä½¿ã£ã¦ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             final Class<?> pluginClass = loader.loadClass(pluginClassName);
             final AbstractPlugin plugin = (AbstractPlugin) pluginClass.newInstance();
 
             assert (null != plugin) : "Illeagal state: Plugin class's instance is null.";
 
-            //ƒvƒ‰ƒOƒCƒ“ƒfƒBƒŒƒNƒgƒŠ‚ðƒZƒbƒg
+            //ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ã‚»ãƒƒãƒˆ
             plugin.setPluginRootdir(pluginRootDir);
             
-            //ƒvƒ‰ƒOƒCƒ“ƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚Ö‚ÌƒAƒNƒZƒXƒp[ƒ~ƒbƒVƒ‡ƒ“‚ðƒZƒbƒg
+            //ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’ã‚»ãƒƒãƒˆ
             try{
                 String filePath = pluginRootDir.getAbsolutePath() + File.separator+ "-";
                 plugin.addPermission(new FilePermission(filePath, "read"));
                 plugin.addPermission(new FilePermission(filePath, "write"));
                 plugin.addPermission(new FilePermission(filePath, "delete"));
             } catch (SecurityException e){
-                //ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ª“¾‚ç‚ê‚È‚©‚Á‚½‚¯‚ÇA–â‘è‚È‚¢‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‘±‚¯‚é.
+                //ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãŒå¾—ã‚‰ã‚Œãªã‹ã£ãŸã‘ã©ã€å•é¡Œãªã„ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ç¶šã‘ã‚‹.
                 assert (false) : "Illegal state: Plugin directory's access permission can not created.";
             }
 
-            //ƒvƒ‰ƒOƒCƒ“î•ñ‚Ì\’z‚ðŽŽ‚Ý‚é
+            //ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®æ§‹ç¯‰ã‚’è©¦ã¿ã‚‹
             if (!this.createPluginInfo(plugin)) {
                 throw new PluginResponseException("Failed to create plugin information about "
                         + pluginClassName + ". Plugin's information methods must return within "
                         + PLUGIN_METHODS_RESPONSE_TIME + " milli seconds.");
             }
 
-            //ƒ[ƒh->ƒLƒƒƒXƒg->ƒCƒ“ƒXƒ^ƒ“ƒX‰»->ƒfƒBƒŒƒNƒgƒŠ‚ÌƒZƒbƒg->ƒvƒ‰ƒOƒCƒ“î•ñ‚Ì\’z‚ª‘S‚Ä¬Œ÷‚µ‚½‚Ì‚Å•Ô‚·.
+            //ãƒ­ãƒ¼ãƒ‰->ã‚­ãƒ£ã‚¹ãƒˆ->ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–->ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚»ãƒƒãƒˆ->ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®æ§‹ç¯‰ãŒå…¨ã¦æˆåŠŸã—ãŸã®ã§è¿”ã™.
             return plugin;
         } catch (final SecurityException e) {
             throw new PluginClassLoadException("Failed to load " + pluginClassName + ".", e);
@@ -301,22 +301,22 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éƒƒ\ƒbƒh
-     * ŒÂ•Ê‚Ìƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒhŽ¸”s‚É‚æ‚Á‚Ä”­¶‚µ‚½—áŠO‚Í•Ô‚³‚È‚¢D
-     * @return ƒ[ƒh‚Å‚«‚½Šeƒvƒ‰ƒOƒCƒ“‚Ìƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ðŠi”[‚·‚éƒŠƒXƒg
-     * @throws PluginLoadException ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚ÌŒŸo‚ÉŽ¸”s‚µ‚½ê‡D
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * å€‹åˆ¥ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰å¤±æ•—ã«ã‚ˆã£ã¦ç™ºç”Ÿã—ãŸä¾‹å¤–ã¯è¿”ã•ãªã„ï¼Ž
+     * @return ãƒ­ãƒ¼ãƒ‰ã§ããŸå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
+     * @throws PluginLoadException ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¤œå‡ºã«å¤±æ•—ã—ãŸå ´åˆï¼Ž
      */
     public List<AbstractPlugin> loadPlugins() throws PluginLoadException {
         return this.loadPlugins(this.searchPluginsDirectory());
     }
 
     /**
-     * Žw’è‚µ‚½ƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚É‚ ‚é‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éƒƒ\ƒbƒhD
-     * ŒÂ•Ê‚Ìƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒhŽ¸”s‚É‚æ‚Á‚Ä”­¶‚µ‚½—áŠO‚Í•Ô‚³‚È‚¢D
-     * @param pluginsDir ƒvƒ‰ƒOƒCƒ“‚ª”z’u‚³‚ê‚Ä‚¢‚éƒfƒBƒŒƒNƒgƒŠ
-     * @return@ƒ[ƒh‚Å‚«‚½Šeƒvƒ‰ƒOƒCƒ“‚Ìƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ðŠi”[‚·‚éƒŠƒXƒg
-     * @throws NullPointerException pluginsDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginsDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * æŒ‡å®šã—ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã«ã‚ã‚‹å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * å€‹åˆ¥ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰å¤±æ•—ã«ã‚ˆã£ã¦ç™ºç”Ÿã—ãŸä¾‹å¤–ã¯è¿”ã•ãªã„ï¼Ž
+     * @param pluginsDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒé…ç½®ã•ã‚Œã¦ã„ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @returnã€€ãƒ­ãƒ¼ãƒ‰ã§ããŸå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
+     * @throws NullPointerException pluginsDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginsDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public List<AbstractPlugin> loadPlugins(final File pluginsDir) {
         if (null == pluginsDir) {
@@ -357,36 +357,36 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒXƒfƒBƒŒƒNƒgƒŠ‚ðíœ‚·‚éƒƒ\ƒbƒhD
-     * @param libraryDirName íœ‚·‚éƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒXƒfƒBƒŒƒNƒgƒŠ
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param libraryDirName å‰Šé™¤ã™ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
      */
     public void removeLibraryDirectoryName(final String libraryDirName) {
         this.libraryDirectoryNames.remove(libraryDirName);
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚ðíœ‚·‚éƒƒ\ƒbƒhD
-     * @param exntension íœ‚·‚éƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‚’å‰Šé™¤ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param exntension å‰Šé™¤ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­
      */
     public void removeLibraryExtension(final String exntension) {
         this.libraryExtensions.remove(exntension);
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“\¬î•ñ‚ð‹Lq‚·‚éXMLƒtƒ@ƒCƒ‹–¼‚ð’u‚«Š·‚¦‚éƒƒ\ƒbƒhD
-     * ƒfƒtƒHƒ‹ƒg‚Íplugin.xml
-     * @param xmlFileName ’u‚«Š·‚¦‚éƒtƒ@ƒCƒ‹–¼
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æ§‹æˆæƒ…å ±ã‚’è¨˜è¿°ã™ã‚‹XMLãƒ•ã‚¡ã‚¤ãƒ«åã‚’ç½®ãæ›ãˆã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯plugin.xml
+     * @param xmlFileName ç½®ãæ›ãˆã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
      */
     public void setPluginXmlFileName(final String xmlFileName) {
         this.pluginXmlFileName = xmlFileName;
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒfƒBƒŒƒNƒgƒŠ‚©‚Ç‚¤‚©‚ð”»’è‚·‚éƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ðƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚É‚æ‚Á‚ÄC‚Ç‚ÌƒfƒBƒŒƒNƒgƒŠ‚ðƒ‰ƒCƒuƒ‰ƒŠ’u‚«ê‚ÆŒ©‚È‚·‚©‚Ì”»’f‚ð
-     * Ž©—R‚ÉŠg’£‚Å‚«‚éD
-     * @param dir ”»’è‘ÎÛ‚ÌƒfƒBƒŒƒNƒgƒŠ
-     * @return ƒ‰ƒCƒuƒ‰ƒŠ’u‚«ê‚ÆŒ©‚È‚·ê‡‚Ítrue
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ï¼Œã©ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç½®ãå ´ã¨è¦‹ãªã™ã‹ã®åˆ¤æ–­ã‚’
+     * è‡ªç”±ã«æ‹¡å¼µã§ãã‚‹ï¼Ž
+     * @param dir åˆ¤å®šå¯¾è±¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç½®ãå ´ã¨è¦‹ãªã™å ´åˆã¯true
      */
     protected boolean isLibraryDirectory(final File dir) {
         if (null == dir || !dir.exists() || !dir.isDirectory()) {
@@ -404,11 +404,11 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚©‚Ç‚¤‚©‚ð”»’è‚·‚éƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ðƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚É‚æ‚Á‚ÄC‚Ç‚Ìƒtƒ@ƒCƒ‹‚ðƒ‰ƒCƒuƒ‰ƒŠ‚ÆŒ©‚È‚·‚©‚Ì”»’f‚ð
-     * Ž©—R‚ÉŠg’£‚Å‚«‚éD
-     * @param file ”»’è‘ÎÛƒtƒ@ƒCƒ‹
-     * @return ƒ‰ƒCƒuƒ‰ƒŠ‚ÆŒ©‚È‚·ê‡‚Ítrue
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ï¼Œã©ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨è¦‹ãªã™ã‹ã®åˆ¤æ–­ã‚’
+     * è‡ªç”±ã«æ‹¡å¼µã§ãã‚‹ï¼Ž
+     * @param file åˆ¤å®šå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«
+     * @return ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨è¦‹ãªã™å ´åˆã¯true
      */
     protected boolean isLibraryFile(final File file) {
         if (null == file || !file.exists() || !file.isFile()) {
@@ -426,10 +426,10 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚ð’Tõ‚·‚éƒƒ\ƒbƒhD
-     * @return ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ
-     * @throws PluginLoadException pluginsƒfƒBƒŒƒNƒgƒŠ‚Ì’Tõ‚ªƒZƒLƒ…ƒŠƒeƒBã‚Å‚«‚È‚©‚Á‚½ê‡CÅI“I‚ÉŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
-     * @throws IllegalPluginDirectoryStructureException ’TõŒ‹‰Ê‚ÌƒfƒBƒŒƒNƒgƒŠ‚ª•s³‚ÈêŠ‚Å‚ ‚Á‚½ê‡
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŽ¢ç´¢ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @return ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @throws PluginLoadException pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æŽ¢ç´¢ãŒã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ä¸Šã§ããªã‹ã£ãŸå ´åˆï¼Œæœ€çµ‚çš„ã«è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
+     * @throws IllegalPluginDirectoryStructureException æŽ¢ç´¢çµæžœã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒä¸æ­£ãªå ´æ‰€ã§ã‚ã£ãŸå ´åˆ
      */
     protected synchronized File searchPluginsDirectory() throws PluginLoadException,
             IllegalPluginDirectoryStructureException {
@@ -488,10 +488,10 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚ð•ÊƒXƒŒƒbƒh‚Å\’z‚·‚é.
-     * Žw’èŽžŠÔˆÈ“à‚É\’z‚Å‚«‚È‚©‚Á‚½ê‡‚Í’ú‚ß‚é.
-     * @param plugin î•ñ‚ð\’z‚·‚éƒvƒ‰ƒOƒCƒ“.
-     * @return ƒvƒ‰ƒOƒCƒ“î•ñ‚ðŽw’èŽžŠÔˆÈ“à‚É\’z‚Å‚«‚½‚çtrueC‚Å‚«‚È‚©‚Á‚½‚çfalse.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’åˆ¥ã‚¹ãƒ¬ãƒƒãƒ‰ã§æ§‹ç¯‰ã™ã‚‹.
+     * æŒ‡å®šæ™‚é–“ä»¥å†…ã«æ§‹ç¯‰ã§ããªã‹ã£ãŸå ´åˆã¯è«¦ã‚ã‚‹.
+     * @param plugin æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³.
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’æŒ‡å®šæ™‚é–“ä»¥å†…ã«æ§‹ç¯‰ã§ããŸã‚‰trueï¼Œã§ããªã‹ã£ãŸã‚‰false.
      */
     private boolean createPluginInfo(final AbstractPlugin plugin) {
         final Thread creationThread = new Thread() {
@@ -503,17 +503,17 @@ public class DefaultPluginLoader implements PluginLoader {
 
         creationThread.start();
         try {
-            creationThread.join(PLUGIN_METHODS_RESPONSE_TIME);//\’z‚Ü‚ÅŽw’èŽžŠÔ‘Ò‚Â
+            creationThread.join(PLUGIN_METHODS_RESPONSE_TIME);//æ§‹ç¯‰ã¾ã§æŒ‡å®šæ™‚é–“å¾…ã¤
         } catch (final InterruptedException e) {
-            //’ú‚ß‚é
+            //è«¦ã‚ã‚‹
         }
         return plugin.isPluginInfoCreated();
     }
 
     /**
-     * Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚©‚çƒvƒ‰ƒOƒCƒ“Ý’èXMLƒtƒ@ƒCƒ‹‚ð’T‚·ƒƒ\ƒbƒh
-     * @param pluginRootDir ’T‚·ƒfƒBƒŒƒNƒgƒŠ
-     * @return XMLƒtƒ@ƒCƒ‹DŒ©‚Â‚©‚ç‚È‚¯‚ê‚ÎnullD
+     * æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šXMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŽ¢ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param pluginRootDir æŽ¢ã™ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return XMLãƒ•ã‚¡ã‚¤ãƒ«ï¼Žè¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°nullï¼Ž
      */
     private File detectPluginXmlFile(final File pluginRootDir) {
         final File[] directoryEntries = pluginRootDir.listFiles();
@@ -530,9 +530,9 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚©‚çˆÈ‰º‚©‚çCƒfƒtƒHƒ‹ƒg‚Ìƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹ŒQ‚ðŒŸõ‚·‚éƒƒ\ƒbƒh
-     * @param pluginRootDir Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ
-     * @return ”­Œ©‚µ‚½ƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹ŒQ
+     * æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ä»¥ä¸‹ã‹ã‚‰ï¼Œãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ã‚’æ¤œç´¢ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param pluginRootDir æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ç™ºè¦‹ã—ãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ç¾¤
      */
     private File[] detectSpecifiedLibraryFiles(final File pluginRootDir) {
         final File[] directoryEntries = pluginRootDir.listFiles();
@@ -571,37 +571,37 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚ÌSet
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã®Set
      */
     private final Set<String> libraryExtensions = new LinkedHashSet<String>();
 
     /**
-     * ƒfƒtƒHƒ‹ƒgƒ‰ƒCƒuƒ‰ƒŠƒfƒBƒŒƒNƒg‚è‚ñ–¼‘O‚ÌSet
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆã‚Šã‚“åå‰ã®Set
      */
     private final Set<String> libraryDirectoryNames = new LinkedHashSet<String>();
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚·‚éXMLƒtƒ@ƒCƒ‹–¼
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã™ã‚‹XMLãƒ•ã‚¡ã‚¤ãƒ«å
      */
     private String pluginXmlFileName = DEFAULT_PLUGIN_XML_NAME;
 
     /**
-     * ŒŸo‚µ‚½ƒfƒtƒHƒ‹ƒgpluginsƒfƒBƒŒƒNƒgƒŠ
+     * æ¤œå‡ºã—ãŸãƒ‡ãƒ•ã‚©ãƒ«ãƒˆpluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
      */
     private File pluginsDirectory = null;
 
     /**
-     * ƒfƒtƒHƒ‹ƒg‚Ìƒvƒ‰ƒOƒCƒ“Ý’èî•ñXML‚Ìƒtƒ@ƒCƒ‹–¼D
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLã®ãƒ•ã‚¡ã‚¤ãƒ«åï¼Ž
      */
     private static final String DEFAULT_PLUGIN_XML_NAME = "plugin.xml";
 
     /**
-     * ƒfƒtƒHƒ‹ƒgpluginsƒfƒBƒŒƒNƒgƒŠ–¼D
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆpluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåï¼Ž
      */
     private static final String PLUGINS_DIRECTORY_NAME = "plugins";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“î•ñ‚Ì\’zŽž‚É‘Ò‚ÂÅ‘åŽžŠÔ.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã®æ§‹ç¯‰æ™‚ã«å¾…ã¤æœ€å¤§æ™‚é–“.
      */
     private static final int PLUGIN_METHODS_RESPONSE_TIME = 5000;
 }

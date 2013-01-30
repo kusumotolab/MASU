@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * {@link ProgressReporter}‚ÌƒfƒtƒHƒ‹ƒgÀ‘• ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚É {@link ProgressSource} ‚ğ—^‚¦‚é. “¯‚¶ {@link ProgressSource}
- * ƒCƒ“ƒXƒ^ƒ“ƒX‚©‚çC‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡”ì‚é‚±‚Æ‚Í‚Å‚«‚È‚¢
+ * {@link ProgressReporter}ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£… ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã« {@link ProgressSource} ã‚’ä¸ãˆã‚‹. åŒã˜ {@link ProgressSource}
+ * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‹ã‚‰ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡æ•°ä½œã‚‹ã“ã¨ã¯ã§ããªã„
  * 
  * @author kou-tngt
  * 
@@ -11,19 +11,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public class DefaultProgressReporter implements ProgressReporter {
 
     /**
-     * —Bˆê‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^. ˆø”‚É {@link ProgressSource} ‚ğó‚¯æ‚èC•ñ—p‚ÌÚ‘±‚ğŠm—§‚·‚é
+     * å”¯ä¸€ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿. å¼•æ•°ã« {@link ProgressSource} ã‚’å—ã‘å–ã‚Šï¼Œå ±å‘Šç”¨ã®æ¥ç¶šã‚’ç¢ºç«‹ã™ã‚‹
      * 
-     * @param source i’»•ñ‚ğ‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AlreadyConnectedException ‚·‚Å‚É“¯‚¶{@link ProgressSource}‚ª•Ê‚ÌƒŒƒ|[ƒ^[‚ÅÚ‘±‚ğì‚Á‚Ä‚¢‚éê‡
+     * @param source é€²æ—å ±å‘Šã‚’ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AlreadyConnectedException ã™ã§ã«åŒã˜{@link ProgressSource}ãŒåˆ¥ã®ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼ã§æ¥ç¶šã‚’ä½œã£ã¦ã„ã‚‹å ´åˆ
      */
     public DefaultProgressReporter(final ProgressSource source) throws AlreadyConnectedException {
-        // ‚±‚Ìƒ\[ƒX—p‚ÌƒRƒlƒNƒ^‚ğì‚Á‚ÄCÚ‘±
+        // ã“ã®ã‚½ãƒ¼ã‚¹ç”¨ã®ã‚³ãƒã‚¯ã‚¿ã‚’ä½œã£ã¦ï¼Œæ¥ç¶š
         this.connector = ProgressConnector.getConnector(source);
         this.connector.connect(this);
     }
 
     /**
-     * i’»î•ñ‘—M‚ÌI—¹‚ğ•ñ‚·‚éƒƒ\ƒbƒh
+     * é€²æ—æƒ…å ±é€ä¿¡ã®çµ‚äº†ã‚’å ±å‘Šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void reportProgressEnd() {
         if (null != this.connector) {
@@ -33,11 +33,11 @@ public class DefaultProgressReporter implements ProgressReporter {
     }
 
     /**
-     * i’»î•ñ‚ğ•ñ‚·‚éƒƒ\ƒbƒh
+     * é€²æ—æƒ…å ±ã‚’å ±å‘Šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param percentage i’»’li%j
-     * @throws IllegalArgumentException percentage‚ª0-100‚ÌŠÔ‚É“ü‚Á‚Ä‚È‚¢ê‡
-     * @throws IllegalStateException percentage‚ª‘O‰ñ•ñ‚µ‚½’l‚æ‚è‰º‚ª‚Á‚½ê‡
+     * @param percentage é€²æ—å€¤ï¼ˆ%ï¼‰
+     * @throws IllegalArgumentException percentageãŒ0-100ã®é–“ã«å…¥ã£ã¦ãªã„å ´åˆ
+     * @throws IllegalStateException percentageãŒå‰å›å ±å‘Šã—ãŸå€¤ã‚ˆã‚Šä¸‹ãŒã£ãŸå ´åˆ
      * @see ProgressReporter#reportProgress(int)
      */
     public void reportProgress(final int percentage) {
@@ -47,7 +47,7 @@ public class DefaultProgressReporter implements ProgressReporter {
         }
 
         if (percentage < this.previousValue) {
-            // ‘O‰ñ‚Ì•ñ‚æ‚è’l‚ªŒ¸‚Á‚½
+            // å‰å›ã®å ±å‘Šã‚ˆã‚Šå€¤ãŒæ¸›ã£ãŸ
             throw new IllegalStateException("reported value was decreased.");
         }
 
@@ -56,19 +56,19 @@ public class DefaultProgressReporter implements ProgressReporter {
                 this.previousValue = percentage;
                 this.connector.reportProgress(percentage);
             } catch (final ConnectionException e) {
-                // Ú‘±‚³‚ê‚Ä‚È‚¢“Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚ÉØ’f‚³‚ê‚½ƒvƒ‰ƒOƒCƒ“ÀsƒXƒŒƒbƒh‚ª‹ßXi‹­§jI—¹‰½‚à’Ê’m‚µ‚È‚¢
+                // æ¥ç¶šã•ã‚Œã¦ãªã„ï¼ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã«åˆ‡æ–­ã•ã‚ŒãŸï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ãŒè¿‘ã€…ï¼ˆå¼·åˆ¶ï¼‰çµ‚äº†ï¼ä½•ã‚‚é€šçŸ¥ã—ãªã„
                 this.connector = null;
             }
         }
     }
 
     /**
-     * ‚±‚ÌƒŒƒ|[ƒ^[‚ÌÚ‘±æ
+     * ã“ã®ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼ã®æ¥ç¶šå…ˆ
      */
     private ProgressConnector connector;
 
     /**
-     * 1‰ñ‘O‚É‚É•ñ‚µ‚½i’»î•ñ’l
+     * 1å›å‰ã«ã«å ±å‘Šã—ãŸé€²æ—æƒ…å ±å€¤
      */
     private int previousValue;
 

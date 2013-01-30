@@ -68,7 +68,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
             } else if (argument instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) argument;
 
-                // TODO C# などの場合はプリミティブ型も型引数に指定可能
+                // TODO C# 縺ｪ縺ｩ縺ｮ蝣ｴ蜷医�ｯ繝励Μ繝溘ユ繧｣繝門梛繧ょ梛蠑墓焚縺ｫ謖�螳壼庄閭ｽ
                 assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state; type argument was not reference type.";
                 constructorCall.addTypeArgument((UnresolvedReferenceTypeInfo<?>) typeArgument
                         .getType());

@@ -7,15 +7,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒrƒWƒ^[‚ªƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‹Lq•”‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚µC
- * ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ”­s‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã—ï¼Œ
+ * çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
  * @author kou-tngt
  *
  */
 public class InheritanceDefinitionStateManager extends EnterExitStateManager {
 
     /**
-     * ”­s‚·‚éó‘Ô‘JˆÚƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•\‚·enum
+     * ç™ºè¡Œã™ã‚‹çŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¡¨ã™enum
      * @author kou-tngt
      *
      */
@@ -24,8 +24,8 @@ public class InheritanceDefinitionStateManager extends EnterExitStateManager {
     }
 
     /**
-     * eƒNƒ‰ƒX‹Lq•”‚Ì’†‚É“ü‚Á‚½‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
-     * @return@eƒNƒ‰ƒX‹Lq•”‚Ì’†‚É“ü‚Á‚½‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã®ä¸­ã«å…¥ã£ãŸæ™‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
+     * @returnã€€è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã®ä¸­ã«å…¥ã£ãŸæ™‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getEnterEventType() {
@@ -33,8 +33,8 @@ public class InheritanceDefinitionStateManager extends EnterExitStateManager {
     }
 
     /**
-     * eƒNƒ‰ƒX‹Lq•”‚©‚ço‚½‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•Ô‚·D
-     * @return@eƒNƒ‰ƒX‹Lq•”‚©‚ço‚½‚Ìó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş
+     * è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¿”ã™ï¼
+     * @returnã€€è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã®çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     @Override
     public StateChangeEventType getExitEventType() {
@@ -42,11 +42,11 @@ public class InheritanceDefinitionStateManager extends EnterExitStateManager {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒCƒxƒ“ƒg‚ªCüq‹Lq•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * ”»’è‚É‚Ítoken.isInheritanceDescription()ƒƒ\ƒbƒh‚ğ—p‚¢‚éD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆãŒä¿®é£¾å­è¨˜è¿°éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * åˆ¤å®šã«ã¯token.isInheritanceDescription()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã‚‹ï¼
      * 
-     * @param event eƒNƒ‰ƒX‹Lq•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚éƒCƒxƒ“ƒg
-     * @return eƒNƒ‰ƒX‹Lq•”‚ğ•\‚·ê‡‚Ítrue
+     * @param event è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return è¦ªã‚¯ãƒ©ã‚¹è¨˜è¿°éƒ¨ã‚’è¡¨ã™å ´åˆã¯true
      */
     @Override
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {

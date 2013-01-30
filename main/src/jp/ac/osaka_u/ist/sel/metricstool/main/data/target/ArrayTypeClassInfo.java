@@ -6,8 +6,8 @@ import java.util.Set;
 
 
 /**
- * ”z—ñŒ^‚Ì’è‹`‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD
- * ‚Å‚«‚ê‚Îg‚¢‚½‚­‚Í‚È‚¢D
+ * é…åˆ—å‹ã®å®šç¾©ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
+ * ã§ãã‚Œã°ä½¿ã„ãŸãã¯ãªã„ï¼
  * 
  * @author higo
  *
@@ -16,9 +16,9 @@ import java.util.Set;
 public final class ArrayTypeClassInfo extends ClassInfo {
 
     /**
-     * ”z—ñ‚ÌŒ^‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * é…åˆ—ã®å‹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param arrayType ”z—ñ‚ÌŒ^
+     * @param arrayType é…åˆ—ã®å‹
      */
     public ArrayTypeClassInfo(final ArrayTypeInfo arrayType) {
 
@@ -31,19 +31,19 @@ public final class ArrayTypeClassInfo extends ClassInfo {
     }
 
     /**
-     * ”z—ñ‚ÌŒ^‚ğ•Ô‚·
+     * é…åˆ—ã®å‹ã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚ÌŒ^
+     * @return é…åˆ—ã®å‹
      */
     public ArrayTypeInfo getArrayType() {
         return this.arrayType;
     }
 
     /**
-     * •Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
-     * ‚Ç‚Ì•Ï”‚à—p‚¢‚ç‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅC‹ó‚Ìset‚ª•Ô‚³‚ê‚é
+     * å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
+     * ã©ã®å¤‰æ•°ã‚‚ç”¨ã„ã‚‰ã‚Œã¦ã„ãªã„ã®ã§ï¼Œç©ºã®setãŒè¿”ã•ã‚Œã‚‹
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -51,9 +51,9 @@ public final class ArrayTypeClassInfo extends ClassInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -61,9 +61,9 @@ public final class ArrayTypeClassInfo extends ClassInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -73,8 +73,8 @@ public final class ArrayTypeClassInfo extends ClassInfo {
     private final ArrayTypeInfo arrayType;
 
     /**
-     * ”z—ñŒ^‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒX‚È‚Ì‚Å–¼‘O‚Í‚È‚¢D
-     * –¼‘O‚ª‚È‚¢‚±‚Æ‚ğ•\‚·’è”D
+     * é…åˆ—å‹ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ãªã®ã§åå‰ã¯ãªã„ï¼
+     * åå‰ãŒãªã„ã“ã¨ã‚’è¡¨ã™å®šæ•°ï¼
      */
     public static final String NONAME = "noname";
 }

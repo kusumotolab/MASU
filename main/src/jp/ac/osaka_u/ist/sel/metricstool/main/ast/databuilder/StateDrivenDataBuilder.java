@@ -12,12 +12,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 
 
 /**
- * ASTã‚Å•¡”‚Ìó‘Ô‚É•ª‚¯‚Ä’è‹`‚³‚ê‚éƒf[ƒ^‚ğ\’z‚·‚éƒNƒ‰ƒX
- * Šeó‘Ô‚É‰‚¶‚½\’zˆ—‚ğs‚¢CÅI“I‚É1‚Â‚Ìƒf[ƒ^‚ğ\’z‚·‚é
+ * ASTä¸Šã§è¤‡æ•°ã®çŠ¶æ…‹ã«åˆ†ã‘ã¦å®šç¾©ã•ã‚Œã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
+ * å„çŠ¶æ…‹ã«å¿œã˜ãŸæ§‹ç¯‰å‡¦ç†ã‚’è¡Œã„ï¼Œæœ€çµ‚çš„ã«1ã¤ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹
  * 
  * @author kou-tngt, t-miyake
  *
- * @param <T> \’z‚³‚ê‚éƒf[ƒ^‚ÌŒ^
+ * @param <T> æ§‹ç¯‰ã•ã‚Œã‚‹ãƒ‡ãƒ¼ã‚¿ã®å‹
  */
 public abstract class StateDrivenDataBuilder<T> extends DataBuilderAdapter<T> implements
         StateChangeListener<AstVisitEvent> {
@@ -52,18 +52,18 @@ public abstract class StateDrivenDataBuilder<T> extends DataBuilderAdapter<T> im
     public abstract void stateChanged(StateChangeEvent<AstVisitEvent> event);
 
     /**
-     * AST‚Ì‰ğÍó‘Ô‚ğ‚Ìƒ}ƒl[ƒWƒƒ[‚ğ’Ç‰Á
+     * ASTã®è§£æçŠ¶æ…‹ã‚’ã®ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’è¿½åŠ 
      * @param stateManager 
      */
     protected final void addStateManager(AstVisitStateManager stateManager) {
-        //’F‚±‚Ìƒƒ\ƒbƒh‚ÌfinalCüq‚Íâ‘Î‚ÉŠO‚µ‚Ä‚Í‚È‚ç‚È‚¢D
+        //æ³¨ï¼šã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®finalä¿®é£¾å­ã¯çµ¶å¯¾ã«å¤–ã—ã¦ã¯ãªã‚‰ãªã„ï¼
 
         this.stateManagers.add(stateManager);
         stateManager.addStateChangeListener(this);
     }
 
     /**
-     * AST‚Ì‰ğÍó‘Ô‚Ìƒ}ƒl[ƒWƒƒ[‚ğ•Û‘¶‚·‚éƒtƒB[ƒ‹ƒh
+     * ASTã®è§£æçŠ¶æ…‹ã®ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ä¿å­˜ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     private final Set<AstVisitStateManager> stateManagers = new LinkedHashSet<AstVisitStateManager>();
 }

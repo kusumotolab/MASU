@@ -7,8 +7,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * Œ^QÆ‚âƒƒ\ƒbƒhŒÄ‚Ño‚µ‚É—^‚¦‚ç‚ê‚½Œ^ˆø”‚ğ•\‚·ƒm[ƒh‚ÉC
- * ASTƒrƒWƒ^[‚ª“ü‚Á‚Ä‚¢‚­‚Ìó‘ÔŠÇ—‚ğs‚¤D
+ * å‹å‚ç…§ã‚„ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—æ™‚ã«ä¸ãˆã‚‰ã‚ŒãŸå‹å¼•æ•°ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ã«ï¼Œ
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒå…¥ã£ã¦ã„ãæ™‚ã®çŠ¶æ…‹ç®¡ç†ã‚’è¡Œã†ï¼
  * 
  * @author kou-tngt
  *
@@ -21,7 +21,7 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * ’Ê’m‚·‚éƒCƒxƒ“ƒg‚Ìƒ^ƒCƒv‚ğ•\‚·enum
+     * é€šçŸ¥ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¿ã‚¤ãƒ—ã‚’è¡¨ã™enum
      * @author kou-tngt
      *
      */
@@ -30,9 +30,9 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * ƒrƒWƒ^[‚ªƒm[ƒh‚É“ü‚Á‚½‚ÌƒCƒxƒ“ƒg‚ğó‚¯æ‚èC
-     * ‚»‚Ìƒm[ƒh‚ªŒ^ˆø”‚ÉŠÖ˜A‚·‚é‚à‚Ì‚Å‚ ‚ê‚Îó‘Ô‘JˆÚ‚ğs‚Á‚ÄƒCƒxƒ“ƒg‚ğ”­s‚·‚éD
-     * @param ƒrƒWƒ^[‚ª’Ê’m‚·‚éAST–K–âƒCƒxƒ“ƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒãƒ¼ãƒ‰ã«å…¥ã£ãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚Šï¼Œ
+     * ãã®ãƒãƒ¼ãƒ‰ãŒå‹å¼•æ•°ã«é–¢é€£ã™ã‚‹ã‚‚ã®ã§ã‚ã‚Œã°çŠ¶æ…‹é·ç§»ã‚’è¡Œã£ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ï¼
+     * @param ãƒ“ã‚¸ã‚¿ãƒ¼ãŒé€šçŸ¥ã™ã‚‹ASTè¨ªå•ã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -54,9 +54,9 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * ƒrƒWƒ^[‚ªƒm[ƒh‚©‚ço‚½‚ÌƒCƒxƒ“ƒg‚ğó‚¯æ‚èC
-     * ‚»‚Ìƒm[ƒh‚ªŒ^ˆø”‚ÉŠÖ˜A‚·‚é‚à‚Ì‚Å‚ ‚ê‚Îó‘Ô‘JˆÚ‚ğs‚Á‚ÄƒCƒxƒ“ƒg‚ğ”­s‚·‚éD
-     * @param ƒrƒWƒ^[‚ª’Ê’m‚·‚éAST–K–âƒCƒxƒ“ƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚Šï¼Œ
+     * ãã®ãƒãƒ¼ãƒ‰ãŒå‹å¼•æ•°ã«é–¢é€£ã™ã‚‹ã‚‚ã®ã§ã‚ã‚Œã°çŠ¶æ…‹é·ç§»ã‚’è¡Œã£ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ï¼
+     * @param ãƒ“ã‚¸ã‚¿ãƒ¼ãŒé€šçŸ¥ã™ã‚‹ASTè¨ªå•ã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -75,9 +75,9 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * ˆø”event‚ªó‘Ô‘JˆÚ‚Ìˆø‚«‹à‚É‚È‚éƒCƒxƒ“ƒg‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * @param event ó‘Ô‘JˆÚ‚Ìˆø‚«‹à‚É‚È‚é‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ƒCƒxƒ“ƒg
-     * @return ó‘Ô‘JˆÚ‚Ìˆø‚«‹à‚É‚È‚éƒg[ƒNƒ“‚È‚çtrue
+     * å¼•æ•°eventãŒçŠ¶æ…‹é·ç§»ã®å¼•ãé‡‘ã«ãªã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * @param event çŠ¶æ…‹é·ç§»ã®å¼•ãé‡‘ã«ãªã‚‹ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return çŠ¶æ…‹é·ç§»ã®å¼•ãé‡‘ã«ãªã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ãªã‚‰true
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
     @Override
@@ -87,7 +87,7 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * ó‘Ô‚ğ•\‚·enum
+     * çŠ¶æ…‹ã‚’è¡¨ã™enum
      * @author kou-tngt
      *
      */

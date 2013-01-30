@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 
 
 /**
- * –¢‰ğŒˆ static initializer ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±º static initializer ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  */
@@ -13,18 +13,18 @@ public class UnresolvedStaticInitializerInfo extends
         UnresolvedInitializerInfo<StaticInitializerInfo> {
 
     /**
-     * Š—LƒNƒ‰ƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass) {
         super(ownerClass);
     }
 
     /**
-     * Š—LƒNƒ‰ƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
             int fromColumn, int toLine, int toColumn) {

@@ -7,11 +7,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedI
 
 
 /**
- * ƒCƒjƒVƒƒƒ‰ƒCƒU‚Ìƒrƒ‹ƒ_
+ * ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ãƒ“ãƒ«ãƒ€
  * 
  * @author g-yamada
  *
- * @param <T>@–¢‰ğŒˆƒCƒjƒVƒƒƒ‰ƒCƒU
+ * @param <T>ã€€æœªè§£æ±ºã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
  */
 public abstract class InitializerBuilder<T extends UnresolvedInitializerInfo<? extends InitializerInfo>>
         extends CallableUnitBuilder<T> {
@@ -30,9 +30,9 @@ public abstract class InitializerBuilder<T extends UnresolvedInitializerInfo<? e
     }
 
     /**
-     * ©•ª‚ÌeƒNƒ‰ƒX‚É©g‚ğ“o˜^‚·‚é
+     * è‡ªåˆ†ã®è¦ªã‚¯ãƒ©ã‚¹ã«è‡ªèº«ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param initializer eƒNƒ‰ƒX‚É“o˜^‚·‚éƒCƒjƒVƒƒƒ‰ƒCƒU
+     * @param initializer è¦ªã‚¯ãƒ©ã‚¹ã«ç™»éŒ²ã™ã‚‹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     protected abstract void registToOwnerClass(final T initializer);
 

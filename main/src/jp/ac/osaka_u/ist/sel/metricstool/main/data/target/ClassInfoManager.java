@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒNƒ‰ƒXî•ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒXD
+ * ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -25,10 +25,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ClassInfoManager {
 
     /**
-     * ‘ÎÛƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚é
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param classInfo ’Ç‰Á‚·‚éƒNƒ‰ƒXî•ñ
-     * @return ˆø”ƒNƒ‰ƒX‚ğ’Ç‰Á‚µ‚½ê‡‚Í true,‚µ‚È‚©‚Á‚½ê‡‚Ífalse
+     * @param classInfo è¿½åŠ ã™ã‚‹ã‚¯ãƒ©ã‚¹æƒ…å ±
+     * @return å¼•æ•°ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã—ãŸå ´åˆã¯ true,ã—ãªã‹ã£ãŸå ´åˆã¯false
      */
     public boolean add(final ClassInfo classInfo) {
 
@@ -37,16 +37,16 @@ public final class ClassInfoManager {
             throw new IllegalArgumentException();
         }
 
-        // ’Ç‰Á‚·‚éƒNƒ‰ƒX‚ª‘ÎÛƒNƒ‰ƒX‚Ì
+        // è¿½åŠ ã™ã‚‹ã‚¯ãƒ©ã‚¹ãŒå¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ™‚
         if (classInfo instanceof TargetClassInfo) {
 
-            //“ñd“o˜^ƒ`ƒFƒbƒN
+            //äºŒé‡ç™»éŒ²ãƒã‚§ãƒƒã‚¯
             if (this.targetClassInfos.contains(classInfo)) {
                 err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
                 return false;
             }
 
-            // ‚·‚Å‚ÉŠO•”ƒNƒ‰ƒX‚Æ‚µ‚Ä“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÍC‚»‚Ìî•ñ‚ğíœ‚·‚é
+            // ã™ã§ã«å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ï¼Œãã®æƒ…å ±ã‚’å‰Šé™¤ã™ã‚‹
             if (this.externalClassInfos.contains(classInfo)) {
                 this.externalClassInfos.remove(classInfo);
 
@@ -74,12 +74,12 @@ public final class ClassInfoManager {
 
         else if (classInfo instanceof ExternalClassInfo) {
 
-            // ‚·‚Å‚É‘ÎÛƒNƒ‰ƒX‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚Í‰½‚à‚µ‚È‚¢
+            // ã™ã§ã«å¯¾è±¡ã‚¯ãƒ©ã‚¹ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ä½•ã‚‚ã—ãªã„
             if (this.targetClassInfos.contains(classInfo)) {
                 return false;
             }
 
-            // “ñd“o˜^ƒ`ƒFƒbƒNC‚½‚¾‚µƒGƒ‰[‚Ío‚³‚È‚¢
+            // äºŒé‡ç™»éŒ²ãƒã‚§ãƒƒã‚¯ï¼ŒãŸã ã—ã‚¨ãƒ©ãƒ¼ã¯å‡ºã•ãªã„
             if (this.externalClassInfos.contains(classInfo)) {
                 return false;
             }
@@ -91,7 +91,7 @@ public final class ClassInfoManager {
             assert false : "Here shouldn't be reached!";
         }
 
-        // ƒNƒ‰ƒX–¼‚©‚çƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ“¾‚é‚½‚ß‚Ìƒ}ƒbƒv‚É’Ç‰Á
+        // ã‚¯ãƒ©ã‚¹åã‹ã‚‰ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ãŸã‚ã®ãƒãƒƒãƒ—ã«è¿½åŠ 
         {
             final String name = classInfo.getClassName();
             SortedSet<ClassInfo> classInfos = this.classNameMap.get(name);
@@ -102,7 +102,7 @@ public final class ClassInfoManager {
             classInfos.add(classInfo);
         }
 
-        //@–¼‘O‹óŠÔ‚©‚çƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ“¾‚é‚½‚ß‚Ìƒ}ƒbƒv‚É’Ç‰Á
+        //ã€€åå‰ç©ºé–“ã‹ã‚‰ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ãŸã‚ã®ãƒãƒƒãƒ—ã«è¿½åŠ 
         {
             final NamespaceInfo namespace = classInfo.getNamespace();
             SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
@@ -117,47 +117,47 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ‘ÎÛƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return ‘ÎÛƒNƒ‰ƒX‚ÌSortedSet
+     * @return å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     public SortedSet<TargetClassInfo> getTargetClassInfos() {
         return Collections.unmodifiableSortedSet(this.targetClassInfos);
     }
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return ŠO•”ƒNƒ‰ƒX‚ÌSortedSet
+     * @return å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     public SortedSet<ExternalClassInfo> getExternalClassInfos() {
         return Collections.unmodifiableSortedSet(this.externalClassInfos);
     }
 
     /**
-     * ‘ÎÛƒNƒ‰ƒX‚Ì”‚ğ•Ô‚·
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°ã‚’è¿”ã™
      * 
-     * @return ‘ÎÛƒNƒ‰ƒX‚Ì”
+     * @return å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°
      */
     public int getTargetClassCount() {
         return this.targetClassInfos.size();
     }
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚Ì”‚ğ•Ô‚·
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®æ•°ã‚’è¿”ã™
      * 
-     * @return ŠO•”ƒNƒ‰ƒX‚Ì”
+     * @return å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®æ•°
      */
     public int getExternalClassCount() {
         return this.externalClassInfos.size();
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½Š®‘SŒÀ’è–¼‚ğ‚ÂƒNƒ‰ƒXî•ñ‚ğ•Ô‚·.
-     * w’è‚³‚ê‚½Š®‘SŒÀ’è–¼‚ğ‚à‚ÂƒNƒ‰ƒX‚ª‘¶İ‚µ‚È‚¢‚Æ‚«‚Ínull‚ğ•Ô‚·
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸå®Œå…¨é™å®šåã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è¿”ã™.
+     * æŒ‡å®šã•ã‚ŒãŸå®Œå…¨é™å®šåã‚’ã‚‚ã¤ã‚¯ãƒ©ã‚¹ãŒå­˜åœ¨ã—ãªã„ã¨ãã¯nullã‚’è¿”ã™
      * 
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
-     * @return ƒNƒ‰ƒXî•ñ
+     * @param fullQualifiedName å®Œå…¨é™å®šå
+     * @return ã‚¯ãƒ©ã‚¹æƒ…å ±
      */
     public ClassInfo getClassInfo(final String[] fullQualifiedName) {
 
@@ -169,10 +169,10 @@ public final class ClassInfoManager {
         final String[] namespace = Arrays.<String> copyOf(fullQualifiedName, namespaceLength);
         final String className = fullQualifiedName[namespaceLength];
 
-        // “¯‚¶ƒNƒ‰ƒX–¼‚ğ‚ÂƒNƒ‰ƒXˆê——‚ğæ“¾        
+        // åŒã˜ã‚¯ãƒ©ã‚¹åã‚’æŒã¤ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—        
         final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         if (null != classInfos) {
-            // –¼‘O‹óŠÔ‚ª“™‚µ‚¢ƒNƒ‰ƒX‚ğ•Ô‚·
+            // åå‰ç©ºé–“ãŒç­‰ã—ã„ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
             for (final ClassInfo classInfo : classInfos) {
                 if (classInfo.getNamespace().equals(namespace)) {
                     return classInfo;
@@ -183,10 +183,10 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½Š®‘SŒÀ’è–¼‚ğ‚ÂƒNƒ‰ƒX‚ª‚ ‚é‚©”»’è‚·‚é
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸå®Œå…¨é™å®šåã‚’æŒã¤ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
      * 
-     * @param fullQualifiedName ’²¸‚µ‚½‚¢ƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼
-     * @return ƒNƒ‰ƒX‚ª‚ ‚éê‡‚Ítrue, ‚È‚¢ê‡‚Ífalse
+     * @param fullQualifiedName èª¿æŸ»ã—ãŸã„ã‚¯ãƒ©ã‚¹ã®å®Œå…¨é™å®šå
+     * @return ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹å ´åˆã¯true, ãªã„å ´åˆã¯false
      */
     public boolean hasClassInfo(final String[] fullQualifiedName) {
 
@@ -198,11 +198,11 @@ public final class ClassInfoManager {
         final String[] namespace = Arrays.<String> copyOf(fullQualifiedName, namespaceLength);
         final String className = fullQualifiedName[namespaceLength];
 
-        //“¯‚¶ƒNƒ‰ƒX–¼‚ğ‚ÂƒNƒ‰ƒXˆê——‚ğæ“¾
+        //åŒã˜ã‚¯ãƒ©ã‚¹åã‚’æŒã¤ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—
         final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         if (null != classInfos) {
 
-            // –¼‘O‹óŠÔ‚ª“™‚µ‚¢ƒNƒ‰ƒX‚ª‚ ‚ê‚ÎCtrue‚ğ•Ô‚·
+            // åå‰ç©ºé–“ãŒç­‰ã—ã„ã‚¯ãƒ©ã‚¹ãŒã‚ã‚Œã°ï¼Œtrueã‚’è¿”ã™
             for (final ClassInfo classInfo : classInfos) {
                 if (classInfo.getNamespace().equals(namespace)) {
                     return true;
@@ -214,10 +214,10 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½–¼‘O‹óŠÔ‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection ‚ğ•Ô‚·
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸåå‰ç©ºé–“ã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection ã‚’è¿”ã™
      * 
-     * @param namespace –¼‘O‹óŠÔ
-     * @return ˆø”‚Åw’è‚µ‚½–¼‘O‹óŠÔ‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection
+     * @param namespace åå‰ç©ºé–“
+     * @return å¼•æ•°ã§æŒ‡å®šã—ãŸåå‰ç©ºé–“ã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection
      */
     public Collection<ClassInfo> getClassInfos(final String[] namespace) {
 
@@ -229,10 +229,10 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½–¼‘O‹óŠÔ‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection ‚ğ•Ô‚·
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸåå‰ç©ºé–“ã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection ã‚’è¿”ã™
      * 
-     * @param namespace –¼‘O‹óŠÔ
-     * @return ˆø”‚Åw’è‚µ‚½–¼‘O‹óŠÔ‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection
+     * @param namespace åå‰ç©ºé–“
+     * @return å¼•æ•°ã§æŒ‡å®šã—ãŸåå‰ç©ºé–“ã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection
      */
     public Collection<ClassInfo> getClassInfos(final NamespaceInfo namespace) {
 
@@ -310,10 +310,10 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½ƒNƒ‰ƒX–¼‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection ‚ğ•Ô‚·
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹åã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection ã‚’è¿”ã™
      * 
-     * @param className ƒNƒ‰ƒX–¼
-     * @return ˆø”‚Åw’è‚µ‚½ƒNƒ‰ƒX–¼‚ğ‚ÂƒNƒ‰ƒXî•ñ‚Ì Collection
+     * @param className ã‚¯ãƒ©ã‚¹å
+     * @return å¼•æ•°ã§æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹åã‚’æŒã¤ã‚¯ãƒ©ã‚¹æƒ…å ±ã® Collection
      */
     public Collection<ClassInfo> getClassInfos(final String className) {
 
@@ -327,7 +327,7 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
@@ -337,7 +337,7 @@ public final class ClassInfoManager {
 
     /**
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^D 
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ 
      */
     public ClassInfoManager() {
 
@@ -349,22 +349,22 @@ public final class ClassInfoManager {
     }
 
     /**
-     * ƒNƒ‰ƒX–¼‚©‚çCƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ“¾‚é‚½‚ß‚Ìƒ}ƒbƒv
+     * ã‚¯ãƒ©ã‚¹åã‹ã‚‰ï¼Œã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ãŸã‚ã®ãƒãƒƒãƒ—
      */
     private final Map<String, SortedSet<ClassInfo>> classNameMap;
 
     /**
-     * –¼‘O‹óŠÔ–¼‚©‚çCƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ“¾‚é‚½‚ß‚Ìƒ}ƒbƒv
+     * åå‰ç©ºé–“åã‹ã‚‰ï¼Œã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ãŸã‚ã®ãƒãƒƒãƒ—
      */
     private final Map<NamespaceInfo, SortedSet<ClassInfo>> namespaceMap;
 
     /**
-     * ‘ÎÛƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final SortedSet<TargetClassInfo> targetClassInfos;
 
     /**
-     * ŠO•”ƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final SortedSet<ExternalClassInfo> externalClassInfos;
 }

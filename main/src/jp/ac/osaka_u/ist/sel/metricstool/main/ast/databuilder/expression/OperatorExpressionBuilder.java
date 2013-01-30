@@ -37,10 +37,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     }
 
     protected void buildOperatorElement(final OperatorToken token, final AstVisitEvent event) {
-        //‰‰Zq‚ª•K—v‚Æ‚·‚é€‚Ì”
+        //æ¼”ç®—å­ãŒå¿…è¦ã¨ã™ã‚‹é …ã®æ•°
         final int term = token.getTermCount();
 
-        //Œ^Œˆ’è‚ÉŠÖ‚í‚é€‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”z—ñ
+        //å‹æ±ºå®šã«é–¢ã‚ã‚‹é …ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é…åˆ—
         final int[] typeSpecifiedTermIndexes = token.getTypeSpecifiedTermIndexes();
 
         final ExpressionElement[] elements = this.getAvailableElements();
@@ -51,32 +51,32 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             final OPERATOR_TYPE operatorType = token.getOperator();
             final OPERATOR operator = OPERATOR.getOperator(event.getText());
 
-            //Še€‚ÌŒ^‚ğ‹L˜^‚·‚é”z—ñ
+            //å„é …ã®å‹ã‚’è¨˜éŒ²ã™ã‚‹é…åˆ—
             final UnresolvedExpressionInfo<? extends ExpressionInfo>[] termTypes = new UnresolvedExpressionInfo<?>[elements.length];
 
-            //Å¶•Ó’l‚É‚Â‚¢‚Ä
+            //æœ€å·¦è¾ºå€¤ã«ã¤ã„ã¦
             final ExpressionElement primary = elements[0];
             if (primary instanceof IdentifierElement) {
-                //¯•Êq‚Ìê‡
+                //è­˜åˆ¥å­ã®å ´åˆ
                 final IdentifierElement leftElement = (IdentifierElement) elements[0];
 
-                //¶•Ó’l‚Ö‚Ì‘ã“ü‚ª‚ ‚é‚©‚Ç‚¤‚©
+                //å·¦è¾ºå€¤ã¸ã®ä»£å…¥ãŒã‚ã‚‹ã‹ã©ã†ã‹
                 boolean assignmentLeft = false;
-                //¶•Ó’l‚Ö‚ÌQÆ‚ª‚ ‚é‚©‚Ç‚¤‚©
+                //å·¦è¾ºå€¤ã¸ã®å‚ç…§ãŒã‚ã‚‹ã‹ã©ã†ã‹
                 boolean referenceLeft = true;
                 if (null != operator) {
                     assignmentLeft = operator.isFirstIsAssignmentee();
                     referenceLeft = operator.isFirstIsReferencee();
                 }
 
-                //QÆ‚È‚ç”íQÆ•Ï”‚Æ‚µ‚Ä‰ğŒˆ‚µ‚ÄŒ‹‰Ê‚ÌŒ^‚ğæ“¾‚·‚é
+                //å‚ç…§ãªã‚‰è¢«å‚ç…§å¤‰æ•°ã¨ã—ã¦è§£æ±ºã—ã¦çµæœã®å‹ã‚’å–å¾—ã™ã‚‹
                 termTypes[0] = leftElement.resolveAsVariable(this.buildDataManager, referenceLeft,
                         assignmentLeft);
             } else if (primary instanceof TypeElement) {
                 TypeElement typeElement = (TypeElement) primary;
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
-                    // ƒLƒƒƒXƒg‚ª‚ ‚é‚Æ‚¨‚»‚ç‚­‚±‚±‚É“’B
-                    // TODO UnresolvedReferenceTypeInfo‚É‚·‚×‚«
+                    // ã‚­ãƒ£ã‚¹ãƒˆãŒã‚ã‚‹ã¨ãŠãã‚‰ãã“ã“ã«åˆ°é”
+                    // TODO UnresolvedReferenceTypeInfoã«ã™ã¹ã
                     termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage(
                             this.buildDataManager.getCurrentUnit(),
                             typeElement.getFromLine(), typeElement.getFromColumn(),
@@ -92,14 +92,14 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     termTypes[0] = elements[0].getUsage();
                 }
             } else {
-                //‚»‚êˆÈŠO‚Ìê‡‚Í’¼ÚŒ^‚ğæ“¾‚·‚é
+                //ãã‚Œä»¥å¤–ã®å ´åˆã¯ç›´æ¥å‹ã‚’å–å¾—ã™ã‚‹
                 termTypes[0] = primary.getUsage();
             }
 
-            //2€–ÚˆÈ~‚É‚Â‚¢‚Ä
+            //2é …ç›®ä»¥é™ã«ã¤ã„ã¦
             for (int i = 1; i < term; i++) {
                 if (elements[i] instanceof IdentifierElement) {
-                    //¯•Êq‚È‚çŸè‚ÉQÆ‚Æ‚µ‚Ä‰ğŒˆ‚µ‚Ä•û‚ğæ“¾‚·‚é
+                    //è­˜åˆ¥å­ãªã‚‰å‹æ‰‹ã«å‚ç…§ã¨ã—ã¦è§£æ±ºã—ã¦æ–¹ã‚’å–å¾—ã™ã‚‹
                     termTypes[i] = ((IdentifierElement) elements[i]).resolveAsVariable(
                             this.buildDataManager, true, false);
                 } else if (elements[i] instanceof TypeElement) {
@@ -110,7 +110,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                                 typeElement.getFromColumn(), typeElement.getToLine(),
                                 typeElement.getToColumn());
                     } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
-                        // ‚±‚±‚É“’B‚·‚é‚Ì‚Íinstanceof type[]‚Æ‚«
+                        // ã“ã“ã«åˆ°é”ã™ã‚‹ã®ã¯instanceof type[]ã¨ã
                         UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                                 .getType();
                         termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType,
@@ -120,13 +120,13 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         termTypes[i] = elements[i].getUsage();
                     }
                 } else {
-                    //‚»‚êˆÈŠO‚È‚ç’¼ÚŒ^‚ğæ“¾‚·‚é
+                    //ãã‚Œä»¥å¤–ãªã‚‰ç›´æ¥å‹ã‚’å–å¾—ã™ã‚‹
                     termTypes[i] = elements[i].getUsage();
                 }
             }
 
             if (2 == term && null != operatorType) {
-                //ƒIƒyƒŒ[ƒ^[ƒCƒ“ƒXƒ^ƒ“ƒX‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚é2€‰‰Zq–¼‘O‰ğŒˆ•”‚ÉŒ^Œˆ’èˆ—‚ğˆÏ÷‚·‚é
+                //ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ãƒ¼ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹2é …æ¼”ç®—å­ï¼åå‰è§£æ±ºéƒ¨ã«å‹æ±ºå®šå‡¦ç†ã‚’å§”è­²ã™ã‚‹
                 assert (null != termTypes[0]) : "Illega state: first term type was not decided.";
                 assert (null != termTypes[1]) : "Illega state: second term type was not decided.";
                 assert null != operator : "Illegal state: operator is null";
@@ -156,11 +156,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 pushElement(new UsageElement(operation));
             } else {
-                //©•ª‚ÅŒ^Œˆ’è‚·‚é
+                //è‡ªåˆ†ã§å‹æ±ºå®šã™ã‚‹
                 UnresolvedExpressionInfo<? extends ExpressionInfo> resultType = null;
 
                 if (null != operator && null != operator.getSpecifiedResultType()) {
-                    //ƒIƒyƒŒ[ƒ^‚É‚æ‚Á‚Ä‚·‚Å‚ÉŒ‹‰Ê‚ÌŒ^‚ªŒˆ’è‚µ‚Ä‚¢‚é
+                    //ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ã«ã‚ˆã£ã¦ã™ã§ã«çµæœã®å‹ãŒæ±ºå®šã—ã¦ã„ã‚‹
                     assert null != operator : "Illegal state: operator is null";
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator);
                     resultType.setOuterUnit(this.buildDataManager.getCurrentUnit());
@@ -186,7 +186,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     resultType.setToLine(termTypes[0].getToLine());
                     resultType.setToColumn(termTypes[0].getToColumn());
                 } else if (token.equals(OperatorToken.ARRAY)) {
-                    //”z—ñ‹Lqq‚Ìê‡‚Í“Á•Êˆ—
+                    //é…åˆ—è¨˜è¿°å­ã®å ´åˆã¯ç‰¹åˆ¥å‡¦ç†
                     final UnresolvedExpressionInfo<? extends ExpressionInfo> ownerType;
                     if (elements[0] instanceof IdentifierElement) {
                         ownerType = ((IdentifierElement) elements[0]).resolveAsVariable(
@@ -214,7 +214,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     resultType.setToLine(castedUsage.getToLine());
                     resultType.setToColumn(castedUsage.getToColumn());
                 } else {
-                    //Œ^Œˆ’è‚ÉŠÖ˜A‚·‚é€‚ğ¶‚©‚ç‡”Ô‚É‹™‚Á‚Ä‚¢‚Á‚ÄÅ‰‚ÉŒˆ’è‚Å‚«‚½“z‚ÉŸè‚ÉŒˆ‚ß‚é
+                    //å‹æ±ºå®šã«é–¢é€£ã™ã‚‹é …ã‚’å·¦ã‹ã‚‰é †ç•ªã«æ¼ã£ã¦ã„ã£ã¦æœ€åˆã«æ±ºå®šã§ããŸå¥´ã«å‹æ‰‹ã«æ±ºã‚ã‚‹
                     for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
                         resultType = termTypes[typeSpecifiedTermIndexes[i]];
                         if (null != resultType) {

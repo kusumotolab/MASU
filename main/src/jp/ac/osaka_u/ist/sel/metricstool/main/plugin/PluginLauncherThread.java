@@ -11,23 +11,23 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“ƒ‰ƒ“ƒ`ƒƒ[‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX.
- * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒhˆÈŠO‚ÍƒCƒ“ƒXƒ^ƒ“ƒX‰»‚Å‚«‚È‚¢.
- * ‚±‚ÌƒXƒŒƒbƒh‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Í•K‚¸“Á•ÊŒ ŒÀ‚ğ‚Â.
- * ‚±‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX‚ğ’Ê‚·‚±‚Æ‚ÅC–{—ˆ“Á•ÊŒ ŒÀ‚ª•K—v‚Èƒvƒ‰ƒOƒCƒ“Àsƒƒ\ƒbƒh‚Ö‚ÌƒAƒNƒZƒX‚ğ“Á•ÊŒ ŒÀ–³‚µ‚ÅÀs‚·‚é‚±‚Æ‚ª‚Å‚«‚é.
- * ‚ä‚¦‚ÉC‚±‚ÌƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚½“Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚ÍC‚»‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªƒvƒ‰ƒOƒCƒ“‚Éæ“¾‚³‚ê‚È‚¢‚æ‚¤‚É’ˆÓ‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹.
+ * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã¯ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã§ããªã„.
+ * ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯å¿…ãšç‰¹åˆ¥æ¨©é™ã‚’æŒã¤.
+ * ã“ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’é€šã™ã“ã¨ã§ï¼Œæœ¬æ¥ç‰¹åˆ¥æ¨©é™ãŒå¿…è¦ãªãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè¡Œãƒ¡ã‚½ãƒƒãƒ‰ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’ç‰¹åˆ¥æ¨©é™ç„¡ã—ã§å®Ÿè¡Œã™ã‚‹ã“ã¨ãŒã§ãã‚‹.
+ * ã‚†ãˆã«ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ãŸç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã¯ï¼Œãã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«å–å¾—ã•ã‚Œãªã„ã‚ˆã†ã«æ³¨æ„ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„.
  * <p>
- * ‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÀs‚ªI‚í‚Á‚½Œã‚ÉC•K‚¸ {@link #stopLaunching()}‚Ü‚½‚Í
- * {@link #stopLaunchingNow()}‚ğŒÄ‚Î‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
+ * å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡ŒãŒçµ‚ã‚ã£ãŸå¾Œã«ï¼Œå¿…ãš {@link #stopLaunching()}ã¾ãŸã¯
+ * {@link #stopLaunchingNow()}ã‚’å‘¼ã°ãªã‘ã‚Œã°ãªã‚‰ãªã„.
  * @author kou-tngt
  *
  */
 public class PluginLauncherThread extends Thread implements PluginLauncher {
     /**
-     * —Bˆê‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * “Á•ÊŒ ŒÀˆÈŠO‚ÌƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡‚Í {@link AccessControlException}‚ğƒXƒ[‚·‚é
-     * ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚É‚æ‚Á‚Ä¶¬‚³‚ê‚éƒXƒŒƒbƒhƒCƒ“ƒXƒ^ƒ“ƒX‚Í“Á•ÊŒ ŒÀ‚ğ•t—^‚³‚ê‚é
-     * @throws AccessControlException ŒÄ‚Ño‚µ‚½ƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡
+     * å”¯ä¸€ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * ç‰¹åˆ¥æ¨©é™ä»¥å¤–ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆã¯ {@link AccessControlException}ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹
+     * ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«ã‚ˆã£ã¦ç”Ÿæˆã•ã‚Œã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ç‰¹åˆ¥æ¨©é™ã‚’ä»˜ä¸ã•ã‚Œã‚‹
+     * @throws AccessControlException å‘¼ã³å‡ºã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã‹ã£ãŸå ´åˆ
      */
     public PluginLauncherThread(final PluginLauncher launcher) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -36,9 +36,9 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * Às‚ÌƒLƒƒƒ“ƒZƒ‹—v‹‚ğ‚·‚éƒƒ\ƒbƒh
-     * @param plugin ƒLƒƒƒ“ƒZƒ‹‚µ‚½‚¢ƒvƒ‰ƒOƒCƒ“
-     * @throws NullPointerException plugin‚ªnull‚Ìê‡
+     * å®Ÿè¡Œã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«è¦æ±‚ã‚’ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param plugin ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸã„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws NullPointerException pluginãŒnullã®å ´åˆ
      */
     public synchronized boolean cancel(final AbstractPlugin plugin) {
         if (null == plugin) {
@@ -51,9 +51,9 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * ƒLƒƒƒ“ƒZƒ‹—v‹‚Ü‚Æ‚ß‚Ä“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param plugins ƒLƒƒƒ“ƒZƒ‹‚·‚éƒvƒ‰ƒOƒCƒ“ŒQ‚ğŠÜ‚ŞƒRƒŒƒNƒVƒ‡ƒ“
-     * @throws NullPointerException plugins‚ªnull‚Ìê‡
+     * ã‚­ãƒ£ãƒ³ã‚»ãƒ«è¦æ±‚ã¾ã¨ã‚ã¦ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param plugins ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç¾¤ã‚’å«ã‚€ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+     * @throws NullPointerException pluginsãŒnullã®å ´åˆ
      */
     public void cancelAll(final Collection<AbstractPlugin> plugins) {
         if (null == plugins) {
@@ -68,7 +68,7 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * Às’†CÀs‘Ò‚¿‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÀs‚ğ‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚é
+     * å®Ÿè¡Œä¸­ï¼Œå®Ÿè¡Œå¾…ã¡ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher#cancelAll()
      */
     public void cancelAll() {
@@ -76,33 +76,33 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
     
     /**
-     * Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ì”‚ğ•Ô‚·.
-     * @return Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ì”
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã®æ•°ã‚’è¿”ã™.
+     * @return å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã®æ•°
      */
     public int getLaunchWaitingTaskNum(){
         return this.launcher.getLaunchWaitingTaskNum() + this.launchQueue.size();
     }
 
     /**
-     * Œ»İÀs’†‚Ìƒvƒ‰ƒOƒCƒ“‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return Às’†‚Ìƒvƒ‰ƒOƒCƒ“‚Ì”.
+     * ç¾åœ¨å®Ÿè¡Œä¸­ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å®Ÿè¡Œä¸­ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°.
      */
     public int getCurrentLaunchingNum() {
         return this.launcher.getCurrentLaunchingNum();
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ì“¯ÀsÅ‘å”‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return “¯ÀsÅ‘å”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°
      */
     public int getMaximumLaunchingNum() {
         return this.launcher.getMaximumLaunchingNum();
     }
 
     /**
-     * Às—v‹‚ğ“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param plugin Às‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws NullPointerException plugin‚ªnull‚Ìê‡
+     * å®Ÿè¡Œè¦æ±‚ã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param plugin å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws NullPointerException pluginãŒnullã®å ´åˆ
      */
     public synchronized void launch(final AbstractPlugin plugin) {
         if (null == plugin) {
@@ -114,9 +114,9 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * Às—v‹‚ğ‚Ü‚Æ‚ß‚Ä“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param plugins Às‚·‚éƒvƒ‰ƒOƒCƒ“ŒQ‚ğŠÜ‚ŞƒRƒŒƒNƒVƒ‡ƒ“
-     * @throws NullPointerException plugins‚ªnull‚Ìê‡
+     * å®Ÿè¡Œè¦æ±‚ã‚’ã¾ã¨ã‚ã¦ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param plugins å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç¾¤ã‚’å«ã‚€ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+     * @throws NullPointerException pluginsãŒnullã®å ´åˆ
      */
     public void launchAll(final Collection<AbstractPlugin> plugins) {
         if (null == plugins) {
@@ -131,23 +131,23 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * ‚±‚ÌƒXƒŒƒbƒh‚ÌÀsƒƒ\ƒbƒh
-     * ’â~M†‚ª—ˆ‚é‚Ü‚ÅC“o˜^‚³‚ê‚½Às—v‹‚âƒLƒƒƒ“ƒZƒ‹—v‹‚ğƒLƒ…[‚©‚çæ‚èo‚µ‚Äˆ—‚·‚é.
+     * ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã®å®Ÿè¡Œãƒ¡ã‚½ãƒƒãƒ‰
+     * åœæ­¢ä¿¡å·ãŒæ¥ã‚‹ã¾ã§ï¼Œç™»éŒ²ã•ã‚ŒãŸå®Ÿè¡Œè¦æ±‚ã‚„ã‚­ãƒ£ãƒ³ã‚»ãƒ«è¦æ±‚ã‚’ã‚­ãƒ¥ãƒ¼ã‹ã‚‰å–ã‚Šå‡ºã—ã¦å‡¦ç†ã™ã‚‹.
      * 
      */
     @Override
     public void run() {
         while (!this.stopNowFlag
                 && (!this.stopFlag || !this.launchQueue.isEmpty() || !this.cancelQueue.isEmpty())) {
-            //‘¦’â~M†‚ª—ˆ‚Ä‚¢‚È‚¢@‚©‚Â@i’â~M†‚ª—ˆ‚Ä‚È‚¢ or d–‚ªc‚Á‚Ä‚éj
+            //å³æ™‚åœæ­¢ä¿¡å·ãŒæ¥ã¦ã„ãªã„ã€€ã‹ã¤ã€€ï¼ˆåœæ­¢ä¿¡å·ãŒæ¥ã¦ãªã„ or ä»•äº‹ãŒæ®‹ã£ã¦ã‚‹ï¼‰
             synchronized (this) {
-                //ÀsƒŠƒNƒGƒXƒg‚ª—ˆ‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚ğÀs‚·‚é
+                //å®Ÿè¡Œãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒæ¥ã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹
                 while (!this.launchQueue.isEmpty()) {
                     this.launcher.launch(this.launchQueue.poll());
                 }
 
-                //ƒLƒƒƒ“ƒZƒ‹ƒŠƒNƒGƒXƒg‚ª—ˆ‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“‚ğƒLƒƒƒ“ƒZƒ‹‚·‚é
-                //launcher‚ÅƒLƒƒƒ“ƒZƒ‹‚É¸”s‚µ‚½‚çC‚±‚Á‚¿‚ÌƒLƒ…[‚É‚¢‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅC’T‚µ‚Äíœ‚·‚é
+                //ã‚­ãƒ£ãƒ³ã‚»ãƒ«ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒæ¥ã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
+                //launcherã§ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã«å¤±æ•—ã—ãŸã‚‰ï¼Œã“ã£ã¡ã®ã‚­ãƒ¥ãƒ¼ã«ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã®ã§ï¼Œæ¢ã—ã¦å‰Šé™¤ã™ã‚‹
                 while (!this.cancelQueue.isEmpty()) {
                     final AbstractPlugin plugin = this.cancelQueue.poll();
                     if (!this.launcher.cancel(plugin)) {
@@ -159,30 +159,30 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
                         }
                     }
                 }
-                //‘SƒLƒƒƒ“ƒZƒ‹‚ÌƒŠƒNƒGƒXƒg‚ª—ˆ‚½‚Ì‚ÅC‘SƒLƒƒƒ“ƒZƒ‹‚·‚é
+                //å…¨ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒæ¥ãŸã®ã§ï¼Œå…¨ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹
                 if (this.requestCancelAll) {
                     this.requestCancelAll = false;
                     this.launcher.cancelAll();
                     this.launchQueue.clear();
                 }
                 
-                //Å‘å“¯Às”‚Ì•ÏX—v‹‚ª—ˆ‚½‚Ì‚Å•ÏX‚·‚é
+                //æœ€å¤§åŒæ™‚å®Ÿè¡Œæ•°ã®å¤‰æ›´è¦æ±‚ãŒæ¥ãŸã®ã§å¤‰æ›´ã™ã‚‹
                 if (this.maximumLaunchingNumRequest > 0){
                     this.launcher.setMaximumLaunchingNum(this.maximumLaunchingNumRequest);
                     this.maximumLaunchingNumRequest = 0;
                 }
 
                 if (!this.stopNowFlag && !this.stopFlag) {
-                    //‚Ü‚¾’â~M†‚ª—ˆ‚Ä‚È‚¢‚Ì‚ÅC’N‚©‚ª‹N‚±‚µ‚É—ˆ‚é‚Ü‚ÅQ‚é
+                    //ã¾ã åœæ­¢ä¿¡å·ãŒæ¥ã¦ãªã„ã®ã§ï¼Œèª°ã‹ãŒèµ·ã“ã—ã«æ¥ã‚‹ã¾ã§å¯ã‚‹
                     try {
                         this.wait();
                     } catch (final InterruptedException e) {
-                        //Š„‚è‚Ü‚ê‚Ä‚à‹C‚É‚µ‚È‚¢
+                        //å‰²ã‚Šè¾¼ã¾ã‚Œã¦ã‚‚æ°—ã«ã—ãªã„
                     }
                 }
             }
         }
-        //’â~M†‚ğ“à•”ƒ‰ƒ“ƒ`ƒƒ[‚É‘—‚é
+        //åœæ­¢ä¿¡å·ã‚’å†…éƒ¨ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã«é€ã‚‹
         if (this.stopNowFlag) {
             this.launcher.stopLaunchingNow();
         } else if (this.stopFlag) {
@@ -191,9 +191,9 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚Ì“¯ÀsÅ‘å”‚ğƒZƒbƒg‚·‚éƒƒ\ƒbƒh
-     * @param size Å‘å”‚ğw’è‚·‚éC1ˆÈã‚Ì®”
-     * @throws IllegalArgumentException size‚ª0ˆÈ‰º‚¾‚Á‚½ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param size æœ€å¤§æ•°ã‚’æŒ‡å®šã™ã‚‹ï¼Œ1ä»¥ä¸Šã®æ•´æ•°
+     * @throws IllegalArgumentException sizeãŒ0ä»¥ä¸‹ã ã£ãŸå ´åˆ
      */
     public void setMaximumLaunchingNum(final int size) {
         if (1 > size) {
@@ -204,8 +204,8 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * ‚±‚ÌƒXƒŒƒbƒh‚É’â~M†‚ğ‘—‚éƒƒ\ƒbƒh.
-     * Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCÀs’†‚Ìƒvƒ‰ƒOƒCƒ“‚ÍI—¹‚·‚é‚Ü‚Å‘Ò‚Â.
+     * ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã«åœæ­¢ä¿¡å·ã‚’é€ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯çµ‚äº†ã™ã‚‹ã¾ã§å¾…ã¤.
      */
     public synchronized void stopLaunching() {
         this.stopFlag = true;
@@ -215,8 +215,8 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * ƒ‰ƒ“ƒ`ƒƒ[‚ğ’¼‚¿‚É’â~‚·‚é. 
-     * Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCÀs’†‚Ìƒ^ƒXƒN‚Í‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚³‚ê‚é. 
+     * ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’ç›´ã¡ã«åœæ­¢ã™ã‚‹. 
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã¯å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã‚‹. 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher#stopLaunchingNow()
      */
     public void stopLaunchingNow() {
@@ -226,37 +226,37 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     }
 
     /**
-     * Às—v‹ƒLƒ…[
+     * å®Ÿè¡Œè¦æ±‚ã‚­ãƒ¥ãƒ¼
      */
     private final ClosableLinkedBlockingQueue<AbstractPlugin> launchQueue = new ClosableLinkedBlockingQueue<AbstractPlugin>();
 
     /**
-     * ƒLƒƒƒ“ƒZƒ‹—v‹ƒLƒ…[
+     * ã‚­ãƒ£ãƒ³ã‚»ãƒ«è¦æ±‚ã‚­ãƒ¥ãƒ¼
      */
     private final BlockingQueue<AbstractPlugin> cancelQueue = new LinkedBlockingQueue<AbstractPlugin>();
 
     /**
-     * “à•”‚Å—˜—p‚·‚éƒ‰ƒ“ƒ`ƒƒ[
+     * å†…éƒ¨ã§åˆ©ç”¨ã™ã‚‹ãƒ©ãƒ³ãƒãƒ£ãƒ¼
      */
     private final PluginLauncher launcher;
 
     /**
-     * ’â~M†
+     * åœæ­¢ä¿¡å·
      */
     private boolean stopFlag = false;
 
     /**
-     * ‘¦’â~M†
+     * å³æ™‚åœæ­¢ä¿¡å·
      */
     private boolean stopNowFlag = false;
 
     /**
-     * ƒ^ƒXƒN‚Ì‘SƒLƒƒƒ“ƒZƒ‹—v‹
+     * ã‚¿ã‚¹ã‚¯ã®å…¨ã‚­ãƒ£ãƒ³ã‚»ãƒ«è¦æ±‚
      */
     private boolean requestCancelAll = false;
     
     /**
-     * ƒ^ƒXƒNÅ‘åÀs”‚Ì•ÏX—v‹‚ğ‚·‚é•Ï”
+     * ã‚¿ã‚¹ã‚¯æœ€å¤§å®Ÿè¡Œæ•°ã®å¤‰æ›´è¦æ±‚ã‚’ã™ã‚‹å¤‰æ•°
      */
     private int maximumLaunchingNumRequest = 0;
 

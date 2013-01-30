@@ -21,7 +21,7 @@ public class DualHashMap<T_CALLER, T_CALLEE> {
 		return calleeMap;
 	}
 
-	public void AddRelation(final T_CALLER caller, final T_CALLEE callee) {
+	public void addRelation(final T_CALLER caller, final T_CALLEE callee) {
 		callerMap.put(caller, callee);
 		calleeMap.put(callee, caller);
 	}

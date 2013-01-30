@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * External‚Èƒ†ƒjƒbƒg‚Å‚Í—˜—p‚Å‚«‚È‚¢ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚½‚Æ‚«‚É“Š‚°‚ç‚ê‚é—áŠO
+ * Externalãªãƒ¦ãƒ‹ãƒƒãƒˆã§ã¯åˆ©ç”¨ã§ããªã„ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ãŸã¨ãã«æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–
  * 
  * @author higo
  *

@@ -7,9 +7,9 @@ import java.util.Set;
 
 
 /**
- * ƒNƒ‰ƒX‚ÌQÆ‚ğ•\‚·ƒNƒ‰ƒXD
- * ReferenceTypeInfo@‚ÍuQÆŒ^v‚ğ•\‚·‚Ì‚É‘Î‚µ‚ÄC
- * ‚±‚ÌƒNƒ‰ƒX‚ÍƒNƒ‰ƒX‚ÌQÆ‚ÉŠÖ‚·‚éî•ñiQÆˆÊ’u‚È‚Çj‚ğ•\‚·
+ * ã‚¯ãƒ©ã‚¹ã®å‚ç…§ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
+ * ReferenceTypeInfoã€€ã¯ã€Œå‚ç…§å‹ã€ã‚’è¡¨ã™ã®ã«å¯¾ã—ã¦ï¼Œ
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã¯ã‚¯ãƒ©ã‚¹ã®å‚ç…§ã«é–¢ã™ã‚‹æƒ…å ±ï¼ˆå‚ç…§ä½ç½®ãªã©ï¼‰ã‚’è¡¨ã™
  * 
  * @author higo
  *
@@ -18,14 +18,14 @@ import java.util.Set;
 public final class ClassReferenceInfo extends ExpressionInfo {
 
     /**
-     * QÆŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å‚ç…§å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param referenceType ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌQÆŒ^
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param referenceType ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®å‚ç…§å‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ClassReferenceInfo(final ClassTypeInfo referenceType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -41,9 +41,9 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌQÆŒ^‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®å‚ç…§å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌQÆŒ^
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®å‚ç…§å‹
      */
     @Override
     public TypeInfo getType() {
@@ -51,18 +51,18 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚ÅQÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒXQÆ‚ÅQÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã§å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public ClassInfo getReferencedClass() {
         return this.referenceType.getReferencedClass();
     }
 
     /**
-     * ƒNƒ‰ƒXQÆ‚É‚¨‚¢‚Ä•Ï”‚ªg—p‚³‚ê‚é‚±‚Æ‚Í‚È‚¢‚Ì‚Å‹ó‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * ã‚¯ãƒ©ã‚¹å‚ç…§ã«ãŠã„ã¦å¤‰æ•°ãŒä½¿ç”¨ã•ã‚Œã‚‹ã“ã¨ã¯ãªã„ã®ã§ç©ºã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ‹ó‚ÌƒZƒbƒg
+     * @return ç©ºã®ã‚»ãƒƒãƒˆ
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -70,9 +70,9 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -80,9 +80,9 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -92,9 +92,9 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -126,7 +126,7 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒXQÆ‚ÌQÆŒ^‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹å‚ç…§ã®å‚ç…§å‹ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final ClassTypeInfo referenceType;
 }

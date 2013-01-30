@@ -21,10 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 
 
 /**
- * ŒÄ‚Ño‚µ‰Â”\‚È’PˆÊ(ƒƒ\ƒbƒh‚âƒRƒ“ƒXƒgƒ‰ƒNƒ^)‚ğ•\‚·ƒNƒ‰ƒX‚Ìƒrƒ‹ƒ_
+ * å‘¼ã³å‡ºã—å¯èƒ½ãªå˜ä½(ãƒ¡ã‚½ãƒƒãƒ‰ã‚„ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿)ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ã®ãƒ“ãƒ«ãƒ€
  * @author t-miyake
  *
- * @param <T> ŒÄ‚Ño‚µ‰Â”\‚È’PˆÊ‚Ìí—Ş
+ * @param <T> å‘¼ã³å‡ºã—å¯èƒ½ãªå˜ä½ã®ç¨®é¡
  */
 
 public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<? extends CallableUnitInfo>>
@@ -112,7 +112,7 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
                     }
                 } else if (!typeParameterStateManager.isEnterParameterDefinition()
                         && !throwsStateManager.isEntered()) {
-                    // •Ô‚è’l‚ÌŒ^
+                    // è¿”ã‚Šå€¤ã®å‹
                     if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
                         if (null != typeBuilder) {
                             typeBuilder.activate();

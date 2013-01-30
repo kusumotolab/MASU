@@ -41,10 +41,10 @@ public class MethodCallBuilder extends ExpressionBuilder {
                                         .getAllAvaliableNames()), callee.getOwnerUsage(), callee
                                 .getName());
                 methodCall.setOuterUnit(this.buildDataManager.getCurrentUnit());
-                // ŠJnˆÊ’u‚Íƒƒ\ƒbƒh–¼‚ÌoŒ»ˆÊ’u
+                // é–‹å§‹ä½ç½®ã¯ãƒ¡ã‚½ãƒƒãƒ‰åã®å‡ºç¾ä½ç½®
                 methodCall.setFromLine(event.getStartLine());
                 methodCall.setFromColumn(event.getStartColumn());
-                // I—¹ˆÊ’u‚Íƒƒ\ƒbƒhŒÄ‚Ño‚µ®‚ÌI—¹ˆÊ’u
+                // çµ‚äº†ä½ç½®ã¯ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—å¼ã®çµ‚äº†ä½ç½®
                 methodCall.setToLine(event.getEndLine());
                 methodCall.setToColumn(event.getEndColumn());
 
@@ -54,7 +54,7 @@ public class MethodCallBuilder extends ExpressionBuilder {
                         methodCall.addArgument(((IdentifierElement) argument).resolveAsVariable(
                                 this.buildDataManager, true, false));
                     } else if (argument instanceof TypeArgumentElement) {
-                        // TODO C#‚È‚Ç‚Ìê‡‚ÍŒ^ˆø”‚ÉQÆŒ^ˆÈŠO‚àw’è‚Å‚«‚é‚Ì‚Å‘Îˆ‚ª•K—v‚©‚à
+                        // TODO C#ãªã©ã®å ´åˆã¯å‹å¼•æ•°ã«å‚ç…§å‹ä»¥å¤–ã‚‚æŒ‡å®šã§ãã‚‹ã®ã§å¯¾å‡¦ãŒå¿…è¦ã‹ã‚‚
                         TypeArgumentElement typeArgument = (TypeArgumentElement) argument;
                         assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "type argument was not reference type.";
                         methodCall.addTypeArgument((UnresolvedReferenceTypeInfo<?>) typeArgument

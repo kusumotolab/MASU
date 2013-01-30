@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * O€‰‰Zg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ä¸‰é …æ¼”ç®—ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -16,16 +16,16 @@ import java.util.Set;
 public class TernaryOperationInfo extends ExpressionInfo {
 
     /**
-     * O€‰‰Z‚ÌğŒ®(‘æˆê€)CğŒ®‚ªtrue‚Ì‚É•Ô‚³‚ê‚é®CğŒ®‚ªfalse‚Ì‚É•Ô‚³‚ê‚é®(‘æO€)CŠJnˆÊ’uCI—¹ˆÊ’u‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼(ç¬¬ä¸€é …)ï¼Œæ¡ä»¶å¼ãŒtrueã®æ™‚ã«è¿”ã•ã‚Œã‚‹å¼ï¼Œæ¡ä»¶å¼ãŒfalseã®æ™‚ã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)ï¼Œé–‹å§‹ä½ç½®ï¼Œçµ‚äº†ä½ç½®ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param condtion ğŒ®(‘æˆê€)
-     * @param trueExpression ğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)
-     * @param falseExpression ğŒ®‚ªfalse‚Ì‚Æ‚¢‚É•Ô‚³‚ê‚é®(‘æO€)
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param condtion æ¡ä»¶å¼(ç¬¬ä¸€é …)
+     * @param trueExpression æ¡ä»¶å¼ãŒtrueã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬äºŒé …)
+     * @param falseExpression æ¡ä»¶å¼ãŒfalseã®ã¨ã„ã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TernaryOperationInfo(final ConditionInfo condtion, ExpressionInfo trueExpression,
             ExpressionInfo falseExpression, final CallableUnitInfo ownerMethod, final int fromLine,
@@ -53,24 +53,24 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚ğ•Ô‚·
-     * @return O€‰‰Z‚ÌğŒ®(‘æˆê€)
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼(ç¬¬ä¸€é …)ã‚’è¿”ã™
+     * @return ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼(ç¬¬ä¸€é …)
      */
     public ConditionInfo getCondition() {
         return this.condition;
     }
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)‚ğ•Ô‚·
-     * @return O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒtrueã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬äºŒé …)ã‚’è¿”ã™
+     * @return ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒtrueã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬äºŒé …)
      */
     public ExpressionInfo getTrueExpression() {
         return this.trueExpression;
     }
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªfalse‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æO€)‚ğ•Ô‚·
-     * @return O€‰‰Z‚ÌğŒ®‚ªfalse‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æO€)
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒfalseã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)ã‚’è¿”ã™
+     * @return ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒfalseã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)
      */
     public ExpressionInfo getFalseExpression() {
         return this.falseExpression;
@@ -86,9 +86,9 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -100,9 +100,9 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌO€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®ä¸‰é …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌO€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®ä¸‰é …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -127,9 +127,9 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -167,17 +167,17 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼(ç¬¬ä¸€é …)ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final ConditionInfo condition;
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒtrueã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬äºŒé …)ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final ExpressionInfo trueExpression;
 
     /**
-     * O€‰‰Z‚ÌğŒ®‚ªfalse‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æO€)‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¸‰é …æ¼”ç®—ã®æ¡ä»¶å¼ãŒfalseã®ã¨ãã«è¿”ã•ã‚Œã‚‹å¼(ç¬¬ä¸‰é …)ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final ExpressionInfo falseExpression;
 }

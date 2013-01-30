@@ -56,7 +56,7 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
                 && type
                         .equals(InheritanceDefinitionStateManager.INHERITANCE_STATE.EXIT_INHERITANCE_DEF)) {
 
-            //SuperƒNƒ‰ƒX‚ª‹ó(extends‚µ‚Ä‚éƒNƒ‰ƒX‚ª‘¶Ý‚µ‚È‚¢)‚È‚çObjectƒNƒ‰ƒX‚ðeƒNƒ‰ƒX‚Æ‚µ‚Ä’Ç‰Á
+            //Superã‚¯ãƒ©ã‚¹ãŒç©º(extendsã—ã¦ã‚‹ã‚¯ãƒ©ã‚¹ãŒå­˜åœ¨ã—ãªã„)ãªã‚‰Objectã‚¯ãƒ©ã‚¹ã‚’è¦ªã‚¯ãƒ©ã‚¹ã¨ã—ã¦è¿½åŠ 
             UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
             if (classInfo.isEnum()) {
                 //String[] enumFullQualifiedName = {"java", "lang", "enum"};
@@ -66,7 +66,7 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
                 classInfo.addSuperClass(enumTypeInfo);
             } else if (!classInfo.isInterface() && classInfo.getSuperClasses().isEmpty()) {
                 final String[] fqname = classInfo.getFullQualifiedName();
-                //ObjectƒNƒ‰ƒX‚»‚Ì‚à‚Ì‚É‚Í’Ç‰Á‚µ‚È‚¢
+                //Objectã‚¯ãƒ©ã‚¹ãã®ã‚‚ã®ã«ã¯è¿½åŠ ã—ãªã„
                 if (3 == fqname.length) {
                     if (fqname[0].equals("java") && fqname[1].equals("lang")
                             && fqname[2].equals("Object")) {

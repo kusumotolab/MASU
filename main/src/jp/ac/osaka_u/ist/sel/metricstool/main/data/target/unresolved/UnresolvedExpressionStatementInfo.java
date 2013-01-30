@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ®•¶‚Ì–¢‰ğŒˆî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * å¼æ–‡ã®æœªè§£æ±ºæƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -22,9 +22,9 @@ public class UnresolvedExpressionStatementInfo extends
         UnresolvedSingleStatementInfo<ExpressionStatementInfo> {
 
     /**
-     * ®•¶‚ğ\¬‚·‚é®‚Ì–¢‰ğŒˆî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param outerLocalSpace ®•ª‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
-     * @param expression ®•¶‚ğ\¬‚·‚é®‚Ì–¢‰ğŒˆî•ñ
+     * å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param outerLocalSpace å¼åˆ†ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
+     * @param expression å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼ã®æœªè§£æ±ºæƒ…å ±
      */
     public UnresolvedExpressionStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace,
@@ -43,14 +43,14 @@ public class UnresolvedExpressionStatementInfo extends
             CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
             FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new IllegalArgumentException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -77,7 +77,7 @@ public class UnresolvedExpressionStatementInfo extends
     }
 
     /**
-     * ®•¶‚ğ\¬‚·‚é®‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> expression;
 

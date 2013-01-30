@@ -52,7 +52,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -62,18 +62,18 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
             throw new IllegalStateException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ìƒ‰ƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã®ãƒ©ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // switch•¶‚Ì®‚ÌŒ^‚ğ’²‚×‚é 
+        // switchæ–‡ã®å¼ã®å‹ã‚’èª¿ã¹ã‚‹ 
         final UnresolvedCaseEntryInfo unresolvedOwnerCaseEntry = this.getOwnerCaseEntry();
         final UnresolvedSwitchBlockInfo unresolvedOwnerSwitchBlock = unresolvedOwnerCaseEntry
                 .getOwnerSwitchBlock();
@@ -85,7 +85,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
 
         final UnresolvedExpressionInfo<?> unresolvedLabel = this.getLabel();
 
-        // ƒvƒŠƒ~ƒeƒBƒuŒ^‚©‚»‚Ìƒ‰ƒbƒp[ƒNƒ‰ƒX‚Ì‚Æ‚«
+        // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã‹ãã®ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã®ã¨ã
         if ((type instanceof PrimitiveTypeInfo) || PrimitiveTypeInfo.isJavaWrapperType(type)) {
 
             this.resolvedInfo = unresolvedLabel.resolve(usingClass, usingMethod, classInfoManager,
@@ -93,16 +93,16 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
             return this.resolvedInfo;
         }
 
-        //@Œ^‚ª•s–¾‚È‚Æ‚«
+        //ã€€å‹ãŒä¸æ˜ãªã¨ã
         else if (type instanceof UnknownTypeInfo) {
 
-            // TODO ‚Æ‚è‚ ‚¦‚¸ƒvƒŠƒ~ƒeƒBƒuŒ^‚Æ“¯‚¶‚æ‚¤‚É‰ğÍ‚·‚éD–â‘è‚ ‚è‚Ì‰Â”\«D
+            // TODO ã¨ã‚Šã‚ãˆãšãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã¨åŒã˜ã‚ˆã†ã«è§£æã™ã‚‹ï¼å•é¡Œã‚ã‚Šã®å¯èƒ½æ€§ï¼
             this.resolvedInfo = unresolvedLabel.resolve(usingClass, usingMethod, classInfoManager,
                     fieldInfoManager, methodInfoManager);
             return this.resolvedInfo;
         }
 
-        //@‚»‚êˆÈŠO‚Ì‚Æ‚«
+        //ã€€ãã‚Œä»¥å¤–ã®ã¨ã
         else {
 
             if (!(unresolvedLabel instanceof UnresolvedVariableUsageInfo<?>)) {
@@ -118,7 +118,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
             final CallableUnitInfo ownerMethod = expression.getOwnerMethod();
 
             final ClassInfo referencedClass = ((ClassTypeInfo) type).getReferencedClass();
-            // TODO –{—ˆ‚Íenum‚Å—ñ‹“‚³‚ê‚Ä‚¢‚é‚à‚Ì‚ÍƒTƒuƒNƒ‰ƒX‚Æ‚µ‚Ä‰ğÍ‚³‚ê‚Ä‚¢‚é‚×‚«
+            // TODO æœ¬æ¥ã¯enumã§åˆ—æŒ™ã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¯ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¨ã—ã¦è§£æã•ã‚Œã¦ã„ã‚‹ã¹ã
             //for (final ClassInfo subClass : referencedClass.getSubClasses()) {
             //    if (subClass.getClassName().equals(name)) {
             //        this.resolvedInfo = new CaseLabelInfo(new ClassReferenceInfo(new ClassTypeInfo(
@@ -146,7 +146,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
                 }
             }
 
-            // ŠO•”ƒNƒ‰ƒX‚Ìê‡‚ÍCƒTƒuƒNƒ‰ƒX‚ª‚ ‚é‚à‚Ì‚Æ‚·‚é
+            // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ï¼Œã‚µãƒ–ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã‚‚ã®ã¨ã™ã‚‹
             if (referencedClass instanceof ExternalClassInfo) {
                 final String[] referencedClassFQName = referencedClass.getFullQualifiedName();
                 final String[] fqName = new String[referencedClassFQName.length + 1];

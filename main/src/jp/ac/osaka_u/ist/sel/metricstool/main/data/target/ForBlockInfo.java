@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * for ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * for ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -20,12 +20,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ForBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä for ƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ for ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ForBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -37,9 +37,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * •Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
+     * å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -55,9 +55,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -73,9 +73,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µˆê——‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µˆê——
+     * @return å‘¼ã³å‡ºã—ä¸€è¦§
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -96,9 +96,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚Ìfor•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®foræ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìfor•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®foræ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -150,8 +150,8 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * for•¶‚Ì‰Šú‰»®‚ğ’Ç‰Á
-     * @param initializerExpression ‰Šú‰»®
+     * foræ–‡ã®åˆæœŸåŒ–å¼ã‚’è¿½åŠ 
+     * @param initializerExpression åˆæœŸåŒ–å¼
      */
     public final void addInitializerExpressions(final ConditionInfo initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -162,7 +162,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         this.initilizerExpressions.add(initializerExpression);
 
-        // •Ö‹XãCinitializerExpression ‚ğ ExpressionExpressionInfo‚Å•ï‚Ş
+        // ä¾¿å®œä¸Šï¼ŒinitializerExpression ã‚’ ExpressionExpressionInfoã§åŒ…ã‚€
         if (initializerExpression instanceof ExpressionInfo) {
             final int fromLine = initializerExpression.getFromLine();
             final int fromColumn = initializerExpression.getFromColumn();
@@ -189,8 +189,8 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * for•¶‚ÌXV®‚ğ’Ç‰Á
-     * @param iteratorExpression ŒJ‚è•Ô‚µ®
+     * foræ–‡ã®æ›´æ–°å¼ã‚’è¿½åŠ 
+     * @param iteratorExpression ç¹°ã‚Šè¿”ã—å¼
      */
     public final void addIteratorExpressions(final ExpressionInfo iteratorExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -201,7 +201,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         this.iteratorExpressions.add(iteratorExpression);
 
-        // •Ö‹XãCiteratorExpression ‚ğ ExpressionStatementInfo‚Å•ï‚Ş
+        // ä¾¿å®œä¸Šï¼ŒiteratorExpression ã‚’ ExpressionStatementInfoã§åŒ…ã‚€
         {
             final int fromLine = iteratorExpression.getFromLine();
             final int fromColumn = iteratorExpression.getFromColumn();
@@ -227,16 +227,16 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‰Šú‰»®‚ÌƒZƒbƒg‚ğ•Ô‚·
-     * @return ‰Šú‰»®‚ÌƒZƒbƒg
+     * åˆæœŸåŒ–å¼ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
+     * @return åˆæœŸåŒ–å¼ã®ã‚»ãƒƒãƒˆ
      */
     public final SortedSet<ConditionInfo> getInitializerExpressions() {
         return Collections.unmodifiableSortedSet(this.initilizerExpressions);
     }
 
     /**
-     * XV®‚ÌƒZƒbƒg‚ğ•Ô‚·
-     * @return XV®
+     * æ›´æ–°å¼ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
+     * @return æ›´æ–°å¼
      */
     public final SortedSet<ExpressionInfo> getIteratorExpressions() {
         return Collections.unmodifiableSortedSet(this.iteratorExpressions);
@@ -248,9 +248,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -297,12 +297,12 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‰Šú‰»®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åˆæœŸåŒ–å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<ConditionInfo> initilizerExpressions;
 
     /**
-     * XV®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æ›´æ–°å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<ExpressionInfo> iteratorExpressions;
 }

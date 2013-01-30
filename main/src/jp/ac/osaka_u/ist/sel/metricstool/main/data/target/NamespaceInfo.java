@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 
 
 /**
- * –¼‘O‹óŠÔ–¼‚ğ•\‚·ƒNƒ‰ƒX
+ * åå‰ç©ºé–“åã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializable {
 
     /**
-     * –¼‘O‹óŠÔƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD–¼‘O‹óŠÔ–¼‚ª—^‚¦‚ç‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * åå‰ç©ºé–“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼åå‰ç©ºé–“åãŒä¸ãˆã‚‰ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      * 
      * @param name
      */
@@ -30,10 +30,10 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚Ì‡˜‚ğ’è‹`‚·‚éƒƒ\ƒbƒhDŒ»İ‚Í–¼‘O‹óŠÔ‚ğ•\‚· String ƒNƒ‰ƒX‚Ì compareTo ‚ğ—p‚¢‚Ä‚¢‚éD
+     * åå‰ç©ºé–“åã®é †åºã‚’å®šç¾©ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼ç¾åœ¨ã¯åå‰ç©ºé–“ã‚’è¡¨ã™ String ã‚¯ãƒ©ã‚¹ã® compareTo ã‚’ç”¨ã„ã¦ã„ã‚‹ï¼
      * 
-     * @param namespace ”äŠr‘ÎÛ–¼‘O‹óŠÔ–¼
-     * @return –¼‘O‹óŠÔ‚Ì‡˜
+     * @param namespace æ¯”è¼ƒå¯¾è±¡åå‰ç©ºé–“å
+     * @return åå‰ç©ºé–“ã®é †åº
      */
     public int compareTo(final NamespaceInfo namespace) {
 
@@ -45,7 +45,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * –¼‘O‹óŠÔ‚Ì”äŠr‚ğs‚¤D“™‚µ‚¢ê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡ false ‚ğ•Ô‚·
+     * åå‰ç©ºé–“ã®æ¯”è¼ƒã‚’è¡Œã†ï¼ç­‰ã—ã„å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆ false ã‚’è¿”ã™
      */
     @Override
     public boolean equals(final Object o) {
@@ -58,14 +58,14 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
             return false;
         }
 
-        // –¼‘O‹óŠÔ‚Ì’·‚³‚Å”äŠr
+        // åå‰ç©ºé–“ã®é•·ã•ã§æ¯”è¼ƒ
         final String[] name = this.getName();
         final String[] correspondName = ((NamespaceInfo) o).getName();
         if (name.length != correspondName.length) {
             return false;
         }
 
-        // Še—v‘f‚ğŒÂ•Ê‚É”äŠr
+        // å„è¦ç´ ã‚’å€‹åˆ¥ã«æ¯”è¼ƒ
         for (int i = 0; i < name.length; i++) {
             if (!name[i].equals(correspondName[i])) {
                 return false;
@@ -75,20 +75,20 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * –¼‘O‹óŠÔ‚Ì”äŠr‚ğs‚¤
+     * åå‰ç©ºé–“ã®æ¯”è¼ƒã‚’è¡Œã†
      * 
-     * @param namespace ”äŠr‘ÎÛ‚ÌString[] i–¼‘O‹óŠÔ‚ğ•\‚·String‚Ì”z—ñj
-     * @return “™‚µ‚¢ê‡‚Ítrue,‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @param namespace æ¯”è¼ƒå¯¾è±¡ã®String[] ï¼ˆåå‰ç©ºé–“ã‚’è¡¨ã™Stringã®é…åˆ—ï¼‰
+     * @return ç­‰ã—ã„å ´åˆã¯true,ãã†ã§ãªã„å ´åˆã¯false
      */
     public boolean equals(final String[] namespace) {
 
-        // –¼‘O‹óŠÔ‚Ì’·‚³‚Å”äŠr
+        // åå‰ç©ºé–“ã®é•·ã•ã§æ¯”è¼ƒ
         final String[] name = this.getName();
         if (name.length != namespace.length) {
             return false;
         }
 
-        // Še—v‘f‚ğŒÂ•Ê‚É”äŠr
+        // å„è¦ç´ ã‚’å€‹åˆ¥ã«æ¯”è¼ƒ
         for (int i = 0; i < name.length; i++) {
             if (!name[i].equals(namespace[i])) {
                 return false;
@@ -98,24 +98,24 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Ô‚·
+     * åå‰ç©ºé–“åã‚’è¿”ã™
      * 
-     * @return –¼‘O‹óŠÔ–¼
+     * @return åå‰ç©ºé–“å
      */
     public String[] getName() {
         return Arrays.<String>copyOf(this.name, this.name.length);
     }
 
     /**
-     * •s–¾‚È–¼‘O‹óŠÔ–¼‚ğ•\‚·’è”
+     * ä¸æ˜ãªåå‰ç©ºé–“åã‚’è¡¨ã™å®šæ•°
      */
     public final static NamespaceInfo UNKNOWN = new NamespaceInfo(new String[] { "unknown" });
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Ô‚·
+     * åå‰ç©ºé–“åã‚’è¿”ã™
      * 
-     * @param delimiter –¼‘O‚Ì‹æØ‚è•¶š
-     * @return –¼‘O‹óŠÔ‚ğ‚Â‚È‚¢‚¾ String
+     * @param delimiter åå‰ã®åŒºåˆ‡ã‚Šæ–‡å­—
+     * @return åå‰ç©ºé–“ã‚’ã¤ãªã„ã  String
      */
     public String getName(final String delimiter) {
 
@@ -135,9 +135,9 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * ‚±‚Ì–¼‘O‹óŠÔ–¼‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®åå‰ç©ºé–“åã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì–¼‘O‹óŠÔ–¼‚ÌƒnƒbƒVƒ…ƒR[ƒh
+     * @return ã“ã®åå‰ç©ºé–“åã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      */
     @Override
     public int hashCode() {
@@ -152,7 +152,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
-     * –¼‘O‹óŠÔ‚ğ•\‚·•Ï”
+     * åå‰ç©ºé–“ã‚’è¡¨ã™å¤‰æ•°
      */
     private final String[] name;
 

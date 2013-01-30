@@ -13,14 +13,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * switch •¶‚Ì default ƒGƒ“ƒgƒŠ‚ğ•\‚·ƒNƒ‰ƒX
+ * switch æ–‡ã® default ã‚¨ãƒ³ãƒˆãƒªã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
 public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä default ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ default ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–
      * 
      * @param correspondingSwitchBlock
      */
@@ -30,43 +30,43 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ default ƒGƒ“ƒgƒŠ‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º default ã‚¨ãƒ³ãƒˆãƒªã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public final DefaultEntryInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return (DefaultEntryInfo) this.getResolved();
         }
 
-        // ‚±‚Ì default ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch •¶‚ğæ“¾
+        // ã“ã® default ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch æ–‡ã‚’å–å¾—
         final UnresolvedSwitchBlockInfo unresolvedOwnerSwitchBlock = this.getOwnerSwitchBlock();
         final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ‚±‚Ì default ƒGƒ“ƒgƒŠ‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® default ã‚¨ãƒ³ãƒˆãƒªã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // default@ƒGƒ“ƒgƒŠƒIƒuƒWƒFƒNƒg‚ğì¬
+        // defaultã€€ã‚¨ãƒ³ãƒˆãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
         this.resolvedInfo = new DefaultEntryInfo(ownerSwitchBlock, fromLine, fromColumn, toLine,
                 toColumn);
         return (DefaultEntryInfo) this.resolvedInfo;

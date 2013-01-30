@@ -54,7 +54,7 @@ public class LabelStateManager extends StackedAstVisitStateManager<LabelStateMan
         if (token.isLabeledStatement()) {
             this.fireStateChangeEvent(LABEL_STATE.EXIT_LABEL_DEF, event);
         } else if (token.isIdentifier() && this.isInDefinition()) {
-            // FIXME ƒ‰ƒxƒ‹‚Ü‚í‚è‚Å‹““®‚ª‚¨‚©‚µ‚©‚Á‚½‚ç‚±‚±‚©‚à
+            // FIXME ãƒ©ãƒ™ãƒ«ã¾ã‚ã‚Šã§æŒ™å‹•ãŒãŠã‹ã—ã‹ã£ãŸã‚‰ã“ã“ã‹ã‚‚
             this.setState(STATE.OUT);
             this.fireStateChangeEvent(LABEL_STATE.EXIT_LABEL_NAME, event);
         }

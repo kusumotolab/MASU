@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒƒ\ƒbƒhî•ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒXD methodInfo ‚ğ—v‘f‚Æ‚µ‚Ä‚ÂD
+ * ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼ methodInfo ã‚’è¦ç´ ã¨ã—ã¦æŒã¤ï¼
  * 
  * @author higo
  * 
@@ -18,7 +18,7 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * @param methodInfo ’Ç‰Á‚·‚éƒƒ\ƒbƒhî•ñ
+     * @param methodInfo è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±
      */
     public void add(final TargetMethodInfo methodInfo) {
 
@@ -32,7 +32,7 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * @param methodInfo ’Ç‰Á‚·‚éƒƒ\ƒbƒhî•ñ
+     * @param methodInfo è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±
      */
     public void add(final ExternalMethodInfo methodInfo) {
 
@@ -46,7 +46,7 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * @param constructorInfo ’Ç‰Á‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ
+     * @param constructorInfo è¿½åŠ ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±
      */
     public void add(final TargetConstructorInfo constructorInfo) {
 
@@ -60,7 +60,7 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * @param constructorInfo ’Ç‰Á‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ
+     * @param constructorInfo è¿½åŠ ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±
      */
     public void add(final ExternalConstructorInfo constructorInfo) {
 
@@ -73,79 +73,79 @@ public final class MethodInfoManager {
     }
 
     /**
-     * ‘ÎÛƒƒ\ƒbƒhî•ñ‚ÌSortedSet‚ğ•Ô‚·D
+     * å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®SortedSetã‚’è¿”ã™ï¼
      * 
-     * @return ‘ÎÛƒƒ\ƒbƒhî•ñ‚ÌSortedSet
+     * @return å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®SortedSet
      */
     public SortedSet<TargetMethodInfo> getTargetMethodInfos() {
         return Collections.unmodifiableSortedSet(this.targetMethodInfos);
     }
 
     /**
-     * ŠO•”ƒƒ\ƒbƒhî•ñ‚ÌSortedSet‚ğ•Ô‚·D
+     * å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®SortedSetã‚’è¿”ã™ï¼
      * 
-     * @return ŠO•”ƒƒ\ƒbƒhî•ñ‚ÌSortedSet
+     * @return å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®SortedSet
      */
     public SortedSet<ExternalMethodInfo> getExternalMethodInfos() {
         return Collections.unmodifiableSortedSet(this.externalMethodInfos);
     }
 
     /**
-     * ‚Á‚Ä‚¢‚é‘ÎÛƒƒ\ƒbƒhî•ñ‚ÌŒÂ”‚ğ•Ô‚·.
+     * æŒã£ã¦ã„ã‚‹å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®å€‹æ•°ã‚’è¿”ã™.
      * 
-     * @return ‘ÎÛƒƒ\ƒbƒh‚ÌŒÂ”
+     * @return å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã®å€‹æ•°
      */
     public int getTargetMethodCount() {
         return this.targetMethodInfos.size();
     }
 
     /**
-     * ‚Á‚Ä‚¢‚éŠO•”ƒƒ\ƒbƒhî•ñ‚ÌŒÂ”‚ğ•Ô‚·.
+     * æŒã£ã¦ã„ã‚‹å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã®å€‹æ•°ã‚’è¿”ã™.
      * 
-     * @return ŠO•”ƒƒ\ƒbƒh‚ÌŒÂ”
+     * @return å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ã®å€‹æ•°
      */
     public int getExternalMethodCount() {
         return this.externalMethodInfos.size();
     }
 
     /**
-     * ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌSortedSet‚ğ•Ô‚·D
+     * å¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®SortedSetã‚’è¿”ã™ï¼
      * 
-     * @return ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌSortedSet
+     * @return å¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®SortedSet
      */
     public SortedSet<TargetConstructorInfo> getTargetConstructorInfos() {
         return Collections.unmodifiableSortedSet(this.targetConstructorInfos);
     }
 
     /**
-     * ŠO•”ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌSortedSet‚ğ•Ô‚·D
+     * å¤–éƒ¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®SortedSetã‚’è¿”ã™ï¼
      * 
-     * @return ŠO•”ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌSortedSet
+     * @return å¤–éƒ¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®SortedSet
      */
     public SortedSet<ExternalConstructorInfo> getExternalConstructorInfos() {
         return Collections.unmodifiableSortedSet(this.externalConstructorInfos);
     }
 
     /**
-     * ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌŒÂ”‚ğ•Ô‚·.
+     * å¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®å€‹æ•°ã‚’è¿”ã™.
      * 
-     * @return ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒÂ”
+     * @return å¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å€‹æ•°
      */
     public int getTargetConstructorCount() {
         return this.targetConstructorInfos.size();
     }
 
     /**
-     * ŠO•”ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ÌŒÂ”‚ğ•Ô‚·.
+     * å¤–éƒ¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã®å€‹æ•°ã‚’è¿”ã™.
      * 
-     * @return ŠO•”ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒÂ”
+     * @return å¤–éƒ¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å€‹æ•°
      */
     public int getExternalConstructorCount() {
         return this.externalConstructorInfos.size();
     }
 
     /**
-     * ƒƒ\ƒbƒhî•ñ‚ğƒNƒŠƒA
+     * ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’ã‚¯ãƒªã‚¢
      */
     public void clear() {
         this.targetMethodInfos.clear();
@@ -156,7 +156,7 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^D 
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ 
      */
     public MethodInfoManager() {
         this.targetMethodInfos = new TreeSet<TargetMethodInfo>();
@@ -167,23 +167,23 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * ‘ÎÛƒƒ\ƒbƒhî•ñ‚ğŠi”[‚·‚é•Ï”D
+     * å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final SortedSet<TargetMethodInfo> targetMethodInfos;
 
     /**
      * 
-     * ŠO•”ƒƒ\ƒbƒhî•ñ‚ğŠi”[‚·‚é•Ï”D
+     * å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final SortedSet<ExternalMethodInfo> externalMethodInfos;
 
     /**
-     * ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ğŠi”[‚·‚é•Ï”
+     * å¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
      */
     private final SortedSet<TargetConstructorInfo> targetConstructorInfos;
 
     /**
-     * ŠO•”ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ğŠi”[‚·‚é•Ï”
+     * å¤–éƒ¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
      */
     private final SortedSet<ExternalConstructorInfo> externalConstructorInfos;
 }

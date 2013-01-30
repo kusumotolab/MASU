@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 
 
 /**
- * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚Ìƒrƒ‹ƒ_
+ * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®ãƒ“ãƒ«ãƒ€
  * 
  * @author g-yamada
  *

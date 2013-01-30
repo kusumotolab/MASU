@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ASTƒp[ƒX‚Åæ“¾‚µ‚½ƒtƒB[ƒ‹ƒhî•ñ‚ğˆê“I‚ÉŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD
+ * ASTãƒ‘ãƒ¼ã‚¹ã§å–å¾—ã—ãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’ä¸€æ™‚çš„ã«æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
  * 
  * 
  * @author higo
@@ -29,16 +29,16 @@ public final class UnresolvedFieldInfo extends
         StaticOrInstance {
 
     /**
-     * UnresolvedƒtƒB[ƒ‹ƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD ƒtƒB[ƒ‹ƒh–¼‚ÆŒ^C’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ª—^‚¦‚ç‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * Unresolvedãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼ ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã¨å‹ï¼Œå®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ãŒä¸ãˆã‚‰ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      * 
-     * @param name ƒtƒB[ƒ‹ƒh–¼
-     * @param type ƒtƒB[ƒ‹ƒh‚ÌŒ^
-     * @param definitionClass ƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param initializer ƒtƒB[ƒ‹ƒh‚Ì‰Šú‰»®
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param name ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
+     * @param type ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‹
+     * @param definitionClass ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param initializer ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åˆæœŸåŒ–å¼
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo<?> type,
             final UnresolvedClassInfo definitionClass,
@@ -60,21 +60,21 @@ public final class UnresolvedFieldInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // Š—LƒNƒ‰ƒX‚ğ‰ğŒˆ
+        // æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’è§£æ±º
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // CüqC–¼‘OC‰Â‹«CƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğæ“¾
-        // Œ^‚Ì‚İ‚±‚±‚Å‚Í‰ğŒˆ‚µ‚È‚¢
+        // ä¿®é£¾å­ï¼Œåå‰ï¼Œå¯è¦–æ€§ï¼Œã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’å–å¾—
+        // å‹ã®ã¿ã“ã“ã§ã¯è§£æ±ºã—ãªã„
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
         final boolean instance = this.isInstanceMember();
@@ -90,7 +90,7 @@ public final class UnresolvedFieldInfo extends
 
     public TargetFieldInfo resolveType(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -108,18 +108,18 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚é–¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ğ•Ô‚·
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚é–¢‰ğŒˆƒNƒ‰ƒXî•ñ
+     * @return ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±
      */
     public UnresolvedClassInfo getOwnerClass() {
         return this.ownerClass;
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚é–¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ğƒZƒbƒg‚·‚é
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param ownerClass ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚é–¢‰ğŒˆƒNƒ‰ƒXî•ñ
+     * @param ownerClass ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±
      */
     public void setOwnerClass(final UnresolvedClassInfo ownerClass) {
 
@@ -131,9 +131,9 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public boolean isInheritanceVisible() {
@@ -143,9 +143,9 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public boolean isNamespaceVisible() {
@@ -155,9 +155,9 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public boolean isPublicVisible() {
@@ -166,9 +166,9 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public boolean isInstanceMember() {
@@ -178,9 +178,9 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public boolean isStaticMember() {
@@ -189,21 +189,21 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * •Ï”‚Ì‰Šú‰»®‚ğ•Ô‚·
+     * å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
      * 
-     * @return •Ï”‚Ì‰Šú‰»®D‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * @return å¤‰æ•°ã®åˆæœŸåŒ–å¼ï¼åˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã„å ´åˆã¯null
      */
     public final UnresolvedExpressionInfo<? extends ExpressionInfo> getInitilizer() {
         return this.initializer;
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private UnresolvedClassInfo ownerClass;
 
     /**
-     * •Ï”‚Ì‰Šú‰»®‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¡¨ã™å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer;
 

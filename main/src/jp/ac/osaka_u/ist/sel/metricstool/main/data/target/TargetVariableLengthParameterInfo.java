@@ -5,7 +5,7 @@ import java.util.Set;
 
 
 /**
- *@‰Â•Ï’·ˆø”‚ğ•\‚·ƒNƒ‰ƒX
+ *ã€€å¯å¤‰é•·å¼•æ•°ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  *
  * @author higo
  *
@@ -15,17 +15,17 @@ public class TargetVariableLengthParameterInfo extends TargetParameterInfo imple
         VariableLengthParameterInfo {
 
     /**
-     * ˆø”–¼Cˆø”‚ÌŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¼•æ•°åï¼Œå¼•æ•°ã®å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param name ˆø”–¼
-     * @param type ˆø”‚ÌŒ^
-     * @param index ‰½”Ô–Ú‚Ìˆø”‚©‚ğ•\‚·
-     * @param definitionMethod éŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param name å¼•æ•°å
+     * @param type å¼•æ•°ã®å‹
+     * @param index ä½•ç•ªç›®ã®å¼•æ•°ã‹ã‚’è¡¨ã™
+     * @param definitionMethod å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetVariableLengthParameterInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo type, final int index, final CallableUnitInfo definitionMethod,

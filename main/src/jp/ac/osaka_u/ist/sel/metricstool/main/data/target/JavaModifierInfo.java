@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 /**
- * Java‚ÌCüq‚ğˆµ‚¤ƒNƒ‰ƒX
+ * Javaã®ä¿®é£¾å­ã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
  * @author a-saitoh
  *
  */

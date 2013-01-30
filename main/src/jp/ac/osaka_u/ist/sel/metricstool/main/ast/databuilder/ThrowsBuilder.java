@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 /**
- * メソッドやコンストラクタが投げる例外を登録するクラス
+ * 繝｡繧ｽ繝�繝峨ｄ繧ｳ繝ｳ繧ｹ繝医Λ繧ｯ繧ｿ縺梧兜縺偵ｋ萓句､悶ｒ逋ｻ骭ｲ縺吶ｋ繧ｯ繝ｩ繧ｹ
  * @author g-yamada
   */
 public class ThrowsBuilder extends CompoundDataBuilder<UnresolvedClassTypeInfo>{

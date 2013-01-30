@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
 /**
- * ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é‚½‚ß‚Ìƒf[ƒ^ƒNƒ‰ƒX
+ * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãŸã‚ã®ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -13,18 +13,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 public final class MethodMetricsInfo extends MetricsInfo<TargetMethodInfo> {
 
     /**
-     * Œv‘ª‘ÎÛƒIƒuƒWƒFƒNƒg‚ğ—^‚¦‚Ä‰Šú‰»
+     * è¨ˆæ¸¬å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param method Œv‘ª‘ÎÛƒƒ\ƒbƒh
+     * @param method è¨ˆæ¸¬å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public MethodMetricsInfo(final TargetMethodInfo method) {
         super(method);
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚Ì‘—MÒ–¼‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡è€…åã‚’è¿”ã™
      * 
-     * @return ƒƒbƒZ[ƒW‚Ì‘—MÒ–¼
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡è€…å
      */
     public String getMessageSourceName() {
         return this.getClass().getName();

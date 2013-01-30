@@ -5,7 +5,7 @@ import java.util.EventObject;
 
 
 /**
- * i’»î•ñƒCƒxƒ“ƒg
+ * é€²æ—æƒ…å ±ã‚¤ãƒ™ãƒ³ãƒˆ
  * 
  * @author kou-tngt
  *
@@ -17,10 +17,10 @@ public class ProgressEvent extends EventObject {
      */
     private static final long serialVersionUID = -8735402526941031611L;
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * @param source i’»ó‹µ‚ğ‘—‚Á‚½ƒvƒ‰ƒOƒCƒ“
-     * @param value i’»ó‹µ‚ğ•\‚·’l(%)
+     * @param source é€²æ—çŠ¶æ³ã‚’é€ã£ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @param value é€²æ—çŠ¶æ³ã‚’è¡¨ã™å€¤(%)
      */
     public ProgressEvent(final ProgressSource source, final int value) {
         super(source);
@@ -29,17 +29,17 @@ public class ProgressEvent extends EventObject {
     }
 
     /**
-     * i’»ó‹µ‚ğæ‚èo‚·
+     * é€²æ—çŠ¶æ³ã‚’å–ã‚Šå‡ºã™
      * 
-     * @return ‚±‚ÌƒCƒxƒ“ƒg‚ª•\‚·i’»ó‹µ’l
+     * @return ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒè¡¨ã™é€²æ—çŠ¶æ³å€¤
      */
     public int getProgressValue() {
         return this.value;
     }
     
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒvƒ‰ƒOƒCƒ“‚ğ•Ô‚·
-     * @return ‚±‚ÌƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒvƒ‰ƒOƒCƒ“
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’è¿”ã™
+     * @return ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³
      * 
      * @see java.util.EventObject#getSource()
      */
@@ -51,7 +51,7 @@ public class ProgressEvent extends EventObject {
     
     private final ProgressSource source;
     /**
-     * i’»ó‹µ‚ğ•\‚·’li%j
+     * é€²æ—çŠ¶æ³ã‚’è¡¨ã™å€¤ï¼ˆ%ï¼‰
      */
     private final int value;
 

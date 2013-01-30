@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 /**
- * –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚È‚¢î•ñ‚ğ—˜—p‚µ‚æ‚¤‚Æ‚µ‚½‚ÉƒXƒ[‚³‚ê‚é—áŠO
+ * åå‰è§£æ±ºã•ã‚Œã¦ã„ãªã„æƒ…å ±ã‚’åˆ©ç”¨ã—ã‚ˆã†ã¨ã—ãŸæ™‚ã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–
  * 
  * @author higo
  *

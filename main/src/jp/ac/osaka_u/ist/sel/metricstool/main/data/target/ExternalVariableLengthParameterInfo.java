@@ -6,10 +6,10 @@ public class ExternalVariableLengthParameterInfo extends ExternalParameterInfo i
         VariableLengthParameterInfo {
 
     /**
-     * ˆø”‚ÌŒ^‚ğw’è‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»DŠO•”’è‹`‚Ìƒƒ\ƒbƒh–¼‚È‚Ì‚Åˆø”–¼‚Í•s–¾D
+     * å¼•æ•°ã®å‹ã‚’æŒ‡å®šã—ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ï¼å¤–éƒ¨å®šç¾©ã®ãƒ¡ã‚½ãƒƒãƒ‰åãªã®ã§å¼•æ•°åã¯ä¸æ˜ï¼
      * 
-     * @param type ˆø”‚ÌŒ^
-     * @param definitionMethod éŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param type å¼•æ•°ã®å‹
+     * @param definitionMethod å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public ExternalVariableLengthParameterInfo(final TypeInfo type,
             final CallableUnitInfo definitionMethod) {

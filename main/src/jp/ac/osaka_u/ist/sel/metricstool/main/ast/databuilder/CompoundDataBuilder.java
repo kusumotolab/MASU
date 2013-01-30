@@ -8,21 +8,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * •¡”‚Ìƒrƒ‹ƒ_‚ğ‘g‚İ‡‚í‚¹‚ÄC•¡‡“I‚Èî•ñ‚ğ\’z‚·‚é’ŠÛƒNƒ‰ƒXD
- * –‘O‚É“o˜^‚³‚ê‚½ƒrƒ‹ƒ_‚É‘Î‚·‚éƒCƒxƒ“ƒg’Ê’mˆ—‚Ì‘ãs‚ğs‚¤D
+ * è¤‡æ•°ã®ãƒ“ãƒ«ãƒ€ã‚’çµ„ã¿åˆã‚ã›ã¦ï¼Œè¤‡åˆçš„ãªæƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹ï¼
+ * äº‹å‰ã«ç™»éŒ²ã•ã‚ŒãŸãƒ“ãƒ«ãƒ€ã«å¯¾ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥å‡¦ç†ã®ä»£è¡Œã‚’è¡Œã†ï¼
  * 
  * @author kou-tngt
  *
- * @param <T> ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚ª\’z‚·‚éƒf[ƒ^‚ÌŒ^
+ * @param <T> ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ãŒæ§‹ç¯‰ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®å‹
  */
 public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
 
     /**
-     * ƒCƒxƒ“ƒg‚Ì’Ê’m‚ğ‚µ‚½‚¢ƒrƒ‹ƒ_‚ğ“o˜^‚·‚éD
-     * “o˜^‚³‚ê‚½ƒrƒ‹ƒ_‚Í‰Šúó‘Ô‚Å”ñƒAƒNƒeƒBƒu‰»‚³‚ê‚é‚½‚ßCŠeƒTƒuƒNƒ‰ƒX‚ÍC”CˆÓ‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å“KØ‚Éƒrƒ‹ƒ_‚ğƒAƒNƒeƒBƒu‚É‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
-     * ƒTƒuƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚©‚çŒÄ‚Ño‚³‚ê‚é‚±‚Æ‚ğl—¶‚µ‚Ä‚ ‚é‚Ì‚ÅCfinal‚ğŠO‚µ‚Ä‚Í‚È‚ç‚È‚¢D
+     * ã‚¤ãƒ™ãƒ³ãƒˆã®é€šçŸ¥ã‚’ã—ãŸã„ãƒ“ãƒ«ãƒ€ã‚’ç™»éŒ²ã™ã‚‹ï¼
+     * ç™»éŒ²ã•ã‚ŒãŸãƒ“ãƒ«ãƒ€ã¯åˆæœŸçŠ¶æ…‹ã§éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚Œã‚‹ãŸã‚ï¼Œå„ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¯ï¼Œä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§é©åˆ‡ã«ãƒ“ãƒ«ãƒ€ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
+     * ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã“ã¨ã‚’è€ƒæ…®ã—ã¦ã‚ã‚‹ã®ã§ï¼Œfinalã‚’å¤–ã—ã¦ã¯ãªã‚‰ãªã„ï¼
      * 
-     * @param builder@“o˜^‚·‚éƒrƒ‹ƒ_
+     * @param builderã€€ç™»éŒ²ã™ã‚‹ãƒ“ãƒ«ãƒ€
      */
     public final void addInnerBuilder(final DataBuilder<?> builder) {
         if (null != builder) {
@@ -32,10 +32,10 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     }
 
     /**
-     * ASTƒm[ƒh‚ª”CˆÓ‚Ìƒm[ƒh‚Ì’†‚É“ü‚Á‚½‚ÉŒÄ‚Ño‚³‚ê‚éD
-     * ‚Ü‚¸ó‘ÔŠÇ—‚ğs‚¤eƒNƒ‰ƒX‚Ì {@link StateDrivenDataBuilder#entered(AstVisitEvent)} ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µC
-     * ó‘Ô•Ï‰»‚ğ‚³‚¹‚½Œã‚ÅCƒAƒNƒeƒBƒuó‘Ô‚É‚ ‚éƒrƒ‹ƒ_‚É‘Î‚µ‚ÄƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚éD
-     * @param e ƒrƒWƒ^[‚ÌASTƒrƒWƒbƒgƒCƒxƒ“ƒg
+     * ASTãƒãƒ¼ãƒ‰ãŒä»»æ„ã®ãƒãƒ¼ãƒ‰ã®ä¸­ã«å…¥ã£ãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
+     * ã¾ãšçŠ¶æ…‹ç®¡ç†ã‚’è¡Œã†è¦ªã‚¯ãƒ©ã‚¹ã® {@link StateDrivenDataBuilder#entered(AstVisitEvent)} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ï¼Œ
+     * çŠ¶æ…‹å¤‰åŒ–ã‚’ã•ã›ãŸå¾Œã§ï¼Œã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã«ã‚ã‚‹ãƒ“ãƒ«ãƒ€ã«å¯¾ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ï¼
+     * @param e ãƒ“ã‚¸ã‚¿ãƒ¼ã®ASTãƒ“ã‚¸ãƒƒãƒˆã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -50,10 +50,10 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     }
 
     /**
-     * ASTƒm[ƒh‚ª”CˆÓ‚Ìƒm[ƒh‚©‚ço‚½‚ÉŒÄ‚Ño‚³‚ê‚éD
-     * æ‚ÉƒAƒNƒeƒBƒuó‘Ô‚É‚ ‚éƒrƒ‹ƒ_‚É‘Î‚µ‚ÄƒCƒxƒ“ƒg‚ğ’Ê’m‚µ‚½Œã‚ÉC
-     * eƒNƒ‰ƒX‚Ì {@link StateDrivenDataBuilder#entered(AstVisitEvent)} ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µó‘Ô•Ï‰»‚ğ”­¶‚³‚¹‚éD
-     * @param e ƒrƒWƒ^[‚ÌASTƒrƒWƒbƒgƒCƒxƒ“ƒg
+     * ASTãƒãƒ¼ãƒ‰ãŒä»»æ„ã®ãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
+     * å…ˆã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã«ã‚ã‚‹ãƒ“ãƒ«ãƒ€ã«å¯¾ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã—ãŸå¾Œã«ï¼Œ
+     * è¦ªã‚¯ãƒ©ã‚¹ã® {@link StateDrivenDataBuilder#entered(AstVisitEvent)} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—çŠ¶æ…‹å¤‰åŒ–ã‚’ç™ºç”Ÿã•ã›ã‚‹ï¼
+     * @param e ãƒ“ã‚¸ã‚¿ãƒ¼ã®ASTãƒ“ã‚¸ãƒƒãƒˆã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -68,17 +68,17 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     }
 
     /**
-     * “o˜^‚³‚ê‚½“à•”ƒrƒ‹ƒ_‚ğíœ‚·‚é
+     * ç™»éŒ²ã•ã‚ŒãŸå†…éƒ¨ãƒ“ãƒ«ãƒ€ã‚’å‰Šé™¤ã™ã‚‹
      * 
-     * @param builder@íœ‚·‚éƒrƒ‹ƒ_
+     * @param builderã€€å‰Šé™¤ã™ã‚‹ãƒ“ãƒ«ãƒ€
      */
     public final void removeInnerBuilder(final DataBuilder<?> builder) {
         this.builders.remove(builder);
     }
 
     /**
-     * ƒrƒ‹‚¾‚Ìó‘Ô‚ğƒŠƒZƒbƒg‚·‚éD
-     * ‘S‚Ä‚Ì“à•”ƒrƒ‹ƒ_‚Ìó‘Ô‚àƒŠƒZƒbƒg‚·‚éD
+     * ãƒ“ãƒ«ã ã®çŠ¶æ…‹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ï¼
+     * å…¨ã¦ã®å†…éƒ¨ãƒ“ãƒ«ãƒ€ã®çŠ¶æ…‹ã‚‚ãƒªã‚»ãƒƒãƒˆã™ã‚‹ï¼
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilderAdapter#reset()
      */
     @Override
@@ -90,7 +90,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     }
 
     /**
-     * —˜—p‚·‚é“à•”ƒrƒ‹‚¾‚ÌƒZƒbƒg
+     * åˆ©ç”¨ã™ã‚‹å†…éƒ¨ãƒ“ãƒ«ã ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<DataBuilder<?>> builders = new LinkedHashSet<DataBuilder<?>>();
 }

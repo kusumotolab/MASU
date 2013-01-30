@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆŠ‡ŒÊ®‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºæ‹¬å¼§å¼ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -21,9 +21,9 @@ public class UnresolvedParenthesesExpressionInfo extends
         UnresolvedExpressionInfo<ParenthesesExpressionInfo> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param parentheticExpression –¢‰ğŒˆ‚ÈŠ‡ŒÊ“à‚Ì®
+     * @param parentheticExpression æœªè§£æ±ºãªæ‹¬å¼§å†…ã®å¼
      */
     public UnresolvedParenthesesExpressionInfo(
             final UnresolvedExpressionInfo<?> parentheticExpression) {
@@ -36,26 +36,26 @@ public class UnresolvedParenthesesExpressionInfo extends
     }
 
     /**
-     * –¢‰ğŒˆƒJƒbƒR“à‚Ì®‚ğ•Ô‚·
+     * æœªè§£æ±ºã‚«ãƒƒã‚³å†…ã®å¼ã‚’è¿”ã™
      * 
-     * @return –¢‰ğŒˆƒJƒbƒR“à‚Ì®
+     * @return æœªè§£æ±ºã‚«ãƒƒã‚³å†…ã®å¼
      */
     public UnresolvedExpressionInfo<?> getParentheticExpression() {
         return this.parentheticExpression;
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      */
     @Override
     public ParenthesesExpressionInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -76,7 +76,7 @@ public class UnresolvedParenthesesExpressionInfo extends
     }
 
     /**
-     *@Š‡ŒÊ“à‚Ì®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     *ã€€æ‹¬å¼§å†…ã®å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     final private UnresolvedExpressionInfo<?> parentheticExpression;
 }

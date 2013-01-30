@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 
 /**
- * –³–¼ƒCƒ“ƒi[ƒNƒ‰ƒX‚ğŒ»‚·ƒNƒ‰ƒX
+ * ç„¡åã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’ç¾ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -15,15 +15,15 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
         AnonymousClassInfo {
 
     /**
-     * –³–¼ƒCƒ“ƒi[ƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ç„¡åã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param namespace –¼‘O‹óŠÔ
-     * @param className ƒNƒ‰ƒX–¼
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param namespace åå‰ç©ºé–“
+     * @param className ã‚¯ãƒ©ã‚¹å
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetAnonymousClassInfo(final NamespaceInfo namespace, final String className,
             final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
@@ -34,14 +34,14 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
     }
 
     /**
-     * –³–¼ƒCƒ“ƒi[ƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ç„¡åã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fullQualifiedName å®Œå…¨é™å®šå
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetAnonymousClassInfo(final String[] fullQualifiedName, final FileInfo fileInfo,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {

@@ -18,7 +18,7 @@ public class InstanceSpecificElement extends ExpressionElement {
 
     private InstanceSpecificElement(final UnresolvedExpressionInfo<? extends ExpressionInfo> usage,
             final SPECIFIC_ELEMENT_TYPE elementType) {
-        // TODO 0‚Å‚È‚¢‚Ì‚ğ‚¢‚ê‚é‚×‚«?
+        // TODO 0ã§ãªã„ã®ã‚’ã„ã‚Œã‚‹ã¹ã?
         super(usage);
 
         this.elementType = elementType;

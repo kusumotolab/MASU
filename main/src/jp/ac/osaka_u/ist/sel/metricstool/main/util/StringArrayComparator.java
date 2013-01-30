@@ -5,20 +5,20 @@ import java.util.Comparator;
 
 
 /**
- * String‚Ì”z—ñ‚ğ”äŠr‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * Stringã®é…åˆ—ã‚’æ¯”è¼ƒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
 public class StringArrayComparator implements Comparator<String[]> {
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒgD
-     * ˆø”‚È‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í private ‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é‚½‚ßV‚½‚ÉƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é‚±‚Æ‚Í‚Å‚«‚È‚¢D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼
+     * å¼•æ•°ãªã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯ private ã§å®£è¨€ã•ã‚Œã¦ã„ã‚‹ãŸã‚æ–°ãŸã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹ã“ã¨ã¯ã§ããªã„ï¼
      */
     public static final StringArrayComparator SINGLETON = new StringArrayComparator();
 
     /**
-     * “ñ‚Â‚ÌString[]‚ğ”äŠr‚·‚é
+     * äºŒã¤ã®String[]ã‚’æ¯”è¼ƒã™ã‚‹
      */
     public int compare(final String[] array1, final String[] array2) {
 
@@ -46,7 +46,7 @@ public class StringArrayComparator implements Comparator<String[]> {
     }
 
     /**
-     * ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“‚ğg‚Á‚Ä‚¢‚é‚½‚ß‚É private ‚É‚µ‚Ä‚¢‚é
+     * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ä½¿ã£ã¦ã„ã‚‹ãŸã‚ã« private ã«ã—ã¦ã„ã‚‹
      */
     private StringArrayComparator() {
     }

@@ -3,19 +3,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * Œ^T‚Å•\Œ»‚³‚ê‚éAST‚Ìƒm[ƒh‚ğC {@link AstToken}‚É–|–ó‚·‚é.
+ * å‹Tã§è¡¨ç¾ã•ã‚Œã‚‹ASTã®ãƒãƒ¼ãƒ‰ã‚’ï¼Œ {@link AstToken}ã«ç¿»è¨³ã™ã‚‹.
  * 
  * @author kou-tngt
  *
- * @param <T> –|–ó‚³‚ê‚éASTƒm[ƒh‚ÌŒ^
+ * @param <T> ç¿»è¨³ã•ã‚Œã‚‹ASTãƒãƒ¼ãƒ‰ã®å‹
  */
 public interface AstTokenTranslator<T> {
 
     /**
-     * ˆø”node‚ª•\‚·ASTƒm[ƒh‚ğ{@link AstToken}‚É–|–ó‚·‚é.
+     * å¼•æ•°nodeãŒè¡¨ã™ASTãƒãƒ¼ãƒ‰ã‚’{@link AstToken}ã«ç¿»è¨³ã™ã‚‹.
      * 
-     * @param node –|–ó‚·‚éASTƒm[ƒh
-     * @return –|–óŒ‹‰Ê‚Ìƒg[ƒNƒ“
+     * @param node ç¿»è¨³ã™ã‚‹ASTãƒãƒ¼ãƒ‰
+     * @return ç¿»è¨³çµæœã®ãƒˆãƒ¼ã‚¯ãƒ³
      */
     public AstToken translate(T node);
 

@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğŠÇ—‚·‚éƒNƒ‰ƒXD
+ * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -26,9 +26,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>, MessageSource {
 
     /**
-     * ƒƒgƒŠƒNƒXî•ñˆê——‚ÌƒCƒeƒŒ[ƒ^‚ğ•Ô‚·D
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ä¸€è¦§ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’è¿”ã™ï¼
      * 
-     * @return ƒƒgƒŠƒNƒXî•ñ‚ÌƒCƒeƒŒ[ƒ^
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
      */
     public Iterator<ClassMetricsInfo> iterator() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -38,10 +38,10 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒXî•ñ‚ğ•Ô‚·D ˆø”‚Åw’è‚³‚ê‚½ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒXî•ñ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍC null ‚ğ•Ô‚·D
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã‚’è¿”ã™ï¼ å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ï¼Œ null ã‚’è¿”ã™ï¼
      * 
-     * @param classInfo ‚Ù‚µ‚¢ƒƒgƒŠƒNƒXî•ñ‚ÌƒNƒ‰ƒX
-     * @return ƒƒgƒŠƒNƒXî•ñ
+     * @param classInfo ã»ã—ã„ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã®ã‚¯ãƒ©ã‚¹
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±
      */
     public ClassMetricsInfo get(final ClassInfo classInfo) {
 
@@ -54,19 +54,19 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     }
 
     /**
-     * ƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param classInfo ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚ÌƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg
-     * @param plugin ƒƒgƒŠƒNƒX‚Ìƒvƒ‰ƒOƒCƒ“
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException “o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒƒgƒŠƒNƒX‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚é
+     * @param classInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã®ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @param plugin ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹
      */
     public void putMetric(final TargetClassInfo classInfo, final AbstractPlugin plugin,
             final Number value) throws MetricAlreadyRegisteredException {
 
         ClassMetricsInfo classMetricsInfo = this.classMetricsInfos.get(classInfo);
 
-        // ‘ÎÛƒNƒ‰ƒX‚Ì classMetricsInfo ‚ª–³‚¢ê‡‚ÍCnew ‚µ‚Ä Map ‚É“o˜^‚·‚é
+        // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã® classMetricsInfo ãŒç„¡ã„å ´åˆã¯ï¼Œnew ã—ã¦ Map ã«ç™»éŒ²ã™ã‚‹
         if (null == classMetricsInfo) {
             classMetricsInfo = new ClassMetricsInfo(classInfo);
             this.classMetricsInfos.put(classInfo, classMetricsInfo);
@@ -76,9 +76,9 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     }
 
     /**
-     * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚É“o˜^˜R‚ê‚ª‚È‚¢‚©‚ğƒ`ƒFƒbƒN‚·‚é
+     * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã«ç™»éŒ²æ¼ã‚ŒãŒãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
      * 
-     * @throws MetricNotRegisteredException “o˜^˜R‚ê‚ª‚ ‚Á‚½ê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @throws MetricNotRegisteredException ç™»éŒ²æ¼ã‚ŒãŒã‚ã£ãŸå ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     public void checkMetrics() throws MetricNotRegisteredException {
 
@@ -102,16 +102,16 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ–¼‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…åã‚’è¿”ã™
      * 
-     * @return ƒƒbƒZ[ƒW‘—MÒ
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
      */
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
 
     /**
-     * ƒNƒ‰ƒXƒƒgƒŠƒNƒXƒ}ƒl[ƒWƒƒ‚ÌƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éD 
+     * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ï¼ 
      */
     public ClassMetricsInfoManager() {
         //MetricsToolSecurityManager.getInstance().checkAccess();
@@ -120,7 +120,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     }
 
     /**
-     * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚Ìƒ}ƒbƒv‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ãƒãƒƒãƒ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedMap<TargetClassInfo, ClassMetricsInfo> classMetricsInfos;
 }

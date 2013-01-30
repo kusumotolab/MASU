@@ -20,10 +20,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ‚ÌŒÄ‚Ño‚³‚ê‚é’PˆÊ‚ÌƒuƒƒbƒNiƒƒ\ƒbƒh‚âƒRƒ“ƒXƒgƒ‰ƒNƒ^j‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã®å‘¼ã³å‡ºã•ã‚Œã‚‹å˜ä½ã®ãƒ–ãƒ­ãƒƒã‚¯ï¼ˆãƒ¡ã‚½ãƒƒãƒ‰ã‚„ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼‰ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
         UnresolvedLocalSpaceInfo<T> implements Visualizable, StaticOrInstance, ModifierSetting {
@@ -32,7 +32,7 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
 
         super(ownerClass);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.modifiers = new HashSet<ModifierInfo>();
@@ -52,12 +52,12 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Éˆø”‚ğ’Ç‰Á‚·‚é
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«å¼•æ•°ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param parameterInfo ’Ç‰Á‚·‚éˆø”
+     * @param parameterInfo è¿½åŠ ã™ã‚‹å¼•æ•°
      */
     public final void addParameter(final UnresolvedParameterInfo parameterInfo) {
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == parameterInfo) {
             throw new NullPointerException();
@@ -67,22 +67,22 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * Cüq‚Ì Set ‚ğ•Ô‚·
+     * ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return Cüq‚Ì Set
+     * @return ä¿®é£¾å­ã® Set
      */
     public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * Cüq‚ğ’Ç‰Á‚·‚é
+     * ä¿®é£¾å­ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param modifier ’Ç‰Á‚·‚éCüq
+     * @param modifier è¿½åŠ ã™ã‚‹ä¿®é£¾å­
      */
     public final void addModifier(final ModifierInfo modifier) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == modifier) {
             throw new NullPointerException();
@@ -92,31 +92,31 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ìˆø”‚ÌƒŠƒXƒg‚ğ•Ô‚·
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å¼•æ•°ã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh‚Ìˆø”‚ÌƒŠƒXƒg
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã®ãƒªã‚¹ãƒˆ
      */
     public final List<UnresolvedParameterInfo> getParameters() {
         return Collections.unmodifiableList(this.parameters);
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™
      * 
-     * @return –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     public final List<UnresolvedTypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á‚·‚é
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeParameter ’Ç‰Á‚·‚é–¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^
+     * @param typeParameter è¿½åŠ ã™ã‚‹æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     public final void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameter) {
             throw new NullPointerException();
@@ -126,22 +126,22 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * –¢‰ğŒˆ—áŠO‚Ì List ‚ğ•Ô‚·
+     * æœªè§£æ±ºä¾‹å¤–ã® List ã‚’è¿”ã™
      * 
-     * @return –¢‰ğŒˆ—áŠO‚Ì List
+     * @return æœªè§£æ±ºä¾‹å¤–ã® List
     */
     public final List<UnresolvedClassTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableList(this.thrownExceptions);
     }
 
     /**
-      * –¢‰ğŒˆ—áŠO‚ğ’Ç‰Á‚·‚é
+      * æœªè§£æ±ºä¾‹å¤–ã‚’è¿½åŠ ã™ã‚‹
       * 
-      * @param typeParameter ’Ç‰Á‚·‚é–¢‰ğŒˆ—áŠO
+      * @param typeParameter è¿½åŠ ã™ã‚‹æœªè§£æ±ºä¾‹å¤–
       */
     public final void addTypeParameter(final UnresolvedClassTypeInfo thrownException) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == thrownException) {
             throw new NullPointerException();
@@ -151,18 +151,18 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public final UnresolvedClassInfo getOwnerClass() {
         return this.getOuterClass();
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isInheritanceVisible() {
@@ -172,9 +172,9 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isNamespaceVisible() {
@@ -184,9 +184,9 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isPublicVisible() {
@@ -195,9 +195,9 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚È‚Ì‚Å true ‚ğ•Ô‚·
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ãªã®ã§ true ã‚’è¿”ã™
      */
     @Override
     public boolean isInstanceMember() {
@@ -206,9 +206,9 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Å‚Í‚È‚¢‚Ì‚Å false ‚ğ•Ô‚·
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã§ã¯ãªã„ã®ã§ false ã‚’è¿”ã™
      */
     @Override
     public boolean isStaticMember() {
@@ -217,15 +217,15 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ‚·‚é
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±ºã™ã‚‹
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
      * @param classInfoManager
      * @return
      */
     public final T resolveTypeParameter(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -249,15 +249,15 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ‚·‚é
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±ºã™ã‚‹
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
      * @param classInfoManager
      * @return
      */
     public final T resolveParameter(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -276,15 +276,15 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * –¢‰ğŒˆ‚ÌƒXƒ[‚³‚ê‚é—áŠOî•ñ‚ğ‰ğŒˆ‚·‚é
-     * ‚·‚Å‚Éresolveƒƒ\ƒbƒh‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô‚Å—p‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * æœªè§£æ±ºã®ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–æƒ…å ±ã‚’è§£æ±ºã™ã‚‹
+     * ã™ã§ã«resolveãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹ã§ç”¨ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
      * @param classInfoManager
      * @return
      */
     public final T resolveThrownException(final ClassInfoManager classInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
@@ -303,22 +303,22 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedTypeParameterInfo> typeParameters;
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ˆø”‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å¼•æ•°ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedParameterInfo> parameters;
 
     /**
-     * throw‚³‚ê‚é—áŠO‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * throwã•ã‚Œã‚‹ä¾‹å¤–ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedClassTypeInfo> thrownExceptions;
 
     /**
-     * Cüq‚ğ•Û‘¶‚·‚é
+     * ä¿®é£¾å­ã‚’ä¿å­˜ã™ã‚‹
      */
     private Set<ModifierInfo> modifiers;
 

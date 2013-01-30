@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * ‘g‚İ‚İŒ^‚ğ•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX.
+ * çµ„ã¿è¾¼ã¿å‹ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -16,55 +16,55 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class BuiltinTypeToken extends AstTokenAdapter {
 
     /**
-     * boolŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * boolå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken BOOLEAN = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.BOOLEAN), PrimitiveTypeInfo.BOOLEAN_STRING);
 
     /**
-     * byteŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * byteå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken BYTE = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.BYTE), PrimitiveTypeInfo.BYTE_STRING);
 
     /**
-     * charŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * charå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken CHAR = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.CHAR), PrimitiveTypeInfo.CHAR_STRING);
 
     /**
-     * shortŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * shortå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken SHORT = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.SHORT), PrimitiveTypeInfo.SHORT_STRING);
 
     /**
-     * intŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * intå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken INT = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.INT), PrimitiveTypeInfo.INT_STRING);
 
     /**
-     * longŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * longå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken LONG = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.LONG), PrimitiveTypeInfo.LONG_STRING);
 
     /**
-     * floatŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * floatå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken FLOAT = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.FLOAT), PrimitiveTypeInfo.FLOAT_STRING);
 
     /**
-     * doubleŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * doubleå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken DOUBLE = new BuiltinTypeToken(PrimitiveTypeInfo
             .getType(PrimitiveTypeInfo.TYPE.DOUBLE), PrimitiveTypeInfo.DOUBLE_STRING);
 
     /**
-     * voidŒ^‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX.
+     * voidå‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹.
      */
     public static final BuiltinTypeToken VOID = new BuiltinTypeToken(VoidTypeInfo.getInstance(),
             VoidTypeInfo.VOID_STRING);
@@ -90,9 +90,9 @@ public class BuiltinTypeToken extends AstTokenAdapter {
     }
 
     /**
-     * w’è‚³‚ê‚½•¶š—ñ‚Å•\‚³‚ê‚éŠî–{Œ^‚ğ•\‚·ƒg[ƒNƒ“‚ğì¬‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã§è¡¨ã•ã‚Œã‚‹åŸºæœ¬å‹ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * 
-     * @param text@‚±‚Ì‘g‚İ‚İŒ^‚ğ•\‚·•¶š—ñ
+     * @param textã€€ã“ã®çµ„ã¿è¾¼ã¿å‹ã‚’è¡¨ã™æ–‡å­—åˆ—
      */
     protected BuiltinTypeToken(final UnresolvedTypeInfo<? extends TypeInfo> type, final String name) {
         super(name);
@@ -101,7 +101,7 @@ public class BuiltinTypeToken extends AstTokenAdapter {
     }
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚ª•\‚·Šî–{Œ^
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒè¡¨ã™åŸºæœ¬å‹
      */
     private final UnresolvedTypeInfo<? extends TypeInfo> type;
 }

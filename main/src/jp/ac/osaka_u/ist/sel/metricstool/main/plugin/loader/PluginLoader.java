@@ -11,40 +11,40 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginResponseException;
 /**
  * 
  * 
- * ‚±‚ÌƒCƒ“ƒ^ƒtƒF[ƒX‚Íƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒhŒQ‚ð’ñ‹Ÿ‚·‚éD
- * loadPluginC‚Ü‚½‚ÍloadPluginsƒƒ\ƒbƒhŒQ‚ð—p‚¢‚ÄC”CˆÓ‚ÌƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
- * ’P‚ÉƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éê‡‚ÍloadPlugins()ƒƒ\ƒbƒh‚ðŽg‚¤D
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¯ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’æä¾›ã™ã‚‹ï¼Ž
+ * loadPluginï¼Œã¾ãŸã¯loadPluginsãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’ç”¨ã„ã¦ï¼Œä»»æ„ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼Ž
+ * å˜ã«ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å ´åˆã¯loadPlugins()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ã†ï¼Ž
  * 
  * @author kou-tngt
  *
  */
 public interface PluginLoader {
     /**
-     * ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚çApluginDirName‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ–¼‚ðŽ‚Âƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é
-     * @param pluginDirName ƒvƒ‰ƒOƒCƒ“ƒfƒBƒŒƒNƒgƒŠ–¼
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡D
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã€pluginDirNameã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’æŒã¤ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+     * @param pluginDirName ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
      */
     public AbstractPlugin loadPlugin(String pluginDirName) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException, PluginResponseException;
 
     /**
-     * pluginsDir‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚©‚çCpluginName‚ÅŽw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ–¼‚ðŽ‚Âƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚é
-     * @param pluginsDir ƒvƒ‰ƒOƒCƒ“‚ª”z’u‚³‚ê‚éƒfƒBƒŒƒNƒgƒŠ
-     * @param pluginDirName ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡D
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
-     * @throws NullPointerException pluginsDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginsDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * pluginsDirã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã‹ã‚‰ï¼ŒpluginNameã§æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’æŒã¤ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+     * @param pluginsDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒé…ç½®ã•ã‚Œã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @param pluginDirName ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
+     * @throws NullPointerException pluginsDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginsDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public AbstractPlugin loadPlugin(File pluginsDir, String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
@@ -52,36 +52,36 @@ public interface PluginLoader {
             PluginResponseException;
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“Ž©‘Ì‚ÌƒfƒBƒŒƒNƒgƒŠ‚ð’¼ÚpluginRootDir‚ÅŽw’è‚µ‚Äƒ[ƒh‚·‚éƒƒ\ƒbƒhD
-     * @param pluginRootDir ƒvƒ‰ƒOƒCƒ“‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ
-     * @return ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws PluginLoadException ƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡‚É“Š‚°‚ç‚ê‚éD’A‚µC‰º‹L‚Ì—áŠO‚Ì‚¢‚¸‚ê‚©‚ÉƒP[ƒX‚ÉŠY“–‚µ‚½Žž‚Í‚»‚¿‚ç‚ª—Dæ‚³‚ê‚éD
-     * @throws IllegalPluginXmlFormatException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌÝ’èî•ñ‚ð‹Lq‚µ‚½XMLƒtƒ@ƒCƒ‹‚ÌŒ`Ž®‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws IllegalPluginDirectoryStructureException ƒ[ƒh‚·‚éƒvƒ‰ƒOƒCƒ“‚ÌƒfƒBƒŒƒNƒgƒŠ\¬‚ª³‚µ‚­‚È‚¢ê‡D
-     * @throws PluginClassLoadException ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒXƒ[ƒh‚ÉŽ¸”s‚µ‚½ê‡D
-     * @throws PluginResponseException ƒ[ƒh‚µ‚½ƒvƒ‰ƒOƒCƒ“‚©‚ç‚Ì‰ž“š‚ª‚È‚©‚Á‚½ê‡.
-     * @throws NullPointerException pluginRootDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginRootDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è‡ªä½“ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ç›´æŽ¥pluginRootDirã§æŒ‡å®šã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * @param pluginRootDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @return ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws PluginLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼Žä½†ã—ï¼Œä¸‹è¨˜ã®ä¾‹å¤–ã®ã„ãšã‚Œã‹ã«ã‚±ãƒ¼ã‚¹ã«è©²å½“ã—ãŸæ™‚ã¯ãã¡ã‚‰ãŒå„ªå…ˆã•ã‚Œã‚‹ï¼Ž
+     * @throws IllegalPluginXmlFormatException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šæƒ…å ±ã‚’è¨˜è¿°ã—ãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws IllegalPluginDirectoryStructureException ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãŒæ­£ã—ããªã„å ´åˆï¼Ž
+     * @throws PluginClassLoadException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆï¼Ž
+     * @throws PluginResponseException ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®å¿œç­”ãŒãªã‹ã£ãŸå ´åˆ.
+     * @throws NullPointerException pluginRootDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginRootDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public AbstractPlugin loadPlugin(File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException, PluginResponseException;
 
     /**
-     * ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éƒƒ\ƒbƒh
-     * ŒÂ•Ê‚Ìƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒhŽ¸”s‚É‚æ‚Á‚Ä”­¶‚µ‚½—áŠO‚Í•Ô‚³‚È‚¢D
-     * @return ƒ[ƒh‚Å‚«‚½Šeƒvƒ‰ƒOƒCƒ“‚Ìƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ðŠi”[‚·‚éƒŠƒXƒg
-     * @throws PluginLoadException ƒfƒtƒHƒ‹ƒg‚ÌpluginsƒfƒBƒŒƒNƒgƒŠ‚ÌŒŸo‚ÉŽ¸”s‚µ‚½ê‡D
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * å€‹åˆ¥ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰å¤±æ•—ã«ã‚ˆã£ã¦ç™ºç”Ÿã—ãŸä¾‹å¤–ã¯è¿”ã•ãªã„ï¼Ž
+     * @return ãƒ­ãƒ¼ãƒ‰ã§ããŸå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
+     * @throws PluginLoadException ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®pluginsãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¤œå‡ºã«å¤±æ•—ã—ãŸå ´åˆï¼Ž
      */
     public List<AbstractPlugin> loadPlugins() throws PluginLoadException;
 
     /**
-     * Žw’è‚µ‚½ƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚É‚ ‚é‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ðƒ[ƒh‚·‚éƒƒ\ƒbƒhD
-     * ŒÂ•Ê‚Ìƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒhŽ¸”s‚É‚æ‚Á‚Ä”­¶‚µ‚½—áŠO‚Í•Ô‚³‚È‚¢D
-     * @param pluginsDir ƒvƒ‰ƒOƒCƒ“‚ª”z’u‚³‚ê‚Ä‚¢‚éƒfƒBƒŒƒNƒgƒŠ
-     * @return@ƒ[ƒh‚Å‚«‚½Šeƒvƒ‰ƒOƒCƒ“‚Ìƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ðŠi”[‚·‚éƒŠƒXƒg
-     * @throws NullPointerException pluginsDir‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException pluginsDir‚ª‘¶Ý‚µ‚È‚¢ê‡CƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚È‚¢ê‡
+     * æŒ‡å®šã—ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã«ã‚ã‚‹å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼Ž
+     * å€‹åˆ¥ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰å¤±æ•—ã«ã‚ˆã£ã¦ç™ºç”Ÿã—ãŸä¾‹å¤–ã¯è¿”ã•ãªã„ï¼Ž
+     * @param pluginsDir ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒé…ç½®ã•ã‚Œã¦ã„ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+     * @returnã€€ãƒ­ãƒ¼ãƒ‰ã§ããŸå„ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
+     * @throws NullPointerException pluginsDirãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException pluginsDirãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯ãªã„å ´åˆ
      */
     public List<AbstractPlugin> loadPlugins(File pluginsDir);
 }

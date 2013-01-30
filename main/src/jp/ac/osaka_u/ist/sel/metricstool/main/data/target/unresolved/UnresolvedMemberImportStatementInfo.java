@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * staticƒCƒ“ƒ|[ƒg‚ğ•\‚·ƒNƒ‰ƒX
+ * staticã‚¤ãƒ³ãƒãƒ¼ãƒˆã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -37,14 +37,14 @@ public class UnresolvedMemberImportStatementInfo extends
     }
 
     /**
-     * ƒNƒ‰ƒX–¼‚Æ‚»‚êˆÈ‰ºstaticƒƒ“ƒo[‘S‚Ä‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©‚ğ•\‚·boolean‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰».
+     * ã‚¯ãƒ©ã‚¹åã¨ãã‚Œä»¥ä¸‹staticãƒ¡ãƒ³ãƒãƒ¼å…¨ã¦ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’è¡¨ã™booleanã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–.
      * <p>
-     * import aaa.bbb.CCC.DDDG // new UnresolvedMemberImportStatementInfo({"aaa","bbb","CCC","DDD"}, false); <br>
+     * import aaa.bbb.CCC.DDDï¼› // new UnresolvedMemberImportStatementInfo({"aaa","bbb","CCC","DDD"}, false); <br>
      * import aaa.bbb.CCC.*; // new AvailableNamespace({"aaa","bbb","CCC"},true); <br>
      * </p>
      * 
-     * @param namespace —˜—p‰Â”\–¼‘O‹óŠÔ–¼
-     * @param allMembers ‘S‚Ä‚ÌƒNƒ‰ƒX‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©
+     * @param namespace åˆ©ç”¨å¯èƒ½åå‰ç©ºé–“å
+     * @param allMembers å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹
      */
     public UnresolvedMemberImportStatementInfo(final String[] namespace, final boolean allMembers) {
         super(namespace, allMembers);
@@ -55,18 +55,18 @@ public class UnresolvedMemberImportStatementInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ˆÊ’uî•ñ‚ğæ“¾
+        // ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();

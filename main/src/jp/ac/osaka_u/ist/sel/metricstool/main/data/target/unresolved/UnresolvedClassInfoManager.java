@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * UnresolvedClassInfoManager ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+ * UnresolvedClassInfoManager ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -21,13 +21,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedClassInfoManager {
 
     /**
-     * ƒNƒ‰ƒXî•ñ‚ğ’Ç‰Á‚·‚é
+     * ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param classInfo ƒNƒ‰ƒXî•ñ
+     * @param classInfo ã‚¯ãƒ©ã‚¹æƒ…å ±
      */
     public synchronized void addClass(final UnresolvedClassInfo classInfo) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
             throw new IllegalArgumentException();
@@ -46,9 +46,9 @@ public class UnresolvedClassInfoManager {
     }
 
     /**
-     * ƒNƒ‰ƒXî•ñ‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * ã‚¯ãƒ©ã‚¹æƒ…å ±ã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ƒNƒ‰ƒXî•ñ‚ÌƒZƒbƒg
+     * @return ã‚¯ãƒ©ã‚¹æƒ…å ±ã®ã‚»ãƒƒãƒˆ
      */
     public Collection<UnresolvedClassInfo> getClassInfos() {
         return Collections.unmodifiableCollection(this.classInfos.values());
@@ -56,7 +56,7 @@ public class UnresolvedClassInfoManager {
 
     public UnresolvedClassInfo getClassInfo(final String name) {
 
-        // “¯‚¶ƒNƒ‰ƒX–¼‚ğ‚ÂƒNƒ‰ƒXˆê——‚ğæ“¾        
+        // åŒã˜ã‚¯ãƒ©ã‚¹åã‚’æŒã¤ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’å–å¾—        
         for(final UnresolvedClassInfo classInfo : this.getClassInfos()){
             if(classInfo.getClassName().equals(name)){
                 return classInfo;
@@ -66,7 +66,7 @@ public class UnresolvedClassInfoManager {
     }
     
     /**
-     * ˆø”‚È‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * å¼•æ•°ãªã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
      */
     public UnresolvedClassInfoManager() {
@@ -74,7 +74,7 @@ public class UnresolvedClassInfoManager {
     }
 
     /**
-     * UnresolvedClassInfo ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒZƒbƒg
+     * UnresolvedClassInfo ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚»ãƒƒãƒˆ
      */
     private final ConcurrentMap<String, UnresolvedClassInfo> classInfos;
 }

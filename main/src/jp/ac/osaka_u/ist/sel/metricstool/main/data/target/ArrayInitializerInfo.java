@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 
 
 /**
- * ”z—ñ‚Ì‰Šú‰»‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—ã®åˆæœŸåŒ–ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -22,14 +22,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 public final class ArrayInitializerInfo extends ExpressionInfo {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param elements ‰Šú‰»®
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param elements åˆæœŸåŒ–å¼
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ArrayInitializerInfo(List<ExpressionInfo> elements, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -46,18 +46,18 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
     }
 
     /**
-     * —v‘f‚Ì‰Šú‰»®‚ğ•Ô‚·
+     * è¦ç´ ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
      * 
-     * @return —v‘f‚Ì‰Šú‰»®
+     * @return è¦ç´ ã®åˆæœŸåŒ–å¼
      */
     public List<ExpressionInfo> getElementInitializers() {
         return this.elementInitialiers;
     }
 
     /**
-     * ”z—ñ‚Ì’·‚³‚ğ•Ô‚·
+     * é…åˆ—ã®é•·ã•ã‚’è¿”ã™
      * 
-     * @return@”z—ñ‚Ì’·‚³
+     * @returnã€€é…åˆ—ã®é•·ã•
      */
     public final int getArrayLength() {
         return this.elementInitialiers.size();
@@ -118,9 +118,9 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -132,9 +132,9 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

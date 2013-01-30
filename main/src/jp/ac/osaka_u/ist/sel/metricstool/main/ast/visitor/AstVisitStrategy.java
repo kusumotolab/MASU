@@ -5,19 +5,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * {@link AstVisitor} ‚ª‚Ç‚Ì‚æ‚¤‚ÉAST‚Ìƒm[ƒh‚ğ–K–â‚·‚é‚©‚ğ§Œä‚·‚éƒCƒ“ƒ^ƒtƒF[ƒX.
+ * {@link AstVisitor} ãŒã©ã®ã‚ˆã†ã«ASTã®ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹ã‹ã‚’åˆ¶å¾¡ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * 
  * @author kou-tngt
  *
- * @param <T> ƒrƒWƒ^[‚ª–K–â‚·‚éAST‚ÌŠeƒm[ƒh‚ÌŒ^
+ * @param <T> ãƒ“ã‚¸ã‚¿ãƒ¼ãŒè¨ªå•ã™ã‚‹ASTã®å„ãƒãƒ¼ãƒ‰ã®å‹
  */
 public interface AstVisitStrategy<T> {
 
     /**
-     * ƒrƒWƒ^[‚ªŒ»İ‚Ìƒm[ƒh‚Ìqƒm[ƒh‚ğ–K–â‚·‚é•K—v‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç¾åœ¨ã®ãƒãƒ¼ãƒ‰ã®å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
      * 
-     * @param node ƒrƒWƒ^[‚ªŒ»İ“’B‚µ‚Ä‚¢‚éƒm[ƒh
-     * @param token ƒrƒWƒ^[‚ªŒ»İ“’B‚µ‚Ä‚¢‚éƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
+     * @param node ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç¾åœ¨åˆ°é”ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒ‰
+     * @param token ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç¾åœ¨åˆ°é”ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
      */
     public boolean needToVisitChildren(T node, AstToken token);
 

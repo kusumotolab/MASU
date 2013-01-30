@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 
 
 /**
- * •¶š—ñCƒ}ƒWƒbƒNƒiƒ“ƒo[‚È‚Ç‚Ì’è”’lƒg[ƒNƒ“‚ğ•\‚·ƒNƒ‰ƒX
+ * æ–‡å­—åˆ—ï¼Œãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ãªã©ã®å®šæ•°å€¤ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -13,11 +13,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 public class ConstantToken extends AstTokenAdapter {
 
     /**
-     * ˆø”text‚Åw’è‚³‚ê‚½•¶š—ñ‚Å‹Lq‚³‚êCˆø”type‚Åw’è‚³‚ê‚½Œ^‚Ì’è”‚ğ•\‚·ƒg[ƒNƒ“‚ğì¬‚·‚é
+     * å¼•æ•°textã§æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã§è¨˜è¿°ã•ã‚Œï¼Œå¼•æ•°typeã§æŒ‡å®šã•ã‚ŒãŸå‹ã®å®šæ•°ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹
      * 
-     * @param text@’è”‚Æ‚µ‚Ä‹Lq‚³‚ê‚½•¶š—ñ
-     * @param type@’è”‚ÌŒ^
-     * @throws type‚ªnull‚Ìê‡
+     * @param textã€€å®šæ•°ã¨ã—ã¦è¨˜è¿°ã•ã‚ŒãŸæ–‡å­—åˆ—
+     * @param typeã€€å®šæ•°ã®å‹
+     * @throws typeãŒnullã®å ´åˆ
      */
     public ConstantToken(final String text, final TypeInfo type) {
         super(text);
@@ -29,15 +29,15 @@ public class ConstantToken extends AstTokenAdapter {
     }
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚ª•\‚·’è”‚ÌŒ^‚ğ•Ô‚·.
-     * @return ‚±‚Ìƒg[ƒNƒ“‚ª•\‚·’è”‚ÌŒ^
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒè¡¨ã™å®šæ•°ã®å‹ã‚’è¿”ã™.
+     * @return ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒè¡¨ã™å®šæ•°ã®å‹
      */
     public TypeInfo getType() {
         return this.type;
     }
 
     /**
-     * ’è”‚ğ•\‚·ƒg[ƒNƒ“‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * å®šæ•°ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * @return true
      */
     @Override
@@ -46,7 +46,7 @@ public class ConstantToken extends AstTokenAdapter {
     }
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚ª•\‚·’è”‚ÌŒ^
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒè¡¨ã™å®šæ•°ã®å‹
      */
     private final TypeInfo type;
 

@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆˆø”g—p‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºå¼•æ•°ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -22,15 +22,15 @@ public final class UnresolvedParameterUsageInfo extends
         UnresolvedVariableUsageInfo<ParameterUsageInfo> {
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éˆø”CQÆ‚©‚Ç‚¤‚©‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¼•æ•°ï¼Œå‚ç…§ã‹ã©ã†ã‹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param usedVariable g—p‚³‚ê‚Ä‚¢‚é•Ï”
-     * @param reference QÆ‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedVariable ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
+     * @param reference å‚ç…§ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
             boolean reference, final boolean assignment,
@@ -43,17 +43,17 @@ public final class UnresolvedParameterUsageInfo extends
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆˆø”g—p‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±ºå¼•æ•°ä½¿ç”¨ã‚’è§£æ±ºã™ã‚‹
      */
     @Override
     public ParameterUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -75,9 +75,9 @@ public final class UnresolvedParameterUsageInfo extends
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éˆø”‚ğ•Ô‚·
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¼•æ•°ã‚’è¿”ã™
      * 
-     * @return@g—p‚³‚ê‚Ä‚¢‚éˆø”
+     * @returnã€€ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¼•æ•°
      */
     public UnresolvedParameterInfo getUsedVariable() {
         return this.usedVariable;

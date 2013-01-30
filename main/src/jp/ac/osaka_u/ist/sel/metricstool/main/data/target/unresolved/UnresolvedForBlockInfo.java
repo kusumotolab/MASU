@@ -18,16 +18,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ for ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±º for ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
 public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo<ForBlockInfo> {
 
     /**
-     * ŠO‘¤‚ÌƒuƒƒbƒNî•ñ‚ğ—^‚¦‚ÄCfor ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œfor ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      * 
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -37,28 +37,28 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ for ƒuƒƒbƒN‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º for ãƒ–ãƒ­ãƒƒã‚¯ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public ForBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì for•¶‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® foræ–‡ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -75,13 +75,13 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚ÌƒCƒ“ƒi[—Ìˆæ‚ğ–¼‘O‰ğŒˆ‚·‚é
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®ã‚¤ãƒ³ãƒŠãƒ¼é ˜åŸŸã‚’åå‰è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager ƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager ƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager ƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public final void resolveInnerBlock(final TargetClassInfo usingClass,
@@ -91,14 +91,14 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // –¢‰ğŒˆ‰Šú‰»®î•ñ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İƒIƒuƒWƒFƒNƒg‚É’Ç‰Á
+        // æœªè§£æ±ºåˆæœŸåŒ–å¼æƒ…å ±ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¿½åŠ 
         for (final UnresolvedConditionInfo<? extends ConditionInfo> unresolvedInitializer : this.initializerExpressions) {
             final ConditionInfo initializer = unresolvedInitializer.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInitializerExpressions(initializer);
         }
 
-        // –¢‰ğŒˆXV®î•ñ‚ğ’Ç‰Á‚µC‰ğŒˆÏ‚İƒIƒuƒWƒFƒNƒg‚É’Ç‰Á
+        // æœªè§£æ±ºæ›´æ–°å¼æƒ…å ±ã‚’è¿½åŠ ã—ï¼Œè§£æ±ºæ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¿½åŠ 
         for (final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedUpdater : this.iteratorExpressions) {
             final ExpressionInfo update = unresolvedUpdater.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -107,9 +107,9 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     }
 
     /**
-     * ‰Šú‰»®‚ğ’Ç‰Á‚·‚éƒƒ\ƒbƒh
+     * åˆæœŸåŒ–å¼ã‚’è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param initializerExpression ’Ç‰Á‚·‚é‰Šú‰»®
+     * @param initializerExpression è¿½åŠ ã™ã‚‹åˆæœŸåŒ–å¼
      */
     public final void addInitializerExpression(
             final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression) {
@@ -123,9 +123,9 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     }
 
     /**
-     * XV®‚ğ’Ç‰Á‚·‚éƒƒ\ƒbƒh
+     * æ›´æ–°å¼ã‚’è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param iteratorExpression ’Ç‰Á‚·‚éXV®
+     * @param iteratorExpression è¿½åŠ ã™ã‚‹æ›´æ–°å¼
      */
     public final void addIteratorExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> iteratorExpression) {

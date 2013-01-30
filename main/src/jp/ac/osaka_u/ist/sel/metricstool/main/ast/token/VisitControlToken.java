@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitStrategy;
 
 
 /**
- * ƒrƒWƒ^[‚Ì“®ì‚ğ§Œä‚·‚é‚½‚ß‚É—\‚ß—pˆÓ‚³‚ê‚½’è”ƒg[ƒNƒ“‚ğ‚ÂƒNƒ‰ƒX.
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ã®å‹•ä½œã‚’åˆ¶å¾¡ã™ã‚‹ãŸã‚ã«äºˆã‚ç”¨æ„ã•ã‚ŒãŸå®šæ•°ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æŒã¤ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -13,23 +13,23 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitStrategy;
 public class VisitControlToken extends AstTokenAdapter {
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚Å•\‚³‚ê‚éƒm[ƒh‚Ì’†‚É‚ÍƒrƒWƒ^[‚Í“ü‚ç‚È‚¢.
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã§è¡¨ã•ã‚Œã‚‹ãƒãƒ¼ãƒ‰ã®ä¸­ã«ã¯ãƒ“ã‚¸ã‚¿ãƒ¼ã¯å…¥ã‚‰ãªã„.
      */
     public static final VisitControlToken SKIP = new VisitControlToken("SKIP");
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚Å•\‚³‚ê‚éƒm[ƒh©‘Ì‚É‚Í“Á•Ê‚Èˆ—‚Í‚µ‚È‚¢‚ªCƒrƒWƒ^[‚Í‚»‚Ìƒm[ƒh‚Ìqƒm[ƒh‚ğ–K–â‚µ‚És‚­.
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã§è¡¨ã•ã‚Œã‚‹ãƒãƒ¼ãƒ‰è‡ªä½“ã«ã¯ç‰¹åˆ¥ãªå‡¦ç†ã¯ã—ãªã„ãŒï¼Œãƒ“ã‚¸ã‚¿ãƒ¼ã¯ãã®ãƒãƒ¼ãƒ‰ã®å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã—ã«è¡Œã.
      */
     public static final VisitControlToken ENTER = new VisitControlToken("ENTER");
 
     /**
-     * –¢’è‹`‚Ìƒm[ƒh‚ğ•\Œ»‚·‚éƒg[ƒNƒ“.
-     * ‚±‚Ìƒg[ƒNƒ“‚Å•\‚³‚ê‚éƒm[ƒh‚É‘Î‚µ‚Ä‚Ç‚Ì‚æ‚¤‚Èˆ—‚ğs‚¤‚©‚Í {@link AstVisitStrategy}‚ÌÀ‘•‚É”C‚³‚ê‚é.
+     * æœªå®šç¾©ã®ãƒãƒ¼ãƒ‰ã‚’è¡¨ç¾ã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³.
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã§è¡¨ã•ã‚Œã‚‹ãƒãƒ¼ãƒ‰ã«å¯¾ã—ã¦ã©ã®ã‚ˆã†ãªå‡¦ç†ã‚’è¡Œã†ã‹ã¯ {@link AstVisitStrategy}ã®å®Ÿè£…ã«ä»»ã•ã‚Œã‚‹.
      */
     public static final VisitControlToken UNKNOWN = new VisitControlToken("UNKNOWN");
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìí—Ş‚ğ•\Œ»‚·‚é•¶š—ñ‚ğ—^‚¦‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç¨®é¡ã‚’è¡¨ç¾ã™ã‚‹æ–‡å­—åˆ—ã‚’ä¸ãˆã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * @param text
      */
     private VisitControlToken(final String text) {

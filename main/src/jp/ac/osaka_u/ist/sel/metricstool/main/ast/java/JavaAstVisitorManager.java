@@ -55,16 +55,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 
 
 /**
- * JavaŒ¾Œêê—p‚Ìƒf[ƒ^“o˜^ƒNƒ‰ƒXŒQ‚ğ“KØ‚ÉƒrƒWƒ^[‚É“o˜^‚µCƒrƒWƒ^[‚É‘Î‚·‚é‘€ì‚ğs‚¤ƒƒ\ƒbƒh‚ğ’ñ‹Ÿ‚·‚éD
+ * Javaè¨€èªå°‚ç”¨ã®ãƒ‡ãƒ¼ã‚¿ç™»éŒ²ã‚¯ãƒ©ã‚¹ç¾¤ã‚’é©åˆ‡ã«ãƒ“ã‚¸ã‚¿ãƒ¼ã«ç™»éŒ²ã—ï¼Œãƒ“ã‚¸ã‚¿ãƒ¼ã«å¯¾ã™ã‚‹æ“ä½œã‚’è¡Œã†ãƒ¡ã‚½ãƒƒãƒ‰ã‚’æä¾›ã™ã‚‹ï¼
  * 
  * @author kou-tngt
  *
- * @param <T> ŠÇ—‚·‚éVisitor‚ª–K–â‚·‚éAST‚Ìƒm[ƒh‚ÌŒ^
+ * @param <T> ç®¡ç†ã™ã‚‹VisitorãŒè¨ªå•ã™ã‚‹ASTã®ãƒãƒ¼ãƒ‰ã®å‹
  */
 public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
 
     /**
-     * Java—p‚ÌƒrƒWƒ^[‚ğ\’z‚·‚é
+     * Javaç”¨ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã‚’æ§‹ç¯‰ã™ã‚‹
      * 
      * @param visitor
      */
@@ -207,7 +207,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     }
 
     /**
-     * ƒrƒWƒ^[‚Ìó‘Ô‚Æ\’z’†‚Ìƒf[ƒ^‚ğƒŠƒZƒbƒg‚·‚éD
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã¨æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ï¼
      */
     public void reset() {
         for (final DataBuilder<?> builder : this.builders) {
@@ -218,24 +218,24 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     }
 
     /**
-     * ŠÇ—‚·‚éƒrƒWƒ^[
+     * ç®¡ç†ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼
      */
     private final AstVisitor<T> visitor;
 
     /**
-     * \’z’†‚Ìƒf[ƒ^‚ÌŠÇ—Ò
+     * æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…
      */
     private final JavaBuildManager buildDataManager = new JavaBuildManager();
 
     /**
-     * ‰ğÍ’†‚Ì®ƒf[ƒ^‚ÌŠÇ—Ò
+     * è§£æä¸­ã®å¼ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…
      */
     private final ExpressionElementManager expressionManager = new ExpressionElementManager();
 
     //    private final ModifiersInterpriter modifiersInterpriter = new JavaModifiersInterpriter();
 
     /**
-     * ƒrƒWƒ^[‚ÉƒZƒbƒg‚µ‚½ƒrƒ‹ƒ_[ŒQ‚ÌƒZƒbƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã«ã‚»ãƒƒãƒˆã—ãŸãƒ“ãƒ«ãƒ€ãƒ¼ç¾¤ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<DataBuilder<?>> builders = new LinkedHashSet<DataBuilder<?>>();
 }

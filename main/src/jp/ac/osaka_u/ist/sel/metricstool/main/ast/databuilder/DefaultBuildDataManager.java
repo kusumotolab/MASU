@@ -42,14 +42,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnitStack;
 
 
 /**
- * ƒrƒ‹ƒ_[‚ª\’z‚·‚éî•ñ‚ğŠÇ—‚µ‚ÄCî•ñ‘S‘Ì‚Ì®‡«‚ğæ‚éƒNƒ‰ƒX.
- * ˆÈ‰º‚Ì3í—Ş‚Ì‹@”\‚ğ˜AŒg‚µ‚Äs‚¤.
+ * ãƒ“ãƒ«ãƒ€ãƒ¼ãŒæ§‹ç¯‰ã™ã‚‹æƒ…å ±ã‚’ç®¡ç†ã—ã¦ï¼Œæƒ…å ±å…¨ä½“ã®æ•´åˆæ€§ã‚’å–ã‚‹ã‚¯ãƒ©ã‚¹.
+ * ä»¥ä¸‹ã®3ç¨®é¡ã®æ©Ÿèƒ½ã‚’é€£æºã—ã¦è¡Œã†.
  * 
- * 1. \’z’†‚Ìƒf[ƒ^‚ÉŠÖ‚·‚éî•ñ‚ÌŠÇ—C’ñ‹Ÿ‹y‚Ñ\’zó‘Ô‚ÌŠÇ—
+ * 1. æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã«é–¢ã™ã‚‹æƒ…å ±ã®ç®¡ç†ï¼Œæä¾›åŠã³æ§‹ç¯‰çŠ¶æ…‹ã®ç®¡ç†
  * 
- * 2. –¼‘O‹óŠÔCƒGƒCƒŠƒAƒXC•Ï”‚È‚Ç‚ÌƒXƒR[ƒvŠÇ—
+ * 2. åå‰ç©ºé–“ï¼Œã‚¨ã‚¤ãƒªã‚¢ã‚¹ï¼Œå¤‰æ•°ãªã©ã®ã‚¹ã‚³ãƒ¼ãƒ—ç®¡ç†
  * 
- * 3. ƒNƒ‰ƒXî•ñCƒƒ\ƒbƒhî•ñC•Ï”‘ã“üC•Ï”QÆCƒƒ\ƒbƒhŒÄ‚Ño‚µî•ñ‚È‚Ç‚Ì“o˜^ì‹Æ‚Ì‘ãs
+ * 3. ã‚¯ãƒ©ã‚¹æƒ…å ±ï¼Œãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ï¼Œå¤‰æ•°ä»£å…¥ï¼Œå¤‰æ•°å‚ç…§ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—æƒ…å ±ãªã©ã®ç™»éŒ²ä½œæ¥­ã®ä»£è¡Œ
  * 
  * @author kou-tngt
  *
@@ -119,8 +119,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     /**
-     * Œ»İ‚ÌƒuƒƒbƒNƒXƒR[ƒv‚É•Ï”‚ğ’Ç‰Á‚·‚é.
-     * @param var ’Ç‰Á‚·‚é•Ï”
+     * ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚³ãƒ¼ãƒ—ã«å¤‰æ•°ã‚’è¿½åŠ ã™ã‚‹.
+     * @param var è¿½åŠ ã™ã‚‹å¤‰æ•°
      */
     private void addScopedVariable(
             UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var) {
@@ -130,8 +130,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     /**
-     * Œ»İ‚©‚çŸ‚ÌƒuƒƒbƒNI—¹‚Ü‚ÅƒXƒR[ƒv‚ª—LŒø‚È•Ï”‚ğ’Ç‰Á‚·‚é.
-     * @param var@’Ç‰Á‚·‚é•Ï”
+     * ç¾åœ¨ã‹ã‚‰æ¬¡ã®ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†ã¾ã§ã‚¹ã‚³ãƒ¼ãƒ—ãŒæœ‰åŠ¹ãªå¤‰æ•°ã‚’è¿½åŠ ã™ã‚‹.
+     * @param varã€€è¿½åŠ ã™ã‚‹å¤‰æ•°
      */
     private void addNextScopedVariable(
             UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var) {
@@ -154,7 +154,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             final BlockScope scope = this.scopeStack.peek();
             scope.addAlias(alias, importStatement);
 
-            //–¼‘O‚ÌƒGƒCƒŠƒAƒXî•ñ‚ª•Ï‰»‚µ‚½‚Ì‚ÅƒLƒƒƒbƒVƒ…‚ğƒŠƒZƒbƒg
+            //åå‰ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹æƒ…å ±ãŒå¤‰åŒ–ã—ãŸã®ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ãƒªã‚»ãƒƒãƒˆ
             aliasNameSetCache = null;
             allAvaliableNameSetCache = null;
         }
@@ -168,7 +168,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             final BlockScope scope = this.scopeStack.peek();
             scope.addUsingNameSpace(importStatement);
 
-            //–¼‘O‹óŠÔî•ñ‚ª•Ï‰»‚µ‚½‚Ì‚ÅƒLƒƒƒbƒVƒ…‚ğƒŠƒZƒbƒg
+            //åå‰ç©ºé–“æƒ…å ±ãŒå¤‰åŒ–ã—ãŸã®ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ãƒªã‚»ãƒƒãƒˆ
             availableNameSpaceSetCache = null;
             allAvaliableNameSetCache = null;
         }
@@ -219,7 +219,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             this.scopeStack.pop();
             nextScopedVariables.clear();
 
-            //–¼‘Oî•ñƒLƒƒƒbƒVƒ…‚ğƒŠƒZƒbƒg
+            //åå‰æƒ…å ±ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ãƒªã‚»ãƒƒãƒˆ
             aliasNameSetCache = null;
             availableNameSpaceSetCache = null;
             allAvaliableNameSetCache = null;
@@ -232,7 +232,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         } else {
             final UnresolvedClassInfo classInfo = (UnresolvedClassInfo) (this.unitStack.pop());
 
-            //ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚È‚¢ê‡‚É‚¾‚¯“o˜^‚ğs‚¤iŒ»İ‚Í‚·‚×‚Ä‚ÌƒNƒ‰ƒX‚ğ“o˜^‚·‚éj
+            //å¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒãªã„å ´åˆã«ã ã‘ç™»éŒ²ã‚’è¡Œã†ï¼ˆç¾åœ¨ã¯ã™ã¹ã¦ã®ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ï¼‰
             //if (this.unitStack.isClassEmpty()) {
             DataManager.getInstance().getUnresolvedClassInfoManager().addClass(classInfo);
             //}
@@ -280,7 +280,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
         final int classDepth = this.unitStack.getClassStack().size();
         if (classDepth >= 2) {
-            /* ˆÈ‰º‚ÌÀ‘•‚Íˆê“I‚È‚à‚ÌDouterUnit‚ÌC³‚ªI‚í‚Á‚½’iŠK‚Å‰º‚ÌƒuƒƒbƒNƒRƒƒ“ƒg‚ÌÀ‘•‚É•ÏX‚·‚×‚« */
+            /* ä»¥ä¸‹ã®å®Ÿè£…ã¯ä¸€æ™‚çš„ãªã‚‚ã®ï¼outerUnitã®ä¿®æ­£ãŒçµ‚ã‚ã£ãŸæ®µéšã§ä¸‹ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆã®å®Ÿè£…ã«å¤‰æ›´ã™ã¹ã */
             final Stack<UnresolvedClassInfo> classStack = this.unitStack.getClassStack();
             final UnresolvedClassInfo currentInnerClass = classStack.peek();
             final UnresolvedClassInfo outerClass = classStack.get(classDepth - 2);
@@ -299,16 +299,16 @@ public class DefaultBuildDataManager implements BuildDataManager {
             }
             currentInnerClass.setOuterUnit(outerUnitForCurrentInnerClass);
 
-            /* ˆÈ‰ºouterUnitŠÖ˜A‚ÌC³‚ªs‚í‚ê‚½‚ÌÀ‘• */
-            // Œ»İ\’z’†‚ÌƒNƒ‰ƒX‚ª“à•”ƒNƒ‰ƒX‚Å‚ ‚Á‚½‚Ìˆ—D
-            // “à•”ƒNƒ‰ƒX‚ÉŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ“o˜^‚µC‚³‚ç‚ÉŠO‘¤‚ÌƒNƒ‰ƒX‚É“à•”ƒNƒ‰ƒX‚ğ“o˜^‚·‚é
+            /* ä»¥ä¸‹outerUnité–¢é€£ã®ä¿®æ­£ãŒè¡Œã‚ã‚ŒãŸæ™‚ã®å®Ÿè£… */
+            // ç¾åœ¨æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹ãŒå†…éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã£ãŸæ™‚ã®å‡¦ç†ï¼
+            // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã«å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ç™»éŒ²ã—ï¼Œã•ã‚‰ã«å¤–å´ã®ã‚¯ãƒ©ã‚¹ã«å†…éƒ¨ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
             /*final Stack<UnresolvedClassInfo> classStack = this.unitStack.getClassStack();
             final UnresolvedClassInfo currentInnerClass = classStack.peek();
             final UnresolvedClassInfo outerClass = classStack.get(classDepth - 2);
             
             outerClass.addInnerClass(currentInnerClass);
 
-            // ‰º‚Ì‚Íç’·DUnresolvedClassInfo‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÅouterUnit‚ª³‚µ‚­İ’è‚³‚ê‚Ä‚¢‚é‚×‚«
+            // ä¸‹ã®ã¯å†—é•·ï¼UnresolvedClassInfoã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§outerUnitãŒæ­£ã—ãè¨­å®šã•ã‚Œã¦ã„ã‚‹ã¹ã
             //currentInnerClass.setOuterUnit(this.unitStack.get(this.unitStack.size() - 2));*/
         }
     }
@@ -318,7 +318,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public List<UnresolvedImportStatementInfo<?>> getAllAvaliableNames() {
-        //      null‚¶‚á‚È‚¯‚ê‚Î•Ï‰»‚µ‚Ä‚È‚¢‚Ì‚ÅƒLƒƒƒbƒVƒ…g‚¢‚Ü‚í‚µ
+        //      nullã˜ã‚ƒãªã‘ã‚Œã°å¤‰åŒ–ã—ã¦ãªã„ã®ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½¿ã„ã¾ã‚ã—
         if (null != allAvaliableNameSetCache) {
             return allAvaliableNameSetCache;
         }
@@ -334,8 +334,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
     
     /**
-     * getAllAvailableNames‚ÌŒ‹‰Ê‚ğCƒCƒ“ƒ|[ƒg•¶‚ÌoŒ»ˆÊ’u‚Åƒ\[ƒg‚µ‚Ä•Ô‚·
-     * @return Œ»İ‚ÌƒXƒR[ƒv‚©‚çŒ©‚¦‚éƒCƒ“ƒ|[ƒg•¶‚ÌW‡
+     * getAllAvailableNamesã®çµæœã‚’ï¼Œã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã®å‡ºç¾ä½ç½®ã§ã‚½ãƒ¼ãƒˆã—ã¦è¿”ã™
+     * @return ç¾åœ¨ã®ã‚¹ã‚³ãƒ¼ãƒ—ã‹ã‚‰è¦‹ãˆã‚‹ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã®é›†åˆ
      */
     public List<UnresolvedImportStatementInfo<?>> getAllSortedAvailableNames(){
         final List<UnresolvedImportStatementInfo<?>> result = this.getAllAvaliableNames();
@@ -344,13 +344,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaceSet() {
-        //null‚¶‚á‚È‚¯‚ê‚Î•Ï‰»‚µ‚Ä‚È‚¢‚Ì‚ÅƒLƒƒƒbƒVƒ…g‚¢‚Ü‚í‚µ
+        //nullã˜ã‚ƒãªã‘ã‚Œã°å¤‰åŒ–ã—ã¦ãªã„ã®ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½¿ã„ã¾ã‚ã—
         if (null != availableNameSpaceSetCache) {
             return availableNameSpaceSetCache;
         }
 
         final List<UnresolvedImportStatementInfo<?>> result = new LinkedList<UnresolvedImportStatementInfo<?>>();
-        //‚Ü‚¸æ‚É¡‚Ì–¼‘O‹óŠÔ‚ğ“o˜^
+        //ã¾ãšå…ˆã«ä»Šã®åå‰ç©ºé–“ã‚’ç™»éŒ²
         if (null == currentNameSpaceCache) {
             currentNameSpaceCache = new UnresolvedClassImportStatementInfo(getCurrentNameSpace(),
                     true);
@@ -358,7 +358,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         result.add(currentNameSpaceCache);
 
         final int size = this.scopeStack.size();
-        for (int i = size - 1; i >= 0; i--) {//Stack‚ÌÀ‘Ì‚ÍVector‚È‚Ì‚ÅŒã‚ë‚©‚çƒ‰ƒ“ƒ_ƒ€ƒAƒNƒZƒX
+        for (int i = size - 1; i >= 0; i--) {//Stackã®å®Ÿä½“ã¯Vectorãªã®ã§å¾Œã‚ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ã‚¯ã‚»ã‚¹
             final BlockScope scope = this.scopeStack.get(i);
             final List<UnresolvedImportStatementInfo<?>> scopeLocalNameSpaceSet = scope
                     .getAvailableNameSpaces();
@@ -372,14 +372,14 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public List<UnresolvedImportStatementInfo<?>> getAvailableAliasSet() {
-        //null‚¶‚á‚È‚¯‚ê‚Î•Ï‰»‚µ‚Ä‚È‚¢‚Ì‚ÅƒLƒƒƒbƒVƒ…g‚¢‚Ü‚í‚µ
+        //nullã˜ã‚ƒãªã‘ã‚Œã°å¤‰åŒ–ã—ã¦ãªã„ã®ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½¿ã„ã¾ã‚ã—
         if (null != aliasNameSetCache) {
             return aliasNameSetCache;
         }
 
         final List<UnresolvedImportStatementInfo<?>> result = new LinkedList<UnresolvedImportStatementInfo<?>>();
         final int size = this.scopeStack.size();
-        for (int i = size - 1; i >= 0; i--) {//Stack‚ÌÀ‘Ì‚ÍVector‚È‚Ì‚ÅŒã‚ë‚©‚çƒ‰ƒ“ƒ_ƒ€ƒAƒNƒZƒX
+        for (int i = size - 1; i >= 0; i--) {//Stackã®å®Ÿä½“ã¯Vectorãªã®ã§å¾Œã‚ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ã‚¯ã‚»ã‚¹
             final BlockScope scope = this.scopeStack.get(i);
             final List<UnresolvedImportStatementInfo<?>> scopeLocalNameSpaceSet = scope
                     .getAvailableAliases();
@@ -395,7 +395,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     public String[] getAliasedName(final String alias) {
         final int size = this.scopeStack.size();
-        for (int i = size - 1; i >= 0; i--) {//Stack‚ÌÀ‘Ì‚ÍVector‚È‚Ì‚ÅŒã‚ë‚©‚çƒ‰ƒ“ƒ_ƒ€ƒAƒNƒZƒX
+        for (int i = size - 1; i >= 0; i--) {//Stackã®å®Ÿä½“ã¯Vectorãªã®ã§å¾Œã‚ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ã‚¯ã‚»ã‚¹
             final BlockScope scope = this.scopeStack.get(i);
             if (scope.hasAlias(alias)) {
                 return scope.replaceAlias(alias);
@@ -456,7 +456,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     /**
-     * Œ»İ‚Ì–¼‘O‹óŠÔ–¼‚ğ•Ô‚·D
+     * ç¾åœ¨ã®åå‰ç©ºé–“åã‚’è¿”ã™ï¼
      * 
      * @return
      */
@@ -473,7 +473,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     /**
-     * ƒXƒ^ƒbƒN‚É‚Â‚Ü‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ÌƒNƒ‰ƒX–¼‚à•t‚¯‚½–¼‘O‹óŠÔ‚ğ•Ô‚·.
+     * ã‚¹ã‚¿ãƒƒã‚¯ã«ã¤ã¾ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®ã‚¯ãƒ©ã‚¹åã‚‚ä»˜ã‘ãŸåå‰ç©ºé–“ã‚’è¿”ã™.
      * @return
      */
     public String[] getCurrentFullNameSpace() {

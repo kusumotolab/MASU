@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * ASTƒrƒWƒ^[‚ªƒƒ\ƒbƒhƒpƒ‰ƒ[ƒ^’è‹`•”‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒ¡ã‚½ãƒƒãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
  * 
  * @author kou-tngt
  *
@@ -13,11 +13,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public class MethodParameterStateManager extends VariableDefinitionStateManager {
 
     /**
-     * ƒg[ƒNƒ“‚ªƒƒ\ƒbƒhƒpƒ‰ƒ[ƒ^’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * ”»’è‚É‚Ítoken.isMethodParameterDefinitionƒƒ\ƒbƒh‚ğ—p‚¢‚é
+     * ãƒˆãƒ¼ã‚¯ãƒ³ãŒãƒ¡ã‚½ãƒƒãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * åˆ¤å®šã«ã¯token.isMethodParameterDefinitionãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã‚‹
      * 
-     * @param token@ƒƒ\ƒbƒhƒpƒ‰ƒ[ƒ^’è‹`•”‚Ç‚¤‚©”»’è‚·‚éƒg[ƒNƒ“
-     * @return ƒƒ\ƒbƒhƒpƒ‰ƒ[ƒ^’è‹`•”‚Å‚ ‚ê‚Îtrue.
+     * @param tokenã€€ãƒ¡ã‚½ãƒƒãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã©ã†ã‹åˆ¤å®šã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã§ã‚ã‚Œã°true.
      */
     @Override
     protected boolean isDefinitionToken(final AstToken token) {

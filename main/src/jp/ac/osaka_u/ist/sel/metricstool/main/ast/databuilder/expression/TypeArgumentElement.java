@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * Œ^ˆø”‚ğ•\‚·®—v‘f
+ * å‹å¼•æ•°ã‚’è¡¨ã™å¼è¦ç´ 
  * 
  * @author kou-tngt
  *
@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class TypeArgumentElement extends ExpressionElement {
 
     /**
-     * ˆø”type‚ğŒ^ˆø”‚Æ‚µ‚Ä•\‚·ƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚·‚éD
+     * å¼•æ•°typeã‚’å‹å¼•æ•°ã¨ã—ã¦è¡¨ã™ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹ï¼
      * 
      * @param type
      */
@@ -23,15 +23,15 @@ public class TypeArgumentElement extends ExpressionElement {
     }
 
     /**
-     * Œ^ˆø”‚ğ•Ô‚·D
-     * @return ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª•\‚·Œ^ˆø”
+     * å‹å¼•æ•°ã‚’è¿”ã™ï¼
+     * @return ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¡¨ã™å‹å¼•æ•°
      */
     public UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return type;
     }
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª•\‚·Œ^ˆø”
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¡¨ã™å‹å¼•æ•°
      */
     private final UnresolvedTypeInfo<? extends TypeInfo> type;
 }

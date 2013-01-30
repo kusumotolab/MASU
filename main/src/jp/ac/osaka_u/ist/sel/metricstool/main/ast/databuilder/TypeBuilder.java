@@ -27,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * ®’†ˆÈŠO‚Å‚ÌŒ^QÆ‚Ìî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[D
+ * å¼ä¸­ä»¥å¤–ã§ã®å‹å‚ç…§ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼ï¼
  * 
  * @author kou-tngt, t-miyake
  *
@@ -35,9 +35,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extends TypeInfo>> {
 
     /**
-     * ˆø”‚ÌBuildDataManager‚ğ—p‚¢‚Ä‰Šú‰»‚ğs‚¤D
+     * å¼•æ•°ã®BuildDataManagerã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã‚’è¡Œã†ï¼
      * 
-     * @param buildDataManager@‚±‚Ìƒrƒ‹ƒ_[‚Å—˜—p‚·‚éƒf[ƒ^ŠÇ—Ò
+     * @param buildDataManagerã€€ã“ã®ãƒ“ãƒ«ãƒ€ãƒ¼ã§åˆ©ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…
      */
     public TypeBuilder(final BuildDataManager buildDataManager) {
         if (null == buildDataManager) {
@@ -53,8 +53,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     /**
-     * ƒrƒWƒ^[‚ªƒm[ƒh‚É“ü‚Á‚½‚ÌƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚éD
-     * @param ƒrƒWƒbƒgƒCƒxƒ“ƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒãƒ¼ãƒ‰ã«å…¥ã£ãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã‚‹ï¼
+     * @param ãƒ“ã‚¸ãƒƒãƒˆã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -62,12 +62,12 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
         super.entered(event);
 
         if (this.isActive() && this.typeStateManager.isEntered()) {
-            //Œ^’è‹`•”“à
+            //å‹å®šç¾©éƒ¨å†…
             final AstToken token = event.getToken();
 
             if (null == this.primitiveType && null == this.voidType
                     && token instanceof BuiltinTypeToken) {
-                //ƒg[ƒNƒ“‚©‚ç‘g‚İ‚İŒ^î•ñ‚ğ‚³‚­‚¹‚¢‚·‚é
+                //ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã‚‰çµ„ã¿è¾¼ã¿å‹æƒ…å ±ã‚’ã•ãã›ã„ã™ã‚‹
                 final BuiltinTypeToken typeToken = (BuiltinTypeToken) token;
                 if (typeToken.isPrimitiveType()) {
                     this.primitiveType = typeToken.getType();
@@ -79,8 +79,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     /**
-     * ƒrƒWƒ^[‚ªƒm[ƒh‚©‚ço‚½‚ÌƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚éD
-     * @param ƒrƒWƒbƒgƒCƒxƒ“ƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã‚‹ï¼
+     * @param ãƒ“ã‚¸ãƒƒãƒˆã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
@@ -88,13 +88,13 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
         super.exited(event);
 
         if (this.isActive() && this.typeStateManager.isEntered()) {
-            //Œ^’è‹`•”“à
+            //å‹å®šç¾©éƒ¨å†…
             final AstToken token = event.getToken();
             if (token.isArrayDeclarator()) {
-                //”z—ñ‹Lq‚ª‚ ‚ê‚Î‚»‚ê‚ğƒJƒEƒ“ƒg‚µ‚ÄŸŒ³”‚É‚·‚é
+                //é…åˆ—è¨˜è¿°ãŒã‚ã‚Œã°ãã‚Œã‚’ã‚«ã‚¦ãƒ³ãƒˆã—ã¦æ¬¡å…ƒæ•°ã«ã™ã‚‹
                 this.arrayCount++;
             } else if (token.isNameSeparator()) {
-                //–¼‘O‹æØ‚è‚É“’B‚µ‚½‚É‰Â”\‚È‚ç‰ß‹‚É\’z‚µ‚½Œ^‚ğ˜AŒ‹‚·‚é
+                //åå‰åŒºåˆ‡ã‚Šã«åˆ°é”ã—ãŸæ™‚ã«å¯èƒ½ãªã‚‰éå»ã«æ§‹ç¯‰ã—ãŸå‹ã‚’é€£çµã™ã‚‹
                 // TODO this.combineBuiltTypes();
             }
         }
@@ -105,24 +105,24 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
         if (this.isActive()) {
             final StateChangeEventType type = event.getType();
             if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
-                //Œ^éŒ¾‚Ì’†‚É“ü‚Á‚½‚Ì‚Å¯•Êqƒrƒ‹ƒ_[‚ğ‹N“®
+                //å‹å®£è¨€ã®ä¸­ã«å…¥ã£ãŸã®ã§è­˜åˆ¥å­ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’èµ·å‹•
                 this.identifierBuilder.activate();
             } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)) {
-                //Œ^éŒ¾‚Ì’†‚©‚ço‚½‚Ì‚ÅC
-                //‚»‚ÌŒ‹‰Ê‚ğ\’z‚µ‚Ä“o˜^
+                //å‹å®£è¨€ã®ä¸­ã‹ã‚‰å‡ºãŸã®ã§ï¼Œ
+                //ãã®çµæœã‚’æ§‹ç¯‰ã—ã¦ç™»éŒ²
                 this.buildType();
                 if (!this.typeStateManager.isEntered()) {
-                    //‘S‚Ä‚ÌŒ^\’z•”‚ÌŠO‚Éo‚½‚È‚ç¯•Êqƒrƒ‹ƒ_[‚ğ”ñƒAƒNƒeƒBƒu‚É
+                    //å…¨ã¦ã®å‹æ§‹ç¯‰éƒ¨ã®å¤–ã«å‡ºãŸãªã‚‰è­˜åˆ¥å­ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
                     this.identifierBuilder.deactivate();
                 }
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.ENTER_TYPE_ARGUMENTS)) {
-                //Œ^ˆø”ŒQ‚Ì’è‹`•”‚É“ü‚Á‚½‚Ì‚ÅCV‚½‚ÈŒ^ˆø”ŒQ‚Ìî•ñ‚ğ“ü‚ê‚éƒŠƒXƒg‚ğƒXƒ^ƒbƒN‚É‚Â‚Ş
+                //å‹å¼•æ•°ç¾¤ã®å®šç¾©éƒ¨ã«å…¥ã£ãŸã®ã§ï¼Œæ–°ãŸãªå‹å¼•æ•°ç¾¤ã®æƒ…å ±ã‚’å…¥ã‚Œã‚‹ãƒªã‚¹ãƒˆã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ã¤ã‚€
                 this.typeArgumentsLists
                         .push(new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>());
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_ARGUMENTS)) {
-                //Œ^ˆø”ŒQ‚Ì’è‹`•”‚ªI‚í‚Á‚½‚Ì‚ÅCƒXƒ^ƒbƒN‚Ìˆê”Ôã‚ÌƒŠƒXƒg‚ğC¡Œ»İ—˜—p‚Å‚«‚éŒ^ƒpƒ‰ƒ[ƒ^ŒQ‚Æ‚µ‚Äæ‚èo‚·D
+                //å‹å¼•æ•°ç¾¤ã®å®šç¾©éƒ¨ãŒçµ‚ã‚ã£ãŸã®ã§ï¼Œã‚¹ã‚¿ãƒƒã‚¯ã®ä¸€ç•ªä¸Šã®ãƒªã‚¹ãƒˆã‚’ï¼Œä»Šç¾åœ¨åˆ©ç”¨ã§ãã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç¾¤ã¨ã—ã¦å–ã‚Šå‡ºã™ï¼
                 if (!this.typeArgumentsLists.isEmpty()) {
                     this.availableTypeArugments = this.typeArgumentsLists.pop();
                     //this.buildType();
@@ -130,7 +130,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                     assert (false) : "Illegal state: requested type arguments were not available.";
                 }
             } else if (type.equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_ARGUMENT)) {
-                //Œ^ˆø”‹Lq•”‚©‚ço‚½‚Ì‚ÅC’¼‹ß‚ÌŒ^î•ñ‚ğæ‚èo‚µ‚ÄŒ^ˆø”î•ñ‚Æ‚µ‚Ä“o˜^‚·‚é
+                //å‹å¼•æ•°è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ï¼Œç›´è¿‘ã®å‹æƒ…å ±ã‚’å–ã‚Šå‡ºã—ã¦å‹å¼•æ•°æƒ…å ±ã¨ã—ã¦ç™»éŒ²ã™ã‚‹
                 if (!this.typeArgumentsLists.isEmpty()) {
                     this.typeArgumentsLists.peek().add(this.popLastBuiltData());
                 } else {
@@ -138,10 +138,10 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 }
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.ENTER_TYPE_WILDCARD)) {
-                //ƒƒCƒ‹ƒhƒJ[ƒh‹Lq•”‚É“ü‚Á‚½‚Ì‚ÅƒCƒ“ƒNƒŠƒƒ“ƒg
+                //ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰è¨˜è¿°éƒ¨ã«å…¥ã£ãŸã®ã§ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
                 this.inWildCardCount++;
             } else if (type.equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_WILDCARD)) {
-                //ƒƒCƒ‹ƒhƒJ[ƒh‹Lq•”‚©‚ço‚é‚Ì‚ÅCŒ^ãŒÀ(‰ºŒÀ)î•ñ‚ğæ“¾‚µ‚ÄŒ^î•ñ‚ğ“o˜^
+                //ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰è¨˜è¿°éƒ¨ã‹ã‚‰å‡ºã‚‹ã®ã§ï¼Œå‹ä¸Šé™(ä¸‹é™)æƒ…å ±ã‚’å–å¾—ã—ã¦å‹æƒ…å ±ã‚’ç™»éŒ²
                 final UnresolvedTypeInfo<? extends TypeInfo> bounds = this.getCurrentBounds();
 
                 assert (bounds != null) : "Illegal state: type upper bounds was not specified.";
@@ -150,14 +150,14 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                         || bounds instanceof UnresolvedSuperTypeInfo) {
                     this.registBuiltData(bounds);
                 } else {
-                    //‹«ŠE‚ªUnresolvedExtendsTypeInfo‚Å‚àUnresolvedExtendsTypeInfo‚Å‚à‚È‚¯‚ê‚ÎƒƒCƒ‹ƒhƒJ[ƒh’P‘Ì
+                    //å¢ƒç•ŒãŒUnresolvedExtendsTypeInfoã§ã‚‚UnresolvedExtendsTypeInfoã§ã‚‚ãªã‘ã‚Œã°ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰å˜ä½“
                     this.registBuiltData(UnresolvedArbitraryTypeInfo.getInstance());
                 }
                 this.currentBounds = null;
                 this.inWildCardCount--;
             } else if (this.inWildCardCount > 0
                     && type.equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS)) {
-                //ƒƒCƒ‹ƒhƒJ[ƒh“à‚ÅŒ^ãŒÀî•ñ‚ª‚ ‚Á‚½‚Ì‚ÅC‚»‚ê‚ğ“o˜^
+                //ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰å†…ã§å‹ä¸Šé™æƒ…å ±ãŒã‚ã£ãŸã®ã§ï¼Œãã‚Œã‚’ç™»éŒ²
                 this.currentBounds = this.popLastBuiltData();
                 //                UnresolvedExtendsTypeInfo e = new UnresolvedExtendsTypeInfo(this.currentUpperBounds);
                 if (this.currentBounds instanceof UnresolvedReferenceTypeInfo<?>) {
@@ -166,7 +166,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 }
             } else if (this.inWildCardCount > 0
                     && type.equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS)) {
-                //ƒƒCƒ‹ƒhƒJ[ƒh“à‚ÅŒ^‰ºŒÀî•ñ‚ª‚ ‚Á‚½‚Ì‚ÅC‚»‚ê‚ğ“o˜^
+                //ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰å†…ã§å‹ä¸‹é™æƒ…å ±ãŒã‚ã£ãŸã®ã§ï¼Œãã‚Œã‚’ç™»éŒ²
                 this.currentBounds = this.popLastBuiltData();
                 if (this.currentBounds instanceof UnresolvedReferenceTypeInfo<?>) {
                     this.currentBounds = new UnresolvedSuperTypeInfo(
@@ -177,59 +177,59 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     /**
-     * Œ^ãŒÀ(–”‚Í‰ºŒÀ)î•ñ‚ğæ“¾‚·‚é
-     * @return@Œ^ãŒÀ(–”‚Í‰ºŒÀ)‚Ìî•ñ
+     * å‹ä¸Šé™(åˆã¯ä¸‹é™)æƒ…å ±ã‚’å–å¾—ã™ã‚‹
+     * @returnã€€å‹ä¸Šé™(åˆã¯ä¸‹é™)ã®æƒ…å ±
      */
     protected UnresolvedTypeInfo<? extends TypeInfo> getCurrentBounds() {
         return this.currentBounds;
     }
 
     /**
-     * Œ^î•ñ‚ğ\’z‚·‚éƒƒ\ƒbƒhD
-     * Œ^’è‹`ƒm[ƒh‚©‚ço‚½CŒ^î•ñˆÈŠO‚ğ•\‚·ƒg[ƒNƒ“‚ÉˆÚ‚Á‚Ä‚µ‚Ü‚Á‚½CŒ^ƒpƒ‰ƒ[ƒ^ŒQ‚Ì\’z‚ªI—¹‚µ‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚éD
+     * å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * å‹å®šç¾©ãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ï¼Œå‹æƒ…å ±ä»¥å¤–ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã«ç§»ã£ã¦ã—ã¾ã£ãŸæ™‚ï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç¾¤ã®æ§‹ç¯‰ãŒçµ‚äº†ã—ãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
      */
     protected void buildType() {
         UnresolvedTypeInfo<? extends TypeInfo> resultType = null;
 
         if (null != this.primitiveType) {
-            //‘g‚İ‚İŒ^‚Ìƒf[ƒ^‚ªì‚ç‚ê‚Ä‚¢‚½‚Ì‚Å‚»‚ê‚ğg‚¤
+            //çµ„ã¿è¾¼ã¿å‹ã®ãƒ‡ãƒ¼ã‚¿ãŒä½œã‚‰ã‚Œã¦ã„ãŸã®ã§ãã‚Œã‚’ä½¿ã†
             resultType = this.primitiveType;
             this.primitiveType = null;
         } else if (null != this.voidType) {
             resultType = this.voidType;
             this.voidType = null;
         } else if (this.identifierBuilder.hasBuiltData()) {
-            //¯•Êqî•ñ‚ª\’z‚³‚ê‚Ä‚¢‚½‚Ì‚ÅC‚»‚ê‚ğg‚Á‚ÄQÆŒ^‚ğì‚éD
+            //è­˜åˆ¥å­æƒ…å ±ãŒæ§‹ç¯‰ã•ã‚Œã¦ã„ãŸã®ã§ï¼Œãã‚Œã‚’ä½¿ã£ã¦å‚ç…§å‹ã‚’ä½œã‚‹ï¼
             final String[] identifier = this.identifierBuilder.popLastBuiltData();
 
             assert (0 != identifier.length) : "Illegal state: identifier was not built.";
 
             UnresolvedTypeParameterTypeInfo typeParameterType = null;
 
-            //‚±‚Ì–¼‘O‚ÅŒ^ƒpƒ‰ƒ[ƒ^‚ğ’T‚µ‚Ä‚İ‚é
+            //ã“ã®åå‰ã§å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ¢ã—ã¦ã¿ã‚‹
             if (identifier.length == 1) {
                 typeParameterType = this.buildDataManager.getTypeParameterType(identifier[0]);
             }
 
             if (null != typeParameterType) {
-                //Œ©‚Â‚©‚Á‚½‚Ì‚ÅŒ^ƒpƒ‰ƒ[ƒ^
+                //è¦‹ã¤ã‹ã£ãŸã®ã§å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
                 resultType = typeParameterType;
 
-                //TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÉŒ^ˆø”‚ª•t‚­Œ¾Œê‚ª‚ ‚Á‚½‚ç‚»‚ê‚ğ“o˜^‚·‚éd‘g‚İ‚ğì‚é•K—v‚ª‚ ‚é‚©‚à
+                //TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«å‹å¼•æ•°ãŒä»˜ãè¨€èªãŒã‚ã£ãŸã‚‰ãã‚Œã‚’ç™»éŒ²ã™ã‚‹ä»•çµ„ã¿ã‚’ä½œã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã‚‚
 
             } else {
-                //Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅQÆŒ^
-                //QÆŒ^‚ğì¬
+                //è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã®ã§å‚ç…§å‹
+                //å‚ç…§å‹ã‚’ä½œæˆ
                 final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(
                         UnresolvedClassImportStatementInfo
                                 .getClassImportStatements(this.buildDataManager
                                         .getAllAvaliableNames()), identifier);
 
-                //g‚¦‚éŒ^ˆø”‚ª‚ ‚ê‚Î“o˜^‚µ‚Ä‚µ‚Ü‚¤D
+                //ä½¿ãˆã‚‹å‹å¼•æ•°ãŒã‚ã‚Œã°ç™»éŒ²ã—ã¦ã—ã¾ã†ï¼
                 if (null != this.availableTypeArugments) {
                     for (final UnresolvedTypeInfo<? extends TypeInfo> type : this.availableTypeArugments) {
 
-                        // C#‚È‚Ç‚ÍQÆŒ^ˆÈŠO‚àŒ^ˆø”‚Éw’è‰Â”\‚È‚Ì‚Å‘Îˆ‚·‚é‚Ğ‚Â‚æ‚¤‚ª‚ ‚é‚©‚à
+                        // C#ãªã©ã¯å‚ç…§å‹ä»¥å¤–ã‚‚å‹å¼•æ•°ã«æŒ‡å®šå¯èƒ½ãªã®ã§å¯¾å‡¦ã™ã‚‹ã²ã¤ã‚ˆã†ãŒã‚ã‚‹ã‹ã‚‚
                         if (type instanceof UnresolvedTypeInfo<?>) {
                             referenceType.addTypeArgument((UnresolvedTypeInfo<?>) type);
                         }
@@ -241,7 +241,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             }
 
         } else if (this.hasBuiltData()) {
-            //¯•Êq‚ªV‚µ‚­ì‚ç‚ê‚Ä‘«‚è‚Í‚µ‚È‚¢‚¯‚Ç‰ß‹‚É\’z‚µ‚½ƒf[ƒ^‚ª‚ ‚Á‚½‚Ì‚ÅC‚»‚ê‚ğg‚Á‚Ä‚¨‚­
+            //è­˜åˆ¥å­ãŒæ–°ã—ãä½œã‚‰ã‚Œã¦è¶³ã‚Šã¯ã—ãªã„ã‘ã©éå»ã«æ§‹ç¯‰ã—ãŸãƒ‡ãƒ¼ã‚¿ãŒã‚ã£ãŸã®ã§ï¼Œãã‚Œã‚’ä½¿ã£ã¦ãŠã
             resultType = this.popLastBuiltData();
 
         } else {
@@ -249,7 +249,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
         }
 
         if (0 < this.arrayCount) {
-            //”z—ñ‹Lq‚ª‚ ‚Á‚½‚Ì‚Å‚»‚ê‚ç‚ÌŒ^‚ğ”z—ñ‚É‚µ‚Ä‚¨‚­
+            //é…åˆ—è¨˜è¿°ãŒã‚ã£ãŸã®ã§ãã‚Œã‚‰ã®å‹ã‚’é…åˆ—ã«ã—ã¦ãŠã
             resultType = UnresolvedArrayTypeInfo.getType(resultType, this.arrayCount);
         }
 
@@ -258,9 +258,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     /**
-     * ƒrƒWƒ^[‚ª–¼‘O‹æØ‚èƒm[ƒh‚©‚ço‚é‚ÉŒÄ‚Ño‚³‚ê‚éD
-     * ‰Â”\‚Å‚ ‚ê‚ÎC‰ß‹‚É\’z‚µ‚½2‚Â‚ÌŒ^î•ñ‚ğ—p‚¢‚ÄC1‚Â‚Ì’·‚¢QÆŒ^î•ñ‚ğ\’z‚·‚éD
-     * \’z‚Å‚«‚È‚¢‚Ì‚Å‚ ‚ê‚Î“Á‚É‰½‚à‚µ‚È‚¢D
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒåå‰åŒºåˆ‡ã‚Šãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºã‚‹æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
+     * å¯èƒ½ã§ã‚ã‚Œã°ï¼Œéå»ã«æ§‹ç¯‰ã—ãŸ2ã¤ã®å‹æƒ…å ±ã‚’ç”¨ã„ã¦ï¼Œ1ã¤ã®é•·ã„å‚ç…§å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
+     * æ§‹ç¯‰ã§ããªã„ã®ã§ã‚ã‚Œã°ç‰¹ã«ä½•ã‚‚ã—ãªã„ï¼
      */
     protected void combineBuiltTypes() {
         if (this.hasBuiltData() && this.getBuiltDataCount() == 2) {
@@ -268,7 +268,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             /*final UnresolvedTypeInfo second = this.popLastBuiltData();
             final UnresolvedTypeInfo first = this.popLastBuiltData();
 
-            //‚Ç‚¿‚ç‚àQÆŒ^‚Å‚ ‚é‚Í‚¸
+            //ã©ã¡ã‚‰ã‚‚å‚ç…§å‹ã§ã‚ã‚‹ã¯ãš
             assert (first instanceof UnresolvedReferenceTypeInfo) : "Illegal state: firstType was not unresolvedReference.";
             assert (second instanceof UnresolvedReferenceTypeInfo) : "Illegal state: firstType was not unresolvedReference.";
 
@@ -276,17 +276,17 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                     && second instanceof UnresolvedReferenceTypeInfo) {
                 final UnresolvedReferenceTypeInfo secondReference = (UnresolvedReferenceTypeInfo) second;
                 final String[] names = secondReference.getFullReferenceName();
-                //owner‚ğ‚ÂV‚µ‚¢QÆŒ^‚ğì‚é
+                //ownerã‚’æŒã¤æ–°ã—ã„å‚ç…§å‹ã‚’ä½œã‚‹
                 final UnresolvedReferenceTypeInfo result = new UnresolvedReferenceTypeInfo(
                         this.buildDataManager.getAvailableNameSpaceSet(), names,
                         (UnresolvedReferenceTypeInfo) first);
 
-                //Œ^ˆø”î•ñ‚ğƒZƒbƒg‚·‚é
+                //å‹å¼•æ•°æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
                 for (final UnresolvedReferenceTypeInfo usage : secondReference.getTypeArguments()) {
                     result.addTypeArgument(usage);
                 }
 
-                //Œ‹‰Ê‚ğ\’zÏ‚İ‚ÌŒ^‚Æ‚µ‚Ä“o˜^
+                //çµæœã‚’æ§‹ç¯‰æ¸ˆã¿ã®å‹ã¨ã—ã¦ç™»éŒ²
                 this.registBuiltData(result);
             }*/
         }
@@ -301,52 +301,52 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     /**
-     * ”z—ñ‹Lqq‚Ì”‚ğƒJƒEƒ“ƒg‚·‚é
+     * é…åˆ—è¨˜è¿°å­ã®æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
      */
     private int arrayCount;
 
     /**
-     * Œ^QÆ‚ÅƒƒCƒ‹ƒhƒJ[ƒh‚ªg‚í‚ê‚½‚ÌãŒÀî•ñ‚ğ‹L‰¯‚µ‚Ä‚¨‚­
+     * å‹å‚ç…§ã§ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ãŒä½¿ã‚ã‚ŒãŸæ™‚ã®ä¸Šé™æƒ…å ±ã‚’è¨˜æ†¶ã—ã¦ãŠã
      */
     private UnresolvedTypeInfo<? extends TypeInfo> currentBounds;
 
     /**
-     * Œ^ˆø”ŒQ‚ğ‹L˜^‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * å‹å¼•æ•°ç¾¤ã‚’è¨˜éŒ²ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<List<UnresolvedTypeInfo<? extends TypeInfo>>> typeArgumentsLists = new Stack<List<UnresolvedTypeInfo<? extends TypeInfo>>>();
 
     /**
-     * \’z‚ªI‚í‚Á‚Ä—˜—p‚Å‚«‚éŒ^ˆø”ŒQ
+     * æ§‹ç¯‰ãŒçµ‚ã‚ã£ã¦åˆ©ç”¨ã§ãã‚‹å‹å¼•æ•°ç¾¤
      */
     private List<UnresolvedTypeInfo<? extends TypeInfo>> availableTypeArugments;
 
     /**
-     * ƒƒCƒ‹ƒhƒJ[ƒhî•ñ‚Ì\’z‚É“ü‚Á‚½[‚³‚ğƒJƒEƒ“ƒg
+     * ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰æƒ…å ±ã®æ§‹ç¯‰ã«å…¥ã£ãŸæ·±ã•ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
      */
     private int inWildCardCount;
 
     /**
-     * \’z‚µ‚½Šî–{Œ^‚ğ‹L˜^‚·‚é
+     * æ§‹ç¯‰ã—ãŸåŸºæœ¬å‹ã‚’è¨˜éŒ²ã™ã‚‹
      */
     private UnresolvedTypeInfo<? extends TypeInfo> primitiveType;
 
     /**
-     * \’z‚µ‚½voidŒ^‚ğ‹L˜^‚·‚é
+     * æ§‹ç¯‰ã—ãŸvoidå‹ã‚’è¨˜éŒ²ã™ã‚‹
      */
     private UnresolvedTypeInfo<? extends TypeInfo> voidType;
 
     /**
-     * ¯•Êqî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * è­˜åˆ¥å­æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final IdentifierBuilder identifierBuilder = new IdentifierBuilder();
 
     /**
-     * \’zî•ñŠÇ—Ò
+     * æ§‹ç¯‰æƒ…å ±ç®¡ç†è€…
      */
     private final BuildDataManager buildDataManager;
 
     /**
-     * Œ^ˆø”’è‹`•”‚ÉŠÖ‚·‚éó‘ÔŠÇ—‚ğ‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+     * å‹å¼•æ•°å®šç¾©éƒ¨ã«é–¢ã™ã‚‹çŠ¶æ…‹ç®¡ç†ã‚’ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
      */
     private final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
 

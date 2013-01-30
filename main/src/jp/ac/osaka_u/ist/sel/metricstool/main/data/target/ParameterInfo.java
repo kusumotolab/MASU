@@ -8,7 +8,7 @@ import java.util.Set;
 
 
 /**
- * ˆø”‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD Œ^‚ğ’ñ‹Ÿ‚·‚é‚Ì‚İD
+ * å¼•æ•°ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ å‹ã‚’æä¾›ã™ã‚‹ã®ã¿ï¼
  * 
  * @author higo
  * 
@@ -17,16 +17,16 @@ import java.util.Set;
 public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
 
     /**
-     * ˆø”ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD–¼‘O‚ÆŒ^‚ª•K—vD
+     * å¼•æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼åå‰ã¨å‹ãŒå¿…è¦ï¼
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param name ˆø”–¼
-     * @param type ˆø”‚ÌŒ^
-     * @param definitionMethod éŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param name å¼•æ•°å
+     * @param type å¼•æ•°ã®å‹
+     * @param definitionMethod å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     ParameterInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
             final CallableUnitInfo definitionMethod, final int fromLine, final int fromColumn,
@@ -35,9 +35,9 @@ public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éˆø”‚ğSet‚Æ‚µ‚Ä•Ô‚·
-     * @param variables •Ï”‚ÌSet
-     * @return —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚éˆø”‚ÌSet
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã¦ã„ã‚‹å¼•æ•°ã‚’Setã¨ã—ã¦è¿”ã™
+     * @param variables å¤‰æ•°ã®Set
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã‚‹å¼•æ•°ã®Set
      */
     public static Set<ParameterInfo> getLocalVariables(Collection<VariableInfo<?>> variables) {
         final Set<ParameterInfo> parameters = new HashSet<ParameterInfo>();

@@ -10,11 +10,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒuƒƒbƒN•¶ˆÈŠO‚Ì–¢‰ğŒˆ•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ–ãƒ­ãƒƒã‚¯æ–‡ä»¥å¤–ã®æœªè§£æ±ºæ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInfo> implements
         UnresolvedStatementInfo<T> {
@@ -164,27 +164,27 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
     private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 
     /**
-     * ŠJns‚ğ•\‚·•Ï”
+     * é–‹å§‹è¡Œã‚’è¡¨ã™å¤‰æ•°
      */
     private int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•\‚·•Ï”
+     * é–‹å§‹åˆ—ã‚’è¡¨ã™å¤‰æ•°
      */
     private int fromColumn;
 
     /**
-     * I—¹s‚ğ•\‚·•Ï”
+     * çµ‚äº†è¡Œã‚’è¡¨ã™å¤‰æ•°
      */
     private int toLine;
 
     /**
-     * I—¹—ñ‚ğ•\‚·•Ï”
+     * çµ‚äº†åˆ—ã‚’è¡¨ã™å¤‰æ•°
      */
     private int toColumn;
 
     /**
-     * ‰ğŒˆÏ‚İî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * è§£æ±ºæ¸ˆã¿æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected T resolvedInfo;
 }

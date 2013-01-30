@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆˆÃ–ÙƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºæš—é»™ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -19,8 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedImplicitInstanceInitializerInfo extends UnresolvedInstanceInitializerInfo {
 
     /**
-     * ‚±‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğŠ—L‚·‚éƒNƒ‰ƒX‚Ì–¢‰ğŒˆî•ñ‚ğ‚ ‚¦‚Ä‰Šú‰»
-     * @param ownerClass ‚±‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğŠ—L‚·‚éƒNƒ‰ƒX‚Ì–¢‰ğŒˆî•ñ
+     * ã“ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’æ‰€æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ã®æœªè§£æ±ºæƒ…å ±ã‚’ã‚ãˆã¦åˆæœŸåŒ–
+     * @param ownerClass ã“ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’æ‰€æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ã®æœªè§£æ±ºæƒ…å ±
      */
     public UnresolvedImplicitInstanceInitializerInfo(UnresolvedClassInfo ownerClass) {
         super(ownerClass);
@@ -31,13 +31,13 @@ public class UnresolvedImplicitInstanceInitializerInfo extends UnresolvedInstanc
             CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
             FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == usingClass) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }

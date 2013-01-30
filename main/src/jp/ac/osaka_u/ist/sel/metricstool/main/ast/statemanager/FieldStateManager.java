@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * ASTƒrƒWƒ^[‚ªƒtƒB[ƒ‹ƒh’è‹`•”‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®šç¾©éƒ¨ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
  * 
  * @author kou-tngt
  *
@@ -13,11 +13,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public class FieldStateManager extends VariableDefinitionStateManager {
 
     /**
-     * ˆø”‚Ìƒg[ƒNƒ“‚ªƒtƒB[ƒ‹ƒh’è‹`•”‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isFieldDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®šç¾©éƒ¨ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isFieldDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param token ƒtƒB[ƒ‹ƒh’è‹`•”‚©‚Ç‚¤‚©‚ğ’²‚×‚éƒg[ƒNƒ“
-     * @return token‚ªƒtƒB[ƒ‹ƒh’è‹`•”‚È‚çtrue
+     * @param token ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®šç¾©éƒ¨ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return tokenãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®šç¾©éƒ¨ãªã‚‰true
      */
     @Override
     protected boolean isDefinitionToken(final AstToken token) {

@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * {@link AstVisitor} ‚ªAST‚Ì”CˆÓ‚Ìƒm[ƒh‚É“’B‚µ‚½‚É”­s‚³‚ê‚éƒCƒxƒ“ƒg.
+ * {@link AstVisitor} ãŒASTã®ä»»æ„ã®ãƒãƒ¼ãƒ‰ã«åˆ°é”ã—ãŸæ™‚ã«ç™ºè¡Œã•ã‚Œã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ.
  * 
  * @author kou-tngt
  *
@@ -15,14 +15,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public class AstVisitEvent extends EventObject {
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ª•\‚·ƒm[ƒh‚ÉŠÖ‚·‚éî•ñ‚ğˆø”‚Éæ‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * @param source@‚±‚ÌƒCƒxƒ“ƒg‚Ì”­sŒ³‚Æ‚È‚éƒrƒWƒ^[
-     * @param token “’B‚µ‚½ƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
-     * @param text “’B‚µ‚½ƒm[ƒh‚ª•\‚·•¶š—ñ
-     * @param enterLine “’B‚µ‚½ƒm[ƒh‚ª•\‚·—v‘f‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJns
-     * @param enterColumn “’B‚µ‚½ƒm[ƒh‚ª•\‚·—v‘f‚Ìƒ\[ƒXƒR[ƒhã‚ÌoŠJn—ñ
-     * @param exitLine “’B‚µ‚½ƒm[ƒh‚ª•\‚·—v‘f‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹s
-     * @param exitColumn “’B‚µ‚½ƒm[ƒh‚ª•\‚·—v‘f‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹s
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒè¡¨ã™ãƒãƒ¼ãƒ‰ã«é–¢ã™ã‚‹æƒ…å ±ã‚’å¼•æ•°ã«å–ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * @param sourceã€€ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã®ç™ºè¡Œå…ƒã¨ãªã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼
+     * @param token åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
+     * @param text åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ãŒè¡¨ã™æ–‡å­—åˆ—
+     * @param enterLine åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ãŒè¡¨ã™è¦ç´ ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹è¡Œ
+     * @param enterColumn åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ãŒè¡¨ã™è¦ç´ ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã®å‡ºé–‹å§‹åˆ—
+     * @param exitLine åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ãŒè¡¨ã™è¦ç´ ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†è¡Œ
+     * @param exitColumn åˆ°é”ã—ãŸãƒãƒ¼ãƒ‰ãŒè¡¨ã™è¦ç´ ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†è¡Œ
      */
     public AstVisitEvent(final AstVisitor source, final AstToken token, final String text, final AstToken parentToken,
             final int enterLine, final int enterColumn, final int exitLine, final int exitColumn) {
@@ -38,7 +38,7 @@ public class AstVisitEvent extends EventObject {
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚Ì”­sÒ‚Å‚ ‚éƒrƒWƒ^[‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã®ç™ºè¡Œè€…ã§ã‚ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã‚’è¿”ã™.
      */
     @Override
     public AstVisitor getSource() {
@@ -46,104 +46,104 @@ public class AstVisitEvent extends EventObject {
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¿”ã™.
      * 
-     * @return ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
+     * @return ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
      */
     public AstToken getToken() {
         return this.token;
     }
     
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ì•¶š—ñ‚ğ•Ô‚·D
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®æ–‡å­—åˆ—ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ì•¶š—ñ
+     * @return ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®æ–‡å­—åˆ—
      */
     public final String getText() {
         return this.text;
     }
     
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìeƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“‚ğ•Ô‚·D
-     * @return ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìeƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®è¦ªãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¿”ã™ï¼
+     * @return ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®è¦ªãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
      */
     public AstToken getParentToken() {
         return this.parentToken;
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJn—ñ‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹åˆ—ã‚’è¿”ã™.
      * 
-     * @return@‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJn—ñ
+     * @returnã€€ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹åˆ—
      */
     public int getStartColumn() {
         return this.startColumn;
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJns‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹è¡Œã‚’è¿”ã™.
      * 
-     * @return@‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJns
+     * @returnã€€ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹è¡Œ
      */
     public int getStartLine() {
         return this.startLine;
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹—ñ‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†åˆ—ã‚’è¿”ã™.
      * 
-     * @return@‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹—ñ.
+     * @returnã€€ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†åˆ—.
      */
     public int getEndColumn() {
         return this.endColumn;
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹s‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†è¡Œã‚’è¿”ã™.
      * 
-     * @return@‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹s.
+     * @returnã€€ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†è¡Œ.
      */
     public int getEndLine() {
         return this.endLine;
     }
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚Ì”­sÒ‚Å‚ ‚éƒrƒWƒ^[‚ğ•Ô‚·.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã®ç™ºè¡Œè€…ã§ã‚ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã‚’è¿”ã™.
      */
     private final AstVisitor source;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
      */
     private final AstToken token;
     
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ì•¶š—ñ
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®æ–‡å­—åˆ—
      */
     private final String text;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìeƒm[ƒh‚Ìí—Ş‚ğ•\‚·ƒg[ƒNƒ“
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®è¦ªãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
      */
     private final AstToken parentToken;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJns.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹è¡Œ.
      */
     private final int startLine;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌŠJn—ñ.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®é–‹å§‹åˆ—.
      */
     private final int startColumn;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹s.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†è¡Œ.
      */
     private final int endLine;
 
     /**
-     * ‚±‚ÌƒCƒxƒ“ƒg‚ªŠÖ˜A‚·‚éASTƒm[ƒh‚Ìƒ\[ƒXƒR[ƒhã‚Å‚ÌI—¹—ñ.
+     * ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒé–¢é€£ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä¸Šã§ã®çµ‚äº†åˆ—.
      */
     private final int endColumn;
 

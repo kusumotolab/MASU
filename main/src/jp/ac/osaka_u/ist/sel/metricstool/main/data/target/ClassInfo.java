@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒNƒ‰ƒXî•ñ‚ğŠi”[‚·‚é‚½‚ß‚Ì’ŠÛƒNƒ‰ƒX
+ * ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -25,7 +25,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         Visualizable, StaticOrInstance, TypeParameterizable {
 
     /**
-     * InnerClassInfo<?>‚ÌSortedSet‚ğClassInfo<?,?,?,?>‚ÌSortedSet‚É•ÏŠ·‚·‚é
+     * InnerClassInfo<?>ã®SortedSetã‚’ClassInfo<?,?,?,?>ã®SortedSetã«å¤‰æ›ã™ã‚‹
      * @param innerClasses
      * @return
      */
@@ -45,15 +45,15 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ÆƒNƒ‰ƒX–¼‚©‚çƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
+     * åå‰ç©ºé–“åã¨ã‚¯ãƒ©ã‚¹åã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
      * 
-     * @param modifiers Cüq‚ÌSet
-     * @param namespace –¼‘O‹óŠÔ–¼
-     * @param className ƒNƒ‰ƒX–¼
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®Set
+     * @param namespace åå‰ç©ºé–“å
+     * @param className ã‚¯ãƒ©ã‚¹å
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final boolean isInterface, final boolean isEnum,
@@ -61,7 +61,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == namespace) || (null == className)) {
             throw new NullPointerException();
@@ -87,14 +87,14 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * Š®‘SŒÀ’è–¼‚©‚çƒNƒ‰ƒXî•ñƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
+     * å®Œå…¨é™å®šåã‹ã‚‰ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
      * 
-     * @param modifiers Cüq‚ÌSet
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®Set
+     * @param fullQualifiedName å®Œå…¨é™å®šå
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final boolean isInterface, final boolean isEnum, final int fromLine,
@@ -102,7 +102,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fullQualifiedName) {
             throw new NullPointerException();
@@ -133,25 +133,25 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒNƒ‰ƒX–¼‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¯ãƒ©ã‚¹åã‚’è¿”ã™
      * 
-     * @return ƒNƒ‰ƒX–¼
+     * @return ã‚¯ãƒ©ã‚¹å
      */
     public String getClassName() {
         return this.className;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì–¼‘O‹óŠÔ–¼‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®åå‰ç©ºé–“åã‚’è¿”ã™
      * 
-     * @return –¼‘O‹óŠÔ–¼
+     * @return åå‰ç©ºé–“å
      */
     public NamespaceInfo getNamespace() {
         return this.namespace;
     }
 
     /**
-     * ƒNƒ‰ƒXƒIƒuƒWƒFƒNƒg‚Ì”äŠr‚Ìê‡‚ÍC–¼‘O‹óŠÔ‚ÉŠî‚Ã‚¢‚½‡˜‚É‚·‚é‚½‚ß‚É’è‹`‚µ‚Ä‚¢‚éD
+     * ã‚¯ãƒ©ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒã®å ´åˆã¯ï¼Œåå‰ç©ºé–“ã«åŸºã¥ã„ãŸé †åºã«ã™ã‚‹ãŸã‚ã«å®šç¾©ã—ã¦ã„ã‚‹ï¼
      */
     @Override
     public final int compareTo(final Position o) {
@@ -179,9 +179,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰
      */
     @Override
     public final String getMeasuredUnitName() {
@@ -190,9 +190,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌCüq‚Ì Set ‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌCüq‚Ì Set
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®ä¿®é£¾å­ã® Set
      */
     @Override
     public final Set<ModifierInfo> getModifiers() {
@@ -200,9 +200,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÉeƒNƒ‰ƒXi‚ÌŒ^j‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«è¦ªã‚¯ãƒ©ã‚¹ï¼ˆã®å‹ï¼‰ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param referenceType ’Ç‰Á‚·‚éeƒNƒ‰ƒX‚ÌŒ^
+     * @param referenceType è¿½åŠ ã™ã‚‹è¦ªã‚¯ãƒ©ã‚¹ã®å‹
      */
     public void addSuperClass(final ClassTypeInfo referenceType) {
 
@@ -215,9 +215,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÉqƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å­ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param subClass ’Ç‰Á‚·‚éqƒNƒ‰ƒX
+     * @param subClass è¿½åŠ ã™ã‚‹å­ã‚¯ãƒ©ã‚¹
      */
     public void addSubClass(final ClassInfo subClass) {
 
@@ -230,27 +230,27 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒX[ƒp[ƒNƒ‰ƒX‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ƒX[ƒp[ƒNƒ‰ƒX‚Ì SortedSet
+     * @return ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã® SortedSet
      */
     public List<ClassTypeInfo> getSuperClasses() {
         return Collections.unmodifiableList(this.superClasses);
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒTƒuƒNƒ‰ƒX‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ƒTƒuƒNƒ‰ƒX‚Ì SortedSet
+     * @return ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã® SortedSet
      */
     public SortedSet<ClassInfo> getSubClasses() {
         return Collections.unmodifiableSortedSet(this.subClasses);
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨é™å®šåã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨é™å®šå
      */
     public final String[] getFullQualifiedName() {
 
@@ -263,10 +263,10 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼‚ğ•Ô‚·DŠ®‘SŒÀ’è–¼‚Íˆø”‚Å—^‚¦‚ç‚ê‚½•¶š—ñ‚É‚æ‚è˜AŒ‹‚³‚êC•Ô‚³‚ê‚éD
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨é™å®šåã‚’è¿”ã™ï¼å®Œå…¨é™å®šåã¯å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã«ã‚ˆã‚Šé€£çµã•ã‚Œï¼Œè¿”ã•ã‚Œã‚‹ï¼
      * 
-     * @param delimiter ‹æØ‚è•¶š
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼
+     * @param delimiter åŒºåˆ‡ã‚Šæ–‡å­—
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å®Œå…¨é™å®šå
      */
     public final String getFullQualifiedName(final String delimiter) {
 
@@ -285,9 +285,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      * 
-     * @return ƒnƒbƒVƒ…ƒR[ƒh
+     * @return ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      */
     @Override
     public final int hashCode() {
@@ -295,9 +295,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * “™‚µ‚¢‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN
+     * ç­‰ã—ã„ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯
      * 
-     * @return “™‚µ‚¢ê‡‚Í true, “™‚µ‚­‚È‚¢ê‡‚Í false
+     * @return ç­‰ã—ã„å ´åˆã¯ true, ç­‰ã—ããªã„å ´åˆã¯ false
      */
     @Override
     public final boolean equals(final Object o) {
@@ -322,22 +322,22 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚Å‚ ‚é‚©‚ğ”»’è‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param classInfo ‘ÎÛƒNƒ‰ƒX
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚Å‚ ‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param classInfo å¯¾è±¡ã‚¯ãƒ©ã‚¹
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isSuperClass(final ClassInfo classInfo) {
 
-        // ˆø”‚Ì’¼Ú‚ÌeƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å¼•æ•°ã®ç›´æ¥ã®è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
-            // ‘ÎÛƒNƒ‰ƒX‚Ì’¼Ú‚ÌeƒNƒ‰ƒX‚ª‚±‚ÌƒNƒ‰ƒX‚Æ“™‚µ‚¢ê‡‚Í true ‚ğ•Ô‚·
+            // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®ç›´æ¥ã®è¦ªã‚¯ãƒ©ã‚¹ãŒã“ã®ã‚¯ãƒ©ã‚¹ã¨ç­‰ã—ã„å ´åˆã¯ true ã‚’è¿”ã™
             if (this.equals(superClass)) {
                 return true;
             }
 
-            // ‘ÎÛƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚É‘Î‚µ‚ÄÄ‹A“I‚Éˆ—Ctrue ‚ª•Ô‚³‚ê‚½ê‡‚ÍC‚±‚Ìƒƒ\ƒbƒh‚à true ‚ğ•Ô‚·
+            // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦å†å¸°çš„ã«å‡¦ç†ï¼Œtrue ãŒè¿”ã•ã‚ŒãŸå ´åˆã¯ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚‚ true ã‚’è¿”ã™
             if (this.isSuperClass(superClass)) {
                 return true;
             }
@@ -347,22 +347,22 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌqƒNƒ‰ƒX‚Å‚ ‚é‚©‚ğ”»’è‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®å­ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param classInfo ‘ÎÛƒNƒ‰ƒX
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌqƒNƒ‰ƒX‚Å‚ ‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param classInfo å¯¾è±¡ã‚¯ãƒ©ã‚¹
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®å­ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isSubClass(final ClassInfo classInfo) {
 
-        // ˆø”‚Ì’¼Ú‚ÌqƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å¼•æ•°ã®ç›´æ¥ã®å­ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final ClassInfo subClassInfo : classInfo.getSubClasses()) {
 
-            // ‘ÎÛƒNƒ‰ƒX‚Ì’¼Ú‚ÌeƒNƒ‰ƒX‚ª‚±‚ÌƒNƒ‰ƒX‚Æ“™‚µ‚¢ê‡‚Í true ‚ğ•Ô‚·
+            // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®ç›´æ¥ã®è¦ªã‚¯ãƒ©ã‚¹ãŒã“ã®ã‚¯ãƒ©ã‚¹ã¨ç­‰ã—ã„å ´åˆã¯ true ã‚’è¿”ã™
             if (this.equals(subClassInfo)) {
                 return true;
             }
 
-            // ‘ÎÛƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚É‘Î‚µ‚ÄÄ‹A“I‚Éˆ—Ctrue ‚ª•Ô‚³‚ê‚½ê‡‚ÍC‚±‚Ìƒƒ\ƒbƒh‚à true ‚ğ•Ô‚·
+            // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦å†å¸°çš„ã«å‡¦ç†ï¼Œtrue ãŒè¿”ã•ã‚ŒãŸå ´åˆã¯ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚‚ true ã‚’è¿”ã™
             if (this.isSubClass(subClassInfo)) {
                 return true;
             }
@@ -372,32 +372,32 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚ ‚é‚©‚ğ”»’è‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹
      * 
-     * @param classInfo ‘ÎÛƒNƒ‰ƒX
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚ ‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param classInfo å¯¾è±¡ã‚¯ãƒ©ã‚¹
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isInnerClass(final ClassInfo classInfo) {
 
-        // ˆø”‚ªnull‚Ì‚Æ‚«‚Ífalse
+        // å¼•æ•°ãŒnullã®ã¨ãã¯false
         if (null == classInfo) {
             return false;
         }
 
         for (final InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
 
-            // ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚Ì’¼Ú‚ÌqƒNƒ‰ƒX‚Æ“™‚µ‚¢ê‡‚Í true ‚ğ•Ô‚·
+            // ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã®ç›´æ¥ã®å­ã‚¯ãƒ©ã‚¹ã¨ç­‰ã—ã„å ´åˆã¯ true ã‚’è¿”ã™
             if (innerClassInfo.equals(this)) {
                 return true;
             }
 
-            // ‚±‚ÌƒNƒ‰ƒX‚ªˆø”‚ÌŠÔÚ“I‚ÈqƒNƒ‰ƒX‚Å‚ ‚éê‡‚à true ‚ğ•Ô‚·
+            // ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¼•æ•°ã®é–“æ¥çš„ãªå­ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã‚‚ true ã‚’è¿”ã™
             if (this.isInnerClass((ClassInfo) innerClassInfo)) {
                 return true;
             }
         }
 
-        // qƒNƒ‰ƒX‚ğÄ‹A“I‚É’²‚×‚½Œ‹‰ÊC‚±‚ÌƒNƒ‰ƒX‚Æˆê’v‚·‚éƒNƒ‰ƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚Å false ‚ğ•Ô‚·
+        // å­ã‚¯ãƒ©ã‚¹ã‚’å†å¸°çš„ã«èª¿ã¹ãŸçµæœï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã¨ä¸€è‡´ã™ã‚‹ã‚¯ãƒ©ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã®ã§ false ã‚’è¿”ã™
         return false;
     }
 
@@ -436,9 +436,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½Œ^ƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeParameter ’Ç‰Á‚·‚éŒ^ƒpƒ‰ƒ[ƒ^
+     * @param typeParameter è¿½åŠ ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     @Override
     public final void addTypeParameter(final TypeParameterInfo typeParameter) {
@@ -452,10 +452,10 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğ•Ô‚·
+     * æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿”ã™
      * 
-     * @param index Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX
-     * @return@w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^
+     * @param index å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+     * @returnã€€æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     @Override
     public final TypeParameterInfo getTypeParameter(final int index) {
@@ -463,9 +463,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     @Override
     public final List<TypeParameterInfo> getTypeParameters() {
@@ -473,7 +473,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Œ^ƒpƒ‰ƒ[ƒ^‚ª‚±‚ÌƒNƒ‰ƒX‚¨‚æ‚ÑeƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚à‚Ì‚Å‚ ‚é‚©‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã“ã®ã‚¯ãƒ©ã‚¹ãŠã‚ˆã³è¦ªã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã‚‚ã®ã§ã‚ã‚‹ã‹ã‚’è¿”ã™
      * 
      * @param typeParameter
      * @return
@@ -501,9 +501,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚½ƒƒ\ƒbƒhî•ñ‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param definedMethod ’Ç‰Á‚·‚é’è‹`‚³‚ê‚½ƒƒ\ƒbƒh
+     * @param definedMethod è¿½åŠ ã™ã‚‹å®šç¾©ã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰
      */
     public final void addDefinedMethod(final MethodInfo definedMethod) {
 
@@ -516,9 +516,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚½ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚ŒãŸã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param definedConstructor ’Ç‰Á‚·‚é’è‹`‚³‚ê‚½ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @param definedConstructor è¿½åŠ ã™ã‚‹å®šç¾©ã•ã‚ŒãŸã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     public final void addDefinedConstructor(final ConstructorInfo definedConstructor) {
 
@@ -531,9 +531,9 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚½ƒtƒB[ƒ‹ƒhî•ñ‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param definedField ’Ç‰Á‚·‚é’è‹`‚³‚ê‚½ƒtƒB[ƒ‹ƒh
+     * @param definedField è¿½åŠ ã™ã‚‹å®šç¾©ã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     public final void addDefinedField(final FieldInfo definedField) {
 
@@ -546,36 +546,36 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet
+     * @return å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet
      */
     public final SortedSet<MethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSortedSet(this.definedMethods);
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet
+     * @return å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet
      */
     public final SortedSet<ConstructorInfo> getDefinedConstructors() {
         return Collections.unmodifiableSortedSet(this.definedConstructors);
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚Ì SortedSet
+     * @return å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã® SortedSet
      */
     public final SortedSet<FieldInfo> getDefinedFields() {
         return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÉƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param innerClass ’Ç‰Á‚·‚éƒCƒ“ƒi[ƒNƒ‰ƒX
+     * @param innerClass è¿½åŠ ã™ã‚‹ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹
      */
     public final void addInnerClass(final InnerClassInfo innerClass) {
 
@@ -588,143 +588,143 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ƒCƒ“ƒi[ƒNƒ‰ƒX‚Ì SortedSet
+     * @return ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã® SortedSet
      */
     public final SortedSet<InnerClassInfo> getInnerClasses() {
         return Collections.unmodifiableSortedSet(this.innerClasses);
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isInheritanceVisible() {
         return ModifierInfo.isInheritanceVisible(this.modifiers);
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isNamespaceVisible() {
         return ModifierInfo.isNamespaceVisible(this.modifiers);
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isPublicVisible() {
         return ModifierInfo.isPublicVisible(this.modifiers);
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     public final boolean isInstanceMember() {
         return ModifierInfo.isInstanceMember(this.modifiers);
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     public final boolean isStaticMember() {
         return ModifierInfo.isStaticMember(this.modifiers);
     }
 
     /**
-     * ƒCƒ“ƒ^[ƒtƒF[ƒX‚©‚Ç‚¤‚©•Ô‚·D
+     * ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‹ã©ã†ã‹è¿”ã™ï¼
      * 
-     * @return ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìê‡ trueCƒNƒ‰ƒX‚Ìê‡ false
+     * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å ´åˆ trueï¼Œã‚¯ãƒ©ã‚¹ã®å ´åˆ false
      */
     public final boolean isInterface() {
         return this.isInterface;
     }
 
     /**
-     * ƒNƒ‰ƒX‚©‚Ç‚¤‚©•Ô‚·D
+     * ã‚¯ãƒ©ã‚¹ã‹ã©ã†ã‹è¿”ã™ï¼
      * 
-     *  @return ƒNƒ‰ƒX‚Ìê‡ trueCƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìê‡ false
+     *  @return ã‚¯ãƒ©ã‚¹ã®å ´åˆ trueï¼Œã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å ´åˆ false
      */
     public final boolean isClass() {
         return !this.isInterface;
     }
 
     /**
-     * —ñ‹“Œ^‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * åˆ—æŒ™å‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * 
-     * @return —ñ‹“Œ^‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åˆ—æŒ™å‹ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isEnum() {
         return this.isEnum;
     }
 
     /**
-     * ƒNƒ‰ƒX–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¯ãƒ©ã‚¹åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String className;
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åå‰ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final NamespaceInfo namespace;
 
     /**
-     * Cüq‚ğ•Û‘¶‚·‚é•Ï”
+     * ä¿®é£¾å­ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final Set<ModifierInfo> modifiers;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ªŒp³‚µ‚Ä‚¢‚éƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D ’¼Ú‚ÌeƒNƒ‰ƒX‚Ì‚İ‚ğ•Û—L‚·‚é‚ªC‘½dŒp³‚ğl‚¦‚Ä Set ‚É‚µ‚Ä‚¢‚éD
+     * ã“ã®ã‚¯ãƒ©ã‚¹ãŒç¶™æ‰¿ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼ ç›´æ¥ã®è¦ªã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ä¿æœ‰ã™ã‚‹ãŒï¼Œå¤šé‡ç¶™æ‰¿ã‚’è€ƒãˆã¦ Set ã«ã—ã¦ã„ã‚‹ï¼
      */
     private final List<ClassTypeInfo> superClasses;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚Ä‚¢‚éƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D’¼Ú‚ÌqƒNƒ‰ƒX‚Ì‚İ‚ğ•Û—L‚·‚éD
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼ç›´æ¥ã®å­ã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ä¿æœ‰ã™ã‚‹ï¼
      */
     private final SortedSet<ClassInfo> subClasses;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğ•Û‘¶‚·‚é•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final List<TypeParameterInfo> typeParameters;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒhˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼
      */
     protected final SortedSet<MethodInfo> definedMethods;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^ˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼
      */
     protected final SortedSet<ConstructorInfo> definedConstructors;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒhˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼
      */
     protected final SortedSet<FieldInfo> definedFields;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì“à•”ƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”D’¼Ú‚Ì“à•”ƒNƒ‰ƒX‚Ì‚İ‚ğ•Û—L‚·‚éD
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å†…éƒ¨ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°ï¼ç›´æ¥ã®å†…éƒ¨ã‚¯ãƒ©ã‚¹ã®ã¿ã‚’ä¿æœ‰ã™ã‚‹ï¼
      */
     private final SortedSet<InnerClassInfo> innerClasses;
 
     /**
-     * ƒCƒ“ƒ^[ƒtƒF[ƒX‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final boolean isInterface;
 
     /**
-     * —ñ‹“Œ^‚©‚Ç‚¤‚©‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åˆ—æŒ™å‹ã‹ã©ã†ã‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final boolean isEnum;
 }

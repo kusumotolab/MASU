@@ -17,21 +17,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 
 
 /**
- * •¶‚Ìî•ñ‚ğ\’z‚·‚éƒNƒ‰ƒX
- * •¡•¶ˆÈŠOi®•¶Creturn•¶Cthrow•¶Cbreak•¶‚È‚Çj‚Ìî•ñ‚ğ\’z‚·‚éD
+ * æ–‡ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
+ * è¤‡æ–‡ä»¥å¤–ï¼ˆå¼æ–‡ï¼Œreturnæ–‡ï¼Œthrowæ–‡ï¼Œbreakæ–‡ãªã©ï¼‰ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
  * 
  * @author t-miyake
  *
- * @param <T> \’z‚³‚ê‚é•¶‚ÌŒ^CUnresolvedStatementInfo‚ÌƒTƒuƒNƒ‰ƒX‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+ * @param <T> æ§‹ç¯‰ã•ã‚Œã‚‹æ–‡ã®å‹ï¼ŒUnresolvedStatementInfoã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
  */
 public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<? extends StatementInfo>>
         extends CompoundDataBuilder<T> {
 
     /**
-     * ®î•ñƒ}ƒl[ƒWƒƒ[C\’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ğ—^‚¦‚Ä‰Šú‰»
+     * å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ï¼Œæ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param expressionManager ®î•ñƒ}ƒl[ƒWƒƒ[
-     * @param buildDataManager \’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[
+     * @param expressionManager å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+     * @param buildDataManager æ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
      */
     public SingleStatementBuilder(final ExpressionElementManager expressionManager,
             final BuildDataManager buildDataManager) {
@@ -70,9 +70,9 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
     }
 
     /**
-     * ‰ß‹‚É\’z‚³‚ê‚½®î•ñ‚Ì‚¤‚¿ÅV‚Ì®î•ñ‚ğ•Ô‚·D
+     * éå»ã«æ§‹ç¯‰ã•ã‚ŒãŸå¼æƒ…å ±ã®ã†ã¡æœ€æ–°ã®å¼æƒ…å ±ã‚’è¿”ã™ï¼
      * 
-     * @return ‰ß‹\’z‚³‚ê‚½®î•ñ‚Ì‚¤‚¿ÅV‚Ì®î•ñ
+     * @return éå»æ§‹ç¯‰ã•ã‚ŒãŸå¼æƒ…å ±ã®ã†ã¡æœ€æ–°ã®å¼æƒ…å ±
      */
     protected UnresolvedExpressionInfo<? extends ExpressionInfo> getLastBuiltExpression() {
         return null == this.expressionManager.getPeekExpressionElement() ? null
@@ -80,12 +80,12 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
     }
 
     /**
-     * •¶‚Ìî•ñ‚ğ\’z‚·‚éD
+     * æ–‡ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
      * 
-     * @param fromLine •¶‚ÌŠJns
-     * @param fromColumn •¶‚ÌŠJn—ñ
-     * @param toLine •¶‚ÌI—¹s
-     * @param toColumn •¶‚ÌI—¹—ñ
+     * @param fromLine æ–‡ã®é–‹å§‹è¡Œ
+     * @param fromColumn æ–‡ã®é–‹å§‹åˆ—
+     * @param toLine æ–‡ã®çµ‚äº†è¡Œ
+     * @param toColumn æ–‡ã®çµ‚äº†åˆ—
      * @return
      */
     protected abstract T buildStatement(
@@ -93,20 +93,20 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
             final int fromLine, final int fromColumn, final int toLine, final int toColumn);
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒg[ƒNƒ“‚ª\’z‚³‚ê‚é•¶‚ğ•\‚·ƒm[ƒh‚Ìƒg[ƒNƒ“‚Å‚ ‚é‚©‚Ç‚¤‚©•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒˆãƒ¼ã‚¯ãƒ³ãŒæ§‹ç¯‰ã•ã‚Œã‚‹æ–‡ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚‹ã‹ã©ã†ã‹è¿”ã™
      * 
-     * @param token ƒg[ƒNƒ“
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚½ƒg[ƒNƒ“‚ª\’z‚³‚ê‚é•¶‚ğ•\‚·ƒm[ƒh‚Ìƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param token ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒˆãƒ¼ã‚¯ãƒ³ãŒæ§‹ç¯‰ã•ã‚Œã‚‹æ–‡ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     protected abstract boolean isTriggerToken(final AstToken token);
 
     /**
-     * \’zÏ‚İ®î•ñƒ}ƒl[ƒWƒƒ[‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * æ§‹ç¯‰æ¸ˆã¿å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     protected final ExpressionElementManager expressionManager;
 
     /**
-     * \’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ğ•\‚·ƒtƒB[ƒ‹ƒh
+     * æ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’è¡¨ã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
      */
     protected final BuildDataManager buildDataManager;
 }

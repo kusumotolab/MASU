@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * ”z—ñŒ^‚Ì length ƒtƒB[ƒ‹ƒhg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—å‹ã® length ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -11,15 +11,15 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public final class ArrayLengthUsageInfo extends FieldUsageInfo {
 
     /**
-     * e‚Æ‚È‚éƒGƒ“ƒeƒBƒeƒBg—p‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * è¦ªã¨ãªã‚‹ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      *
-     * @param qualifierExpression eƒGƒ“ƒeƒBƒeƒB
-     * @param qualifierType eƒGƒ“ƒeƒBƒeƒB‚ÌŒ^i•K—v‚È‚¢‚©‚àDDDj
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param qualifierExpression è¦ªã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
+     * @param qualifierType è¦ªã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®å‹ï¼ˆå¿…è¦ãªã„ã‹ã‚‚ï¼ï¼ï¼ï¼‰
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ArrayLengthUsageInfo(final ExpressionInfo qualifierExpression,
             final ArrayTypeInfo qualifierType, final CallableUnitInfo ownerMethod,
@@ -31,9 +31,9 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
     }
 
     /**
-     * length ƒtƒB[ƒ‹ƒhg—p‚ÌŒ^‚ğ•Ô‚·D
+     * length ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®å‹ã‚’è¿”ã™ï¼
      * 
-     * @return length ƒtƒB[ƒ‹ƒhg—p‚ÌŒ^
+     * @return length ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã®å‹
      */
     @Override
     public TypeInfo getType() {

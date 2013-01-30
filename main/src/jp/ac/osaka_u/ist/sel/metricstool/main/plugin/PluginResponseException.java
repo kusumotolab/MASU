@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 
 /**
- * �v���O�C������̉������w�莞�Ԉȓ��ɋA���Ă��Ȃ������ꍇ�ɃX���[�����.
+ * プラグインからの応答が指定時間以内に帰ってこなかった場合にスローされる.
  * @author kou-tngt
  *
  */

@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ª‘¶İ‚·‚é‚±‚Æ‚ğ•\‚·ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹ã“ã¨ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,30 +10,30 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public interface HavingOuterUnit {
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @return å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     UnitInfo getOuterUnit();
     
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğİ’è‚·‚é
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹
      * 
-     * @param outerUnit ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @param outerUnit å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     void setOuterUnit(UnitInfo outerUnit);
     
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     ClassInfo getOuterClass();
 
     /**
-     * ŠO‘¤‚ÌŒÄ‚Ño‚µ‰Â”\‚Èƒ†ƒjƒbƒgiƒƒ\ƒbƒhCƒRƒ“ƒXƒgƒ‰ƒNƒ^“™j‚ğ•Ô‚·
+     * å¤–å´ã®å‘¼ã³å‡ºã—å¯èƒ½ãªãƒ¦ãƒ‹ãƒƒãƒˆï¼ˆãƒ¡ã‚½ãƒƒãƒ‰ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ç­‰ï¼‰ã‚’è¿”ã™
      * 
-     * @return ŠO‘¤‚ÌŒÄ‚Ño‚µ‰Â”\‚Èƒ†ƒjƒbƒgiƒƒ\ƒbƒhCƒRƒ“ƒXƒgƒ‰ƒNƒ^“™j
+     * @return å¤–å´ã®å‘¼ã³å‡ºã—å¯èƒ½ãªãƒ¦ãƒ‹ãƒƒãƒˆï¼ˆãƒ¡ã‚½ãƒƒãƒ‰ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ç­‰ï¼‰
      */
     CallableUnitInfo getOuterCallableUnit();
 }

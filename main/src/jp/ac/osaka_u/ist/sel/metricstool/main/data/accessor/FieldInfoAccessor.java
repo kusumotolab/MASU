@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 
 
 /**
- * ‚±‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ÍCƒtƒB[ƒ‹ƒhî•ñ‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒhŒS‚ğ’ñ‹Ÿ‚·‚éD
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã¯ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰éƒ¡ã‚’æä¾›ã™ã‚‹ï¼
  * 
  * @author higo
  *
@@ -13,8 +13,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 public interface FieldInfoAccessor extends Iterable<TargetFieldInfo> {
 
     /**
-     * ‘ÎÛƒtƒB[ƒ‹ƒh‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return ‘ÎÛƒtƒB[ƒ‹ƒh‚Ì”
+     * å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å¯¾è±¡ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ•°
      */
     public int getFieldCount();
 }

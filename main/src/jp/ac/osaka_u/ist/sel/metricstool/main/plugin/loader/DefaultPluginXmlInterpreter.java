@@ -19,25 +19,25 @@ import org.xml.sax.SAXException;
 
 
 /**
- * PluginXmlInterpreterƒNƒ‰ƒX‚ÍCƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Åˆø”‚Æ‚µ‚Ä—^‚¦‚ç‚ê‚½ƒvƒ‰ƒOƒCƒ“’è‹`XMLƒtƒ@ƒCƒ‹‚ğ‰ğÍ‚µC
- * ‚»‚Ì’†‚Å‹Lq‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“î•ñ‚ğæ“¾‚·‚épublicƒƒ\ƒbƒhŒQ‚ğ’ñ‹Ÿ‚·‚éD
+ * PluginXmlInterpreterã‚¯ãƒ©ã‚¹ã¯ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å¼•æ•°ã¨ã—ã¦ä¸ãˆã‚‰ã‚ŒãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®šç¾©XMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æã—ï¼Œ
+ * ãã®ä¸­ã§è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³æƒ…å ±ã‚’å–å¾—ã™ã‚‹publicãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’æä¾›ã™ã‚‹ï¼
  * <p>
- * ƒvƒ‰ƒOƒCƒ“’è‹`XMLƒtƒ@ƒCƒ‹‚Ì‹LqŒ`®‚ª•ÏX‚³‚ê‚½ê‡‚ÍC‚±‚ÌƒNƒ‰ƒX‚ğC³‚·‚é‚©C
- * ‚ ‚é‚¢‚Í‚±‚ÌƒNƒ‰ƒX‚ÌƒTƒuƒNƒ‰ƒX‚ğV‚½‚Éì¬‚µ‚ÄVŒ`®‚É‘Î‰‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®šç¾©XMLãƒ•ã‚¡ã‚¤ãƒ«ã®è¨˜è¿°å½¢å¼ãŒå¤‰æ›´ã•ã‚ŒãŸå ´åˆã¯ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã‚’ä¿®æ­£ã™ã‚‹ã‹ï¼Œ
+ * ã‚ã‚‹ã„ã¯ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’æ–°ãŸã«ä½œæˆã—ã¦æ–°å½¢å¼ã«å¯¾å¿œã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
  * 
  * @author kou-tngt
  */
 public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
 
     /**
-     * PluginXmlInterpreterƒNƒ‰ƒX‚Ì—Bˆê‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^D
-     * ˆø”‚Æ‚µ‚Ä—^‚¦‚ç‚ê‚½XMLƒtƒ@ƒCƒ‹‚ğ‰ğÍ‚µCƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ÆƒNƒ‰ƒXƒpƒXw’èî•ñ‚ğæ“¾‚·‚éD
-     * @param pluginXml ‰ğÍ‘ÎÛ‚Æ‚·‚éƒvƒ‰ƒOƒCƒ“’è‹`XMLƒtƒ@ƒCƒ‹
-     * @throws PluginLoadException pluginXml‚ÌXML‚Ì\•¶‰ğÍ‚ª‚Å‚«‚È‚©‚Á‚½‚Æ‚«C‚Ü‚½‚ÍCXML\•¶‚ªŒë‚Á‚Ä‚¢‚½ê‡
-     * @throws IOException pluginXml ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚½ê‡
-     * @throws IllegalPluginXmlFormatException pluginXmlƒtƒ@ƒCƒ‹‚ªƒvƒ‰ƒOƒCƒ“’è‹`XMLƒtƒ@ƒCƒ‹‚ÌŒ`®‚Éˆá”½‚µ‚Ä‚¢‚éê‡
-     * @throws NullPointerException pluginXml‚ªnull‚Ìê‡
-     * @throws IlleagalArgumentException@pluginXml‚ª‘¶İ‚µ‚È‚¢ê‡Cƒtƒ@ƒCƒ‹‚Å‚Í‚È‚¢ê‡C‚Ü‚½‚ÍŠg’£q‚ªxml‚Å‚Í‚È‚¢ê‡
+     * PluginXmlInterpreterã‚¯ãƒ©ã‚¹ã®å”¯ä¸€ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼
+     * å¼•æ•°ã¨ã—ã¦ä¸ãˆã‚‰ã‚ŒãŸXMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æã—ï¼Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã¨ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šæƒ…å ±ã‚’å–å¾—ã™ã‚‹ï¼
+     * @param pluginXml è§£æå¯¾è±¡ã¨ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®šç¾©XMLãƒ•ã‚¡ã‚¤ãƒ«
+     * @throws PluginLoadException pluginXmlã®XMLã®æ§‹æ–‡è§£æãŒã§ããªã‹ã£ãŸã¨ãï¼Œã¾ãŸã¯ï¼ŒXMLæ§‹æ–‡ãŒèª¤ã£ã¦ã„ãŸå ´åˆ
+     * @throws IOException pluginXml ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ãŸå ´åˆ
+     * @throws IllegalPluginXmlFormatException pluginXmlãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®šç¾©XMLãƒ•ã‚¡ã‚¤ãƒ«ã®å½¢å¼ã«é•åã—ã¦ã„ã‚‹å ´åˆ
+     * @throws NullPointerException pluginXmlãŒnullã®å ´åˆ
+     * @throws IlleagalArgumentExceptionã€€pluginXmlãŒå­˜åœ¨ã—ãªã„å ´åˆï¼Œãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ãªã„å ´åˆï¼Œã¾ãŸã¯æ‹¡å¼µå­ãŒxmlã§ã¯ãªã„å ´åˆ
      * 
      */
     public DefaultPluginXmlInterpreter(final File pluginXml) throws PluginLoadException,
@@ -54,9 +54,9 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
         if (!pluginXml.getName().endsWith(".xml")) {
             throw new IllegalArgumentException(pluginXml + " is not xml file.");
         }
-        //ˆø”ƒ`ƒFƒbƒN‚¨‚µ‚Ü‚¢
+        //å¼•æ•°ãƒã‚§ãƒƒã‚¯ãŠã—ã¾ã„
 
-        //å‚ÉƒGƒ‰[•\¦‚Ì‚½‚ß‚ÉCƒtƒ@ƒCƒ‹‚ğ‚Á‚Ä‚¨‚­
+        //ä¸»ã«ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºã®ãŸã‚ã«ï¼Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒã£ã¦ãŠã
         this.pluginXml = pluginXml;
 
         try {
@@ -64,28 +64,28 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
                     .newDocumentBuilder();
             this.document = builder.parse(pluginXml);
         } catch (final ParserConfigurationException e) {
-            //DocumentBuilder‚Ì\’z‚É¸”s‚µ‚½ê‡i‚Ç‚¤‚¢‚¤‚É”­¶‚·‚é‚©‚Í•s–¾j
+            //DocumentBuilderã®æ§‹ç¯‰ã«å¤±æ•—ã—ãŸå ´åˆï¼ˆã©ã†ã„ã†æ™‚ã«ç™ºç”Ÿã™ã‚‹ã‹ã¯ä¸æ˜ï¼‰
             throw new PluginLoadException("Failed to interpret " + pluginXml.getAbsolutePath()
                     + ".", e);
         } catch (final SAXException e) {
-            //XML\•¶‚ªŠÔˆá‚Á‚Ä‚¢‚ÄDocument‚ªì‚ê‚È‚©‚Á‚½ê‡j
+            //XMLæ§‹æ–‡ãŒé–“é•ã£ã¦ã„ã¦DocumentãŒä½œã‚Œãªã‹ã£ãŸå ´åˆï¼‰
             throw new IllegalPluginXmlFormatException("Syntax error : "
                     + pluginXml.getAbsolutePath(), e);
         }
 
         if (!this.document.getDocumentElement().getNodeName().equals(PLUGIN_TAG)) {
-            //XMLƒtƒ@ƒCƒ‹‚Ì’†g‚ª<plugin>‚©‚çn‚Ü‚Á‚Ä‚¢‚È‚¢Œ`®‚ª‚¨‚©‚µ‚¢j
+            //XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­èº«ãŒ<plugin>ã‹ã‚‰å§‹ã¾ã£ã¦ã„ãªã„ï¼å½¢å¼ãŒãŠã‹ã—ã„ï¼‰
             throw new IllegalPluginXmlFormatException("Syntax error : The root tag must be <"
                     + PLUGIN_TAG + ">. at " + pluginXml.getAbsolutePath());
         }
 
-        //XML‚ğ‰ğÍ‚µ‚Äî•ñ‚ğæ“¾
+        //XMLã‚’è§£æã—ã¦æƒ…å ±ã‚’å–å¾—
         this.interpretPluginXml();
     }
 
     /**
-     * ‰ğÍ‘ÎÛ‚Ìxmlƒtƒ@ƒCƒ‹’†‚É‹Lq‚³‚ê‚Ä‚¢‚éCƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX–¼‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return ƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚ğ•\‚·•¶š—ñ
+     * è§£æå¯¾è±¡ã®xmlãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ï¼Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹åã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã‚’è¡¨ã™æ–‡å­—åˆ—
      */
     public String getPluginClassName() {
         assert (null != this.pluginClassName && 0 != this.pluginClassName.length()) : "Illegal state: this.pluginClassName is not initialized.";
@@ -93,8 +93,8 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * ‰ğÍ‘ÎÛ‚Ìxmlƒtƒ@ƒCƒ‹’†‚É‹Lq‚³‚ê‚Ä‚¢‚éCƒtƒ@ƒCƒ‹‚Ö‚ÌƒNƒ‰ƒXƒpƒXw’èˆê——‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return ƒtƒ@ƒCƒ‹‚Ö‚ÌƒNƒ‰ƒXƒpƒXw’è‚ğ•\‚·•¶š—ñ‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®xmlãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ï¼Œãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šä¸€è¦§ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šã‚’è¡¨ã™æ–‡å­—åˆ—ã®é…åˆ—
      */
     public String[] getClassPathFileNames() {
         assert (null != this.classPathsToFile) : "Illegal state: this.classPathsToFile is not initialized.";
@@ -102,8 +102,8 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * ‰ğÍ‘ÎÛ‚Ìxmlƒtƒ@ƒCƒ‹’†‚É‹Lq‚³‚ê‚Ä‚¢‚éCƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒNƒ‰ƒXƒpƒXw’èˆê——‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return ƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒNƒ‰ƒXƒpƒXw’è‚ğ•\‚·•¶š—ñ‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®xmlãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šä¸€è¦§ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šã‚’è¡¨ã™æ–‡å­—åˆ—ã®é…åˆ—
      */
     public String[] getClassPathDirectoryNames() {
         assert (null != this.classPathsToDirectory) : "Illegal state: this.classPathsToDirectory is not initialized.";
@@ -111,8 +111,8 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * ‰ğÍ‘ÎÛ‚Ìxmlƒtƒ@ƒCƒ‹’†‚É‹Lq‚³‚ê‚Ä‚¢‚éCƒNƒ‰ƒXƒpƒXw’èˆê——‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return ƒNƒ‰ƒXƒpƒXw’è‚ğ•\‚·•¶š—ñ‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®xmlãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ï¼Œã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šä¸€è¦§ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šã‚’è¡¨ã™æ–‡å­—åˆ—ã®é…åˆ—
      */
     public String[] getClassPathAttributeNames() {
         assert (null != this.classPathsToAttribute) : "Illegal state: this.classPathsToAttribute is not initialized.";
@@ -120,9 +120,9 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * ‰ğÍ‘ÎÛ‚ÌXMLƒtƒ@ƒCƒ‹‚ğ•\‚·DOMƒhƒLƒ…ƒƒ“ƒg‚ğ•Ô‚·ƒƒ\ƒbƒhD
-     * ƒTƒuƒNƒ‰ƒX‚©‚ç‚àƒhƒLƒ…ƒƒ“ƒg‚ªQÆ‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ßCƒAƒNƒZƒXƒŒƒxƒ‹‚Íprotected‚Æ‚·‚éD
-     * @return ‰ğÍ‘ÎÛXML‚ğ•\‚·DOMƒhƒLƒ…ƒƒ“ƒg
+     * è§£æå¯¾è±¡ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ã™DOMãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã‚‚ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãŒå‚ç…§ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ãŸã‚ï¼Œã‚¢ã‚¯ã‚»ã‚¹ãƒ¬ãƒ™ãƒ«ã¯protectedã¨ã™ã‚‹ï¼
+     * @return è§£æå¯¾è±¡XMLã‚’è¡¨ã™DOMãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ
      * @see org.w3c.dom.Document
      */
     protected final Document getDocument() {
@@ -130,8 +130,8 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * xml‚ğ‰ğÍ‚µƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX‚Ìî•ñ‚ğæ“¾‚·‚éƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚©‚çŒÄ‚Ño‚³‚ê‚é‚½‚ßC‚±‚ÌƒNƒ‰ƒX‚ÌpublicC‚Ü‚½‚Íprotected‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚Í‚È‚ç‚È‚¢D
+     * xmlã‚’è§£æã—ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ã®æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ãŸã‚ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®publicï¼Œã¾ãŸã¯protectedãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã¯ãªã‚‰ãªã„ï¼
      */
     private void interpretPluginClassName() {
         final String className = this.document.getDocumentElement().getAttribute(CLASS_ATTRIBUTE);
@@ -141,24 +141,24 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * xml‚ğ‰ğÍ‚µƒNƒ‰ƒXƒpƒXî•ñ‚ğæ“¾‚·‚éƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚©‚çŒÄ‚Ño‚³‚ê‚é‚½‚ßC‚±‚ÌƒNƒ‰ƒX‚ÌpublicC‚Ü‚½‚Íprotected‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚Í‚È‚ç‚È‚¢D
+     * xmlã‚’è§£æã—ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ãŸã‚ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®publicï¼Œã¾ãŸã¯protectedãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã¯ãªã‚‰ãªã„ï¼
      */
     private void interpretClassPath() {
-        //ƒNƒ‰ƒXƒpƒXî•ñ‚ğˆê“I‚ÉŠi”[‚µ‚Ä‚¨‚­ƒZƒbƒg
+        //ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æƒ…å ±ã‚’ä¸€æ™‚çš„ã«æ ¼ç´ã—ã¦ãŠãã‚»ãƒƒãƒˆ
         final Set<String> classPathToFileSet = new LinkedHashSet<String>();
         final Set<String> classPathToDirectorySet = new LinkedHashSet<String>();
 
-        //<plugin>ƒ^ƒO’¼‰º‚Ìq‹Ÿ’B
+        //<plugin>ã‚¿ã‚°ç›´ä¸‹ã®å­ä¾›é”
         final NodeList rootChildren = this.document.getDocumentElement().getChildNodes();
         final int rootChildreNum = rootChildren.getLength();
 
         for (int i = 0; i < rootChildreNum; i++) {
             final Node rootChild = rootChildren.item(i);
             if (rootChild.getNodeName().equals(CLASSPATH_TAG)) {
-                //<classpath>ƒ^ƒO‚¾‚Á‚½
+                //<classpath>ã‚¿ã‚°ã ã£ãŸ
 
-                //<classpath>ƒ^ƒO’¼‰º‚Ìq‹Ÿ’B
+                //<classpath>ã‚¿ã‚°ç›´ä¸‹ã®å­ä¾›é”
                 final NodeList classpathNodes = rootChild.getChildNodes();
                 final int classPathNum = classpathNodes.getLength();
 
@@ -167,26 +167,26 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
                     final String classPathTagName = classPathNode.getNodeName();
 
                     if (classPathTagName.equals(FILE_TAG)) {
-                        //<file>ƒ^ƒO‚¾‚Á‚½
+                        //<file>ã‚¿ã‚°ã ã£ãŸ
                         final String classPathToFile = this.getNodeAttribute(classPathNode,
                                 PATH_ATTRIBUTE);
                         if (null != classPathToFile && 0 != classPathToFile.length()) {
-                            //“o˜^
+                            //ç™»éŒ²
                             classPathToFileSet.add(classPathToFile);
                         }
                     } else if (classPathTagName.equals(DIRECTORY_TAG)) {
-                        //<dir>ƒ^ƒO‚¾‚Á‚½
+                        //<dir>ã‚¿ã‚°ã ã£ãŸ
                         final String classPathToDirectory = this.getNodeAttribute(classPathNode,
                                 PATH_ATTRIBUTE);
                         if (null != classPathToDirectory && 0 != classPathToDirectory.length()) {
-                            //“o˜^
+                            //ç™»éŒ²
                             classPathToDirectorySet.add(classPathToDirectory);
                         }
                     } else if (classPathTagName.equals(TEXT_TAG)) {
-                        //‰½‚à‚µ‚È‚¢
+                        //ä½•ã‚‚ã—ãªã„
                     } else {
-                        //<file>‚Å‚à<dir>‚Å‚à‚È‚¢ƒ^ƒO‚ª<classpath>’¼‰º‚É‚ ‚Á‚½
-                        //Àsã‚Í–³‹‚·‚ê‚Î–â‘è‚È‚¢‚¯‚Çˆê‰ƒAƒT[ƒVƒ‡ƒ“ƒGƒ‰[‚ğ“Š‚°‚é
+                        //<file>ã§ã‚‚<dir>ã§ã‚‚ãªã„ã‚¿ã‚°ãŒ<classpath>ç›´ä¸‹ã«ã‚ã£ãŸ
+                        //å®Ÿè¡Œä¸Šã¯ç„¡è¦–ã™ã‚Œã°å•é¡Œãªã„ã‘ã©ä¸€å¿œã‚¢ã‚µãƒ¼ã‚·ãƒ§ãƒ³ã‚¨ãƒ©ãƒ¼ã‚’æŠ•ã’ã‚‹
                         assert (false) : "Unknown tag is found under <classpath> tag: "
                                 + classPathTagName + " in " + this.pluginXml.getAbsolutePath();
                     }
@@ -194,17 +194,17 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
             }
         }
 
-        //<file>‚Åw’è‚³‚ê‚½ƒNƒ‰ƒXƒpƒX‚ğƒtƒB[ƒ‹ƒh‚Ì”z—ñ‚É•Û‘¶
+        //<file>ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é…åˆ—ã«ä¿å­˜
         final int fileNum = classPathToFileSet.size();
         this.classPathsToFile = new String[fileNum];
         classPathToFileSet.toArray(this.classPathsToFile);
 
-        //<dir>‚Åw’è‚³‚ê‚½ƒNƒ‰ƒXƒpƒX‚ğƒtƒB[ƒ‹ƒh‚Ì”z—ñ‚É•Û‘¶
+        //<dir>ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é…åˆ—ã«ä¿å­˜
         final int dirNum = classPathToDirectorySet.size();
         this.classPathsToDirectory = new String[dirNum];
         classPathToDirectorySet.toArray(this.classPathsToDirectory);
 
-        //<file>‚Æ<dir>‚Åw’è‚³‚ê‚½ƒNƒ‰ƒXƒpƒX‚ğƒtƒB[ƒ‹ƒh‚Ì”z—ñ‚É•Û‘¶
+        //<file>ã¨<dir>ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é…åˆ—ã«ä¿å­˜
         this.classPathsToAttribute = new String[fileNum + dirNum];
         int i = 0;
         for (final String classPath : classPathToFileSet) {
@@ -216,8 +216,8 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * xml‚ğ‰ğÍ‚µî•ñ‚ğæ“¾‚·‚éƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚©‚çŒÄ‚Ño‚³‚ê‚é‚½‚ßC‚±‚ÌƒNƒ‰ƒX‚ÌpublicC‚Ü‚½‚Íprotected‚ÈƒCƒ“ƒXƒ^ƒ“ƒXƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚Í‚È‚ç‚È‚¢D
+     * xmlã‚’è§£æã—æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ãŸã‚ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®publicï¼Œã¾ãŸã¯protectedãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã¯ãªã‚‰ãªã„ï¼
      */
     private void interpretPluginXml() {
         this.interpretPluginClassName();
@@ -225,11 +225,11 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * org.w3c.dom.Node‚©‚çCattributeName‚Åw’è‚µ‚½‘®«‚Ì’l‚ğæ“¾‚·‚éƒƒ\ƒbƒhD
-     * node‚ªw’è‚³‚ê‚½–¼‘O‚Ì‘®«‚ğ‚½‚È‚¢ê‡‚Ínull‚ğ•Ô‚·D
-     * @param node ‘®«’l‚ğæ“¾‚·‚é‘ÎÛƒm[ƒh
-     * @param attributeName æ“¾‚·‚é‘®«–¼
-     * @return ‘®«’l‚ğ•\‚·•¶š—ñDnode‚ªw’è‚³‚ê‚½–¼‘O‚Ì‘®«‚ğ‚½‚È‚¢ê‡‚ÍnullD
+     * org.w3c.dom.Nodeã‹ã‚‰ï¼ŒattributeNameã§æŒ‡å®šã—ãŸå±æ€§ã®å€¤ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * nodeãŒæŒ‡å®šã•ã‚ŒãŸåå‰ã®å±æ€§ã‚’æŒãŸãªã„å ´åˆã¯nullã‚’è¿”ã™ï¼
+     * @param node å±æ€§å€¤ã‚’å–å¾—ã™ã‚‹å¯¾è±¡ãƒãƒ¼ãƒ‰
+     * @param attributeName å–å¾—ã™ã‚‹å±æ€§å
+     * @return å±æ€§å€¤ã‚’è¡¨ã™æ–‡å­—åˆ—ï¼nodeãŒæŒ‡å®šã•ã‚ŒãŸåå‰ã®å±æ€§ã‚’æŒãŸãªã„å ´åˆã¯nullï¼
      * @see org.w3c.dom.Node
      */
     private String getNodeAttribute(final Node node, final String attributeName) {
@@ -244,67 +244,67 @@ public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
     }
 
     /**
-     * ‰ğÍ‘ÎÛXMLƒtƒ@ƒCƒ‹‚ÌDOMƒhƒLƒ…ƒƒ“ƒg
+     * è§£æå¯¾è±¡XMLãƒ•ã‚¡ã‚¤ãƒ«ã®DOMãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ
      */
     private final Document document;
 
     /**
-     * ‰ğÍ‘ÎÛXMLƒtƒ@ƒCƒ‹
+     * è§£æå¯¾è±¡XMLãƒ•ã‚¡ã‚¤ãƒ«
      */
     private final File pluginXml;;
 
     /**
-     * ‰ğÍ‘ÎÛ‚ÌXMLƒtƒ@ƒCƒ‹‚ªw’è‚·‚éƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX–¼
+     * è§£æå¯¾è±¡ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹å
      */
     private String pluginClassName;
 
     /**
-     * ‰ğÍ‘ÎÛ‚ÌXMLƒtƒ@ƒCƒ‹‚ªw’è‚·‚éCƒtƒ@ƒCƒ‹‚É‘Î‚·‚éƒNƒ‰ƒXƒpƒX—v‹‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã™ã‚‹ï¼Œãƒ•ã‚¡ã‚¤ãƒ«ã«å¯¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹è¦æ±‚ã®é…åˆ—
      */
     private String[] classPathsToFile;
 
     /**
-     * ‰ğÍ‘ÎÛ‚ÌXMLƒtƒ@ƒCƒ‹‚ªw’è‚·‚éCƒfƒBƒŒƒNƒgƒŠ‚É‘Î‚·‚éƒNƒ‰ƒXƒpƒX—v‹‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã™ã‚‹ï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«å¯¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹è¦æ±‚ã®é…åˆ—
      */
     private String[] classPathsToDirectory;
 
     /**
-     * ‰ğÍ‘ÎÛ‚ÌXMLƒtƒ@ƒCƒ‹‚ªw’è‚·‚éC‘S‚Ä‚ÌƒNƒ‰ƒXƒpƒX—v‹‚Ì”z—ñ
+     * è§£æå¯¾è±¡ã®XMLãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã™ã‚‹ï¼Œå…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹è¦æ±‚ã®é…åˆ—
      */
     private String[] classPathsToAttribute;
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚Ìƒ‹[ƒgƒ^ƒO–¼plugin‚ğ•\‚·•¶š—ñ’è”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ«ãƒ¼ãƒˆã‚¿ã‚°åpluginã‚’è¡¨ã™æ–‡å­—åˆ—å®šæ•°
      */
     private static final String PLUGIN_TAG = "plugin";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚ÌƒNƒ‰ƒXƒpƒXƒ^ƒO–¼classpath‚ğ•\‚·•¶š—ñ’è”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚¿ã‚°åclasspathã‚’è¡¨ã™æ–‡å­—åˆ—å®šæ•°
      */
     private static final String CLASSPATH_TAG = "classpath";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚ÌCƒtƒ@ƒCƒ‹‚É‘Î‚·‚éƒNƒ‰ƒXƒpƒXw’è‚Ìƒ^ƒO–¼file‚ğ•\‚·•¶š—ñ’è”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼Œãƒ•ã‚¡ã‚¤ãƒ«ã«å¯¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šã®ã‚¿ã‚°åfileã‚’è¡¨ã™æ–‡å­—åˆ—å®šæ•°
      */
     private static final String FILE_TAG = "file";
 
     /**
-     * XMLƒtƒ@ƒCƒ‹‚ÌCƒeƒLƒXƒgî•ñ‚ğ•\‚·ƒ^ƒO
+     * XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼Œãƒ†ã‚­ã‚¹ãƒˆæƒ…å ±ã‚’è¡¨ã™ã‚¿ã‚°
      */
     private static final String TEXT_TAG = "#text";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚ÌCƒfƒBƒŒƒNƒgƒŠ‚É‘Î‚·‚éƒNƒ‰ƒXƒpƒXw’è‚Ìƒ^ƒO–¼dir‚ğ•\‚·•¶š—ñ’è”
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«å¯¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹æŒ‡å®šã®ã‚¿ã‚°ådirã‚’è¡¨ã™æ–‡å­—åˆ—å®šæ•°
      */
     private static final String DIRECTORY_TAG = "dir";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚ÌCƒvƒ‰ƒOƒCƒ“ƒNƒ‰ƒX–¼‚ğ’l‚É‚Â‘®«–¼‚ğ•\‚·’è”•¶š—ñ
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹åã‚’å€¤ã«æŒã¤å±æ€§åã‚’è¡¨ã™å®šæ•°æ–‡å­—åˆ—
      */
     private static final String CLASS_ATTRIBUTE = "class";
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“İ’èî•ñXMLƒtƒ@ƒCƒ‹‚ÌCƒNƒ‰ƒXƒpƒX‚ğ’l‚É‚Â‘®«–¼‚ğ•\‚·’è”•¶š—ñ
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šæƒ…å ±XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼Œã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã‚’å€¤ã«æŒã¤å±æ€§åã‚’è¡¨ã™å®šæ•°æ–‡å­—åˆ—
      */
     private static final String PATH_ATTRIBUTE = "path";
 }

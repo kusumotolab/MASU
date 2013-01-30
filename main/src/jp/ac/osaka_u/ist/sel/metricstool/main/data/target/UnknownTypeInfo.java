@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * –¼‘O‰ğŒˆ‚Å‚«‚È‚¢Œ^‚ğ•\‚·ƒNƒ‰ƒXD
+ * åå‰è§£æ±ºã§ããªã„å‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -11,23 +11,23 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public class UnknownTypeInfo implements TypeInfo {
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public static UnknownTypeInfo getInstance() {
         return SINGLETON;
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚Å‚«‚È‚¢Œ^‚Ì–¼‘O‚ğ•Ô‚·D
+     * åå‰è§£æ±ºã§ããªã„å‹ã®åå‰ã‚’è¿”ã™ï¼
      */
     public String getTypeName() {
         return UNKNOWN_STRING;
     }
 
     /**
-     * “™‚µ‚¢‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN‚ğs‚¤
+     * ç­‰ã—ã„ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
      */
     public boolean equals(final TypeInfo typeInfo) {
 
@@ -39,18 +39,18 @@ public class UnknownTypeInfo implements TypeInfo {
     }
 
     /**
-     * ŠO‚ÌƒNƒ‰ƒX‚©‚çƒAƒNƒZƒX•s‰Â‚É‚·‚é
+     * å¤–ã®ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ä¸å¯ã«ã™ã‚‹
      */
     private UnknownTypeInfo() {
     }
 
     /**
-     * •s–¾Œ^‚ÌŒ^–¼‚ğ•\‚·’è”
+     * ä¸æ˜å‹ã®å‹åã‚’è¡¨ã™å®šæ•°
      */
     public static final String UNKNOWN_STRING = "UNKNOWN";
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Ì’PˆêƒIƒuƒWƒFƒNƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì’è”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®å˜ä¸€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å®šæ•°
      */
     private static final UnknownTypeInfo SINGLETON = new UnknownTypeInfo();
 }

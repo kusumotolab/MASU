@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * if ƒuƒƒbƒN‚â for ƒuƒƒbƒN‚È‚Ç ƒƒ\ƒbƒh“à‚Ì\‘¢“I‚È‚Ü‚Æ‚Ü‚è‚Ì’PˆÊ‚ğ•\‚·’ŠÛƒNƒ‰ƒX
+ * if ãƒ–ãƒ­ãƒƒã‚¯ã‚„ for ãƒ–ãƒ­ãƒƒã‚¯ãªã© ãƒ¡ã‚½ãƒƒãƒ‰å†…ã®æ§‹é€ çš„ãªã¾ã¨ã¾ã‚Šã®å˜ä½ã‚’è¡¨ã™æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -15,12 +15,12 @@ import java.util.Set;
 public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     BlockInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
@@ -28,7 +28,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒNƒIƒuƒWƒFƒNƒg‚ğ‘¼‚ÌƒuƒƒbƒNƒIƒuƒWƒFƒNƒg‚Æ”äŠr‚·‚é
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨æ¯”è¼ƒã™ã‚‹
      */
     @Override
     public final boolean equals(Object o) {
@@ -45,7 +45,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN•¶‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯æ–‡ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     public final int hashCode() {
@@ -54,9 +54,9 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN‚ğŠ—L‚·‚é‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ‰€æœ‰ã™ã‚‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN‚ğŠ—L‚·‚éƒƒ\ƒbƒh
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ‰€æœ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final CallableUnitInfo getOwnerMethod() {
@@ -74,17 +74,17 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN‚ªŒJ‚è•Ô‚µ•¶‚Å‚ ‚é‚©‚Ç‚¤‚©•Ô‚·
-     * @return ŒJ‚è•Ô‚µ•¶‚Å‚ ‚é‚È‚çtrue
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒç¹°ã‚Šè¿”ã—æ–‡ã§ã‚ã‚‹ã‹ã©ã†ã‹è¿”ã™
+     * @return ç¹°ã‚Šè¿”ã—æ–‡ã§ã‚ã‚‹ãªã‚‰true
      */
     public boolean isLoopStatement() {
         return false;
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN‚ğ’¼ÚŠ—L‚·‚éƒ[ƒJƒ‹‹óŠÔ‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«ç©ºé–“ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN‚ğ’¼ÚŠ—L‚·‚éƒ[ƒJƒ‹‹óŠÔ
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«ç©ºé–“
      */
     @Override
     public final LocalSpaceInfo getOwnerSpace() {
@@ -92,9 +92,9 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

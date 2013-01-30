@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ASTƒp[ƒX‚ÌÛCQÆŒ^•Ï”‚Ì—˜—p‰Â”\‚È–¼‘O‹óŠÔ–¼C‚Ü‚½‚ÍŠ®‘SŒÀ’è–¼‚ğ•\‚·ƒNƒ‰ƒX
+ * ASTãƒ‘ãƒ¼ã‚¹ã®éš›ï¼Œå‚ç…§å‹å¤‰æ•°ã®åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“åï¼Œã¾ãŸã¯å®Œå…¨é™å®šåã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -37,14 +37,14 @@ public final class UnresolvedClassImportStatementInfo extends
     }
 
     /**
-     * —˜—p‰Â”\–¼‘O‹óŠÔ–¼‚Æ‚»‚êˆÈ‰º‚ÌƒNƒ‰ƒX‘S‚Ä‚ÌƒNƒ‰ƒX‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©‚ğ•\‚·boolean‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰».
+     * åˆ©ç”¨å¯èƒ½åå‰ç©ºé–“åã¨ãã‚Œä»¥ä¸‹ã®ã‚¯ãƒ©ã‚¹å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’è¡¨ã™booleanã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–.
      * <p>
-     * import aaa.bbb.ccc.DDDG // new AvailableNamespace({"aaa","bbb","ccc","DDD"}, false); <br>
+     * import aaa.bbb.ccc.DDDï¼› // new AvailableNamespace({"aaa","bbb","ccc","DDD"}, false); <br>
      * import aaa.bbb.ccc.*; // new AvailableNamespace({"aaa","bbb","ccc"},true); <br>
      * </p>
      * 
-     * @param namespace —˜—p‰Â”\–¼‘O‹óŠÔ–¼
-     * @param allClasses ‘S‚Ä‚ÌƒNƒ‰ƒX‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©
+     * @param namespace åˆ©ç”¨å¯èƒ½åå‰ç©ºé–“å
+     * @param allClasses å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹
      */
     public UnresolvedClassImportStatementInfo(final String[] namespace, final boolean allClasses) {
         super(namespace, allClasses);
@@ -55,13 +55,13 @@ public final class UnresolvedClassImportStatementInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -88,9 +88,9 @@ public final class UnresolvedClassImportStatementInfo extends
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Ô‚·D
+     * åå‰ç©ºé–“åã‚’è¿”ã™ï¼
      * 
-     * @return –¼‘O‹óŠÔ–¼
+     * @return åå‰ç©ºé–“å
      */
     public String[] getNamespace() {
 

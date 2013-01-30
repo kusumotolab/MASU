@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ˆê€‰‰Z‚Ì“à—e‚ğ•\‚·ƒNƒ‰ƒX
+ * ä¸€é …æ¼”ç®—ã®å†…å®¹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -22,10 +22,10 @@ public final class UnresolvedMonominalOperationInfo extends
         UnresolvedExpressionInfo<MonominalOperationInfo> {
 
     /**
-     * €‚Æˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
+     * é …ã¨ä¸€é …æ¼”ç®—ã®çµæœã®å‹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param operand €
-     * @param operator ˆê€‰‰Z‚Ì‰‰Zq
+     * @param operand é …
+     * @param operator ä¸€é …æ¼”ç®—ã®æ¼”ç®—å­
      */
     public UnresolvedMonominalOperationInfo(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> operand,
@@ -44,19 +44,19 @@ public final class UnresolvedMonominalOperationInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -74,9 +74,9 @@ public final class UnresolvedMonominalOperationInfo extends
     }
 
     /**
-     * ˆê€‰‰Z‚Ì€‚ğ•Ô‚·
+     * ä¸€é …æ¼”ç®—ã®é …ã‚’è¿”ã™
      * 
-     * @return ˆê€‰‰Z‚Ì€
+     * @return ä¸€é …æ¼”ç®—ã®é …
      */
     public UnresolvedExpressionInfo<? extends ExpressionInfo> getOperand() {
         return this.operand;
@@ -91,12 +91,12 @@ public final class UnresolvedMonominalOperationInfo extends
     }
 
     /**
-     * ˆê€‰‰Z‚Ì€
+     * ä¸€é …æ¼”ç®—ã®é …
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> operand;
 
     /**
-     * ˆê€‰‰Z‚Ì‰‰Zq
+     * ä¸€é …æ¼”ç®—ã®æ¼”ç®—å­
      */
     private final OPERATOR operator;
 

@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * –¢‰ğŒˆƒGƒ“ƒeƒBƒeƒB—˜—p‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£åˆ©ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -21,14 +21,14 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param referencedName QÆ‚³‚ê‚Ä‚¢‚é–¼‘O
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param referencedName å‚ç…§ã•ã‚Œã¦ã„ã‚‹åå‰
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnknownEntityUsageInfo(final String[] referencedName,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -48,9 +48,9 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -58,9 +58,9 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì–¢‰ğŒˆƒGƒ“ƒeƒBƒeƒBg—p‚ÌƒeƒLƒXƒg•\Œ»
+     * @return ã“ã®æœªè§£æ±ºã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      */
     @Override
     public String getText() {
@@ -74,9 +74,9 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -84,9 +84,9 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚é•¶š—ñ‚ğ•Ô‚·
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹æ–‡å­—åˆ—ã‚’è¿”ã™
      * 
-     * @return QÆ‚³‚ê‚Ä‚¢‚é•¶š—ñ
+     * @return å‚ç…§ã•ã‚Œã¦ã„ã‚‹æ–‡å­—åˆ—
      */
     public String[] getReferencedName() {
         return this.referencedName;

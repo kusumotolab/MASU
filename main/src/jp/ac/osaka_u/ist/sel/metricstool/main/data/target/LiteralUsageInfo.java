@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * ƒŠƒeƒ‰ƒ‹‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒªãƒ†ãƒ©ãƒ«ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * @author t-miyake
  *
  */
@@ -15,15 +15,15 @@ import java.util.Set;
 public final class LiteralUsageInfo extends ExpressionInfo {
 
     /**
-     * ƒŠƒeƒ‰ƒ‹AƒŠƒeƒ‰ƒ‹‚ÌŒ^AoŒ»ˆÊ’u‚ğ—^‚¦‚Ä‰Šú‰»
+     * ãƒªãƒ†ãƒ©ãƒ«ã€ãƒªãƒ†ãƒ©ãƒ«ã®å‹ã€å‡ºç¾ä½ç½®ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param literal ƒŠƒeƒ‰ƒ‹
-     * @param type ƒŠƒeƒ‰ƒ‹‚ÌŒ^
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param literal ãƒªãƒ†ãƒ©ãƒ«
+     * @param type ãƒªãƒ†ãƒ©ãƒ«ã®å‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public LiteralUsageInfo(final String literal, final TypeInfo type,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -45,18 +45,18 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ƒŠƒeƒ‰ƒ‹‚Ì•¶š—ñ‚ğ•Ô‚·
+     * ãƒªãƒ†ãƒ©ãƒ«ã®æ–‡å­—åˆ—ã‚’è¿”ã™
      * 
-     * @return ƒŠƒeƒ‰ƒ‹‚Ì•¶š—ñ
+     * @return ãƒªãƒ†ãƒ©ãƒ«ã®æ–‡å­—åˆ—
      */
     public final String getLiteral() {
         return this.literal;
     }
 
     /**
-     * ƒŠƒeƒ‰ƒ‹‚Í•Ï”QÆ‚Å‚Í‚È‚¢‚Ì‚Å‹ó‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * ãƒªãƒ†ãƒ©ãƒ«ã¯å¤‰æ•°å‚ç…§ã§ã¯ãªã„ã®ã§ç©ºã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ‹ó‚ÌƒZƒbƒg
+     * @return ç©ºã®ã‚»ãƒƒãƒˆ
      */
     @Override
     public final Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -64,9 +64,9 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public final Set<CallInfo<?>> getCalls() {
@@ -74,9 +74,9 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -84,9 +84,9 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -118,12 +118,12 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ƒŠƒeƒ‰ƒ‹‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒªãƒ†ãƒ©ãƒ«ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String literal;
 
     /**
-     * ƒŠƒeƒ‰ƒ‹‚ÌŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒªãƒ†ãƒ©ãƒ«ã®å‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final TypeInfo type;
 }

@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 
 
 /**
- * ƒNƒ‰ƒXî•ñ‚Ì\’z‚ğs‚¤ƒrƒ‹ƒ_[D
+ * ã‚¯ãƒ©ã‚¹æƒ…å ±ã®æ§‹ç¯‰ã‚’è¡Œã†ãƒ“ãƒ«ãƒ€ãƒ¼ï¼
  * 
  * @author kou-tngt
  *
@@ -26,35 +26,35 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½\’zƒf[ƒ^ŠÇ—‚ğs‚¤BuildDataManager‚Æ
-     * ƒfƒtƒHƒ‹ƒg‚ÌCüqƒrƒ‹ƒ_[C–¼‘Oƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚éD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†ã‚’è¡Œã†BuildDataManagerã¨
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ä¿®é£¾å­ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œåå‰ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param targetDataManager@ƒrƒ‹ƒ_[‚ª—˜—p‚·‚é\’zƒf[ƒ^ŠÇ—Ò
+     * @param targetDataManagerã€€ãƒ“ãƒ«ãƒ€ãƒ¼ãŒåˆ©ç”¨ã™ã‚‹æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…
      */
     public ClassBuilder(final BuildDataManager targetDataManager) {
         this(targetDataManager, new ModifiersBuilder(), new NameBuilder());
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½\’zƒf[ƒ^ŠÇ—‚ğs‚¤BuildDataManager
-     * Cüqƒrƒ‹ƒ_[C–¼‘Oƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚éD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†ã‚’è¡Œã†BuildDataManager
+     * ä¿®é£¾å­ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œåå‰ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param targetDataManager@ƒrƒ‹ƒ_[‚ª—˜—p‚·‚é\’zƒf[ƒ^ŠÇ—Ò
+     * @param targetDataManagerã€€ãƒ“ãƒ«ãƒ€ãƒ¼ãŒåˆ©ç”¨ã™ã‚‹æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…
      */
     public ClassBuilder(final BuildDataManager targetDataManager,
             final ModifiersBuilder modifiersBuilder, final NameBuilder nameBuilder) {
 
-        //ƒf[ƒ^ŠÇ—Ò‚Ínull‚¾‚Æ¢‚éD
+        //ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã¯nullã ã¨å›°ã‚‹ï¼
         if (null == targetDataManager) {
             throw new NullPointerException("builderManager is null.");
         }
 
-        //–¼‘O\’z‚à‚Å‚«‚È‚¢‚Æ¢‚éD
+        //åå‰æ§‹ç¯‰ã‚‚ã§ããªã„ã¨å›°ã‚‹ï¼
         if (null == nameBuilder) {
             throw new NullPointerException("nameBuilder is null.");
         }
 
-        //ó‘Ô•Ï‰»‚ğ’Ê’m‚µ‚Ä—~‚µ‚¢‚à‚Ì‚ğ“o˜^‚·‚éD
+        //çŠ¶æ…‹å¤‰åŒ–ã‚’é€šçŸ¥ã—ã¦æ¬²ã—ã„ã‚‚ã®ã‚’ç™»éŒ²ã™ã‚‹ï¼
         this.addStateManager(this.classStateManager);
         this.addStateManager(new ModifiersDefinitionStateManager());
         this.addStateManager(new NameStateManager());
@@ -63,50 +63,50 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         this.modifiersBuilder = modifiersBuilder;
         this.nameBuilder = nameBuilder;
 
-        //“à•”‚Åg‚¤ƒrƒ‹ƒ_[‚ğ“o˜^‚µ‚ÄC‚±‚¢‚Â‚ç‚ªƒAƒNƒeƒBƒu‚É‚È‚Á‚½‚É©“®“I‚ÉƒrƒWƒ^[‚©‚ç‚ÌƒCƒxƒ“ƒg‚ª“Í‚­‚æ‚¤‚É‚·‚éD
-        //ƒfƒtƒHƒ‹ƒg‚Å”ñƒAƒNƒeƒBƒuó‘Ô‚ÉƒZƒbƒg‚³‚ê‚é
+        //å†…éƒ¨ã§ä½¿ã†ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç™»éŒ²ã—ã¦ï¼Œã“ã„ã¤ã‚‰ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ãŸæ™‚ã«è‡ªå‹•çš„ã«ãƒ“ã‚¸ã‚¿ãƒ¼ã‹ã‚‰ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒå±Šãã‚ˆã†ã«ã™ã‚‹ï¼
+        //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹
         this.addInnerBuilder(modifiersBuilder);
         this.addInnerBuilder(nameBuilder);
     }
 
     /**
-     * “o˜^‚³‚ê‚½ƒXƒe[ƒgƒ}ƒl[ƒWƒƒ‚©‚çó‘Ô•Ï‰»‚ğó‚¯æ‚éƒƒ\ƒbƒhD
-     * @param event ó‘Ô•Ï‰»ƒCƒxƒ“ƒg
+     * ç™»éŒ²ã•ã‚ŒãŸã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ã‹ã‚‰çŠ¶æ…‹å¤‰åŒ–ã‚’å—ã‘å–ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * @param event çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChanged(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
     @Override
     public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_DEF)) {
-            //ƒNƒ‰ƒX’è‹`‚É“ü‚Á‚½‚çC‚Æ‚è‚ ‚¦‚¸V‚µ‚¢ƒNƒ‰ƒX’è‹`‚ğ“o˜^‚µ‚És‚­
+            //ã‚¯ãƒ©ã‚¹å®šç¾©ã«å…¥ã£ãŸã‚‰ï¼Œã¨ã‚Šã‚ãˆãšæ–°ã—ã„ã‚¯ãƒ©ã‚¹å®šç¾©ã‚’ç™»éŒ²ã—ã«è¡Œã
             final AstVisitEvent trigger = event.getTrigger();
             this.startClassDefinition(event, trigger.getStartLine(), trigger.getStartColumn(),
                     trigger.getEndLine(), trigger.getEndColumn());
 
         } else if (type.equals(CLASS_STATE_CHANGE.EXIT_CLASS_DEF)) {
-            //ƒNƒ‰ƒX’è‹`•”‚©‚ço‚½‚Ì‚ÅCƒf[ƒ^\’z‚ğI—¹‚µ‚ÄŒãn––‚ğs‚¤D
+            //ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ï¼Œãƒ‡ãƒ¼ã‚¿æ§‹ç¯‰ã‚’çµ‚äº†ã—ã¦å¾Œå§‹æœ«ã‚’è¡Œã†ï¼
             this.endClassDefinition();
             this.isClassNameBuit = false;
         } else if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_BLOCK)) {
-            //ƒNƒ‰ƒX‚ÌƒuƒƒbƒN‚É“ü‚Á‚½‚Ì‚Åƒf[ƒ^ŠÇ—Ò‚É’Ê’m‚µ‚ÄC–¼‘O\’zƒtƒ‰ƒO‚ğ~‚ë‚·
+            //ã‚¯ãƒ©ã‚¹ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸã®ã§ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã«é€šçŸ¥ã—ã¦ï¼Œåå‰æ§‹ç¯‰ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
             this.isClassNameBuit = false;
             this.enterClassblock();
         } else if (this.classStateManager.isInPreDeclaration()) {
-            //ƒNƒ‰ƒXƒuƒƒbƒN‚Ì‘O‚ÌCƒNƒ‰ƒXéŒ¾•”‚É‹‚éê‡D
+            //ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã®å‰ã®ï¼Œã‚¯ãƒ©ã‚¹å®£è¨€éƒ¨ã«å±…ã‚‹å ´åˆï¼
             if (type.equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.ENTER_MODIFIERS_DEF)) {
-                //Cüq’è‹`•”‚É“ü‚Á‚½‚Ì‚ÅCüqƒrƒ‹ƒ_‚ğƒAƒNƒeƒBƒu‚É
+                //ä¿®é£¾å­å®šç¾©éƒ¨ã«å…¥ã£ãŸã®ã§ä¿®é£¾å­ãƒ“ãƒ«ãƒ€ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
                 this.modifiersBuilder.activate();
             } else if (type
                     .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)) {
-                //Cüq’è‹`•”‚©‚ço‚½‚Ì‚ÅCüqƒrƒ‹ƒ_‚ğ”ñƒAƒNƒeƒBƒu‚É‚µ‚ÄCüqî•ñ‚ğ“o˜^‚·‚é
+                //ä¿®é£¾å­å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ä¿®é£¾å­ãƒ“ãƒ«ãƒ€ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã—ã¦ä¿®é£¾å­æƒ…å ±ã‚’ç™»éŒ²ã™ã‚‹
                 this.modifiersBuilder.deactivate();
                 this.registModifiers(this.modifiersBuilder.popLastBuiltData());
                 this.modifiersBuilder.clearBuiltData();
             } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME) && !this.isClassNameBuit) {
-                //–¼‘Oî•ñ’è‹`•”‚ÉÅ‰‚É“ü‚Á‚½‚ÉƒNƒ‰ƒX–¼‚ğ\’z‚·‚é
+                //åå‰æƒ…å ±å®šç¾©éƒ¨ã«æœ€åˆã«å…¥ã£ãŸæ™‚ã«ã‚¯ãƒ©ã‚¹åã‚’æ§‹ç¯‰ã™ã‚‹
                 this.nameBuilder.activate();
             } else if (type.equals(NameStateManager.NAME_STATE.EXIT_NAME) && !this.isClassNameBuit) {
-                //Å‰‚É–¼‘Oî•ñ’è‹`•”‚©‚ço‚½‚ÉƒNƒ‰ƒX–¼‚ğ“o˜^‚µ‚ÄCƒNƒ‰ƒX–¼‚ª\’zÏ‚İ‚Å‚ ‚é‚±‚Æ‚ğ•\‚·ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+                //æœ€åˆã«åå‰æƒ…å ±å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ã‚¯ãƒ©ã‚¹åã‚’ç™»éŒ²ã—ã¦ï¼Œã‚¯ãƒ©ã‚¹åãŒæ§‹ç¯‰æ¸ˆã¿ã§ã‚ã‚‹ã“ã¨ã‚’è¡¨ã™ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
                 this.nameBuilder.deactivate();
                 this.registClassName(this.nameBuilder.getFirstBuiltData());
                 this.nameBuilder.clearBuiltData();
@@ -116,12 +116,12 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚©‚ço‚½‚ÉŒÄ‚Ño‚³‚êC
-     * ƒf[ƒ^ŠÇ—Ò‚É {@link BuildDataManager#endClassDefinition()} ƒƒ\ƒbƒh‚ğ’Ê‚¶‚Ä‚»‚ê‚ğ’Ê’m‚µC
-     * \’z’†‚Ìƒf[ƒ^‚ğ“à•”ƒXƒ^ƒbƒN‚©‚çæ‚èo‚·D
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œ
+     * ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã« {@link BuildDataManager#endClassDefinition()} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’é€šã˜ã¦ãã‚Œã‚’é€šçŸ¥ã—ï¼Œ
+     * æ§‹ç¯‰ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã‚’å†…éƒ¨ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å–ã‚Šå‡ºã™ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅC
-     * ƒNƒ‰ƒX’è‹`•”‚ªI—¹‚µ‚½‚Æ‚«‚Ìˆ—‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œ
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ãŒçµ‚äº†ã—ãŸã¨ãã®å‡¦ç†ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      */
     protected void endClassDefinition() {
         this.buildManager.endClassDefinition();
@@ -131,20 +131,20 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒXƒuƒƒbƒN‚É“ü‚Á‚½‚ÉŒÄ‚Ño‚³‚êC
-     * ƒf[ƒ^\’z•”‚É‚»‚Ì|‚ğ’Ê’m‚·‚éD
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œ
+     * ãƒ‡ãƒ¼ã‚¿æ§‹ç¯‰éƒ¨ã«ãã®æ—¨ã‚’é€šçŸ¥ã™ã‚‹ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅC
-     * ƒNƒ‰ƒXƒuƒƒbƒN‚É“ü‚Á‚½ˆ—‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œ
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸå‡¦ç†ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      */
     protected void enterClassblock() {
         this.buildManager.enterClassBlock();
     }
 
     /**
-     * \’z’†‚ÌƒNƒ‰ƒXî•ñ‚ª‚ ‚ê‚Î‚»‚ê‚ğC‚È‚¯‚ê‚Înull‚ğ•Ô‚·D
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ãŒã‚ã‚Œã°ãã‚Œã‚’ï¼Œãªã‘ã‚Œã°nullã‚’è¿”ã™ï¼
      * 
-     * @return \’z’†‚ÌƒNƒ‰ƒXî•ñ‚ª‚ ‚ê‚Î‚»‚ê‚ğC‚È‚¯‚ê‚ÎnullD
+     * @return æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ãŒã‚ã‚Œã°ãã‚Œã‚’ï¼Œãªã‘ã‚Œã°nullï¼
      */
     protected final UnresolvedClassInfo getBuildingClassInfo() {
         if (this.hasBuildingClassInfo()) {
@@ -155,24 +155,24 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * \’z’†‚ÌƒNƒ‰ƒXî•ñ‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * 
-     * @return \’z’†‚ÌƒNƒ‰ƒXî•ñ‚ª‚ ‚ê‚Îtrue
+     * @return æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ãŒã‚ã‚Œã°true
      */
     protected boolean hasBuildingClassInfo() {
         return !this.buildingClassStack.isEmpty();
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚É“ü‚Á‚½‚ÉŒÄ‚Î‚ê‚éƒƒ\ƒbƒhD
-     * V‚µ‚­“’B‚µ‚½ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚µC“o˜^‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh{@link #registClassInfo(UnresolvedClassInfo)}‚ğŒÄ‚ÔD
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«å…¥ã£ãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * æ–°ã—ãåˆ°é”ã—ãŸã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã—ï¼Œç™»éŒ²ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰{@link #registClassInfo(UnresolvedClassInfo)}ã‚’å‘¼ã¶ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅCƒNƒ‰ƒX’è‹`•”‚É“ü‚Á‚½Û‚Ì‹““®‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«å…¥ã£ãŸéš›ã®æŒ™å‹•ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param startLine ƒNƒ‰ƒX‚ÌŠJns”Ô†
-     * @param startColumn ƒNƒ‰ƒX‚ÌŠJn—ñ”Ô†
-     * @param endLine@ƒNƒ‰ƒX‚ÌI—¹s”Ô†
-     * @param endColumn@ƒNƒ‰ƒX‚ÌI—¹—ñ”Ô†
+     * @param startLine ã‚¯ãƒ©ã‚¹ã®é–‹å§‹è¡Œç•ªå·
+     * @param startColumn ã‚¯ãƒ©ã‚¹ã®é–‹å§‹åˆ—ç•ªå·
+     * @param endLineã€€ã‚¯ãƒ©ã‚¹ã®çµ‚äº†è¡Œç•ªå·
+     * @param endColumnã€€ã‚¯ãƒ©ã‚¹ã®çµ‚äº†åˆ—ç•ªå·
      */
     protected void startClassDefinition(final StateChangeEvent<AstVisitEvent> event,
             final int startLine, final int startColumn, final int endLine, final int endColumn) {
@@ -183,7 +183,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile,
                 this.buildManager.getCurrentUnit());
 
-        //enuméŒ¾‚ª—ˆ‚½ê‡‚Íenum‚Å‚ ‚é‚±‚Æ‚ğ“o˜^
+        //enumå®£è¨€ãŒæ¥ãŸå ´åˆã¯enumã§ã‚ã‚‹ã“ã¨ã‚’ç™»éŒ²
         if (event.getTrigger().getToken().isEnumDefinition()) {
             classInfo.setIsEnum();
         }
@@ -198,13 +198,13 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚É“ü‚èCV‚µ‚­ƒNƒ‰ƒXî•ñ‚ğì¬‚µ‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚êC
-     * ƒf[ƒ^ŠÇ—Ò‚É‘Î‚µ‚ÄV‚µ‚¢ƒNƒ‰ƒXî•ñ‚ğ“o˜^‚·‚éD
-     * ‚Ü‚½‚»‚Ìî•ñ‚ğ‚±‚ÌƒNƒ‰ƒX‚Ì“à•”ƒXƒ^ƒbƒN‚É‚à•Û‘¶‚·‚éD
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«å…¥ã‚Šï¼Œæ–°ã—ãã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ä½œæˆã—ãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œï¼Œ
+     * ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã«å¯¾ã—ã¦æ–°ã—ã„ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ç™»éŒ²ã™ã‚‹ï¼
+     * ã¾ãŸãã®æƒ…å ±ã‚’ã“ã®ã‚¯ãƒ©ã‚¹ã®å†…éƒ¨ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚‚ä¿å­˜ã™ã‚‹ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅCƒNƒ‰ƒXî•ñ‚Ì“o˜^ˆ—‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œã‚¯ãƒ©ã‚¹æƒ…å ±ã®ç™»éŒ²å‡¦ç†ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param classInfo “o˜^‚·‚éV‹KƒNƒ‰ƒX
+     * @param classInfo ç™»éŒ²ã™ã‚‹æ–°è¦ã‚¯ãƒ©ã‚¹
      */
     protected void registClassInfo(final UnresolvedClassInfo classInfo) {
         this.registBuiltData(classInfo);
@@ -212,12 +212,12 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒX–¼î•ñ‚ª\’z‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚êCŒ»İ\’z’†‚ÌƒNƒ‰ƒXî•ñ‚É‘Î‚µ‚ÄC–¼‘O‚ğ“o˜^‚·‚éD
-     * \’z’†‚ÌƒNƒ‰ƒXƒf[ƒ^‚ª“à•”ƒXƒ^ƒbƒN‚©‚ç”­Œ©‚Å‚«‚È‚¢ê‡‚ÍC‰½‚à‚µ‚È‚¢D
+     * ã‚¯ãƒ©ã‚¹åæƒ…å ±ãŒæ§‹ç¯‰ã•ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œç¾åœ¨æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ã«å¯¾ã—ã¦ï¼Œåå‰ã‚’ç™»éŒ²ã™ã‚‹ï¼
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹ãƒ‡ãƒ¼ã‚¿ãŒå†…éƒ¨ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰ç™ºè¦‹ã§ããªã„å ´åˆã¯ï¼Œä½•ã‚‚ã—ãªã„ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğ”CˆÓ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅC–¼‘Oî•ñ‚Ì“o˜^ˆ—‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»»æ„ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œåå‰æƒ…å ±ã®ç™»éŒ²å‡¦ç†ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param name \’z’†‚ÌƒNƒ‰ƒX–¼D
+     * @param name æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹åï¼
      */
     protected void registClassName(final String[] name) {
         if (this.hasBuildingClassInfo() && 0 < name.length) {
@@ -226,7 +226,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
             if (classStackSize > 1
                     && !(this.buildManager.getOuterUnit() instanceof UnresolvedClassInfo)) {
 
-                // ŠO‘¤‚ªƒƒ\ƒbƒh‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚Ìê‡CŠO‘¤‚ÌƒNƒ‰ƒX‚ğ‚©‚çŒ©‚Ä‰½”Ô–Ú‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚ğ¦‚·ID‚ğU‚é
+                // å¤–å´ãŒãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®å ´åˆï¼Œå¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’ã‹ã‚‰è¦‹ã¦ä½•ç•ªç›®ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚’ç¤ºã™IDã‚’æŒ¯ã‚‹
                 final int id = this.buildingClassStack.get(classStackSize - 2).getInnerClasses()
                         .size();
                 name[0] = (id + 1) + name[0];
@@ -236,11 +236,11 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒX‚ÌCüqî•ñ‚ª\’z‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚êCCüqî•ñ‚ğ“o˜^‚·‚éD
+     * ã‚¯ãƒ©ã‚¹ã®ä¿®é£¾å­æƒ…å ±ãŒæ§‹ç¯‰ã•ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œä¿®é£¾å­æƒ…å ±ã‚’ç™»éŒ²ã™ã‚‹ï¼
      * 
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅCCüq‚©‚ç”»’f‚³‚ê‚éî•ñ‚Ì“o˜^ˆ—‚ğ”CˆÓ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œä¿®é£¾å­ã‹ã‚‰åˆ¤æ–­ã•ã‚Œã‚‹æƒ…å ±ã®ç™»éŒ²å‡¦ç†ã‚’ä»»æ„ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param modifiers@ƒNƒ‰ƒX‚É•t‚¯‚ç‚ê‚½Cüq‚Ì”z—ñ
+     * @param modifiersã€€ã‚¯ãƒ©ã‚¹ã«ä»˜ã‘ã‚‰ã‚ŒãŸä¿®é£¾å­ã®é…åˆ—
      */
     protected void registModifiers(final ModifierInfo[] modifiers) {
         if (this.hasBuildingClassInfo()) {
@@ -253,32 +253,32 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚ÉŠÖ˜A‚·‚éƒrƒWƒ^[‚Ìó‘Ô‚ğŠÇ—‚µCó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚éD
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«é–¢é€£ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’ç®¡ç†ã—ï¼ŒçŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ï¼
      */
     private final ClassDefinitionStateManager classStateManager = new ClassDefinitionStateManager();
 
     /**
-     * \’z’†ƒf[ƒ^‚ÌŠÇ—Ò
+     * æ§‹ç¯‰ä¸­ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…
      */
     private final BuildDataManager buildManager;
 
     /**
-     * Cüqî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_
+     * ä¿®é£¾å­æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€
      */
     private final ModifiersBuilder modifiersBuilder;
 
     /**
-     * –¼‘Oî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_
+     * åå‰æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€
      */
     private final NameBuilder nameBuilder;
 
     /**
-     * \’z’†‚ÌƒNƒ‰ƒXƒf[ƒ^ƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹ãƒ‡ãƒ¼ã‚¿ã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<UnresolvedClassInfo> buildingClassStack = new Stack<UnresolvedClassInfo>();
 
     /**
-     * \’z’†‚ÌƒNƒ‰ƒXƒf[ƒ^‚É‘Î‚µ‚ÄƒNƒ‰ƒX–¼‚ª‚·‚Å‚É\’z‚³‚ê‚½‚©‚Ç‚¤‚©‚ğ•\‚·
+     * æ§‹ç¯‰ä¸­ã®ã‚¯ãƒ©ã‚¹ãƒ‡ãƒ¼ã‚¿ã«å¯¾ã—ã¦ã‚¯ãƒ©ã‚¹åãŒã™ã§ã«æ§‹ç¯‰ã•ã‚ŒãŸã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private boolean isClassNameBuit = false;
 }

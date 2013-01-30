@@ -10,12 +10,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éƒvƒ‰ƒOƒCƒ“À‘•—p‚Ì’ŠÛƒNƒ‰ƒX.
+ * ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè£…ç”¨ã®æŠ½è±¡ã‚¯ãƒ©ã‚¹.
  * 
- * {@link AbstractPlugin} ‚Ìˆê•”‚Ìƒƒ\ƒbƒh‚ªƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚Ä‚¢‚é.
+ * {@link AbstractPlugin} ã®ä¸€éƒ¨ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚Œã¦ã„ã‚‹.
  * 
- * ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚·‚éƒNƒ‰ƒX‚Í {@link #measureClassMetric(TargetClassInfo)} ‚ğÀ‘•‚·‚é•K—v‚ª‚ ‚é. 
- * •K—v‚ª‚ ‚ê‚Î {@link #setupExecute()}, {@link #teardownExecute()} ‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ {@link #measureClassMetric(TargetClassInfo)} ã‚’å®Ÿè£…ã™ã‚‹å¿…è¦ãŒã‚ã‚‹. 
+ * å¿…è¦ãŒã‚ã‚Œã° {@link #setupExecute()}, {@link #teardownExecute()} ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
  * 
  * @author rniitani
  */
@@ -26,7 +26,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * ƒNƒ‰ƒX–ˆ‚ÉƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚é.
+     * ã‚¯ãƒ©ã‚¹æ¯ã«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹.
      * 
      * @see #registClassMetric(TargetClassInfo)
      */
@@ -35,20 +35,20 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
 
         setupExecute();
         try {
-            // ƒNƒ‰ƒXî•ñƒAƒNƒZƒT‚ğæ“¾
+            // ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚¢ã‚¯ã‚»ã‚µã‚’å–å¾—
             final ClassInfoAccessor classAccessor = this.getClassInfoAccessor();
 
-            // i’»•ñ—p
+            // é€²æ—å ±å‘Šç”¨
             int measuredClassCount = 0;
             final int maxClassCount = classAccessor.getClassCount();
 
-            // ‘SƒNƒ‰ƒX‚É‚Â‚¢‚Ä
+            // å…¨ã‚¯ãƒ©ã‚¹ã«ã¤ã„ã¦
             for (final TargetClassInfo targetClass : classAccessor) {
 
-                // ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é
+                // ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
                 registClassMetric(targetClass);
 
-                // 1ƒNƒ‰ƒX‚²‚Æ‚É%‚Åi’»•ñ
+                // 1ã‚¯ãƒ©ã‚¹ã”ã¨ã«%ã§é€²æ—å ±å‘Š
                 this.reportProgress(++measuredClassCount * 100 / maxClassCount);
             }
         } finally {
@@ -57,28 +57,28 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * {@link #execute()} ‚ÌÅ‰‚ÉÀs‚³‚ê‚éˆ—.
+     * {@link #execute()} ã®æœ€åˆã«å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†.
      * 
-     * •K—v‚ª‚ ‚ê‚ÎƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * å¿…è¦ãŒã‚ã‚Œã°ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      */
     protected void setupExecute() {
     }
 
     /**
-     * {@link #execute()} ‚ÌÅŒã‚ÉÀs‚³‚ê‚éˆ—.
+     * {@link #execute()} ã®æœ€å¾Œã«å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†.
      * 
-     * •K—v‚ª‚ ‚ê‚ÎƒI[ƒo[ƒ‰ƒCƒh‚·‚é.
+     * å¿…è¦ãŒã‚ã‚Œã°ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹.
      */
     protected void teardownExecute() {
     }
 
     /**
-     * ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚Ä“o˜^‚·‚é.
+     * ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ã¦ç™»éŒ²ã™ã‚‹.
      * 
-     * {@link MetricAlreadyRegisteredException} ‚É‘Î‚·‚é•W€‚Ì—áŠOˆ—‚ğ’ñ‹Ÿ‚·‚é.
-     * Œv‘ª‚Í {@link #measureClassMetric(TargetClassInfo)} ‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚ÄÀ‘•‚·‚é.
+     * {@link MetricAlreadyRegisteredException} ã«å¯¾ã™ã‚‹æ¨™æº–ã®ä¾‹å¤–å‡¦ç†ã‚’æä¾›ã™ã‚‹.
+     * è¨ˆæ¸¬ã¯ {@link #measureClassMetric(TargetClassInfo)} ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦å®Ÿè£…ã™ã‚‹.
      * 
-     * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
+     * @param targetClass å¯¾è±¡ã®ã‚¯ãƒ©ã‚¹
      */
     protected void registClassMetric(TargetClassInfo targetClass) {
         try {
@@ -89,18 +89,18 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚é.
+     * ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹.
      * 
-     * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
+     * @param targetClass å¯¾è±¡ã®ã‚¯ãƒ©ã‚¹
      */
     abstract protected Number measureClassMetric(TargetClassInfo targetClass);
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒƒgƒŠƒNƒX‚ğŒv‘ª‚Å‚«‚éŒ¾Œê‚ğ•Ô‚·.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã§ãã‚‹è¨€èªã‚’è¿”ã™.
      * 
-     * ƒNƒ‰ƒX‚É‚Â‚¢‚ÄŒv‘ª‚·‚é‚Ì‚ª‘O’ñ‚È‚Ì‚ÅƒIƒuƒWƒFƒNƒgwŒüŒ¾Œê‚ğ‘ÎÛ‚Æ‚·‚é.
+     * ã‚¯ãƒ©ã‚¹ã«ã¤ã„ã¦è¨ˆæ¸¬ã™ã‚‹ã®ãŒå‰æãªã®ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘è¨€èªã‚’å¯¾è±¡ã¨ã™ã‚‹.
      * 
-     * @return ƒIƒuƒWƒFƒNƒgwŒüŒ¾Œê‚Ì”z—ñ
+     * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘è¨€èªã®é…åˆ—
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE
      */
     @Override
@@ -109,9 +109,9 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªŒv‘ª‚·‚éƒƒgƒŠƒNƒX‚Ìƒ^ƒCƒv‚ğ•Ô‚·.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒè¨ˆæ¸¬ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™.
      * 
-     * @return ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚é‚Ì‚Å {@link METRIC_TYPE#CLASS_METRIC} ‚ğ•Ô‚·.
+     * @return ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ã®ã§ {@link METRIC_TYPE#CLASS_METRIC} ã‚’è¿”ã™.
      */
     @Override
     protected METRIC_TYPE getMetricType() {
@@ -119,9 +119,9 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
     }
 
     /**
-     * ‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ªƒNƒ‰ƒX‚ÉŠÖ‚·‚éî•ñ‚ğ—˜—p‚·‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒh.
+     * ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹æƒ…å ±ã‚’åˆ©ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @return ƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚é‚Ì‚Å true ‚ğ•Ô‚·.
+     * @return ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹ã®ã§ true ã‚’è¿”ã™.
      */
     @Override
     protected boolean useClassInfo() {

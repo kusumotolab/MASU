@@ -2,16 +2,16 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
 /**
- * メトリクスの計測可能単位であることを表すインターフェース
+ * 繝｡繝医Μ繧ｯ繧ｹ縺ｮ險域ｸｬ蜿ｯ閭ｽ蜊倅ｽ阪〒縺ゅｋ縺薙→繧定｡ｨ縺吶う繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  */
 public interface MetricMeasurable {
 
     /**
-     * 計測単位名を返すメソッド
+     * 險域ｸｬ蜊倅ｽ榊錐繧定ｿ斐☆繝｡繧ｽ繝�繝�
      * 
-     * @return 計測単位名
+     * @return 險域ｸｬ蜊倅ｽ榊錐
      */
     String getMeasuredUnitName();
 }

@@ -12,9 +12,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒAƒmƒe[ƒVƒ‡ƒ“‚É—^‚¦‚ç‚ê‚éˆø”‚ğ‰ğÍ‚·‚éƒrƒ‹ƒ_[
- * Œ»İƒAƒmƒe[ƒVƒ‡ƒ“‚Ìˆø”‚Í^–Ê–Ú‚É‰ğÍ‚µ‚Ä‚¢‚È‚¢
- * —^‚¦‚ç‚ê‚½ˆø”‚Í‚·‚×‚ÄString‚Æ‚µ‚Äæ“¾‚·‚é‚±‚Æ‚É‚µ‚Ä‚¢‚é
+ * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«ä¸ãˆã‚‰ã‚Œã‚‹å¼•æ•°ã‚’è§£æã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
+ * ç¾åœ¨ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®å¼•æ•°ã¯çœŸé¢ç›®ã«è§£æã—ã¦ã„ãªã„
+ * ä¸ãˆã‚‰ã‚ŒãŸå¼•æ•°ã¯ã™ã¹ã¦Stringã¨ã—ã¦å–å¾—ã™ã‚‹ã“ã¨ã«ã—ã¦ã„ã‚‹
  * @author a-saitoh
  *
  */
@@ -24,7 +24,7 @@ public class AnnotationStatementBuilder extends DataBuilderAdapter<String> {
     public void entered(AstVisitEvent e) {
         if (isActive()) {
 
-            //ANNOTATION_STRING‚ÌŒã‚É‚­‚é•¶š—ñ‚ğæ“¾
+            //ANNOTATION_STRINGã®å¾Œã«ãã‚‹æ–‡å­—åˆ—ã‚’å–å¾—
             if (!e.getToken().isAnnotationString()) {
                 this.annotationArguments.append(e.getText());
             }
@@ -37,8 +37,8 @@ public class AnnotationStatementBuilder extends DataBuilderAdapter<String> {
     }
 
     /**
-     * \’z‚µ‚½Stringƒf[ƒ^‚ğ“¾‚éD
-     * ^–Ê–Ú‚É‰ğÍ‚·‚é‚È‚ç‚ÎStack‚ÉŠi”[‚·‚é•K—v‚ª‚ ‚é‚©‚à(ƒAƒmƒe[ƒVƒ‡ƒ“‚Í“ü‚êq‚É‚Å‚«‚é‚Ì‚Å)
+     * æ§‹ç¯‰ã—ãŸStringãƒ‡ãƒ¼ã‚¿ã‚’å¾—ã‚‹ï¼
+     * çœŸé¢ç›®ã«è§£æã™ã‚‹ãªã‚‰ã°Stackã«æ ¼ç´ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã‚‚(ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã¯å…¥ã‚Œå­ã«ã§ãã‚‹ã®ã§)
      * @return
      */
     public String getArguments() {

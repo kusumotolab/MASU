@@ -5,7 +5,7 @@ import java.util.Set;
 
 
 /**
- * 修飾子を持つことができることを表すインターフェース
+ * 菫ｮ鬟ｾ蟄舌ｒ謖√▽縺薙→縺後〒縺阪ｋ縺薙→繧定｡ｨ縺吶う繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  *
@@ -13,9 +13,9 @@ import java.util.Set;
 public interface Modifier {
 
     /**
-     * 修飾子のSetを返す
+     * 菫ｮ鬟ｾ蟄舌�ｮSet繧定ｿ斐☆
      * 
-     * @return 修飾子のSet
+     * @return 菫ｮ鬟ｾ蟄舌�ｮSet
      */
     Set<ModifierInfo> getModifiers();
 }

@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ”z—ñŒ^‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD
+ * é…åˆ—å‹ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -17,9 +17,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class ArrayTypeInfo implements ReferenceTypeInfo {
 
     /**
-     * Œ^–¼‚ğ•Ô‚·
+     * å‹åã‚’è¿”ã™
      * 
-     * @return Œ^–¼
+     * @return å‹å
      */
     @Override
     public String getTypeName() {
@@ -35,10 +35,10 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * “™‚µ‚¢‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN‚ğs‚¤
+     * ç­‰ã—ã„ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
      * 
-     * @param typeInfo ”äŠr‘ÎÛŒ^
-     * @return “™‚µ‚¢ê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @param typeInfo æ¯”è¼ƒå¯¾è±¡å‹
+     * @return ç­‰ã—ã„å ´åˆã¯true, ãã†ã§ãªã„å ´åˆã¯false
      */
     @Override
     public boolean equals(final TypeInfo typeInfo) {
@@ -63,29 +63,29 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ”z—ñ‚Ì—v‘f‚ğ•Ô‚·
+     * é…åˆ—ã®è¦ç´ ã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚Ì—v‘f‚ÌŒ^
+     * @return é…åˆ—ã®è¦ç´ ã®å‹
      */
     public final TypeInfo getElementType() {
         return this.element;
     }
 
     /**
-     * ”z—ñ‚ÌŸŒ³‚ğ•Ô‚·
+     * é…åˆ—ã®æ¬¡å…ƒã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚ÌŸŒ³
+     * @return é…åˆ—ã®æ¬¡å…ƒ
      */
     public final int getDimension() {
         return this.dimension;
     }
 
     /**
-     * ArrayTypeInfo ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·‚½‚ß‚Ìƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒhD
+     * ArrayTypeInfo ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™ãŸã‚ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰ï¼
      * 
-     * @param element Œ^‚ğ•\‚·•Ï”
-     * @param dimension ŸŒ³‚ğ•\‚·•Ï”
-     * @return ¶¬‚µ‚½ ArrayTypeInfo ƒIƒuƒWƒFƒNƒg
+     * @param element å‹ã‚’è¡¨ã™å¤‰æ•°
+     * @param dimension æ¬¡å…ƒã‚’è¡¨ã™å¤‰æ•°
+     * @return ç”Ÿæˆã—ãŸ ArrayTypeInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public static ArrayTypeInfo getType(final TypeInfo element, final int dimension) {
 
@@ -107,10 +107,10 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¤D”z—ñ‚Ì—v‘f‚ÌŒ^‚Æ”z—ñ‚ÌŸŒ³‚ª—^‚¦‚ç‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼é…åˆ—ã®è¦ç´ ã®å‹ã¨é…åˆ—ã®æ¬¡å…ƒãŒä¸ãˆã‚‰ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„
      * 
-     * @param element ”z—ñ‚Ì—v‘f
-     * @param dimension ”z—ñ‚Ì–Œ
+     * @param element é…åˆ—ã®è¦ç´ 
+     * @param dimension é…åˆ—ã®äº‹ä»¶
      */
     ArrayTypeInfo(final TypeInfo element, final int dimension) {
 
@@ -127,42 +127,42 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * ”z—ñ‚Ì—v‘f‚ğ•Û‘¶‚·‚é•Ï”
+     * é…åˆ—ã®è¦ç´ ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final TypeInfo element;
 
     /**
-     * ”z—ñ‚ÌŸŒ³‚ğ•Û‘¶‚·‚é•Ï”
+     * é…åˆ—ã®æ¬¡å…ƒã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final int dimension;
 
     /**
-     * ArrayTypeInfo ƒIƒuƒWƒFƒNƒg‚ğˆêŒ³ŠÇ—‚·‚é‚½‚ß‚Ì MapDƒIƒuƒWƒFƒNƒg‚Íƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒh‚Å¶¬‚³‚ê‚éD
+     * ArrayTypeInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸€å…ƒç®¡ç†ã™ã‚‹ãŸã‚ã® Mapï¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰ã§ç”Ÿæˆã•ã‚Œã‚‹ï¼
      */
     private static final Map<Key, ArrayTypeInfo> ARRAY_TYPE_MAP = new HashMap<Key, ArrayTypeInfo>();
 
     /**
-     * •Ï”‚ÌŒ^‚ÆŸŒ³‚ğ—p‚¢‚ÄƒL[‚Æ‚È‚éƒNƒ‰ƒXD
+     * å¤‰æ•°ã®å‹ã¨æ¬¡å…ƒã‚’ç”¨ã„ã¦ã‚­ãƒ¼ã¨ãªã‚‹ã‚¯ãƒ©ã‚¹ï¼
      * 
      * @author higo
      */
     static class Key {
 
         /**
-         * ‘æˆêƒL[
+         * ç¬¬ä¸€ã‚­ãƒ¼
          */
         private final TypeInfo element;
 
         /**
-         * ‘æ“ñƒL[
+         * ç¬¬äºŒã‚­ãƒ¼
          */
         private final int dimension;
 
         /**
-         * ‘æˆêC‘æ“ñƒL[‚©‚çCƒL[ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
+         * ç¬¬ä¸€ï¼Œç¬¬äºŒã‚­ãƒ¼ã‹ã‚‰ï¼Œã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
          * 
-         * @param element ‘æˆêƒL[
-         * @param dimension ‘æ“ñƒL[
+         * @param element ç¬¬ä¸€ã‚­ãƒ¼
+         * @param dimension ç¬¬äºŒã‚­ãƒ¼
          */
         Key(final TypeInfo element, final int dimension) {
 
@@ -178,7 +178,7 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
         }
 
         /**
-         * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·D
+         * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ï¼
          */
         @Override
         public int hashCode() {
@@ -186,25 +186,25 @@ public class ArrayTypeInfo implements ReferenceTypeInfo {
         }
 
         /**
-         * ‚±‚ÌƒL[ƒIƒuƒWƒFƒNƒg‚Ì‘æˆêƒL[‚ğ•Ô‚·D
+         * ã“ã®ã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¬¬ä¸€ã‚­ãƒ¼ã‚’è¿”ã™ï¼
          * 
-         * @return ‘æˆêƒL[
+         * @return ç¬¬ä¸€ã‚­ãƒ¼
          */
         public String getFirstKey() {
             return this.element.getTypeName();
         }
 
         /**
-         * ‚±‚ÌƒL[ƒIƒuƒWƒFƒNƒg‚Ì‘æ“ñƒL[‚ğ•Ô‚·D
+         * ã“ã®ã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¬¬äºŒã‚­ãƒ¼ã‚’è¿”ã™ï¼
          * 
-         * @return ‘æ“ñƒL[
+         * @return ç¬¬äºŒã‚­ãƒ¼
          */
         public int getSecondKey() {
             return this.dimension;
         }
 
         /**
-         * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚Æˆø”‚Åw’è‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ª“™‚µ‚¢‚©‚ğ•Ô‚·D
+         * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç­‰ã—ã„ã‹ã‚’è¿”ã™ï¼
          */
         @Override
         public boolean equals(Object o) {

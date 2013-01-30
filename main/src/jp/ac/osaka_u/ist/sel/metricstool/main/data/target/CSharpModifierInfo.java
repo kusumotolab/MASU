@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 /**
- * C#‚ÌCüq‚ğˆµ‚¤ƒNƒ‰ƒX
+ * C#ã®ä¿®é£¾å­ã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
  * @author a-saitoh
  *
  */

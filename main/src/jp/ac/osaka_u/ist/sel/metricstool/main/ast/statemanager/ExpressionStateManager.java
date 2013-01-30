@@ -7,12 +7,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * �r�W�^�[�����L�q���ɓ��B�������ɏ�ԑJ�ڂ��C��ԑJ�ڃC�x���g��ʒm����D
- * ���̃N���X�͎�Ɏ���͕��̃r���_�[�̗L��������؂�ւ��邽�߂Ɏg�p����邱�Ƃ�z�肵�Ă���D
+ * ビジターが式記述部に到達した時に状態遷移し，状態遷移イベントを通知する．
+ * このクラスは主に式解析部のビルダーの有効無効を切り替えるために使用されることを想定している．
  * <p>
- * ���L�q�����Ɏ����p�����Ȃ��c���[�iJava�̓����N���X�錾�Ȃǁj�����݂���ꍇ�́C���̓����͍\��������̂ł͂Ȃ��Ɣ��肵�C
- * ���L�q������o����ԂɑJ�ڂ���D
- * �����āC���̃c���[�̖K�₪�I��������C������x���L�q���ɓ�������ԂɑJ�ڂ���D
+ * 式記述部中に式が継続しないツリー（Javaの匿名クラス宣言など）が存在する場合は，その内部は構成するものではないと判定し，
+ * 式記述部から出た状態に遷移する．
+ * そして，そのツリーの訪問が終了した後，もう一度式記述部に入った状態に遷移する．
  * 
  * @author kou-tngt
  *
@@ -25,7 +25,7 @@ public class ExpressionStateManager extends
     }
     
     /**
-     * �ʒm�����ԑJ�ڃC�x���g�̃C�x���g�^�C�v��\��Enum
+     * 通知する状態遷移イベントのイベントタイプを表すEnum
      * @author kou-tngt
      *
      */
@@ -34,11 +34,11 @@ public class ExpressionStateManager extends
     }
 
     /**
-     * �r�W�^�[��AST�m�[�h�̒��ɓ��������̃C�x���g�ʒm���󂯎��C
-     * ���̃m�[�h�����L�q���⎮���p�����Ȃ��m�[�h�ł���΁C
-     * ��Ԃ�J�ڂ�������C�x���g�𔭍s����
+     * ビジターがASTノードの中に入った時のイベント通知を受け取り，
+     * そのノードが式記述部や式が継続しないノードであれば，
+     * 状態を遷移させた後イベントを発行する
      * 
-     * @param event AST�r�W�b�g�C�x���g
+     * @param event ASTビジットイベント
      */
     @Override
     public void entered(final AstVisitEvent event) {
@@ -55,11 +55,11 @@ public class ExpressionStateManager extends
     }
 
     /**
-     * �r�W�^�[��AST�m�[�h�̂���o�����̃C�x���g�ʒm���󂯎��C
-     * ���̃m�[�h�����L�q���⎮���p�����Ȃ��m�[�h�ł���΁C
-     * ��Ԃ�߂�����C�x���g�𔭍s����
+     * ビジターがASTノードのから出た時のイベント通知を受け取り，
+     * そのノードが式記述部や式が継続しないノードであれば，
+     * 状態を戻した後イベントを発行する
      * 
-     * @param event AST�r�W�b�g�C�x���g
+     * @param event ASTビジットイベント
      */
     @Override
     public void exited(final AstVisitEvent event) {
@@ -74,31 +74,31 @@ public class ExpressionStateManager extends
     }
 
     /**
-     * ���̒��ɂ��邩�ǂ�����Ԃ����\�b�h
-     * @return�@���̒��ɋ���ꍇ��true
+     * 式の中にいるかどうかを返すメソッド
+     * @return　式の中に居る場合はtrue
      */
     public boolean inExpression() {
         return STATE.IN == this.getState();
     }
 
     /**
-     * �����ŗ^����ꂽ�g�[�N�������̌p�����Ȃ��m�[�h���ǂ�����Ԃ��D
-     * �f�t�H���g�����ł́Ctoken.isBlock()��true��Ԃ���true��Ԃ��D
-     * ���̃��\�b�h���I�[�o�[���[�h���邱�ƂŁC�C�ӂ̃m�[�h�Ŏ�����؂�悤�ȏ�ԑJ�ڂ�����N���X���쐬���邱�Ƃ��ł���D
+     * 引数で与えられたトークンが式の継続しないノードかどうかを返す．
+     * デフォルト実装では，token.isBlock()がtrueを返せばtrueを返す．
+     * このメソッドをオーバーラードすることで，任意のノードで式を区切るような状態遷移をするクラスを作成することができる．
      * 
-     * @param token ���̌p�����Ȃ��m�[�h���ǂ�����Ԃ��g�[�N��
-     * @return ���̌p�����Ȃ��m�[�h�ł����true
+     * @param token 式の継続しないノードかどうかを返すトークン
+     * @return 式の継続しないノードであればtrue
      */
     protected boolean isExpressionInsulator(final AstToken token) {
         return token.isBlock();
     }
 
     /**
-     * �����ŗ^����ꂽ�g�[�N������ԕω��̃g���K�ɂȂ蓾�邩�ǂ�����Ԃ�.
-     * token.isExpression() �܂��� {@link #isExpressionInsulator(AstToken)}�̂ǂ��炩�𖞂�����
-     * true��Ԃ��D
-     * @param token ��ԕω��̃g���K�ƂȂ蓾�邩�ǂ����𒲂ׂ�g�[�N��
-     * @return token.isExpression() �܂��� {@link #isExpressionInsulator(AstToken)}�̂ǂ��炩�𖞂����ꍇtrue
+     * 引数で与えられたトークンが状態変化のトリガになり得るかどうかを返す.
+     * token.isExpression() または {@link #isExpressionInsulator(AstToken)}のどちらかを満たせば
+     * trueを返す．
+     * @param token 状態変化のトリガとなり得るかどうかを調べるトークン
+     * @return token.isExpression() または {@link #isExpressionInsulator(AstToken)}のどちらかを満たす場合true
      */
     @Override
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
@@ -107,7 +107,7 @@ public class ExpressionStateManager extends
     }
 
     /**
-     * ��Ԃ�\��Enum
+     * 状態を表すEnum
      * @author kou-tngt
      *
      */

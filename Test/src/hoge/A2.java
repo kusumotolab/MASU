@@ -2,6 +2,7 @@ package hoge;
 
 public class A2 extends A1 {
 
+	A1 tttt = new A1();
 	int a22 = calc2(10);
 
 	public int calc(int a, int b) {

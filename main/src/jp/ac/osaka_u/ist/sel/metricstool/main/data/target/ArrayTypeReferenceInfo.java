@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ”z—ñŒ^QÆ‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—å‹å‚ç…§ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -18,14 +18,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ArrayTypeReferenceInfo extends ExpressionInfo {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param arrayType QÆ‚³‚ê‚Ä‚¢‚é”z—ñ‚ÌŒ^
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param arrayType å‚ç…§ã•ã‚Œã¦ã„ã‚‹é…åˆ—ã®å‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ArrayTypeReferenceInfo(final ArrayTypeInfo arrayType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -42,7 +42,7 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * Œ^‚ğ•Ô‚·
+     * å‹ã‚’è¿”ã™
      */
     @Override
     public TypeInfo getType() {
@@ -50,9 +50,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ”z—ñ‚ÌŒ^QÆ‚É‚¨‚¢‚Ä•Ï”‚ªg—p‚³‚ê‚é‚±‚Æ‚Í‚È‚¢‚Ì‚Å‹ó‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * é…åˆ—ã®å‹å‚ç…§ã«ãŠã„ã¦å¤‰æ•°ãŒä½¿ç”¨ã•ã‚Œã‚‹ã“ã¨ã¯ãªã„ã®ã§ç©ºã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ‹ó‚ÌƒZƒbƒg
+     * @return ç©ºã®ã‚»ãƒƒãƒˆ
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -60,9 +60,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌƒZƒbƒg
+     * @return å‘¼ã³å‡ºã—ã®ã‚»ãƒƒãƒˆ
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -70,9 +70,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì”z—ñŒ^QÆ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®é…åˆ—å‹å‚ç…§ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì”z—ñŒ^‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®é…åˆ—å‹ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -81,9 +81,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

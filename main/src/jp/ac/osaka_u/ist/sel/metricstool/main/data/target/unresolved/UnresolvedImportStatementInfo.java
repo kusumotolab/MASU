@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * staticƒCƒ“ƒ|[ƒg‚ğ•\‚·ƒNƒ‰ƒX
+ * staticã‚¤ãƒ³ãƒãƒ¼ãƒˆã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -22,14 +22,14 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
         UnresolvedUnitInfo<T> {
 
     /**
-     * ƒCƒ“ƒ|[ƒg•¶š—ñ‚Æ‘S‚Ä‚Ì–¼‘O‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡å­—åˆ—ã¨å…¨ã¦ã®åå‰ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param namespace —˜—p‰Â”\–¼‘O‹óŠÔ–¼
-     * @param all ‘S‚Ä‚Ì–¼‘O‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©
+     * @param namespace åˆ©ç”¨å¯èƒ½åå‰ç©ºé–“å
+     * @param all å…¨ã¦ã®åå‰ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹
      */
     public UnresolvedImportStatementInfo(final String[] namespace, final boolean all) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == namespace || ((!all) && namespace.length == 0)) {
             throw new IllegalArgumentException();
@@ -44,10 +44,10 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
             MethodInfoManager methodInfoManager);
 
     /**
-     * ‘ÎÛƒIƒuƒWƒFƒNƒg‚Æ“™‚µ‚¢‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ç­‰ã—ã„ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @param o ‘ÎÛƒIƒuƒWƒFƒNƒg
-     * @return “™‚µ‚¢ê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @param o å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @return ç­‰ã—ã„å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public final boolean equals(Object o) {
@@ -77,18 +77,18 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•Ô‚·
+     * åå‰ç©ºé–“åã‚’è¿”ã™
      * 
-     * @return –¼‘O‹óŠÔ–¼
+     * @return åå‰ç©ºé–“å
      */
     public final String[] getImportName() {
         return Arrays.<String> copyOf(this.importName, this.importName.length);
     }
 
     /**
-     * Š®‘SŒÀ’è–¼‚ğ•Ô‚·D
+     * å®Œå…¨é™å®šåã‚’è¿”ã™ï¼
      * 
-     * @return Š®‘SŒÀ’è–¼
+     * @return å®Œå…¨é™å®šå
      */
     public final String[] getFullQualifiedName() {
 
@@ -103,9 +103,9 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
     }
 
     /**
-     * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒnƒbƒVƒ…ƒR[ƒh
+     * @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      */
     @Override
     public final int hashCode() {
@@ -114,21 +114,21 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
     }
 
     /**
-     * ‘S‚Ä‚ÌƒNƒ‰ƒX‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©
+     * å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹
      * 
-     * @return —˜—p‰Â”\‚Å‚ ‚éê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åˆ©ç”¨å¯èƒ½ã§ã‚ã‚‹å ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean isAll() {
         return this.all;
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼‚ğ•\‚·•Ï”
+     * åå‰ç©ºé–“åã‚’è¡¨ã™å¤‰æ•°
      */
     private final String[] importName;
 
     /**
-     * ‘S‚Ä‚ÌƒNƒ‰ƒX‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©‚ğ•\‚·•Ï”
+     * å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private final boolean all;
 }

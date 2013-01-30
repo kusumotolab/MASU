@@ -2,16 +2,16 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 
 /**
- * Œ¾Œêî•ñ‚ğ•\‚·EnumD
+ * è¨€èªæƒ…å ±ã‚’è¡¨ã™Enumï¼
  * 
- * Œ»İ‚ÍJAVA‚Ì‚İ(2006/11/16)
+ * ç¾åœ¨ã¯JAVAã®ã¿(2006/11/16)
  * 
  * @author kou-tngt
  * 
  */
 public enum LANGUAGE {
     /**
-     * JavaŒ¾Œê ƒo[ƒWƒ‡ƒ“1.5ˆÈ~—p
+     * Javaè¨€èª ãƒãƒ¼ã‚¸ãƒ§ãƒ³1.5ä»¥é™ç”¨
      */
     JAVA15 {
         @Override
@@ -41,7 +41,7 @@ public enum LANGUAGE {
     },
 
     /**
-     * JavaŒ¾Œê ƒo[ƒWƒ‡ƒ“1.4—p
+     * Javaè¨€èª ãƒãƒ¼ã‚¸ãƒ§ãƒ³1.4ç”¨
      */
     JAVA14 {
         @Override
@@ -71,7 +71,7 @@ public enum LANGUAGE {
     },
 
     /**
-     * JavaŒ¾Œê ƒo[ƒWƒ‡ƒ“1.3—p
+     * Javaè¨€èª ãƒãƒ¼ã‚¸ãƒ§ãƒ³1.3ç”¨
      */
     JAVA13 {
         @Override
@@ -101,7 +101,7 @@ public enum LANGUAGE {
     },
     
     /**
-     * JavaŒ¾Œê ƒo[ƒWƒ‡ƒ“1.3—p
+     * Javaè¨€èª ãƒãƒ¼ã‚¸ãƒ§ãƒ³1.3ç”¨
      */
     CSHARP {
         @Override
@@ -147,68 +147,68 @@ public enum LANGUAGE {
     ;
 
     /**
-     * ‚±‚ÌŒ¾Œê‚ªƒIƒuƒWƒFƒNƒgwŒüŒ¾Œê‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒh
+     * ã“ã®è¨€èªãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘è¨€èªã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @return ƒIƒuƒWƒFƒNƒgwŒüŒ¾Œê‚Å‚ ‚ê‚Îtrue
+     * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘è¨€èªã§ã‚ã‚Œã°true
      */
     public boolean isObjectOrientedLanguage() {
         return false;
     }
 
     /**
-     * ‚±‚ÌŒ¾Œê‚ª\‘¢‰»Œ¾Œê‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒh
+     * ã“ã®è¨€èªãŒæ§‹é€ åŒ–è¨€èªã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @return \‘¢‰»Œ¾Œê‚Å‚ ‚ê‚Îtrue
+     * @return æ§‹é€ åŒ–è¨€èªã§ã‚ã‚Œã°true
      */
     public boolean isStructuralLanguage() {
         return false;
     }
 
     /**
-     * ‚±‚ÌŒ¾Œê‚ªŠÖ”Œ^Œ¾Œê‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒh
+     * ã“ã®è¨€èªãŒé–¢æ•°å‹è¨€èªã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @return ŠÖ”Œ^Œ¾Œê‚Å‚ ‚ê‚Îtrue
+     * @return é–¢æ•°å‹è¨€èªã§ã‚ã‚Œã°true
      */
     public boolean isFunctionalLanguage() {
         return false;
     }
 
     /**
-     * ‚±‚ÌŒ¾Œê‚ªƒXƒNƒŠƒvƒgŒ¾Œê‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒƒ\ƒbƒh
+     * ã“ã®è¨€èªãŒã‚¹ã‚¯ãƒªãƒ—ãƒˆè¨€èªã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @return ƒXƒNƒŠƒvƒgŒ¾Œê‚Å‚ ‚ê‚Îtrue
+     * @return ã‚¹ã‚¯ãƒªãƒ—ãƒˆè¨€èªã§ã‚ã‚Œã°true
      */
     public boolean isScriptLanguage() {
         return false;
     }
 
     /**
-     * ‚±‚ÌŒ¾Œê‚ÌŠg’£q‚ğ•Ô‚·
+     * ã“ã®è¨€èªã®æ‹¡å¼µå­ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒ¾Œê‚ÌŠg’£q
+     * @return ã“ã®è¨€èªã®æ‹¡å¼µå­
      */
     public abstract String getExtension();
 
     /**
-     * ‚±‚ÌŒ¾Œê‚Ì–¼‘O‚ğ•Ô‚·
+     * ã“ã®è¨€èªã®åå‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒ¾Œê‚Ì–¼‘O
+     * @return ã“ã®è¨€èªã®åå‰
      * 
      */
     public abstract String getName();
 
     /**
-     * ‚±‚ÌŒ¾Œê‚Ì¯•Êq–¼‚ğ•Ô‚·D
-     * ¯•Êq–¼‚Í -l ƒIƒvƒVƒ‡ƒ“‚É—p‚¢‚ç‚ê‚é.
+     * ã“ã®è¨€èªã®è­˜åˆ¥å­åã‚’è¿”ã™ï¼
+     * è­˜åˆ¥å­åã¯ -l ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã«ç”¨ã„ã‚‰ã‚Œã‚‹.
      * 
-     * @return ‚±‚ÌŒ¾Œê‚Ìà–¾•¶
+     * @return ã“ã®è¨€èªã®èª¬æ˜æ–‡
      */
     public abstract String getIdentifierName();
 
     /**
-     * ‚±‚ÌŒ¾Œê‚Ì–¼‘O‹óŠÔ‚ğ‹æØ‚é•¶ši—ñj‚ğ‚ğ•Ô‚·D
+     * ã“ã®è¨€èªã®åå‰ç©ºé–“ã‚’åŒºåˆ‡ã‚‹æ–‡å­—ï¼ˆåˆ—ï¼‰ã‚’ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌŒ¾Œê‚Ì–¼‘O‹óŠÔ‚ğ‹æØ‚é•¶ši—ñj
+     * @return ã“ã®è¨€èªã®åå‰ç©ºé–“ã‚’åŒºåˆ‡ã‚‹æ–‡å­—ï¼ˆåˆ—ï¼‰
      */
     public abstract String getNamespaceDelimiter();
 }

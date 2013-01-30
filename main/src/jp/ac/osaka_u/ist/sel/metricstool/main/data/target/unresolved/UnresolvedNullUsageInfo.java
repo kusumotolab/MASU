@@ -11,10 +11,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆnullg—p‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD
- * UnresolvedEntityUsageInfo‚ÆEntityUsageInfo‚ªƒNƒ‰ƒX‚Å‚ ‚é‚½‚ßC
- * NullUsageInfo‚Å‚±‚ê‚ç—¼•û‚ğŒp³‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢D
- * ‚»‚Ì‚½‚ß‚Ì‘Ã‹¦ˆÄ‚Æ‚µ‚Äì¬‚µ‚½ƒNƒ‰ƒXD
+ * æœªè§£æ±ºnullä½¿ç”¨ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
+ * UnresolvedEntityUsageInfoã¨EntityUsageInfoãŒã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ãŸã‚ï¼Œ
+ * NullUsageInfoã§ã“ã‚Œã‚‰ä¸¡æ–¹ã‚’ç¶™æ‰¿ã™ã‚‹ã“ã¨ãŒã§ããªã„ï¼
+ * ãã®ãŸã‚ã®å¦¥å”æ¡ˆã¨ã—ã¦ä½œæˆã—ãŸã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  *
@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedNullUsageInfo extends UnresolvedExpressionInfo<NullUsageInfo> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      */
     public UnresolvedNullUsageInfo() {
 
@@ -30,33 +30,33 @@ public final class UnresolvedNullUsageInfo extends UnresolvedExpressionInfo<Null
     }
 
     /**
-    * g—pî•ñ‚Ì–¼‘O‰ğŒˆ‚·‚é
+    * ä½¿ç”¨æƒ…å ±ã®åå‰è§£æ±ºã™ã‚‹
     * 
-    * @return ‰ğŒˆÏ‚İ‚Ìg—pî•ñ
+    * @return è§£æ±ºæ¸ˆã¿ã®ä½¿ç”¨æƒ…å ±
     */
     @Override
     public NullUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement

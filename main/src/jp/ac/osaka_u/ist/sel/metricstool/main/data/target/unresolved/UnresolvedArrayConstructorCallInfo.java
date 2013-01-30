@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ”z—ñƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºé…åˆ—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -31,9 +31,9 @@ public class UnresolvedArrayConstructorCallInfo extends
         UnresolvedConstructorCallInfo<UnresolvedArrayTypeInfo, ArrayConstructorCallInfo> {
 
     /**
-     * ”z—ñƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éQÆŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * é…åˆ—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‚ç…§å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param unresolvedArrayType ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éŒ^
+     * @param unresolvedArrayType ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‹
      */
     public UnresolvedArrayConstructorCallInfo(final UnresolvedArrayTypeInfo unresolvedArrayType) {
 
@@ -43,12 +43,12 @@ public class UnresolvedArrayConstructorCallInfo extends
     }
 
     /**
-     * ”z—ñƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éŒ^‚ÆˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param unresolvedArrayType ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éŒ^
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * é…åˆ—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‹ã¨ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param unresolvedArrayType ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedArrayConstructorCallInfo(final UnresolvedArrayTypeInfo unresolvedArrayType,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
@@ -62,38 +62,38 @@ public class UnresolvedArrayConstructorCallInfo extends
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      */
     @Override
     public ArrayConstructorCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌƒVƒOƒlƒ`ƒƒ‚ğæ“¾
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ã‚·ã‚°ãƒãƒãƒ£ã‚’å–å¾—
         final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        //@ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒ^‚ğ‰ğŒˆ
+        //ã€€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å‹ã‚’è§£æ±º
         final UnresolvedArrayTypeInfo unresolvedArrayType = this.getReferenceType();
         final ArrayTypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -103,7 +103,7 @@ public class UnresolvedArrayConstructorCallInfo extends
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
 
-        // ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğ‰ğŒˆ
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’è§£æ±º
         for (int dimension = 1; dimension <= arrayType.getDimension(); dimension++) {
 
             final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedIndexExpression = this
@@ -123,10 +123,10 @@ public class UnresolvedArrayConstructorCallInfo extends
     }
 
     /**
-     * ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğƒZƒbƒg
+     * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’ã‚»ãƒƒãƒˆ
      * 
-     * @param dimension ”z—ñ‚ÌŸŒ³‚ğ•\‚·
-     * @param indexExpression ”z—ñ‚Ì—v‘fw’è•”•ª‚Ì®‚ğ•\‚·
+     * @param dimension é…åˆ—ã®æ¬¡å…ƒã‚’è¡¨ã™
+     * @param indexExpression é…åˆ—ã®è¦ç´ æŒ‡å®šéƒ¨åˆ†ã®å¼ã‚’è¡¨ã™
      */
     public void addIndexExpression(final int dimension,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression) {
@@ -140,9 +140,9 @@ public class UnresolvedArrayConstructorCallInfo extends
     }
 
     /**
-     * ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğæ“¾
+     * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’å–å¾—
      * 
-     * @return ƒCƒ“ƒfƒbƒNƒX‚Ì®
+     * @return ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼
      */
     public List<UnresolvedExpressionInfo<? extends ExpressionInfo>> getIndexExpressions() {
 
@@ -159,7 +159,7 @@ public class UnresolvedArrayConstructorCallInfo extends
     }
 
     /**
-     * ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private SortedMap<Integer, UnresolvedExpressionInfo<? extends ExpressionInfo>> indexExpressions;
 }

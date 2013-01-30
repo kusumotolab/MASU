@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 /**
- * ”z—ñ‚Ì’·‚³‚ğ•\‚·•Ï” length ‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—ã®é•·ã•ã‚’è¡¨ã™å¤‰æ•° length ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -16,9 +16,9 @@ import java.util.Map;
 public final class ArrayLengthInfo extends FieldInfo {
 
     /**
-     * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ğ(•Ö‹Xã)’è‹`‚µ‚Ä‚¢‚é”z—ñƒIƒuƒWƒFƒNƒg‚ğ—^‚¦‚Ä‰Šú‰»
+     * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’(ä¾¿å®œä¸Š)å®šç¾©ã—ã¦ã„ã‚‹é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param ownerArray ”z—ñƒIƒuƒWƒFƒNƒg
+     * @param ownerArray é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     private ArrayLengthInfo(final ArrayTypeInfo ownerArray) {
 
@@ -28,7 +28,7 @@ public final class ArrayLengthInfo extends FieldInfo {
     }
 
     /**
-     * ArrayLengthInfo@‚ğ“¾‚é‚½‚ß‚Ìƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒh
+     * ArrayLengthInfoã€€ã‚’å¾—ã‚‹ãŸã‚ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰
      * 
      * @param ownerArray
      * @return

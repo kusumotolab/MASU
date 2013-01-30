@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedR
 
 
 /**
- * ƒŠƒ^[ƒ“•¶‚Ìî•ñ‚ğ\’z‚·‚éƒNƒ‰ƒX
+ * ãƒªã‚¿ãƒ¼ãƒ³æ–‡ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -24,10 +24,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedR
 public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedReturnStatementInfo> {
 
     /**
-     * \’zÏ‚İ‚Ì®î•ñƒ}ƒl[ƒWƒƒ[C\’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ğ—^‚¦‚Ä‰Šú‰»D
+     * æ§‹ç¯‰æ¸ˆã¿ã®å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ï¼Œæ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ä¸ãˆã¦åˆæœŸåŒ–ï¼
      * 
-     * @param expressionManager \’zÏ‚İ®î•ñƒ}ƒl[ƒWƒƒ[
-     * @param buildDataManager \’zÏ‚İƒf[ƒ^ƒ}ƒl[ƒWƒƒ[
+     * @param expressionManager æ§‹ç¯‰æ¸ˆã¿å¼æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+     * @param buildDataManager æ§‹ç¯‰æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
      */
     public ReturnStatementBuilder(ExpressionElementManager expressionManager,
             BuildDataManager buildDataManager) {
@@ -53,7 +53,7 @@ public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedRet
                         .getLastBuiltExpression();
                 final UnresolvedReturnStatementInfo buildingStatement = this.getLastBuildData();
 
-                // TODO ‚¢‚¯‚Ä‚È‚¢.SingleStatementBuilder‚ğStatetDrivenDataBuilder‚ğŒp³‚·‚é‚æ‚¤‚É•ÏX‚·‚×‚«
+                // TODO ã„ã‘ã¦ãªã„.SingleStatementBuilderã‚’StatetDrivenDataBuilderã‚’ç¶™æ‰¿ã™ã‚‹ã‚ˆã†ã«å¤‰æ›´ã™ã¹ã
                 if (null != returnedExpression
                         && (returnedExpression.getToLine() < buildingStatement.getFromLine() 
                                 || returnedExpression.getToLine() == buildingStatement.getFromLine()

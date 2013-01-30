@@ -13,24 +13,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
 
 /**
- * i’»ó‹µ‚ğ•ñ‚·‚é {@link ProgressReporter} ‚Æ‚»‚ê‚ğó‚¯æ‚é {@link ProgressListener}‚Ì‹´“n‚µ‚ğ‚·‚éƒNƒ‰ƒX.
- * ‚P‚Â‚Ì {@link ProgressSource} ‘Î‚µ‚Ä‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª‚P‚Âì‚ç‚ê‚é.
- * ‚±‚ÌƒNƒ‰ƒX‚Ì‚P‚Â‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚É‘Î‚µ‚ÄC•¡”‚ÌƒŠƒXƒi[‚ª“o˜^‚Å‚«‚é.
+ * é€²æ—çŠ¶æ³ã‚’å ±å‘Šã™ã‚‹ {@link ProgressReporter} ã¨ãã‚Œã‚’å—ã‘å–ã‚‹ {@link ProgressListener}ã®æ©‹æ¸¡ã—ã‚’ã™ã‚‹ã‚¯ãƒ©ã‚¹.
+ * ï¼‘ã¤ã® {@link ProgressSource} å¯¾ã—ã¦ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒï¼‘ã¤ä½œã‚‰ã‚Œã‚‹.
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã®ï¼‘ã¤ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«å¯¾ã—ã¦ï¼Œè¤‡æ•°ã®ãƒªã‚¹ãƒŠãƒ¼ãŒç™»éŒ²ã§ãã‚‹.
  * <p>
- * {@link ProgressReporter}‚ğÀ‘•‚·‚éƒNƒ‰ƒX‚ÍC {@link #getConnector(AbstractPlugin)}ƒƒ\ƒbƒh‚É
- * •ñ‚·‚é {@link ProgressSource} ‚ğ“n‚·‚±‚Æ‚ÅC‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é.
- * Ÿ‚ÉC {@link #connect(ProgressReporter)}ƒƒ\ƒbƒh‚É©•ª©g‚ğ“n‚·‚±‚Æ‚ÅC
- * ƒRƒlƒNƒVƒ‡ƒ“‚ğŠm—§‚·‚é.
+ * {@link ProgressReporter}ã‚’å®Ÿè£…ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ï¼Œ {@link #getConnector(AbstractPlugin)}ãƒ¡ã‚½ãƒƒãƒ‰ã«
+ * å ±å‘Šã™ã‚‹ {@link ProgressSource} ã‚’æ¸¡ã™ã“ã¨ã§ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹.
+ * æ¬¡ã«ï¼Œ {@link #connect(ProgressReporter)}ãƒ¡ã‚½ãƒƒãƒ‰ã«è‡ªåˆ†è‡ªèº«ã‚’æ¸¡ã™ã“ã¨ã§ï¼Œ
+ * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ç¢ºç«‹ã™ã‚‹.
  * <p>
- *  {@link ProgressListener}‚ğÀ‘•‚·‚éƒNƒ‰ƒX‚ÍC{@link #getConnector(AbstractPlugin)}ƒƒ\ƒbƒh‚É
- *  •ñ‚ğó‚¯æ‚è‚½‚¢ {@link ProgressSource} ‚ğ“n‚·‚±‚Æ‚ÅC‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚µC
- *  Ÿ‚ÉC {@link #addProgressListener(ProgressListener)}ƒƒ\ƒbƒh‚É©g‚ğ“n‚·‚±‚Æ‚ÅC
- *  ƒRƒlƒNƒVƒ‡ƒ“‚ğŠm—§‚·‚é.
+ *  {@link ProgressListener}ã‚’å®Ÿè£…ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ï¼Œ{@link #getConnector(AbstractPlugin)}ãƒ¡ã‚½ãƒƒãƒ‰ã«
+ *  å ±å‘Šã‚’å—ã‘å–ã‚ŠãŸã„ {@link ProgressSource} ã‚’æ¸¡ã™ã“ã¨ã§ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã—ï¼Œ
+ *  æ¬¡ã«ï¼Œ {@link #addProgressListener(ProgressListener)}ãƒ¡ã‚½ãƒƒãƒ‰ã«è‡ªèº«ã‚’æ¸¡ã™ã“ã¨ã§ï¼Œ
+ *  ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ç¢ºç«‹ã™ã‚‹.
  * <p>
- * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚ÍC‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚É‘Î‚µ‚ÄC {@link #disconnect()}ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·‚±‚Æ‚ÅC
- * ƒRƒlƒNƒVƒ‡ƒ“‚ğ‹­§“I‚É‰ğœ‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚é.
- * ƒRƒlƒNƒVƒ‡ƒ“‚ª‰ğœ‚³‚ê‚½‚±‚Æ‚ÍƒŠƒXƒi[‘¤‚É‚Í‘¦À‚É’Ê’m‚³‚êC {@link ProgressSource} ‘¤‚É‚ÍŸ‰ñˆÈ~‚Ìi’»•ñ‚É 
- * {@link ProgressConnectionException}‚ªƒXƒ[‚³‚ê‚é
+ * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã¯ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«å¯¾ã—ã¦ï¼Œ {@link #disconnect()}ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã“ã¨ã§ï¼Œ
+ * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å¼·åˆ¶çš„ã«è§£é™¤ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹.
+ * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒè§£é™¤ã•ã‚ŒãŸã“ã¨ã¯ãƒªã‚¹ãƒŠãƒ¼å´ã«ã¯å³åº§ã«é€šçŸ¥ã•ã‚Œï¼Œ {@link ProgressSource} å´ã«ã¯æ¬¡å›ä»¥é™ã®é€²æ—å ±å‘Šæ™‚ã« 
+ * {@link ProgressConnectionException}ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
  * 
  * @author kou-tngt
  *
@@ -38,17 +38,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 public final class ProgressConnector {
 
     /**
-     * ƒtƒ@ƒNƒgƒŠƒƒ\ƒbƒh.
-     * ˆø”‚É {@link ProgressSource} ‚ğ—^‚¦‚é‚±‚Æ‚ÅC‚»‚Ìƒ\[ƒX‚©‚ç‚Ìi’»•ñ‚ğ‹´“n‚µ‚·‚éƒRƒlƒNƒ^‚ğì¬
-     * @param source i’»î•ñ‚ğ‘—‚éƒ\[ƒX
-     * @return pluginƒCƒ“ƒXƒ^ƒ“ƒX‚©‚ç‚Ìi’»•ñ‚ğ‹´“n‚µ‚·‚éƒRƒlƒNƒ^
+     * ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰.
+     * å¼•æ•°ã« {@link ProgressSource} ã‚’ä¸ãˆã‚‹ã“ã¨ã§ï¼Œãã®ã‚½ãƒ¼ã‚¹ã‹ã‚‰ã®é€²æ—å ±å‘Šã‚’æ©‹æ¸¡ã—ã™ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’ä½œæˆ
+     * @param source é€²æ—æƒ…å ±ã‚’é€ã‚‹ã‚½ãƒ¼ã‚¹
+     * @return pluginã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‹ã‚‰ã®é€²æ—å ±å‘Šã‚’æ©‹æ¸¡ã—ã™ã‚‹ã‚³ãƒã‚¯ã‚¿
      */
     public static synchronized ProgressConnector getConnector(final ProgressSource source) {
         if (connectionsMap.containsKey(source)) {
-            //ƒ}ƒbƒv‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚½‚Ì‚ÅC‚»‚Ì‚Ü‚Ü•Ô‚·
+            //ãƒãƒƒãƒ—ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ãŸã®ã§ï¼Œãã®ã¾ã¾è¿”ã™
             return connectionsMap.get(source);
         } else {
-            //‚È‚©‚Á‚½‚Ì‚ÅV‚µ‚­ì‚Á‚Ä“o˜^‚µ‚Ä•Ô‚·.
+            //ãªã‹ã£ãŸã®ã§æ–°ã—ãä½œã£ã¦ç™»éŒ²ã—ã¦è¿”ã™.
             final ProgressConnector connection = new ProgressConnector(source);
             connectionsMap.put(source, connection);
             return connection;
@@ -56,9 +56,9 @@ public final class ProgressConnector {
     }
 
     /**
-     * i’»•ñ‚ğó‚¯æ‚éƒŠƒXƒi[‚ğ“o˜^‚·‚é
-     * @param listener i’»•ñ‚ğó‚¯æ‚éƒŠƒXƒi[
-     * @throws NullPointerException@listner‚ªnull‚Ìê‡
+     * é€²æ—å ±å‘Šã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠãƒ¼ã‚’ç™»éŒ²ã™ã‚‹
+     * @param listener é€²æ—å ±å‘Šã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠãƒ¼
+     * @throws NullPointerExceptionã€€listnerãŒnullã®å ´åˆ
      */
     public final void addProgressListener(final ProgressListener listener) {
         if (null == listener) {
@@ -68,17 +68,17 @@ public final class ProgressConnector {
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“‚ğ‹­§“I‚É‰ğœ‚·‚éƒƒ\ƒbƒh
-     * @throws AccessControlException ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚½ƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å¼·åˆ¶çš„ã«è§£é™¤ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @throws AccessControlException ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆ
      */
     public final synchronized void disconnect() {
-        //ƒAƒNƒZƒXŒ ƒ`ƒFƒbƒN
+        //ã‚¢ã‚¯ã‚»ã‚¹æ¨©ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
-        //‰ğœÏ‚İƒtƒ‰ƒO‚ğ—§‚Ä‚ÄCƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÌƒŒƒ|[ƒ^[‚ğnull‚É‚·‚é
+        //è§£é™¤æ¸ˆã¿ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã¦ï¼Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼ã‚’nullã«ã™ã‚‹
         this.connectionState = STATE.DISCONNECTED;
         this.reporter = null;
 
-        //ƒŠƒXƒi[‚É’Ê’m‚µ‚Ä‚©‚ç‘Síœ
+        //ãƒªã‚¹ãƒŠãƒ¼ã«é€šçŸ¥ã—ã¦ã‹ã‚‰å…¨å‰Šé™¤
         for (final ProgressListener listener : this.listeners) {
             listener.disconnected(new ProgressEvent(this.source, -1));
         }
@@ -86,7 +86,7 @@ public final class ProgressConnector {
     }
 
     /**
-     * ‚±‚ÌƒRƒlƒNƒ^‚ÉŒ»İ“o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ğ•Ô‚·
+     * ã“ã®ã‚³ãƒã‚¯ã‚¿ã«ç¾åœ¨ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã‚’è¿”ã™
      * @return
      */
     public final Set<ProgressListener> getListeners() {
@@ -94,16 +94,16 @@ public final class ProgressConnector {
     }
 
     /**
-     * ‚±‚ÌƒRƒlƒNƒ^‚Ìƒ\[ƒX‚ğ•Ô‚·
-     * @return ƒ\[ƒX
+     * ã“ã®ã‚³ãƒã‚¯ã‚¿ã®ã‚½ãƒ¼ã‚¹ã‚’è¿”ã™
+     * @return ã‚½ãƒ¼ã‚¹
      */
     public final ProgressSource getSource() {
         return this.source;
     }
 
     /**
-     * ƒŠƒXƒi[‚ğíœ‚·‚é
-     * @param listener@íœ‚·‚éƒŠƒXƒi[
+     * ãƒªã‚¹ãƒŠãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
+     * @param listenerã€€å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠãƒ¼
      */
     public final void removeProgressListener(final ProgressListener listener) {
         if (null != listener) {
@@ -112,10 +112,10 @@ public final class ProgressConnector {
     }
 
     /**
-     * ˆø”‚É—^‚¦‚ç‚ê‚½{@link ProgressSource}‚ÌƒŒƒ|[ƒ^[‚Æ‚ÌÚ‘±‚ğŠm—§‚·‚é
-     * @param reporter Ú‘±‚·‚éƒŒƒ|[ƒ^[
-     * @throws AlreadyConnectedException •Ê‚Ìreporter‚Æ‚ÌÚ‘±‚ªŠm—§‚³‚ê‚Ä‚¢‚é‚ÉC“¯‚¶ƒ\[ƒX‚©‚ç‚Ì•Ê‚ÌƒŠƒ|[ƒ^[‚ªÚ‘±‚µ‚Ä‚«‚½ê‡
-     * @throws NullPointerException@reporter‚ªnull‚Ìê‡
+     * å¼•æ•°ã«ä¸ãˆã‚‰ã‚ŒãŸ{@link ProgressSource}ã®ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼ã¨ã®æ¥ç¶šã‚’ç¢ºç«‹ã™ã‚‹
+     * @param reporter æ¥ç¶šã™ã‚‹ãƒ¬ãƒãƒ¼ã‚¿ãƒ¼
+     * @throws AlreadyConnectedException åˆ¥ã®reporterã¨ã®æ¥ç¶šãŒç¢ºç«‹ã•ã‚Œã¦ã„ã‚‹æ™‚ã«ï¼ŒåŒã˜ã‚½ãƒ¼ã‚¹ã‹ã‚‰ã®åˆ¥ã®ãƒªãƒãƒ¼ã‚¿ãƒ¼ãŒæ¥ç¶šã—ã¦ããŸå ´åˆ
+     * @throws NullPointerExceptionã€€reporterãŒnullã®å ´åˆ
      */
     synchronized void connect(final ProgressReporter reporter) throws AlreadyConnectedException {
         if (null == reporter) {
@@ -123,7 +123,7 @@ public final class ProgressConnector {
         }
 
         if (null != this.reporter) {
-            //‘¼‚ÌƒŠƒ|[ƒ^[‚Æ‚ÌÚ‘±‚ªŠm—§’†
+            //ä»–ã®ãƒªãƒãƒ¼ã‚¿ãƒ¼ã¨ã®æ¥ç¶šãŒç¢ºç«‹ä¸­
             throw new AlreadyConnectedException("New progress connection was refused.");
         }
 
@@ -132,7 +132,7 @@ public final class ProgressConnector {
     }
 
     /**
-     * i’»î•ñ‚Ì‘—M‚ğI—¹‚·‚éƒƒ\ƒbƒh
+     * é€²æ—æƒ…å ±ã®é€ä¿¡ã‚’çµ‚äº†ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     final synchronized void progressEnd() {
         this.reporter = null;
@@ -141,14 +141,14 @@ public final class ProgressConnector {
     }
 
     /**
-     * i’»î•ñ‚ğ•ñ‚·‚é
+     * é€²æ—æƒ…å ±ã‚’å ±å‘Šã™ã‚‹
      * 
-     * ‚±‚ÌƒpƒbƒP[ƒWˆÈŠO‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢.
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·‚ÍCˆø”‚Ì³‚µ‚³‚Í–‘O‚Éƒ`ƒFƒbƒN‚µ‚Ä‚¨‚©‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
+     * ã“ã®ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ä»¥å¤–ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„.
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™æ™‚ã¯ï¼Œå¼•æ•°ã®æ­£ã—ã•ã¯äº‹å‰ã«ãƒã‚§ãƒƒã‚¯ã—ã¦ãŠã‹ãªã‘ã‚Œã°ãªã‚‰ãªã„.
      * 
-     * @param percentage i’»î•ñi%j
-     * @throws DisconnectedException ƒRƒlƒNƒVƒ‡ƒ“‚ªØ’f‚³‚ê‚Ä‚¢‚éê‡
-     * @throws ConnectionException ƒRƒlƒNƒVƒ‡ƒ“‚ªŠm—§‚³‚ê‚Ä‚¢‚È‚¢ê‡
+     * @param percentage é€²æ—æƒ…å ±ï¼ˆ%ï¼‰
+     * @throws DisconnectedException ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒåˆ‡æ–­ã•ã‚Œã¦ã„ã‚‹å ´åˆ
+     * @throws ConnectionException ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒç¢ºç«‹ã•ã‚Œã¦ã„ãªã„å ´åˆ
      */
     void reportProgress(final int percentage) throws DisconnectedException, ConnectionException {
         if (STATE.INIT == this.connectionState) {
@@ -157,20 +157,20 @@ public final class ProgressConnector {
             throw new DisconnectedException("Already disconnected.");
         }
 
-        //ƒRƒlƒNƒVƒ‡ƒ“ŠÇ—‚Ì–{¿‚Æ‚ÍŠO‚ê‚é‚Ì‚ÅC—áŠO‚Å‚Í‚È‚­ƒAƒT[ƒVƒ‡ƒ“‚Åˆø”‚Ì³‚µ‚³‚ğƒ`ƒFƒbƒN
-        //ŒÄ‚Ño‚µŒ³‚Åˆø”ƒ`ƒFƒbƒN•—áŠO“Š‚°‚ğ‚µ‚Ä‚¨‚­‚×‚«
+        //ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†ã®æœ¬è³ªã¨ã¯å¤–ã‚Œã‚‹ã®ã§ï¼Œä¾‹å¤–ã§ã¯ãªãã‚¢ã‚µãƒ¼ã‚·ãƒ§ãƒ³ã§å¼•æ•°ã®æ­£ã—ã•ã‚’ãƒã‚§ãƒƒã‚¯
+        //å‘¼ã³å‡ºã—å…ƒã§å¼•æ•°ãƒã‚§ãƒƒã‚¯ï¼†ä¾‹å¤–æŠ•ã’ã‚’ã—ã¦ãŠãã¹ã
         assert (0 <= percentage && 100 >= percentage) : "Illegal parameter : percentage was "
                 + percentage;
 
         if (STATE.CONNECTED == this.connectionState) {
-            //Ú‘±’†‚È‚Ì‚ÅƒCƒxƒ“ƒg‚ğì‚Á‚ÄƒŠƒXƒi‚É“Š‚°‚é
+            //æ¥ç¶šä¸­ãªã®ã§ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä½œã£ã¦ãƒªã‚¹ãƒŠã«æŠ•ã’ã‚‹
             this.fireProgress(new ProgressEvent(this.source, percentage));
         }
     }
 
     /**
-     * ƒŠƒXƒi‚Éi’»î•ñ‚ğ’Ê’m‚·‚éƒƒ\ƒbƒh
-     * @param event@’Ê’m‚·‚éƒCƒxƒ“ƒg
+     * ãƒªã‚¹ãƒŠã«é€²æ—æƒ…å ±ã‚’é€šçŸ¥ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param eventã€€é€šçŸ¥ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     private void fireProgress(final ProgressEvent event) {
         if (null == event) {
@@ -185,8 +185,8 @@ public final class ProgressConnector {
     }
 
     /**
-     * ƒŠƒXƒi‚Éi’»î•ñ‚ÌI—¹‚ğ’Ê’m‚·‚éƒƒ\ƒbƒh
-     * @param event@’Ê’m‚·‚éƒCƒxƒ“ƒg
+     * ãƒªã‚¹ãƒŠã«é€²æ—æƒ…å ±ã®çµ‚äº†ã‚’é€šçŸ¥ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param eventã€€é€šçŸ¥ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     private void fireProgressEnd(final ProgressEvent event) {
         if (null == event) {
@@ -201,17 +201,17 @@ public final class ProgressConnector {
     }
 
     /**
-     * private ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * ˆø”‚É{@link ProgressSource}‚ğæ‚é.
-     * @param source i’»î•ñ‚Ìƒ\[ƒX
+     * private ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * å¼•æ•°ã«{@link ProgressSource}ã‚’å–ã‚‹.
+     * @param source é€²æ—æƒ…å ±ã®ã‚½ãƒ¼ã‚¹
      */
     private ProgressConnector(final ProgressSource source) {
         this.source = source;
     }
 
     /**
-     * Ú‘±ó‘Ô‚ğ•\‚·
-     * ó‘Ô‘JˆÚ‚Í INIT -> CONNECTED -> DISCONNECTED -> CONNECTED -> ...
+     * æ¥ç¶šçŠ¶æ…‹ã‚’è¡¨ã™
+     * çŠ¶æ…‹é·ç§»ã¯ INIT -> CONNECTED -> DISCONNECTED -> CONNECTED -> ...
      * @author kou-tngt
      */
     private static enum STATE {
@@ -219,28 +219,28 @@ public final class ProgressConnector {
     };
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠÇ—‚·‚éMap
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç®¡ç†ã™ã‚‹Map
      */
     private static final Map<ProgressSource, ProgressConnector> connectionsMap = new HashMap<ProgressSource, ProgressConnector>();
 
     /**
-     * ƒŠƒXƒi[‚ğŠÇ—‚·‚éSet.
-     * ‚±‚±‚É‚¾‚¯QÆ‚ª‚ ‚Á‚Ä‚àˆÓ–¡‚ª–³‚¢‚Ì‚ÅCãQÆ‚Å‚Â.
+     * ãƒªã‚¹ãƒŠãƒ¼ã‚’ç®¡ç†ã™ã‚‹Set.
+     * ã“ã“ã«ã ã‘å‚ç…§ãŒã‚ã£ã¦ã‚‚æ„å‘³ãŒç„¡ã„ã®ã§ï¼Œå¼±å‚ç…§ã§æŒã¤.
      */
     private final Set<ProgressListener> listeners = new ConcurrentHashSet<ProgressListener>();
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÌÚ‘±ó‘Ô
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®æ¥ç¶šçŠ¶æ…‹
      */
     private STATE connectionState = STATE.INIT;
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªÚ‘±‚·‚éƒ\[ƒX
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæ¥ç¶šã™ã‚‹ã‚½ãƒ¼ã‚¹
      */
     private final ProgressSource source;
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚É’¼Úi’»•ñ‚ğ‚µ‚Ä‚­‚éƒŠƒ|[ƒ^[
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«ç›´æ¥é€²æ—å ±å‘Šã‚’ã—ã¦ãã‚‹ãƒªãƒãƒ¼ã‚¿ãƒ¼
      */
     private ProgressReporter reporter;
 

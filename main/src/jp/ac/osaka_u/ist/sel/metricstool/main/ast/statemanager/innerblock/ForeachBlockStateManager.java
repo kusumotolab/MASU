@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * Foreach���̃X�e�[�g�}�l�[�W��
+ * Foreach文のステートマネージャ
  * @author a-saitoh
  *
  */
@@ -24,7 +24,7 @@ public class ForeachBlockStateManager extends InnerBlockStateManager {
     @Override
     protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
 
-        // ���ɃC�x���g�����s�ς݂̏ꍇ�C���������I��
+        // 既にイベントが発行済みの場合，何もせず終了
         if (super.fireStateChangeEnterEvent(event)) {
             return true;
         }
@@ -48,7 +48,7 @@ public class ForeachBlockStateManager extends InnerBlockStateManager {
 
     @Override
     protected boolean fireStateChangeExitEvent(AstVisitEvent event) {
-        // ���ɃC�x���g�����s�ς݂̏ꍇ�C���������I��
+        // 既にイベントが発行済みの場合，何もせず終了
         if (super.fireStateChangeExitEvent(event)) {
             return true;
         }

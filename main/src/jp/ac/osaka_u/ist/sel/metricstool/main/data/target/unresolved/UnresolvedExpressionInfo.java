@@ -9,10 +9,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ‚ÌƒNƒ‰ƒXQÆCƒƒ\ƒbƒhŒÄ‚Ño‚µCƒtƒB[ƒ‹ƒhg—p‚È‚Ç‚ğŒ»‚·ƒNƒ‰ƒX‚Ì‹¤’Ê‚ÌŠî’êƒNƒ‰ƒX
+ * æœªè§£æ±ºã®ã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãªã©ã‚’ç¾ã™ã‚¯ãƒ©ã‚¹ã®å…±é€šã®åŸºåº•ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> implements
         UnresolvedConditionInfo<T> {
@@ -57,9 +57,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * Šù‚É‰ğŒˆÏ‚İ‚©‚Ç‚¤‚©‚ğ•Ô‚·D
+     * æ—¢ã«è§£æ±ºæ¸ˆã¿ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
      * 
-     * @return ‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean alreadyResolved() {
@@ -67,10 +67,10 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * ‰ğŒˆÏ‚İƒNƒ‰ƒXQÆ‚ğ•Ô‚·
+     * è§£æ±ºæ¸ˆã¿ã‚¯ãƒ©ã‚¹å‚ç…§ã‚’è¿”ã™
      * 
-     * @return ‰ğŒˆÏ‚İƒNƒ‰ƒXQÆ
-     * @throws NotResolvedException ‰ğŒˆ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @return è§£æ±ºæ¸ˆã¿ã‚¯ãƒ©ã‚¹å‚ç…§
+     * @throws NotResolvedException è§£æ±ºã•ã‚Œã¦ã„ãªã„å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     @Override
     public final T getResolved() {
@@ -83,9 +83,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * ŠJns‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param fromLine ŠJns
+     * @param fromLine é–‹å§‹è¡Œ
      */
     public final void setFromLine(final int fromLine) {
 
@@ -97,9 +97,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * ŠJn—ñ‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param fromColumn ŠJn—ñ
+     * @param fromColumn é–‹å§‹åˆ—
      */
     public final void setFromColumn(final int fromColumn) {
 
@@ -111,9 +111,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * I—¹s‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param toLine I—¹s
+     * @param toLine çµ‚äº†è¡Œ
      */
     public final void setToLine(final int toLine) {
 
@@ -125,9 +125,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * I—¹—ñ‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param toColumn I—¹—ñ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public final void setToColumn(final int toColumn) {
         if (toColumn < 0) {
@@ -138,36 +138,36 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * ŠJns‚ğ•Ô‚·
+     * é–‹å§‹è¡Œã‚’è¿”ã™
      * 
-     * @return ŠJns
+     * @return é–‹å§‹è¡Œ
      */
     public final int getFromLine() {
         return this.fromLine;
     }
 
     /**
-     * ŠJn—ñ‚ğ•Ô‚·
+     * é–‹å§‹åˆ—ã‚’è¿”ã™
      * 
-     * @return ŠJn—ñ
+     * @return é–‹å§‹åˆ—
      */
     public final int getFromColumn() {
         return this.fromColumn;
     }
 
     /**
-     * I—¹s‚ğ•Ô‚·
+     * çµ‚äº†è¡Œã‚’è¿”ã™
      * 
-     * @return I—¹s
+     * @return çµ‚äº†è¡Œ
      */
     public final int getToLine() {
         return this.toLine;
     }
 
     /**
-     * I—¹—ñ‚ğ•Ô‚·
+     * çµ‚äº†åˆ—ã‚’è¿”ã™
      * 
-     * @return I—¹—ñ
+     * @return çµ‚äº†åˆ—
      */
     public final int getToColumn() {
         return this.toColumn;
@@ -202,27 +202,27 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     }
 
     /**
-     * ‰ğŒˆÏ‚İî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * è§£æ±ºæ¸ˆã¿æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected T resolvedInfo;
 
     /**
-     * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int fromColumn;
 
     /**
-     * I—¹s‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * çµ‚äº†è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int toLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int toColumn;
 

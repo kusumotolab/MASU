@@ -7,26 +7,26 @@ import java.util.Set;
 
 
 /**
- * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•Û‘¶‚·‚é•Ï”
+ * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
  * 
  * @author higo
 
- * @param <T> Œ^‚Ìî•ñCƒNƒ‰ƒXŒ^‚©”z—ñŒ^‚©
+ * @param <T> å‹ã®æƒ…å ±ï¼Œã‚¯ãƒ©ã‚¹å‹ã‹é…åˆ—å‹ã‹
  */
 @SuppressWarnings("serial")
 public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
         CallInfo<ConstructorInfo> {
 
     /**
-     * Œ^‚ğ—^‚¦‚ÄƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ‰Šú‰»
+     * å‹ã‚’ä¸ãˆã¦ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’åˆæœŸåŒ–
      * 
-     * @param referenceType ŒÄ‚Ño‚µ‚ÌŒ^
-     * @param callee ŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ 
+     * @param referenceType å‘¼ã³å‡ºã—ã®å‹
+     * @param callee å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ 
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ— 
      */
     public ConstructorCallInfo(final T referenceType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -42,7 +42,7 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
     }
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ÌŒ^‚ğ•Ô‚·
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®å‹ã‚’è¿”ã™
      */
     @Override
     public T getType() {
@@ -50,9 +50,9 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public final Set<CallInfo<?>> getCalls() {

@@ -5,18 +5,18 @@ import java.util.Comparator;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒRƒ“ƒpƒŒ[ƒ^.
- * ƒvƒ‰ƒOƒCƒ“‚ÌƒNƒ‰ƒX–¼‚Ì‚İ‚Å”äŠr‚·‚é.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚³ãƒ³ãƒ‘ãƒ¬ãƒ¼ã‚¿.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¯ãƒ©ã‚¹åã®ã¿ã§æ¯”è¼ƒã™ã‚‹.
  * @author kou-tngt
  *
  */
 public class ClassNamePluginComparator implements Comparator<AbstractPlugin> {
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒNƒ‰ƒX–¼‚Ì‚İ‚Å”äŠr‚·‚é.
-     * @param o1 ”äŠr‚³‚êƒvƒ‰ƒOƒCƒ“
-     * @param o2 ”äŠr‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @return o1‚ªo2‚æ‚è‚à‡˜“I‚É¬‚³‚¯‚ê‚Î•‰‚Ì”C“¯‚¶‚Å‚ ‚ê‚Î0C‘å‚«‚¯‚ê‚Î³‚Ì”‚ğ•Ô‚·.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚¯ãƒ©ã‚¹åã®ã¿ã§æ¯”è¼ƒã™ã‚‹.
+     * @param o1 æ¯”è¼ƒã•ã‚Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @param o2 æ¯”è¼ƒã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @return o1ãŒo2ã‚ˆã‚Šã‚‚é †åºçš„ã«å°ã•ã‘ã‚Œã°è² ã®æ•°ï¼ŒåŒã˜ã§ã‚ã‚Œã°0ï¼Œå¤§ãã‘ã‚Œã°æ­£ã®æ•°ã‚’è¿”ã™.
      */
     public int compare(final AbstractPlugin o1, final AbstractPlugin o2) {
         return o1.getClass().getCanonicalName().compareTo(o2.getClass().getCanonicalName());

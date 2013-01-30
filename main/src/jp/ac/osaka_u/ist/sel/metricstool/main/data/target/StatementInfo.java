@@ -8,22 +8,22 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public interface StatementInfo extends ExecutableElementInfo {
 
     /**
-     * •¶‚ÌƒeƒLƒXƒg•\Œ»(StringŒ^)‚ğ•Ô‚·
+     * æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾(Stringå‹)ã‚’è¿”ã™
      * 
-     * @return@•¶‚ÌƒeƒLƒXƒg•\Œ»(StringŒ^)‚ğ•Ô‚·
+     * @returnã€€æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾(Stringå‹)ã‚’è¿”ã™
      */
     String getText();
 
     /**
-     * •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ‚ğ•Ô‚·
-     * @return •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
+     * æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“ã‚’è¿”ã™
+     * @return æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
      */
     LocalSpaceInfo getOwnerSpace();
 
     /**
-     * •¶‚ğŠ—L‚·‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•Ô‚·
+     * æ–‡ã‚’æ‰€æœ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¿”ã™
      * 
-     * @return •¶‚ğŠ—L‚·‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @return æ–‡ã‚’æ‰€æœ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     CallableUnitInfo getOwnerMethod();
 }

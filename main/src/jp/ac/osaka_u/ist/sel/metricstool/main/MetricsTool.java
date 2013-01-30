@@ -105,7 +105,7 @@ import org.objectweb.asm.ClassReader;
  * 
  * @author higo
  * 
- * MetricsTool‚ÌƒƒCƒ“ƒNƒ‰ƒXD Œ»İ‚Í‰¼À‘•D
+ * MetricsToolã®ãƒ¡ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹ï¼ ç¾åœ¨ã¯ä»®å®Ÿè£…ï¼
  * 
  * since 2006.11.12
  * 
@@ -114,15 +114,15 @@ public class MetricsTool {
 
     /**
      * 
-     * @param args ‘ÎÛƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒpƒX
+     * @param args å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
      * 
-     * Œ»İ‰¼À‘•D ‘ÎÛƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^‚ğŠi”[‚µ‚½ŒãC\•¶‰ğÍ‚ğs‚¤D
+     * ç¾åœ¨ä»®å®Ÿè£…ï¼ å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã—ãŸå¾Œï¼Œæ§‹æ–‡è§£æã‚’è¡Œã†ï¼
      */
     public static void main(String[] args) {
 
         initSecurityManager();
 
-        // î•ñ•\¦—p‚ÌƒŠƒXƒi‚ğì¬
+        // æƒ…å ±è¡¨ç¤ºç”¨ã®ãƒªã‚¹ãƒŠã‚’ä½œæˆ
         final MessageListener outListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
                 System.out.print(event.getSource().getMessageSourceName() + " > "
@@ -258,13 +258,13 @@ public class MetricsTool {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
-            // "-h"‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Íƒwƒ‹ƒv‚ğ•\¦‚µ‚ÄI—¹
-            // ‚±‚Ì‚Æ‚«C‘¼‚ÌƒIƒvƒVƒ‡ƒ“‚Í‘S‚Ä–³‹‚³‚ê‚é
+            // "-h"ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ãƒ˜ãƒ«ãƒ—ã‚’è¡¨ç¤ºã—ã¦çµ‚äº†
+            // ã“ã®ã¨ãï¼Œä»–ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯å…¨ã¦ç„¡è¦–ã•ã‚Œã‚‹
             if (cmd.hasOption("h") || (0 == args.length)) {
                 final HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("MetricsTool", options, true);
 
-                // -l ‚ÅŒ¾Œê‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍC‰ğÍ‰Â”\Œ¾Œêˆê——‚ğ•\¦
+                // -l ã§è¨€èªãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ï¼Œè§£æå¯èƒ½è¨€èªä¸€è¦§ã‚’è¡¨ç¤º
                 if (!cmd.hasOption("l")) {
                     err.println("Available languages;");
                     for (final LANGUAGE language : LANGUAGE.values()) {
@@ -272,7 +272,7 @@ public class MetricsTool {
                                 + language.getIdentifierName() + "\"");
                     }
 
-                    // -l ‚ÅŒ¾Œê‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚ÍC‚»‚ÌƒvƒƒOƒ‰ƒ~ƒ“ƒOŒ¾Œê‚Åg—p‰Â”\‚ÈƒƒgƒŠƒNƒXˆê——‚ğ•\¦
+                    // -l ã§è¨€èªãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ï¼Œãã®ãƒ—ãƒ­ã‚°ãƒ©ãƒŸãƒ³ã‚°è¨€èªã§ä½¿ç”¨å¯èƒ½ãªãƒ¡ãƒˆãƒªã‚¯ã‚¹ä¸€è¦§ã‚’è¡¨ç¤º
                 } else {
                     Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
                     err.println("Available metrics for "
@@ -335,22 +335,22 @@ public class MetricsTool {
 
             metricsTool.loadPlugins(Settings.getInstance().getMetrics());
 
-            // ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ª³‚µ‚¢‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN‚·‚é
+            // ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ãŒæ­£ã—ã„ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
             {
-                // -d ‚Æ -i ‚Ì‚Ç‚¿‚ç‚àw’è‚³‚ê‚Ä‚¢‚é‚Ì‚Í•s³
+                // -d ã¨ -i ã®ã©ã¡ã‚‰ã‚‚æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã®ã¯ä¸æ­£
                 if (!cmd.hasOption("d") && !cmd.hasOption("l")) {
                     err.println("-d and/or -i must be specified in the analysis mode!");
                     System.exit(0);
                 }
 
-                // Œ¾Œê‚ªw’è‚³‚ê‚È‚©‚Á‚½‚Ì‚Í•s³
+                // è¨€èªãŒæŒ‡å®šã•ã‚Œãªã‹ã£ãŸã®ã¯ä¸æ­£
                 if (!cmd.hasOption("l")) {
                     err.println("-l must be specified for analysis");
                     System.exit(0);
                 }
 
                 {
-                    // ƒtƒ@ƒCƒ‹ƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡‚Í -F ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+                    // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆã¯ -F ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
                     if ((0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins()
                             .size())
                             && !cmd.hasOption("F")) {
@@ -358,14 +358,14 @@ public class MetricsTool {
                         System.exit(0);
                     }
 
-                    // ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡‚Í -C ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+                    // ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆã¯ -C ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
                     if ((0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins()
                             .size())
                             && !cmd.hasOption("C")) {
                         err.println("-C must be specified for class metrics!");
                         System.exit(0);
                     }
-                    // ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡‚Í -M ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+                    // ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆã¯ -M ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
                     if ((0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins()
                             .size())
                             && !cmd.hasOption("M")) {
@@ -373,7 +373,7 @@ public class MetricsTool {
                         System.exit(0);
                     }
 
-                    // ƒtƒB[ƒ‹ƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡‚Í -A ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+                    // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆã¯ -A ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„
                     if ((0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins()
                             .size())
                             && !cmd.hasOption("A")) {
@@ -383,28 +383,28 @@ public class MetricsTool {
                 }
 
                 {
-                    // ƒtƒ@ƒCƒ‹ƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚È‚¢‚Ì‚É -F@ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Í–³‹‚·‚é|‚ğ’Ê’m
+                    // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ãªã„ã®ã« -Fã€€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ç„¡è¦–ã™ã‚‹æ—¨ã‚’é€šçŸ¥
                     if ((0 == DataManager.getInstance().getPluginManager().getFileMetricPlugins()
                             .size())
                             && cmd.hasOption("F")) {
                         err.println("No file metric is specified. -F is ignored.");
                     }
 
-                    // ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚È‚¢‚Ì‚É -C@ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Í–³‹‚·‚é|‚ğ’Ê’m
+                    // ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ãªã„ã®ã« -Cã€€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ç„¡è¦–ã™ã‚‹æ—¨ã‚’é€šçŸ¥
                     if ((0 == DataManager.getInstance().getPluginManager().getClassMetricPlugins()
                             .size())
                             && cmd.hasOption("C")) {
                         err.println("No class metric is specified. -C is ignored.");
                     }
 
-                    // ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚È‚¢‚Ì‚É -M@ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Í–³‹‚·‚é|‚ğ’Ê’m
+                    // ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ãªã„ã®ã« -Mã€€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ç„¡è¦–ã™ã‚‹æ—¨ã‚’é€šçŸ¥
                     if ((0 == DataManager.getInstance().getPluginManager().getMethodMetricPlugins()
                             .size())
                             && cmd.hasOption("M")) {
                         err.println("No method metric is specified. -M is ignored.");
                     }
 
-                    // ƒtƒB[ƒ‹ƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚µ‚È‚¢‚Ì‚É -A@ƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Í–³‹‚·‚é|‚ğ’Ê’m
+                    // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã—ãªã„ã®ã« -Aã€€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ç„¡è¦–ã™ã‚‹æ—¨ã‚’é€šçŸ¥
                     if ((0 == DataManager.getInstance().getPluginManager().getFieldMetricPlugins()
                             .size())
                             && cmd.hasOption("A")) {
@@ -449,21 +449,21 @@ public class MetricsTool {
     }
 
     /**
-     * ˆø”–³‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^D ƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ‚Ì‰Šú‰»‚ğs‚¤D
+     * å¼•æ•°ç„¡ã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼
      */
     public MetricsTool() {
 
     }
 
     /**
-     * ƒ‰ƒCƒuƒ‰ƒŠ‚ğ‰ğÍ‚µC‚»‚Ìî•ñ‚ğExternalClassInfo‚Æ‚µ‚Ä“o˜^‚·‚éD
-     * readTargetFiles()‚Ì‘O‚ÉŒÄ‚Ño‚³‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è§£æã—ï¼Œãã®æƒ…å ±ã‚’ExternalClassInfoã¨ã—ã¦ç™»éŒ²ã™ã‚‹ï¼
+     * readTargetFiles()ã®å‰ã«å‘¼ã³å‡ºã•ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„
      */
     public void analyzeLibraries() {
 
         final Settings settings = Settings.getInstance();
 
-        // javaŒ¾Œê‚Ìê‡
+        // javaè¨€èªã®å ´åˆ
         if (settings.getLanguage().equals(LANGUAGE.JAVA15)
                 || settings.getLanguage().equals(LANGUAGE.JAVA14)
                 || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
@@ -480,16 +480,16 @@ public class MetricsTool {
 
         final Set<JavaUnresolvedExternalClassInfo> unresolvedExternalClasses = new HashSet<JavaUnresolvedExternalClassInfo>();
 
-        // ƒoƒCƒgƒR[ƒh‚©‚ç“Ç‚İ‚İ
+        // ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‹ã‚‰èª­ã¿è¾¼ã¿
         for (final String path : Settings.getInstance().getLibraries()) {
             readJavaLibraries(new File(path), unresolvedExternalClasses);
         }
 
-        // ƒNƒ‰ƒX‚»‚Ì‚à‚Ì‚Ì‚İ–¼‘O‰ğŒˆiŒ^‚Í‰ğŒˆ‚µ‚È‚¢j
+        // ã‚¯ãƒ©ã‚¹ãã®ã‚‚ã®ã®ã¿åå‰è§£æ±ºï¼ˆå‹ã¯è§£æ±ºã—ãªã„ï¼‰
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
-            // –³–¼ƒNƒ‰ƒX‚Í–¼‘O‰ğŒˆ‚µ‚È‚¢
+            // ç„¡åã‚¯ãƒ©ã‚¹ã¯åå‰è§£æ±ºã—ãªã„
             if (unresolvedClassInfo.isAnonymous()) {
                 continue;
             }
@@ -508,15 +508,15 @@ public class MetricsTool {
             classInfoManager.add(classInfo);
         }
 
-        // ŠO‘¤‚ÌƒNƒ‰ƒXî•ñ‚ğ’Ç‰Á
+        // å¤–å´ã®ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è¿½åŠ 
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
-            // –³–¼ƒNƒ‰ƒX‚Í–³‹
+            // ç„¡åã‚¯ãƒ©ã‚¹ã¯ç„¡è¦–
             if (unresolvedClassInfo.isAnonymous()) {
                 continue;
             }
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚È‚¢ê‡‚Í–³‹
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ãªã„å ´åˆã¯ç„¡è¦–
             if (!unresolvedClassInfo.isInner()) {
                 continue;
             }
@@ -524,27 +524,27 @@ public class MetricsTool {
             final String[] fqName = JavaByteCodeUtility.separateName(unresolvedClassInfo.getName());
             final String[] outerFQName = Arrays.copyOf(fqName, fqName.length - 1);
             final ClassInfo outerClass = classInfoManager.getClassInfo(outerFQName);
-            if (null != outerClass) { // outerClass‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å
+            if (null != outerClass) { // outerClassãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ã‹ã‚‚ã—ã‚Œãªã„ã®ã§
                 final ClassInfo classInfo = classInfoManager.getClassInfo(fqName);
                 ((ExternalInnerClassInfo) classInfo).setOuterUnit(outerClass);
             }
         }
 
-        //@Œ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ
+        //ã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±º
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
-            // –³–¼ƒNƒ‰ƒX‚Í–³‹
+            // ç„¡åã‚¯ãƒ©ã‚¹ã¯ç„¡è¦–
             if (unresolvedClassInfo.isAnonymous()) {
                 continue;
             }
 
-            // ‚Ü‚¸‚ÍC‰ğŒˆÏ‚İƒIƒuƒWƒFƒNƒg‚ğæ“¾            
+            // ã¾ãšã¯ï¼Œè§£æ±ºæ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—            
             final String unresolvedClassName = unresolvedClassInfo.getName();
             final String[] className = JavaByteCodeNameResolver.resolveName(unresolvedClassName);
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
 
-            // Œ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ
+            // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±º
             final List<String> unresolvedTypeParameters = unresolvedClassInfo.getTypeParameters();
             for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                 final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
@@ -554,21 +554,21 @@ public class MetricsTool {
             }
         }
 
-        //@ŠeƒNƒ‰ƒX‚Å•\‚í‚ê‚Ä‚¢‚éŒ^‚ğ‰ğŒˆ‚µ‚Ä‚¢‚­
+        //ã€€å„ã‚¯ãƒ©ã‚¹ã§è¡¨ã‚ã‚Œã¦ã„ã‚‹å‹ã‚’è§£æ±ºã—ã¦ã„ã
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
-            // –³–¼ƒNƒ‰ƒX‚Í–¼‘O‰ğŒˆ‚µ‚È‚¢
+            // ç„¡åã‚¯ãƒ©ã‚¹ã¯åå‰è§£æ±ºã—ãªã„
             if (unresolvedClassInfo.isAnonymous()) {
                 continue;
             }
 
-            // ‚Ü‚¸‚ÍC‰ğŒˆÏ‚İƒIƒuƒWƒFƒNƒg‚ğæ“¾            
+            // ã¾ãšã¯ï¼Œè§£æ±ºæ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—            
             final String unresolvedClassName = unresolvedClassInfo.getName();
             final String[] className = JavaByteCodeNameResolver.resolveName(unresolvedClassName);
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
 
-            // eƒNƒ‰ƒX,ƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ‰ğŒˆ
+            // è¦ªã‚¯ãƒ©ã‚¹,ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’è§£æ±º
             for (final String unresolvedSuperType : unresolvedClassInfo.getSuperTypes()) {
                 final ClassTypeInfo superType = (ClassTypeInfo) JavaByteCodeNameResolver
                         .resolveType(unresolvedSuperType, null, classInfo);
@@ -577,7 +577,7 @@ public class MetricsTool {
                 superClass.addSubClass(classInfo);
             }
 
-            // ƒtƒB[ƒ‹ƒh‚Ì‰ğŒˆ            
+            // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®è§£æ±º            
             for (final JavaUnresolvedExternalFieldInfo unresolvedField : unresolvedClassInfo
                     .getFields()) {
 
@@ -598,7 +598,7 @@ public class MetricsTool {
                 classInfo.addDefinedField(field);
             }
 
-            // ƒƒ\ƒbƒh‚Ì‰ğŒˆ
+            // ãƒ¡ã‚½ãƒƒãƒ‰ã®è§£æ±º
             for (final JavaUnresolvedExternalMethodInfo unresolvedMethod : unresolvedClassInfo
                     .getMethods()) {
 
@@ -611,14 +611,14 @@ public class MetricsTool {
                     modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
                 }
 
-                // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì‚Æ‚«
+                // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ã¨ã
                 if (name.equals("<init>")) {
 
                     final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
                             modifiers);
                     constructor.setOuterUnit(classInfo);
 
-                    // Œ^ƒpƒ‰ƒ[ƒ^‚Ì‰ğŒˆ
+                    // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è§£æ±º
                     final List<String> unresolvedTypeParameters = unresolvedMethod
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
@@ -628,7 +628,7 @@ public class MetricsTool {
                         constructor.addTypeParameter(typeParameter);
                     }
 
-                    // ˆø”‚Ì‰ğŒˆ
+                    // å¼•æ•°ã®è§£æ±º
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
                         final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
@@ -638,7 +638,7 @@ public class MetricsTool {
                         constructor.addParameter(parameter);
                     }
 
-                    // ƒXƒ[‚³‚ê‚é—áŠO‚Ì‰ğŒˆ
+                    // ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã®è§£æ±º
                     final List<String> unresolvedThrownExceptions = unresolvedMethod
                             .getThrownExceptions();
                     for (final String unresolvedThrownException : unresolvedThrownExceptions) {
@@ -650,14 +650,14 @@ public class MetricsTool {
                     classInfo.addDefinedConstructor(constructor);
                 }
 
-                // ƒƒ\ƒbƒh‚Ì‚Æ‚«
+                // ãƒ¡ã‚½ãƒƒãƒ‰ã®ã¨ã
                 else {
 
                     final ExternalMethodInfo method = new ExternalMethodInfo(modifiers, name,
                             !isStatic);
                     method.setOuterUnit(classInfo);
 
-                    // Œ^ƒpƒ‰ƒ[ƒ^‚Ì‰ğŒˆ
+                    // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è§£æ±º
                     final List<String> unresolvedTypeParameters = unresolvedMethod
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
@@ -667,13 +667,13 @@ public class MetricsTool {
                         method.addTypeParameter(typeParameter);
                     }
 
-                    // •Ô‚è’l‚Ì‰ğŒˆ
+                    // è¿”ã‚Šå€¤ã®è§£æ±º
                     final String unresolvedReturnType = unresolvedMethod.getReturnType();
                     final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(
                             unresolvedReturnType, null, method);
                     method.setReturnType(returnType);
 
-                    // ˆø”‚Ì‰ğŒˆ
+                    // å¼•æ•°ã®è§£æ±º
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
                         final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
@@ -683,7 +683,7 @@ public class MetricsTool {
                         method.addParameter(parameter);
                     }
 
-                    // ƒXƒ[‚³‚ê‚é—áŠO‚Ì‰ğŒˆ
+                    // ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã®è§£æ±º
                     final List<String> unresolvedThrownExceptions = unresolvedMethod
                             .getThrownExceptions();
                     for (final String unresolvedThrownException : unresolvedThrownExceptions) {
@@ -703,7 +703,7 @@ public class MetricsTool {
 
         try {
 
-            // jarƒtƒ@ƒCƒ‹‚Ìê‡
+            // jarãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆ
             if (file.isFile() && file.getName().endsWith(".jar")) {
 
                 final JarFile jar = new JarFile(file);
@@ -719,7 +719,7 @@ public class MetricsTool {
                 }
             }
 
-            // classƒtƒ@ƒCƒ‹‚Ìê‡
+            // classãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆ
             else if (file.isFile() && file.getName().endsWith(".class")) {
 
                 final ClassReader reader = new ClassReader(new FileInputStream(file));
@@ -728,7 +728,7 @@ public class MetricsTool {
                 unresolvedExternalClasses.add(parser.getClassInfo());
             }
 
-            // ƒfƒBƒŒƒNƒgƒŠ‚Ìê‡
+            // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆ
             else if (file.isDirectory()) {
 
                 for (final File subfile : file.listFiles()) {
@@ -746,7 +746,7 @@ public class MetricsTool {
                 }
             }
 
-            //ã‹LˆÈŠO‚Ìê‡‚Í³‚µ‚­‚È‚¢ƒtƒ@ƒCƒ‹‚ªJava‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚µ‚Äw’è‚³‚ê‚Ä‚¢‚é‚±‚Æ‚É‚È‚èCI—¹            
+            //ä¸Šè¨˜ä»¥å¤–ã®å ´åˆã¯æ­£ã—ããªã„ãƒ•ã‚¡ã‚¤ãƒ«ãŒJavaã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã“ã¨ã«ãªã‚Šï¼Œçµ‚äº†            
             else {
                 err.println("file <" + file.getAbsolutePath()
                         + "> is inappropriate as a Java library.");
@@ -754,7 +754,7 @@ public class MetricsTool {
             }
         }
 
-        // ƒ‰ƒCƒuƒ‰ƒŠ‚Ì“Ç‚İ‚İ‚Å—áŠO‚ª”­¶‚µ‚½ê‡‚ÍƒvƒƒOƒ‰ƒ€‚ğI—¹
+        // ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®èª­ã¿è¾¼ã¿ã§ä¾‹å¤–ãŒç™ºç”Ÿã—ãŸå ´åˆã¯ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†
         catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
@@ -762,12 +762,12 @@ public class MetricsTool {
     }
 
     /**
-     * {@link #readTargetFiles()} ‚Å“Ç‚İ‚ñ‚¾‘ÎÛƒtƒ@ƒCƒ‹ŒQ‚ğ‰ğÍ‚·‚é.
+     * {@link #readTargetFiles()} ã§èª­ã¿è¾¼ã‚“ã å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ã‚’è§£æã™ã‚‹.
      * 
      */
     public void analyzeTargetFiles() {
 
-        // ‘ÎÛƒtƒ@ƒCƒ‹‚ÌAST‚©‚ç–¢‰ğŒˆƒNƒ‰ƒXCƒtƒB[ƒ‹ƒhCƒƒ\ƒbƒhî•ñ‚ğæ“¾
+        // å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ASTã‹ã‚‰æœªè§£æ±ºã‚¯ãƒ©ã‚¹ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼Œãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’å–å¾—
         out.println("parsing all target files.");
         parseTargetFiles();
 
@@ -791,7 +791,7 @@ public class MetricsTool {
             addMethodInsideInfomation();
         }
 
-        // •¶–@Œë‚è‚Ì‚ ‚éƒtƒ@ƒCƒ‹ˆê——‚ğ•\¦
+        // æ–‡æ³•èª¤ã‚Šã®ã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã‚’è¡¨ç¤º
         // err.println("The following files includes incorrect syntax.");
         // err.println("Any metrics of them were not measured");
         for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
@@ -802,26 +802,26 @@ public class MetricsTool {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğƒ[ƒh‚·‚é. w’è‚³‚ê‚½Œ¾ŒêCw’è‚³‚ê‚½ƒƒgƒŠƒNƒX‚ÉŠÖ˜A‚·‚éƒvƒ‰ƒOƒCƒ“‚Ì‚İ‚ğ {@link PluginManager}‚É“o˜^‚·‚é.
-     * null ‚ªw’è‚³‚ê‚½ê‡‚Í‘ÎÛŒ¾Œê‚É‚¨‚¢‚ÄŒv‘ª‰Â”\‚È‘S‚Ä‚ÌƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹. æŒ‡å®šã•ã‚ŒãŸè¨€èªï¼ŒæŒ‡å®šã•ã‚ŒãŸãƒ¡ãƒˆãƒªã‚¯ã‚¹ã«é–¢é€£ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã¿ã‚’ {@link PluginManager}ã«ç™»éŒ²ã™ã‚‹.
+     * null ãŒæŒ‡å®šã•ã‚ŒãŸå ´åˆã¯å¯¾è±¡è¨€èªã«ãŠã„ã¦è¨ˆæ¸¬å¯èƒ½ãªå…¨ã¦ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param metrics w’è‚·‚éƒƒgƒŠƒNƒX‚Ì”z—ñCw’è‚µ‚È‚¢ê‡‚Ínull
+     * @param metrics æŒ‡å®šã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®é…åˆ—ï¼ŒæŒ‡å®šã—ãªã„å ´åˆã¯null
      */
     public void loadPlugins(final String[] metrics) {
 
         final PluginManager pluginManager = DataManager.getInstance().getPluginManager();
         final Settings settings = Settings.getInstance();
         try {
-            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// ƒvƒ‰ƒOƒCƒ“‚ğ‘Sƒ[ƒh
+            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å…¨ãƒ­ãƒ¼ãƒ‰
                 final PluginInfo info = plugin.getPluginInfo();
 
-                // ‘ÎÛŒ¾Œê‚ÅŒv‘ª‰Â”\‚Å‚È‚¯‚ê‚Î“o˜^‚µ‚È‚¢
+                // å¯¾è±¡è¨€èªã§è¨ˆæ¸¬å¯èƒ½ã§ãªã‘ã‚Œã°ç™»éŒ²ã—ãªã„
                 if (!info.isMeasurable(settings.getLanguage())) {
                     continue;
                 }
 
                 if (null != metrics) {
-                    // ƒƒgƒŠƒNƒX‚ªw’è‚³‚ê‚Ä‚¢‚é‚Ì‚Å‚±‚Ìƒvƒ‰ƒOƒCƒ“‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN
+                    // ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã®ã§ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
                     final String pluginMetricName = info.getMetricName();
                     for (final String metric : metrics) {
                         if (metric.equalsIgnoreCase(pluginMetricName)) {
@@ -830,7 +830,7 @@ public class MetricsTool {
                         }
                     }
 
-                    // ƒƒgƒŠƒNƒX‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚Å‚Æ‚è‚ ‚¦‚¸‘S•”“o˜^
+                    // ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„ã®ã§ã¨ã‚Šã‚ãˆãšå…¨éƒ¨ç™»éŒ²
                 } else {
                     pluginManager.addPlugin(plugin);
                 }
@@ -842,7 +842,7 @@ public class MetricsTool {
     }
 
     /**
-     * ƒ[ƒhÏ‚İ‚Ìƒvƒ‰ƒOƒCƒ“‚ğÀs‚·‚é.
+     * ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹.
      */
     public void launchPlugins() {
 
@@ -856,7 +856,7 @@ public class MetricsTool {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                // ‹C‚É‚µ‚È‚¢
+                // æ°—ã«ã—ãªã„
             }
         } while (0 < launcher.getCurrentLaunchingNum() + launcher.getLaunchWaitingTaskNum());
 
@@ -864,7 +864,7 @@ public class MetricsTool {
     }
 
     /**
-     * {@link Settings}‚Éw’è‚³‚ê‚½êŠ‚©‚ç‰ğÍ‘ÎÛƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ñ‚Å“o˜^‚·‚é
+     * {@link Settings}ã«æŒ‡å®šã•ã‚ŒãŸå ´æ‰€ã‹ã‚‰è§£æå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚“ã§ç™»éŒ²ã™ã‚‹
      */
     public void readTargetFiles() {
 
@@ -872,12 +872,12 @@ public class MetricsTool {
 
         final Settings settings = Settings.getInstance();
 
-        // ƒfƒBƒŒƒNƒgƒŠ‚©‚ç“Ç‚İ‚İ
+        // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰èª­ã¿è¾¼ã¿
         for (final String directory : settings.getTargetDirectories()) {
             registerFilesFromDirectory(new File(directory));
         }
 
-        // ƒŠƒXƒgƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ
+        // ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿
         for (final String file : settings.getListFiles()) {
 
             try {
@@ -902,14 +902,14 @@ public class MetricsTool {
     }
 
     /**
-     * ƒƒgƒŠƒNƒXî•ñ‚ğ {@link Settings} ‚Éw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Éo—Í‚·‚é.
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã‚’ {@link Settings} ã«æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›ã™ã‚‹.
      */
     public void writeMetrics() {
 
         final PluginManager pluginManager = DataManager.getInstance().getPluginManager();
         final Settings settings = Settings.getInstance();
 
-        // ƒtƒ@ƒCƒ‹ƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆ
         if (0 < pluginManager.getFileMetricPlugins().size()) {
 
             try {
@@ -927,7 +927,7 @@ public class MetricsTool {
             }
         }
 
-        // ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡
+        // ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆ
         if (0 < pluginManager.getClassMetricPlugins().size()) {
 
             try {
@@ -945,7 +945,7 @@ public class MetricsTool {
             }
         }
 
-        // ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡
+        // ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆ
         if (0 < pluginManager.getMethodMetricPlugins().size()) {
 
             try {
@@ -964,7 +964,7 @@ public class MetricsTool {
 
         }
 
-        // ƒtƒB[ƒ‹ƒhƒƒgƒŠƒNƒX‚ğŒv‘ª‚·‚éê‡
+        // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¨ˆæ¸¬ã™ã‚‹å ´åˆ
         if (0 < pluginManager.getFieldMetricPlugins().size()) {
 
             try {
@@ -984,35 +984,35 @@ public class MetricsTool {
     }
 
     /**
-     * {@link MetricsToolSecurityManager} ‚Ì‰Šú‰»‚ğs‚¤. ƒVƒXƒeƒ€‚É“o˜^‚Å‚«‚ê‚ÎCƒVƒXƒeƒ€‚ÌƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ‚É‚à“o˜^‚·‚é.
+     * {@link MetricsToolSecurityManager} ã®åˆæœŸåŒ–ã‚’è¡Œã†. ã‚·ã‚¹ãƒ†ãƒ ã«ç™»éŒ²ã§ãã‚Œã°ï¼Œã‚·ã‚¹ãƒ†ãƒ ã®ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£ã«ã‚‚ç™»éŒ²ã™ã‚‹.
      */
     private static final void initSecurityManager() {
         try {
-            // MetricsToolSecurityManager‚ÌƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ\’z‚µC‰Šú“Á•ÊŒ ŒÀƒXƒŒƒbƒh‚É‚È‚é
+            // MetricsToolSecurityManagerã®ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ§‹ç¯‰ã—ï¼ŒåˆæœŸç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã«ãªã‚‹
             System.setSecurityManager(MetricsToolSecurityManager.getInstance());
         } catch (final SecurityException e) {
-            // Šù‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚éƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ‚É‚æ‚Á‚ÄCV‚½‚ÈƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ‚Ì“o˜^‚ª‹–‰Â‚³‚ê‚È‚©‚Á‚½D
-            // ƒVƒXƒeƒ€‚ÌƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ‚Æ‚µ‚Äg‚í‚È‚­‚Ä‚àC“Á•ÊŒ ŒÀƒXƒŒƒbƒh‚ÌƒAƒNƒZƒX§Œä‚Í–â‘è‚È‚­“®ì‚·‚é‚Ì‚Å‚Æ‚è‚ ‚¦‚¸–³‹‚·‚é
+            // æ—¢ã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£ã«ã‚ˆã£ã¦ï¼Œæ–°ãŸãªã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£ã®ç™»éŒ²ãŒè¨±å¯ã•ã‚Œãªã‹ã£ãŸï¼
+            // ã‚·ã‚¹ãƒ†ãƒ ã®ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£ã¨ã—ã¦ä½¿ã‚ãªãã¦ã‚‚ï¼Œç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡ã¯å•é¡Œãªãå‹•ä½œã™ã‚‹ã®ã§ã¨ã‚Šã‚ãˆãšç„¡è¦–ã™ã‚‹
             err.println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
     }
 
     /**
      * 
-     * @param file ‘ÎÛƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ
+     * @param file å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
      * 
-     * ‘ÎÛ‚ªƒfƒBƒŒƒNƒgƒŠ‚Ìê‡‚ÍC‚»‚Ìq‚É‘Î‚µ‚ÄÄ‹A“I‚Éˆ—‚ğ‚·‚éD ‘ÎÛ‚ªƒtƒ@ƒCƒ‹‚Ìê‡‚ÍC‘ÎÛŒ¾Œê‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚ ‚ê‚ÎC“o˜^ˆ—‚ğs‚¤D
+     * å¯¾è±¡ãŒãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆã¯ï¼Œãã®å­ã«å¯¾ã—ã¦å†å¸°çš„ã«å‡¦ç†ã‚’ã™ã‚‹ï¼ å¯¾è±¡ãŒãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆã¯ï¼Œå¯¾è±¡è¨€èªã®ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚ã‚Œã°ï¼Œç™»éŒ²å‡¦ç†ã‚’è¡Œã†ï¼
      */
     private void registerFilesFromDirectory(final File file) {
 
-        // ƒfƒBƒŒƒNƒgƒŠ‚È‚ç‚ÎCÄ‹A“I‚Éˆ—
+        // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãªã‚‰ã°ï¼Œå†å¸°çš„ã«å‡¦ç†
         if (file.isDirectory()) {
             File[] subfiles = file.listFiles();
             for (int i = 0; i < subfiles.length; i++) {
                 registerFilesFromDirectory(subfiles[i]);
             }
 
-            // ƒtƒ@ƒCƒ‹‚È‚ç‚ÎCŠg’£q‚ª‘ÎÛŒ¾Œê‚Æˆê’v‚·‚ê‚Î“o˜^
+            // ãƒ•ã‚¡ã‚¤ãƒ«ãªã‚‰ã°ï¼Œæ‹¡å¼µå­ãŒå¯¾è±¡è¨€èªã¨ä¸€è‡´ã™ã‚Œã°ç™»éŒ²
         } else if (file.isFile()) {
 
             final LANGUAGE language = Settings.getInstance().getLanguage();
@@ -1025,7 +1025,7 @@ public class MetricsTool {
                 targetFiles.add(targetFile);
             }
 
-            // ƒfƒBƒŒƒNƒgƒŠ‚Å‚àƒtƒ@ƒCƒ‹‚Å‚à‚È‚¢ê‡‚Í•s³
+            // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã‚‚ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚‚ãªã„å ´åˆã¯ä¸æ­£
         } else {
             err.println("\"" + file.getAbsolutePath() + "\" is not a vaild file!");
             System.exit(0);
@@ -1033,7 +1033,7 @@ public class MetricsTool {
     }
 
     /**
-     * o—ÍƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * å‡ºåŠ›ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     protected static MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
@@ -1042,7 +1042,7 @@ public class MetricsTool {
     }, MESSAGE_TYPE.OUT);
 
     /**
-     * ƒGƒ‰[ƒƒbƒZ[ƒWo—Í—p‚ÌƒvƒŠƒ“ƒ^
+     * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›ç”¨ã®ãƒ—ãƒªãƒ³ã‚¿
      */
     protected static MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
@@ -1051,7 +1051,7 @@ public class MetricsTool {
     }, MESSAGE_TYPE.ERROR);
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ÌAST‚©‚ç–¢‰ğŒˆƒNƒ‰ƒXCƒtƒB[ƒ‹ƒhCƒƒ\ƒbƒhî•ñ‚ğæ“¾
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ASTã‹ã‚‰æœªè§£æ±ºã‚¯ãƒ©ã‚¹ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼Œãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’å–å¾—
      */
     public void parseTargetFiles() {
 
@@ -1065,7 +1065,7 @@ public class MetricsTool {
             threads[i].start();
         }
 
-        //‘S‚Ä‚ÌƒXƒŒƒbƒh‚ªI‚í‚é‚Ì‚ğ‘Ò‚Â
+        //å…¨ã¦ã®ã‚¹ãƒ¬ãƒƒãƒ‰ãŒçµ‚ã‚ã‚‹ã®ã‚’å¾…ã¤
         for (final Thread thread : threads) {
             try {
                 thread.join();
@@ -1076,62 +1076,62 @@ public class MetricsTool {
     }
 
     /**
-     * ƒNƒ‰ƒXCƒƒ\ƒbƒhCƒtƒB[ƒ‹ƒh‚È‚Ç‚Ì’è‹`‚ğ–¼‘O‰ğŒˆ‚·‚éDAST ƒp[ƒX‚ÌŒã‚ÉŒÄ‚Ño‚³‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * ã‚¯ãƒ©ã‚¹ï¼Œãƒ¡ã‚½ãƒƒãƒ‰ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãªã©ã®å®šç¾©ã‚’åå‰è§£æ±ºã™ã‚‹ï¼AST ãƒ‘ãƒ¼ã‚¹ã®å¾Œã«å‘¼ã³å‡ºã•ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      */
     private void resolveDefinitions() {
 
-        // –¢‰ğŒˆƒNƒ‰ƒXî•ñƒ}ƒl[ƒWƒƒC ƒNƒ‰ƒXî•ñƒ}ƒl[ƒWƒƒ‚ğæ“¾
+        // æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ï¼Œ ã‚¯ãƒ©ã‚¹æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’å–å¾—
         final UnresolvedClassInfoManager unresolvedClassManager = DataManager.getInstance()
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classManager = DataManager.getInstance().getClassInfoManager();
         final FieldInfoManager fieldManager = DataManager.getInstance().getFieldInfoManager();
         final MethodInfoManager methodManager = DataManager.getInstance().getMethodInfoManager();
 
-        // Še–¢‰ğŒˆƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å„æœªè§£æ±ºã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassManager.getClassInfos()) {
 
             final FileInfo fileInfo = unresolvedClassInfo.getFileInfo();
 
-            //@ƒNƒ‰ƒXî•ñ‚ğ‰ğŒˆ
+            //ã€€ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’è§£æ±º
             final TargetClassInfo classInfo = unresolvedClassInfo.resolve(null, null, classManager,
                     fieldManager, methodManager);
 
             fileInfo.addDefinedClass(classInfo);
 
-            // ‰ğŒˆ‚³‚ê‚½ƒNƒ‰ƒXî•ñ‚ğ“o˜^
+            // è§£æ±ºã•ã‚ŒãŸã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ç™»éŒ²
             classManager.add(classInfo);
         }
 
-        // Še–¢‰ğŒˆƒNƒ‰ƒX‚ÌŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ‰ğŒˆ
+        // å„æœªè§£æ±ºã‚¯ãƒ©ã‚¹ã®å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è§£æ±º
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassManager.getClassInfos()) {
             unresolvedClassInfo.resolveOuterUnit(classManager);
         }
     }
 
     /**
-     * ƒNƒ‰ƒX‚È‚Ç‚Ì’è‹`‚Ì’†‚Å—˜—p‚³‚ê‚Ä‚¢‚éŒ^‚ğ–¼‘O‰ğŒˆ‚·‚éD
-     * resolveDefinitions‚ÌŒã‚ÉŒÄ‚Ño‚³‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * ã‚¯ãƒ©ã‚¹ãªã©ã®å®šç¾©ã®ä¸­ã§åˆ©ç”¨ã•ã‚Œã¦ã„ã‚‹å‹ã‚’åå‰è§£æ±ºã™ã‚‹ï¼
+     * resolveDefinitionsã®å¾Œã«å‘¼ã³å‡ºã•ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„
      */
     private void resolveTypes() {
 
-        // –¢‰ğŒˆƒNƒ‰ƒXî•ñƒ}ƒl[ƒWƒƒC ƒNƒ‰ƒXî•ñƒ}ƒl[ƒWƒƒ‚ğæ“¾
+        // æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ï¼Œ ã‚¯ãƒ©ã‚¹æƒ…å ±ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’å–å¾—
         final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
-        // æ‚É superType‚¾‚¯‰ğŒˆ
+        // å…ˆã« superTypeã ã‘è§£æ±º
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
             unresolvedClassInfo.resolveSuperClass(classInfoManager);
         }
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆ
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±º
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
             unresolvedClassInfo.resolveTypeParameter(classInfoManager);
         }
 
-        // —˜—p‰Â”\‚ÈŒ^ƒpƒ‰ƒ[ƒ^‚ğ‰ğŒˆi‚±‚Ìˆ—‚Í2‚Â‚Ìƒ‹[ƒv‚ª•K—vj
+        // åˆ©ç”¨å¯èƒ½ãªå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è§£æ±ºï¼ˆã“ã®å‡¦ç†ã¯2ã¤ã®ãƒ«ãƒ¼ãƒ—ãŒå¿…è¦ï¼‰
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
             unresolvedClassInfo.resolveAvailableTypeParameters(classInfoManager);
@@ -1141,7 +1141,7 @@ public class MetricsTool {
         //            unresolvedClassInfo.resolveAvailableTypeParameters();
         //        }
 
-        // c‚è‚ÌType‚ğ‰ğŒˆ
+        // æ®‹ã‚Šã®Typeã‚’è§£æ±º
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
 
@@ -1167,19 +1167,19 @@ public class MetricsTool {
     }
 
     /**
-     * ƒƒ\ƒbƒhƒI[ƒo[ƒ‰ƒCƒhî•ñ‚ğŠeMethodInfo‚É’Ç‰Á‚·‚éDaddInheritanceInfomationToClassInfos ‚ÌŒã ‚©‚Â registMethodInfos
-     * ‚ÌŒã‚ÉŒÄ‚Ño‚³‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰æƒ…å ±ã‚’å„MethodInfoã«è¿½åŠ ã™ã‚‹ï¼addInheritanceInfomationToClassInfos ã®å¾Œ ã‹ã¤ registMethodInfos
+     * ã®å¾Œã«å‘¼ã³å‡ºã•ãªã‘ã‚Œã°ãªã‚‰ãªã„
      */
     private void addOverrideRelation() {
 
-        // ‘S‚Ä‚ÌŠO•”ƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å…¨ã¦ã®å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final ExternalClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
                 .getExternalClassInfos()) {
             addOverrideRelation(classInfo);
 
         }
 
-        // ‘S‚Ä‚Ì‘ÎÛƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å…¨ã¦ã®å¯¾è±¡ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final TargetClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
                 .getTargetClassInfos()) {
             addOverrideRelation(classInfo);
@@ -1187,33 +1187,33 @@ public class MetricsTool {
     }
 
     /**
-     * ƒƒ\ƒbƒhƒI[ƒo[ƒ‰ƒCƒhî•ñ‚ğŠeMethodInfo‚É’Ç‰Á‚·‚éDˆø”‚Åw’è‚µ‚½ƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚É‚Â‚¢‚Äˆ—‚ğs‚¤
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰æƒ…å ±ã‚’å„MethodInfoã«è¿½åŠ ã™ã‚‹ï¼å¼•æ•°ã§æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ã¤ã„ã¦å‡¦ç†ã‚’è¡Œã†
      * 
-     * @param classInfo ‘ÎÛƒNƒ‰ƒX
+     * @param classInfo å¯¾è±¡ã‚¯ãƒ©ã‚¹
      */
     private void addOverrideRelation(final ClassInfo classInfo) {
 
-        // ŠeeƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å„è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
-            // Še‘ÎÛƒNƒ‰ƒX‚ÌŠeƒƒ\ƒbƒh‚É‚Â‚¢‚ÄCeƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ä‚¢‚é‚©‚ğ’²¸
+            // å„å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®å„ãƒ¡ã‚½ãƒƒãƒ‰ã«ã¤ã„ã¦ï¼Œè¦ªã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ã„ã‚‹ã‹ã‚’èª¿æŸ»
             for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
                 addOverrideRelation(superClassInfo, methodInfo);
             }
         }
 
-        // ŠeƒCƒ“ƒi[ƒNƒ‰ƒX‚É‘Î‚µ‚Ä
+        // å„ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦
         for (InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
             addOverrideRelation((ClassInfo) innerClassInfo);
         }
     }
 
     /**
-     * ƒƒ\ƒbƒhƒI[ƒo[ƒ‰ƒCƒhî•ñ‚ğ’Ç‰Á‚·‚éDˆø”‚Åw’è‚³‚ê‚½ƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚É‘Î‚µ‚Ä‘€ì‚ğs‚¤.
-     * AddOverrideInformationToMethodInfos()‚Ì’†‚©‚ç‚Ì‚İŒÄ‚Ño‚³‚ê‚éD
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰æƒ…å ±ã‚’è¿½åŠ ã™ã‚‹ï¼å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾ã—ã¦æ“ä½œã‚’è¡Œã†.
+     * AddOverrideInformationToMethodInfos()ã®ä¸­ã‹ã‚‰ã®ã¿å‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
      * 
-     * @param classInfo ƒNƒ‰ƒXî•ñ
-     * @param overrider ƒI[ƒo[ƒ‰ƒCƒh‘ÎÛ‚Ìƒƒ\ƒbƒh
+     * @param classInfo ã‚¯ãƒ©ã‚¹æƒ…å ±
+     * @param overrider ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰å¯¾è±¡ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     private void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
 
@@ -1223,26 +1223,26 @@ public class MetricsTool {
 
         METHOD: for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
 
-            // ƒƒ\ƒbƒh–¼‚ªˆá‚¤ê‡‚ÍƒI[ƒo[ƒ‰ƒCƒh‚³‚ê‚È‚¢
+            // ãƒ¡ã‚½ãƒƒãƒ‰åãŒé•ã†å ´åˆã¯ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã•ã‚Œãªã„
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
                 continue METHOD;
             }
 
-            // ˆø”‚Ì”‚ğ”äŠr
+            // å¼•æ•°ã®æ•°ã‚’æ¯”è¼ƒ
             final List<ParameterInfo> overriderParameters = overrider.getParameters();
             final List<ParameterInfo> methodParameters = methodInfo.getParameters();
             if (overriderParameters.size() != methodParameters.size()) {
                 continue METHOD;
             }
 
-            // ˆø”‚ÌŒ^‚Å”äŠrD‘æˆêˆø”‚©‚ç‡”Ô‚ÉD
+            // å¼•æ•°ã®å‹ã§æ¯”è¼ƒï¼ç¬¬ä¸€å¼•æ•°ã‹ã‚‰é †ç•ªã«ï¼
             final Iterator<ParameterInfo> overriderIterator = overriderParameters.iterator();
             final Iterator<ParameterInfo> methodIterator = methodParameters.iterator();
             while (overriderIterator.hasNext() && methodIterator.hasNext()) {
                 final ParameterInfo overriderParameter = overriderIterator.next();
                 final ParameterInfo methodParameter = methodIterator.next();
                 if (methodParameter.getType() instanceof TypeParameterTypeInfo) {
-                    // ˆø”‚ªŒ^ˆø”Œ^‚¾‚Á‚½‚Î‚ ‚¢‚Í‚Ô‚Á‚Æ‚¨‚µ
+                    // å¼•æ•°ãŒå‹å¼•æ•°å‹ã ã£ãŸã°ã‚ã„ã¯ã¶ã£ã¨ãŠã—
                 } else {
                     final String overriderParameterType = overriderParameter.getType()
                             .getTypeName();
@@ -1254,22 +1254,22 @@ public class MetricsTool {
                 }
             }
 
-            // ƒI[ƒo[ƒ‰ƒCƒhŠÖŒW‚ğ“o˜^‚·‚é
+            // ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰é–¢ä¿‚ã‚’ç™»éŒ²ã™ã‚‹
             overrider.addOverridee(methodInfo);
             methodInfo.addOverrider(overrider);
 
-            // ’¼Ú‚ÌƒI[ƒo[ƒ‰ƒCƒhŠÖŒW‚µ‚©’Šo‚µ‚È‚¢‚Ì‚ÅC‚±‚ÌƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚Í’²¸‚µ‚È‚¢
+            // ç›´æ¥ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰é–¢ä¿‚ã—ã‹æŠ½å‡ºã—ãªã„ã®ã§ï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã¯èª¿æŸ»ã—ãªã„
             return;
         }
 
-        // eƒNƒ‰ƒXŒQ‚É‘Î‚µ‚ÄÄ‹A“I‚Éˆ—
+        // è¦ªã‚¯ãƒ©ã‚¹ç¾¤ã«å¯¾ã—ã¦å†å¸°çš„ã«å‡¦ç†
         for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }
 
     /**
-     * ƒGƒ“ƒeƒBƒeƒBiƒtƒB[ƒ‹ƒh‚âƒNƒ‰ƒXj‚Ì‘ã“üEQÆCƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µŠÖŒW‚ğ’Ç‰Á‚·‚éD
+     * ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ï¼ˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚„ã‚¯ãƒ©ã‚¹ï¼‰ã®ä»£å…¥ãƒ»å‚ç…§ï¼Œãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—é–¢ä¿‚ã‚’è¿½åŠ ã™ã‚‹ï¼
      */
     private void addMethodInsideInfomation() {
 
@@ -1280,13 +1280,13 @@ public class MetricsTool {
         final MethodInfoManager methodInfoManager = DataManager.getInstance()
                 .getMethodInfoManager();
 
-        // Še–¢‰ğŒˆƒNƒ‰ƒXî•ñ ‚É‘Î‚µ‚Ä
+        // å„æœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ± ã«å¯¾ã—ã¦
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
 
             final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
 
-            // –¢‰ğŒˆƒtƒB[ƒ‹ƒhî•ñ‚É‘Î‚µ‚Ä
+            // æœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã«å¯¾ã—ã¦
             for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo
                     .getDefinedFields()) {
                 final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
@@ -1317,7 +1317,7 @@ public class MetricsTool {
                 }
             }
 
-            // Še–¢‰ğŒˆƒƒ\ƒbƒhî•ñ‚É‘Î‚µ‚Ä
+            // å„æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã«å¯¾ã—ã¦
             for (final UnresolvedMethodInfo unresolvedMethod : unresolvedClassInfo
                     .getDefinedMethods()) {
 
@@ -1326,7 +1326,7 @@ public class MetricsTool {
                         fieldInfoManager, methodInfoManager);
             }
 
-            // Še–¢‰ğŒˆƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚É‘Î‚µ‚Ä
+            // å„æœªè§£æ±ºã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã«å¯¾ã—ã¦
             for (final UnresolvedConstructorInfo unresolvedConstructor : unresolvedClassInfo
                     .getDefinedConstructors()) {
 

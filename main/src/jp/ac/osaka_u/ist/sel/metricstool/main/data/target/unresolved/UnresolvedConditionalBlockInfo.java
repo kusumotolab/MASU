@@ -12,35 +12,35 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆğŒ®•t‚«ƒuƒƒbƒN•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºæ¡ä»¶å¼ä»˜ããƒ–ãƒ­ãƒƒã‚¯æ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
- * @param <T> ‰ğŒˆÏ‚İƒuƒƒbƒN‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ãƒ–ãƒ­ãƒƒã‚¯ã®å‹
  *
  */
 public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockInfo> extends
         UnresolvedBlockInfo<T> {
 
     /**
-     * ŠO‘¤‚ÌƒuƒƒbƒNî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒNî•ñ
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±
      */
     public UnresolvedConditionalBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
     }
 
     /**
-     * –¢‰ğŒˆğŒ®‚ğ•Ô‚·
-     * @return –¢‰ğŒˆğŒ®
+     * æœªè§£æ±ºæ¡ä»¶å¼ã‚’è¿”ã™
+     * @return æœªè§£æ±ºæ¡ä»¶å¼
      */
     public final UnresolvedConditionalClauseInfo getConditionalClause() {
         return this.conditionalClause;
     }
 
     /**
-     * –¢‰ğŒˆğŒ®‚ğİ’è‚·‚é
-     * @param conditionalClause –¢‰ğŒˆğŒ®
+     * æœªè§£æ±ºæ¡ä»¶å¼ã‚’è¨­å®šã™ã‚‹
+     * @param conditionalClause æœªè§£æ±ºæ¡ä»¶å¼
      */
     public final void setConditionalClause(final UnresolvedConditionalClauseInfo conditionalClause) {
 
@@ -53,13 +53,13 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚ÌƒCƒ“ƒi[—Ìˆæ‚ğ–¼‘O‰ğŒˆ‚·‚é
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®ã‚¤ãƒ³ãƒŠãƒ¼é ˜åŸŸã‚’åå‰è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager ƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager ƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager ƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public void resolveInnerBlock(final TargetClassInfo usingClass,
@@ -69,19 +69,19 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
         super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // ğŒ®‚Ì‰ğŒˆ
+        // æ¡ä»¶å¼ã®è§£æ±º
         final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
                 .getConditionalClause();
         final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setConditionalClause(conditionalClause);
 
-        // ğŒ®‚ÌownerConditionalBlock‚ğİ’è
+        // æ¡ä»¶å¼ã®ownerConditionalBlockã‚’è¨­å®š
         conditionalClause.getCondition().setOwnerConditionalBlock(this.resolvedInfo);
     }
 
     /**
-     * –¢‰ğŒˆğŒ®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æœªè§£æ±ºæ¡ä»¶å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private UnresolvedConditionalClauseInfo conditionalClause;
 }

@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ˆø”‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * å¼•æ•°ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -46,16 +46,16 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éˆø”‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¼•æ•°ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param usedParameter g—p‚³‚ê‚Ä‚¢‚éˆø”
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedParameter ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¼•æ•°
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     private ParameterUsageInfo(final ParameterInfo usedParameter, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
@@ -66,17 +66,17 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éƒpƒ‰ƒ[ƒ^Cg—p‚Ìí—ŞCg—p‚³‚ê‚Ä‚¢‚éˆÊ’uî•ñ‚ğ—^‚¦‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼Œä½¿ç”¨ã®ç¨®é¡ï¼Œä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
      * 
-     * @param usedParameter g—p‚³‚ê‚Ä‚¢‚éƒpƒ‰ƒ[ƒ^
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assingment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
-     * @return ƒpƒ‰[ƒ[ƒ^g—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param usedParameter ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assingment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
+     * @return ãƒ‘ãƒ©ãƒ¼ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static ParameterUsageInfo getInstance(final ParameterInfo usedParameter,
             final boolean reference, final boolean assingment, final CallableUnitInfo ownerMethod,
@@ -88,8 +88,8 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     }
 
     /**
-     * ƒpƒ‰ƒ[ƒ^•Ï”g—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğƒpƒ‰ƒ[ƒ^•Ï”‚©‚çƒpƒ‰ƒ[ƒ^•Ï”g—p‚Ö‚Ìƒ}ƒbƒv‚É’Ç‰Á
-     * @param parameterUsage ƒpƒ‰ƒ[ƒ^•Ï”g—p
+     * ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ•°ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ•°ã‹ã‚‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ•°ä½¿ç”¨ã¸ã®ãƒãƒƒãƒ—ã«è¿½åŠ 
+     * @param parameterUsage ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ•°ä½¿ç”¨
      */
     private static void addParameterUsage(final ParameterUsageInfo parameterUsage) {
 
@@ -111,9 +111,9 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒpƒ‰ƒ[ƒ^‚Ìg—pî•ñ‚ÌƒZƒbƒg‚ğæ“¾
-     * @param parameter g—pî•ñ‚ğæ“¾‚µ‚½‚¢ƒ[ƒJƒ‹•Ï”
-     * @return ƒpƒ‰ƒ[ƒ^g—p‚ÌƒZƒbƒgDˆø”‚Å—^‚¦‚ç‚ê‚½ƒ[ƒJƒ‹•Ï”‚ªg—p‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä½¿ç”¨æƒ…å ±ã®ã‚»ãƒƒãƒˆã‚’å–å¾—
+     * @param parameter ä½¿ç”¨æƒ…å ±ã‚’å–å¾—ã—ãŸã„ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+     * @return ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä½¿ç”¨ã®ã‚»ãƒƒãƒˆï¼å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ãŒä½¿ç”¨ã•ã‚Œã¦ã„ãªã„å ´åˆã¯null
      */
     public final static Set<ParameterUsageInfo> getUsages(final ParameterInfo parameter) {
         if (USAGE_MAP.containsKey(parameter)) {
@@ -124,10 +124,10 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éˆø”—˜—p‚ÌSet‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹å¼•æ•°åˆ©ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”—˜—p‚ÌCollection
-     * @return —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éˆø”—˜—p‚ÌSet
+     * @param variableUsages å¤‰æ•°åˆ©ç”¨ã®Collection
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹å¼•æ•°åˆ©ç”¨ã®Set
      */
     public final static Set<ParameterUsageInfo> getParameterUsages(
             Collection<VariableUsageInfo<?>> variableUsages) {

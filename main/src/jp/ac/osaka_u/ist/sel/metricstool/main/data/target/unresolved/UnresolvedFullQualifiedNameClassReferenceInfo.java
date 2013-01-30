@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆŠ®‘SŒÀ’è–¼ƒNƒ‰ƒXQÆ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºå®Œå…¨é™å®šåã‚¯ãƒ©ã‚¹å‚ç…§ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo, t-miyake
  *
@@ -27,9 +27,9 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         UnresolvedClassReferenceInfo {
 
     /**
-     * Š®‘SŒÀ’è–¼‚ª‚í‚©‚Á‚Ä‚¢‚éiUnresolvedClassInfo‚ÌƒIƒuƒWƒFƒNƒg‚ª‘¶İ‚·‚éjƒNƒ‰ƒX‚ÌQÆ‚ğ‰Šú‰»
+     * å®Œå…¨é™å®šåãŒã‚ã‹ã£ã¦ã„ã‚‹ï¼ˆUnresolvedClassInfoã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå­˜åœ¨ã™ã‚‹ï¼‰ã‚¯ãƒ©ã‚¹ã®å‚ç…§ã‚’åˆæœŸåŒ–
      * 
-     * @param referencedClass QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX
+     * @param referencedClass å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedFullQualifiedNameClassReferenceInfo(final UnresolvedClassInfo referencedClass) {
         super(new LinkedList<UnresolvedClassImportStatementInfo>(), referencedClass
@@ -42,18 +42,18 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -63,13 +63,13 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         ClassInfo referencedClass = classInfoManager
                 .getClassInfo(fullQualifiedReferenceName);
 
-        // QÆ‚³‚ê‚½ƒNƒ‰ƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍC‚±‚±‚Å“o˜^‚·‚é
+        // å‚ç…§ã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆã¯ï¼Œã“ã“ã§ç™»éŒ²ã™ã‚‹
         if (null == referencedClass) {
             referencedClass = new ExternalClassInfo(fullQualifiedReferenceName);
             classInfoManager.add(referencedClass);
         }
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -89,16 +89,16 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚Ìî•ñ‚ğ•Ô‚·
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚Ìî•ñ
+     * @return å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®æƒ…å ±
      */
     public UnresolvedClassInfo getReferencedClass() {
         return this.referencedClass;
     }
 
     /**
-     * QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedClassInfo referencedClass;
 

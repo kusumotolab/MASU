@@ -11,16 +11,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ªƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é‚½‚ß‚É—p‚¢‚éƒNƒ‰ƒXD
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  */
 public class DefaultClassMetricsRegister implements ClassMetricsRegister {
 
     /**
-     * “o˜^ˆ——p‚ÌƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¤Dƒvƒ‰ƒOƒCƒ“‚Í©g‚ğˆø”‚Æ‚µ‚Ä—^‚¦‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * ç™»éŒ²å‡¦ç†ç”¨ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯è‡ªèº«ã‚’å¼•æ•°ã¨ã—ã¦ä¸ãˆãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      * 
-     * @param plugin ‰Šú‰»‚ğs‚¤ƒvƒ‰ƒOƒCƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param plugin åˆæœŸåŒ–ã‚’è¡Œã†ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public DefaultClassMetricsRegister(final AbstractPlugin plugin) {
 
@@ -36,10 +36,10 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
     }
 
     /**
-     * ‘æˆêˆø”‚ÌƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX’li‘æ“ñˆø”j‚ğ“o˜^‚·‚é
-     * @param classInfo ƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚éƒNƒ‰ƒX
-     * @param value “o˜^‚·‚éƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException ‚·‚Å‚ÉƒƒgƒŠƒNƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÉƒXƒ[‚³‚ê‚é—áŠO
+     * ç¬¬ä¸€å¼•æ•°ã®ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ï¼ˆç¬¬äºŒå¼•æ•°ï¼‰ã‚’ç™»éŒ²ã™ã‚‹
+     * @param classInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param value ç™»éŒ²ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ã™ã§ã«ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–
      */
     @Override
     public void registMetric(final TargetClassInfo classInfo, final Number value)

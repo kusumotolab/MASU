@@ -15,15 +15,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  * 
- * ƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğ•\‚·ƒNƒ‰ƒXD
+ * ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
  */
 @SuppressWarnings("serial")
 public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, Serializable {
 
     /**
-     * w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹–¼‚ÌƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD
+     * æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«åã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param name ƒtƒ@ƒCƒ‹–¼
+     * @param name ãƒ•ã‚¡ã‚¤ãƒ«å
      */
     public FileInfo(final String name) {
 
@@ -38,9 +38,9 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * ‚±‚Ìƒtƒ@ƒCƒ‹‚É’è‹`‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚éD
+     * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹ï¼
      * 
-     * @param definedClass ’è‹`‚³‚ê‚½ƒNƒ‰ƒXD
+     * @param definedClass å®šç¾©ã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ï¼
      */
     public void addDefinedClass(final TargetClassInfo definedClass) {
 
@@ -53,29 +53,29 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX“¯m‚ğ”äŠr‚·‚éƒƒ\ƒbƒh
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒå£«ã‚’æ¯”è¼ƒã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param o ”äŠr‘ÎÛ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
-     * @return ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª”äŠr‘ÎÛ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚æ‚è‡˜“I‚É¬‚³‚¯‚ê‚Î•‰‚Ì”C“™‚µ‚¯‚ê‚Î0C‘å‚«‚¯‚ê‚Î³‚Ì”.
+     * @param o æ¯”è¼ƒå¯¾è±¡ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @return ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæ¯”è¼ƒå¯¾è±¡ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚ˆã‚Šé †åºçš„ã«å°ã•ã‘ã‚Œã°è² ã®æ•°ï¼Œç­‰ã—ã‘ã‚Œã°0ï¼Œå¤§ãã‘ã‚Œã°æ­£ã®æ•°.
      */
     public int compareTo(FileInfo o) {
         return this.getName().compareTo(o.getName());
     }
 
     /**
-     * ‚±‚Ìƒtƒ@ƒCƒ‹‚É’è‹`‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒtƒ@ƒCƒ‹‚É’è‹`‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ÌSortedSet
+     * @return ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     public SortedSet<TargetClassInfo> getDefinedClasses() {
         return Collections.unmodifiableSortedSet(this.definedClasses);
     }
 
     /**
-     * ˆø”‚Æ‚±‚Ìƒtƒ@ƒCƒ‹‚ª“™‚µ‚¢‚©‚ğ”»’è‚·‚éD”»’è‚É‚ÍC•Ï”name‚ğ—p‚¢‚éD
+     * å¼•æ•°ã¨ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒç­‰ã—ã„ã‹ã‚’åˆ¤å®šã™ã‚‹ï¼åˆ¤å®šã«ã¯ï¼Œå¤‰æ•°nameã‚’ç”¨ã„ã‚‹ï¼
      * 
-     * @param o ”äŠr‘ÎÛƒtƒ@ƒCƒ‹
-     * @return “™‚µ‚¢ê‡‚Í true, “™‚µ‚­‚È‚¢ê‡‚Í false
+     * @param o æ¯”è¼ƒå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«
+     * @return ç­‰ã—ã„å ´åˆã¯ true, ç­‰ã—ããªã„å ´åˆã¯ false
      */
     @Override
     public boolean equals(Object o) {
@@ -94,36 +94,36 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * s”‚ğ•Ô‚·D
+     * è¡Œæ•°ã‚’è¿”ã™ï¼
      * 
-     * @return s”
+     * @return è¡Œæ•°
      */
     public int getLOC() {
         return this.loc;
     }
 
     /**
-     * ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰
      */
     public String getMeasuredUnitName() {
         return this.getName();
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹–¼‚ğ•Ô‚·D Œ»İƒtƒ‹ƒpƒX‚Å•Ô‚·‚ªCƒfƒBƒŒƒNƒgƒŠ‚Æƒtƒ@ƒCƒ‹–¼‚ğ•ª‚¯‚½•û‚ª—Ç‚¢‚©‚àD
+     * ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¿”ã™ï¼ ç¾åœ¨ãƒ•ãƒ«ãƒ‘ã‚¹ã§è¿”ã™ãŒï¼Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¨ãƒ•ã‚¡ã‚¤ãƒ«åã‚’åˆ†ã‘ãŸæ–¹ãŒè‰¯ã„ã‹ã‚‚ï¼
      * 
-     * @return ƒtƒ@ƒCƒ‹–¼
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«å
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·DƒnƒbƒVƒ…ƒR[ƒh‚Íƒtƒ@ƒCƒ‹–¼iƒtƒ‹ƒpƒXj‚ğ—p‚¢‚ÄŒvZ‚³‚ê‚é
+     * ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ï¼ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã¯ãƒ•ã‚¡ã‚¤ãƒ«åï¼ˆãƒ•ãƒ«ãƒ‘ã‚¹ï¼‰ã‚’ç”¨ã„ã¦è¨ˆç®—ã•ã‚Œã‚‹
      * 
-     * @return ‚±‚Ìƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…ƒR[ƒh
+     * @return ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      */
     @Override
     public int hashCode() {
@@ -132,9 +132,9 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * •Ï” loc ‚Ì setterDs”î•ñ‚ğƒZƒbƒg‚·‚éD
+     * å¤‰æ•° loc ã® setterï¼è¡Œæ•°æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ï¼
      * 
-     * @param loc s”
+     * @param loc è¡Œæ•°
      */
     public void setLOC(final int loc) {
 
@@ -147,7 +147,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * ƒRƒƒ“ƒg‚ğ’Ç‰Á‚·‚é
+     * ã‚³ãƒ¡ãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param comment
      */
@@ -161,7 +161,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * ƒRƒƒ“ƒg‚ÌƒZƒbƒg‚ğ’Ç‰Á‚·‚é
+     * ã‚³ãƒ¡ãƒ³ãƒˆã®ã‚»ãƒƒãƒˆã‚’è¿½åŠ ã™ã‚‹
      * @param commentSet
      */
     public void addAllComments(final SortedSet<CommentInfo> commentSet){
@@ -169,7 +169,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
     
     /**
-     * ƒRƒƒ“ƒgˆê——‚ğ•Ô‚·
+     * ã‚³ãƒ¡ãƒ³ãƒˆä¸€è¦§ã‚’è¿”ã™
      * 
      * @return
      */
@@ -178,25 +178,25 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹‚Ìs”‚ğ•\‚·•Ï”D
+     * ãƒ•ã‚¡ã‚¤ãƒ«ã®è¡Œæ•°ã‚’è¡¨ã™å¤‰æ•°ï¼
      */
     private int loc;
 
     /**
-     * ƒtƒ@ƒCƒ‹–¼‚ğ•\‚·•Ï”. ƒnƒbƒVƒ…ƒR[ƒh‚ÌŒvZ‚Ég‚Á‚Ä‚¢‚éD
+     * ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¡¨ã™å¤‰æ•°. ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã®è¨ˆç®—ã«ä½¿ã£ã¦ã„ã‚‹ï¼
      */
     private final String name;
 
     /**
-     * ‚±‚Ìƒtƒ@ƒCƒ‹‚ÅéŒ¾‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒXˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§å®£è¨€ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<TargetClassInfo> definedClasses;
 
     /**
-     * ‚±‚Ìƒtƒ@ƒCƒ‹“à‚ÌƒRƒƒ“ƒgˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã‚³ãƒ¡ãƒ³ãƒˆä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<CommentInfo> comments;
 
-    // TODO import‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚Ìî•ñ‚ğ’Ç‰Á
-    // TODO include‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğ’Ç‰Á
+    // TODO importã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®æƒ…å ±ã‚’è¿½åŠ 
+    // TODO includeã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’è¿½åŠ 
 }

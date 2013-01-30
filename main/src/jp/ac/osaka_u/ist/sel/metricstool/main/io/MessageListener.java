@@ -5,15 +5,15 @@ import java.util.EventListener;
 
 
 /**
- * ƒƒbƒZ[ƒWƒCƒxƒ“ƒg‚ğó‚¯æ‚éƒŠƒXƒi
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠ
  * @author kou-tngt
  *
  */
 public interface MessageListener extends EventListener {
 
     /**
-     * ƒƒbƒZ[ƒWóMƒƒ\ƒbƒh
-     * @param event ƒƒbƒZ[ƒWƒCƒxƒ“ƒg
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param event ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void messageReceived(MessageEvent event);
 }

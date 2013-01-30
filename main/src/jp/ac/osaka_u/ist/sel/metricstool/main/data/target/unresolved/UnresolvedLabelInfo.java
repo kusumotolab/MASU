@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒ‰ƒxƒ‹’è‹`‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ©ãƒ™ãƒ«å®šç¾©ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -22,48 +22,48 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         UnresolvedStatementInfo<LabelInfo> {
 
     /**
-     * ƒ‰ƒxƒ‹–¼‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒ©ãƒ™ãƒ«åã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param name ƒ‰ƒxƒ‹–¼
+     * @param name ãƒ©ãƒ™ãƒ«å
      */
     public UnresolvedLabelInfo() {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.labeledStatement = null;
         this.resolvedInfo = null;
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤ƒƒ\ƒbƒh
+     * åå‰è§£æ±ºã‚’è¡Œã†ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public LabelInfo resolve(final TargetClassInfo usingClass, final CallableUnitInfo usingMethod,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ìƒ‰ƒxƒ‹‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã®ãƒ©ãƒ™ãƒ«ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O‚ğæ“¾
+        // ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰ã‚’å–å¾—
         final String name = this.getName();
 
-        // ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶‚ğæ“¾
+        // ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡ã‚’å–å¾—
         final UnresolvedStatementInfo<?> unresolvedLabeledStatement = this.getLabeledStatement();
         final StatementInfo labeledStatement = unresolvedLabeledStatement.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -74,35 +74,35 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O
+     * @return ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O‚ğƒZƒbƒg‚·‚é
-     * @param name ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O
+     * ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param name ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶‚ğƒZƒbƒg‚·‚é
+     * ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param labeledStatement ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶
+     * @param labeledStatement ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡
      */
     public void setLabeledStatement(final UnresolvedStatementInfo<?> labeledStatement) {
         this.labeledStatement = labeledStatement;
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶
+     * @return ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡
      */
     public UnresolvedStatementInfo<?> getLabeledStatement() {
         return this.labeledStatement;

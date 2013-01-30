@@ -2,21 +2,21 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * i’»î•ñ•ñ—pƒCƒ“ƒ^ƒtƒF[ƒX
+ * é€²æ—æƒ…å ±å ±å‘Šç”¨ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
  * @author kou-tngt
  *
  */
 public interface ProgressReporter {
     /**
-     * i’»î•ñ‘—M‚ÌI—¹‚ğ•ñ‚·‚éƒƒ\ƒbƒh
+     * é€²æ—æƒ…å ±é€ä¿¡ã®çµ‚äº†ã‚’å ±å‘Šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void reportProgressEnd();
 
     /**
-     * i’»î•ñ‚ğ•ñ‚·‚éƒƒ\ƒbƒh
-     * @param percentage i’»’li%j
-     * @throws IllegalArgumentException percentage‚ª0-100‚ÌŠÔ‚É“ü‚Á‚Ä‚È‚¢ê‡
-     * @throws IllegalStateException percentage‚ª‘O‰ñ•ñ‚µ‚½’l‚æ‚è‰º‚ª‚Á‚½ê‡
+     * é€²æ—æƒ…å ±ã‚’å ±å‘Šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param percentage é€²æ—å€¤ï¼ˆ%ï¼‰
+     * @throws IllegalArgumentException percentageãŒ0-100ã®é–“ã«å…¥ã£ã¦ãªã„å ´åˆ
+     * @throws IllegalStateException percentageãŒå‰å›å ±å‘Šã—ãŸå€¤ã‚ˆã‚Šä¸‹ãŒã£ãŸå ´åˆ
      */
     public void reportProgress(int percentage);
 }

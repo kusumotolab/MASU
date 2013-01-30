@@ -38,34 +38,34 @@ public class UnresolvedClassConstructorCallInfo extends
     }
     
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      */
     @Override
     public ClassConstructorCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌƒVƒOƒlƒ`ƒƒ‚ğæ“¾
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ã‚·ã‚°ãƒãƒãƒ£ã‚’å–å¾—
         final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        //@ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒ^‚ğ‰ğŒˆ
+        //ã€€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å‹ã‚’è§£æ±º
         final UnresolvedClassTypeInfo unresolvedReferenceType = this.getReferenceType();
         final ClassTypeInfo classType = (ClassTypeInfo) unresolvedReferenceType.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -91,7 +91,7 @@ public class UnresolvedClassConstructorCallInfo extends
             }
         }
 
-        // ‘ÎÛƒNƒ‰ƒX‚É’è‹`‚³‚ê‚½ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÅŠY“–‚·‚é‚à‚Ì‚ª‚È‚¢‚Ì‚ÅCŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚½ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğŒÄ‚Ño‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+        // å¯¾è±¡ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚ŒãŸã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§è©²å½“ã™ã‚‹ã‚‚ã®ãŒãªã„ã®ã§ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚ŒãŸã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ã“ã¨ã«ã™ã‚‹
         {
             ClassInfo classInfo = classType.getReferencedClass();
             if (classInfo instanceof TargetClassInfo) {

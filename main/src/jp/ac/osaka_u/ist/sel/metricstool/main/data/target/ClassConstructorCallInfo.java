@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•\‚·ƒNƒ‰ƒX
+ * ã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -11,15 +11,15 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo> {
 
     /**
-     * Œ^‚ğ—^‚¦‚ÄƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ‰Šú‰»
+     * å‹ã‚’ä¸ãˆã¦ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’åˆæœŸåŒ–
      * 
-     * @param classType ŒÄ‚Ño‚µ‚ÌŒ^
-     * @param callee ŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param classType å‘¼ã³å‡ºã—ã®å‹
+     * @param callee å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ 
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ClassConstructorCallInfo(final ClassTypeInfo classType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -29,9 +29,9 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
     }
 
     /**
-     * ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * @return ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      */
     @Override
     public String getText() {

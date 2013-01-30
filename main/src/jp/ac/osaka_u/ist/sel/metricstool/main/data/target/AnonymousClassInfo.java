@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * 無名インナークラスを表すクラス
+ * 辟｡蜷阪う繝ｳ繝翫�ｼ繧ｯ繝ｩ繧ｹ繧定｡ｨ縺吶け繝ｩ繧ｹ
  * 
  * @author higo
  *

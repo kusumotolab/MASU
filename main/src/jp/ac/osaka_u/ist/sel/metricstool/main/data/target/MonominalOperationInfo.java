@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * ˆê€‰‰Z‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * ä¸€é …æ¼”ç®—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -15,16 +15,16 @@ import java.util.Set;
 public final class MonominalOperationInfo extends ExpressionInfo {
 
     /**
-     * ˆê€‰‰Z‚ÌƒIƒyƒ‰ƒ“ƒhAˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä¸€é …æ¼”ç®—ã®ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã€ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param operand ƒIƒyƒ‰ƒ“ƒh
-     * @param operator ƒIƒyƒŒ[ƒ^[
-     * @param isPreposed ‰‰Zq‚ÌˆÊ’u
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param operand ã‚ªãƒšãƒ©ãƒ³ãƒ‰
+     * @param operator ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ãƒ¼
+     * @param isPreposed æ¼”ç®—å­ã®ä½ç½®
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public MonominalOperationInfo(final ExpressionInfo operand, final OPERATOR operator,
             final boolean isPreposed, final CallableUnitInfo ownerMethod, final int fromLine,
@@ -51,24 +51,24 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ƒIƒyƒ‰ƒ“ƒh‚ğ•Ô‚·
-     * @return ƒIƒyƒ‰ƒ“ƒh
+     * ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’è¿”ã™
+     * @return ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public final ExpressionInfo getOperand() {
         return this.operand;
     }
 
     /**
-     * ˆê€‰‰Z‚Ì‰‰Zq‚ğ•Ô‚·D
-     * @return ‰‰Zq
+     * ä¸€é …æ¼”ç®—ã®æ¼”ç®—å­ã‚’è¿”ã™ï¼
+     * @return æ¼”ç®—å­
      */
     public final OPERATOR getOperator() {
         return this.operator;
     }
 
     /**
-     * ‰‰Zq‚ª‘O’u‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©•Ô‚·
-     * @return ‰‰Zq‚ª‘O’u‚³‚ê‚Ä‚¢‚é‚È‚çtrue
+     * æ¼”ç®—å­ãŒå‰ç½®ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹è¿”ã™
+     * @return æ¼”ç®—å­ãŒå‰ç½®ã•ã‚Œã¦ã„ã‚‹ãªã‚‰true
      */
     public final boolean isPreposed() {
         return this.isPreposed;
@@ -80,9 +80,9 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -90,9 +90,9 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì’P€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®å˜é …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì’P€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®å˜é …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -117,9 +117,9 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -152,22 +152,22 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ƒIƒyƒ‰ƒ“ƒh‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final ExpressionInfo operand;
 
     /**
-     * ˆê€‰‰Z‚Ì‰‰Zq‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä¸€é …æ¼”ç®—ã®æ¼”ç®—å­ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final OPERATOR operator;
 
     /**
-     * ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä¸€é …æ¼”ç®—ã®çµæœã®å‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final TypeInfo type;
 
     /**
-     * ‰‰Zq‚ª‘O’u‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ¦‚·•Ï”
+     * æ¼”ç®—å­ãŒå‰ç½®ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’ç¤ºã™å¤‰æ•°
      */
     private final boolean isPreposed;
 }

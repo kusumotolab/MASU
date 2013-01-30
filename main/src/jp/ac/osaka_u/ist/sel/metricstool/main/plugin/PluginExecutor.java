@@ -9,17 +9,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
 
 /**
- * ÀÛ‚Éƒvƒ‰ƒOƒCƒ“‚ğÀs‚·‚éƒNƒ‰ƒX.
- * ƒCƒ“ƒXƒ^ƒ“ƒX‰»‚É‚Í“Á•ÊŒ ŒÀ‚ª•K—v.
+ * å®Ÿéš›ã«ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ã‚¯ãƒ©ã‚¹.
+ * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã«ã¯ç‰¹åˆ¥æ¨©é™ãŒå¿…è¦.
  * @author kou-tngt
  *
  */
 public class PluginExecutor implements Runnable {
     /**
-     * ˆø”‚Ìƒvƒ‰ƒOƒCƒ“‚ğÀs‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒNƒ‰ƒX‚©‚ç‚Ì‚İŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚é.
-     * @param plugin Às‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Î‚ê‚½ê‡
+     * å¼•æ•°ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã®ã¿å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã‚‹.
+     * @param plugin å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã°ã‚ŒãŸå ´åˆ
      */
     public PluginExecutor(final AbstractPlugin plugin) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -27,9 +27,9 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * Às‚ªI—¹‚µ‚½‚ÉCÀsƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚éƒŠƒXƒi‚ğ“o˜^‚·‚éƒƒ\ƒbƒh
-     * @param listener “o˜^‚·‚éƒŠƒXƒi
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * å®Ÿè¡ŒãŒçµ‚äº†ã—ãŸæ™‚ã«ï¼Œå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚’ç™»éŒ²ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param listener ç™»éŒ²ã™ã‚‹ãƒªã‚¹ãƒŠ
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void addExecutionEndListener(final ExecutionEndListener listener) {
         if (null == listener) {
@@ -40,7 +40,7 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * Àsƒƒ\ƒbƒh
+     * å®Ÿè¡Œãƒ¡ã‚½ãƒƒãƒ‰
      */
     public void execute() {
         this.plugin.executionWrapper();
@@ -48,16 +48,16 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğæ“¾‚·‚é
-     * @return ƒvƒ‰ƒOƒCƒ“‚ğæ“¾‚·‚é
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å–å¾—ã™ã‚‹
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å–å¾—ã™ã‚‹
      */
     public AbstractPlugin getPlugin() {
         return this.plugin;
     }
 
     /**
-     * •ÊƒXƒŒƒbƒh‚Æ‚µ‚Ä‹N“®‚³‚ê‚éê‡C‚ÌƒGƒ“ƒgƒŠƒƒ\ƒbƒh.
-     * {@link #execute()} ‚ğŒÄ‚Ño‚·‚Ì‚İ‚Å‚ ‚é.
+     * åˆ¥ã‚¹ãƒ¬ãƒƒãƒ‰ã¨ã—ã¦èµ·å‹•ã•ã‚Œã‚‹å ´åˆï¼Œã®ã‚¨ãƒ³ãƒˆãƒªãƒ¡ã‚½ãƒƒãƒ‰.
+     * {@link #execute()} ã‚’å‘¼ã³å‡ºã™ã®ã¿ã§ã‚ã‚‹.
      * @see java.lang.Runnable#run()
      */
     public void run() {
@@ -65,8 +65,8 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * Às‚ªI—¹‚µ‚½‚ÉCÀsƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚éƒŠƒXƒi‚ğíœ‚·‚éƒƒ\ƒbƒh
-     * @param listener íœ‚µ‚½‚¢ƒŠƒXƒi
+     * å®Ÿè¡ŒãŒçµ‚äº†ã—ãŸæ™‚ã«ï¼Œå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param listener å‰Šé™¤ã—ãŸã„ãƒªã‚¹ãƒŠ
      */
     public void removeExectionEndListener(final ExecutionEndListener listener) {
         if (null != listener) {
@@ -75,7 +75,7 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * ÀsI—¹‚ğƒŠƒXƒi‚É’Ê’m‚·‚é.
+     * å®Ÿè¡Œçµ‚äº†ã‚’ãƒªã‚¹ãƒŠã«é€šçŸ¥ã™ã‚‹.
      */
     private void fireExecutionEnd() {
         for (final ExecutionEndListener listener : this.listeners) {
@@ -84,12 +84,12 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * Às‚·‚éƒvƒ‰ƒOƒCƒ“
+     * å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
      */
     private final AbstractPlugin plugin;
 
     /**
-     * ƒŠƒXƒi‚ÌSet
+     * ãƒªã‚¹ãƒŠã®Set
      */
     private final Set<ExecutionEndListener> listeners = new WeakHashSet<ExecutionEndListener>();
 

@@ -5,7 +5,7 @@ import java.util.SortedSet;
 
 
 /**
- * switch ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * switch ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -14,12 +14,12 @@ import java.util.SortedSet;
 public final class SwitchBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * switch ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      *
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public SwitchBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -27,9 +27,9 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚Ìswitch•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®switchæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìswitch•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®switchæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {

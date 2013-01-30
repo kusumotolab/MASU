@@ -17,31 +17,31 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public interface Resolvable<T> {
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¢C‰ğŒˆÏ‚İƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+     * åå‰è§£æ±ºã‚’è¡Œã„ï¼Œè§£æ±ºæ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
      * 
-     * @param usingClass –¼‘O‰ğŒˆ‚ğs‚¤ƒGƒ“ƒeƒBƒeƒB‚ª‚ ‚éƒNƒ‰ƒX
-     * @param usingMethod –¼‘O‰ğŒˆ‚ğs‚¤ƒGƒ“ƒeƒBƒeƒB‚ª‚ ‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass åå‰è§£æ±ºã‚’è¡Œã†ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod åå‰è§£æ±ºã‚’è¡Œã†ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      * 
-     * @return ‰ğŒˆÏ‚İ‚ÌƒIƒuƒWƒFƒNƒg
+     * @return è§£æ±ºæ¸ˆã¿ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public abstract T resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager);
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğ•Ô‚·
+     * åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±ã‚’è¿”ã™
      * 
-     * @return –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ
+     * @return åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±
      */
     public abstract T getResolved();
 
     /**
-     * Šù‚É–¼‘O‰ğŒˆ‚³‚ê‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * æ—¢ã«åå‰è§£æ±ºã•ã‚ŒãŸã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åå‰è§£æ±ºã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     public abstract boolean alreadyResolved();
 }

@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * {@link AstToken}‚ÌƒAƒ_ƒvƒ^ƒNƒ‰ƒX.
- * AstToken‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é‘S‚Ä‚Ìƒƒ\ƒbƒh‚É‚Â‚¢‚ÄCfalse‚ğ•Ô‚·‚¾‚¯‚ÌƒfƒtƒHƒ‹ƒgÀ‘•‚ğ‚Â.
+ * {@link AstToken}ã®ã‚¢ãƒ€ãƒ—ã‚¿ã‚¯ãƒ©ã‚¹.
+ * AstTokenã§å®£è¨€ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ã¤ã„ã¦ï¼Œfalseã‚’è¿”ã™ã ã‘ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…ã‚’æŒã¤.
  * 
  * @author kou-tngt
  *
@@ -11,10 +11,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class AstTokenAdapter implements AstToken {
 
     /**
-     * w’è‚³‚ê‚½•¶š—ñî•ñ‚ğ‚Âƒg[ƒNƒ“‚ğì¬‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—æƒ…å ±ã‚’æŒã¤ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * @param text
-     * @throws NullPointerException text‚ªnull‚Ìê‡
-     * @throws IllegalArgumentException text‚ª‹ó•¶š—ñ‚Ìê‡
+     * @throws NullPointerException textãŒnullã®å ´åˆ
+     * @throws IllegalArgumentException textãŒç©ºæ–‡å­—åˆ—ã®å ´åˆ
      */
     public AstTokenAdapter(final String text) {
         if (null == text) {
@@ -405,7 +405,7 @@ public class AstTokenAdapter implements AstToken {
     }
 
     /**
-     * ‚±‚Ìƒg[ƒNƒ“‚Ì•¶š—ñ
+     * ã“ã®ãƒˆãƒ¼ã‚¯ãƒ³ã®æ–‡å­—åˆ—
      */
     private final String text;
 

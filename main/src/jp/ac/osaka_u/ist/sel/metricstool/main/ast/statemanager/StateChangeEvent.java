@@ -5,16 +5,16 @@ import java.util.EventObject;
 
 
 /**
- * ó‘Ô•Ï‰»‚ğ•\‚·ƒCƒxƒ“ƒg
+ * çŠ¶æ…‹å¤‰åŒ–ã‚’è¡¨ã™ã‚¤ãƒ™ãƒ³ãƒˆ
  * 
  * @author kou-tngt
  *
- * @param <T>@ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚é—v‘f‚ÌŒ^
+ * @param <T>ã€€çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã‚‹è¦ç´ ã®å‹
  */
 public class StateChangeEvent<T> extends EventObject {
 
     /**
-     * ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•\‚·ƒ}[ƒJ[ƒCƒ“ƒ^ƒtƒF[ƒX
+     * çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¡¨ã™ãƒãƒ¼ã‚«ãƒ¼ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
      * 
      * @author kou-tngt
      *
@@ -23,12 +23,12 @@ public class StateChangeEvent<T> extends EventObject {
     }
 
     /**
-     * ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒ\[ƒXCó‘Ô•Ï‰»‚Ìí—ŞCó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½—v‘f‚ğw’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸã‚½ãƒ¼ã‚¹ï¼ŒçŠ¶æ…‹å¤‰åŒ–ã®ç¨®é¡ï¼ŒçŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸè¦ç´ ã‚’æŒ‡å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * 
-     * @param source ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒ\[ƒX
-     * @param stateChangeType ó‘Ô•Ï‰»‚Ìí—Ş
-     * @param trigger ó‘Ô•Ï‰»‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½—v‘f
-     * @throws NullPointerException source, stateChangeType, trigger ‚Ì‚¢‚¸‚ê‚©‚ªnull‚¾‚Á‚½ê‡
+     * @param source çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸã‚½ãƒ¼ã‚¹
+     * @param stateChangeType çŠ¶æ…‹å¤‰åŒ–ã®ç¨®é¡
+     * @param trigger çŠ¶æ…‹å¤‰åŒ–ã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸè¦ç´ 
+     * @throws NullPointerException source, stateChangeType, trigger ã®ã„ãšã‚Œã‹ãŒnullã ã£ãŸå ´åˆ
      */
     public StateChangeEvent(final StateManager source, final StateChangeEventType stateChangeType, final T trigger) {
         super(source);
@@ -49,8 +49,8 @@ public class StateChangeEvent<T> extends EventObject {
     }
 
     /**
-     * ƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒ\[ƒX‚ğæ“¾‚·‚é
-     * @return ƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒ\[ƒX
+     * ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸã‚½ãƒ¼ã‚¹ã‚’å–å¾—ã™ã‚‹
+     * @return ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸã‚½ãƒ¼ã‚¹
      * @see java.util.EventObject#getSource()
      */
     @Override
@@ -59,33 +59,33 @@ public class StateChangeEvent<T> extends EventObject {
     }
 
     /**
-     * ƒCƒxƒ“ƒg‚Ìí—Ş‚ğæ“¾‚·‚é
-     * @return@ƒCƒxƒ“ƒg‚Ìí—Ş
+     * ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’å–å¾—ã™ã‚‹
+     * @returnã€€ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     public StateChangeEventType getType() {
         return this.stateChangeType;
     }
 
     /**
-     * ƒCƒxƒ“ƒg‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½—v‘f‚ğæ“¾‚·‚é
-     * @return@ƒCƒxƒ“ƒg‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½—v‘f
+     * ã‚¤ãƒ™ãƒ³ãƒˆã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸè¦ç´ ã‚’å–å¾—ã™ã‚‹
+     * @returnã€€ã‚¤ãƒ™ãƒ³ãƒˆã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸè¦ç´ 
      */
     public T getTrigger() {
         return this.trigger;
     }
 
     /**
-     * ƒCƒxƒ“ƒg‚ğ”­s‚µ‚½ƒ\[ƒX
+     * ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã—ãŸã‚½ãƒ¼ã‚¹
      */
     private final StateManager source;
 
     /**
-     * ƒCƒxƒ“ƒg‚Ìí—Ş
+     * ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
      */
     private final StateChangeEventType stateChangeType;
 
     /**
-     * ƒCƒxƒ“ƒg‚ÌƒgƒŠƒK‚Æ‚È‚Á‚½—v‘f
+     * ã‚¤ãƒ™ãƒ³ãƒˆã®ãƒˆãƒªã‚¬ã¨ãªã£ãŸè¦ç´ 
      */
     private final T trigger;
 

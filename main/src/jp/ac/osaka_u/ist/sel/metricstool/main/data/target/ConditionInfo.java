@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * if•¶‚âfor•¶‚ÌğŒ‚ğ•\‚·ƒNƒ‰ƒX
+ * ifæ–‡ã‚„foræ–‡ã®æ¡ä»¶ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *

@@ -13,19 +13,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒNƒ‰ƒX‚Ìî•ñ‚ğ•Û—L‚·‚éƒNƒ‰ƒXDˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * ã‚¯ãƒ©ã‚¹ã®æƒ…å ±ã‚’ä¿æœ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * <ul>
- * <li>ƒNƒ‰ƒX–¼</li>
- * <li>Cüq</li>
- * <li>–¼‘O‹óŠÔiƒpƒbƒP[ƒW–¼j</li>
- * <li>s”</li>
- * <li>Œp³‚µ‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>Œp³‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>QÆ‚µ‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>“à•”ƒNƒ‰ƒX</li>
- * <li>‚±‚ÌƒNƒ‰ƒX“à‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh</li>
- * <li>‚±‚ÌƒNƒ‰ƒX“à‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh</li>
+ * <li>ã‚¯ãƒ©ã‚¹å</li>
+ * <li>ä¿®é£¾å­</li>
+ * <li>åå‰ç©ºé–“ï¼ˆãƒ‘ãƒƒã‚±ãƒ¼ã‚¸åï¼‰</li>
+ * <li>è¡Œæ•°</li>
+ * <li>ç¶™æ‰¿ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>ç¶™æ‰¿ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>å‚ç…§ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>å†…éƒ¨ã‚¯ãƒ©ã‚¹</li>
+ * <li>ã“ã®ã‚¯ãƒ©ã‚¹å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰</li>
+ * <li>ã“ã®ã‚¯ãƒ©ã‚¹å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰</li>
  * </ul>
  * 
  * @author higo
@@ -35,10 +35,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class TargetClassInfo extends ClassInfo {
 
     /**
-     * w’è‚³‚ê‚½ƒNƒ‰ƒX‚ÉŠÜ‚Ü‚ê‚é‘S‚Ä‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ•Ô‚·
+     * æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã«å«ã¾ã‚Œã‚‹å…¨ã¦ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @param classInfo w’è‚·‚éƒNƒ‰ƒX
-     * @return@w’è‚³‚ê‚½ƒNƒ‰ƒX‚ÉŠÜ‚Ü‚ê‚é‘S‚Ä‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX
+     * @param classInfo æŒ‡å®šã™ã‚‹ã‚¯ãƒ©ã‚¹
+     * @returnã€€æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã«å«ã¾ã‚Œã‚‹å…¨ã¦ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹
      */
     static public SortedSet<ClassInfo> getAllInnerClasses(final ClassInfo classInfo) {
 
@@ -57,12 +57,12 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * w’è‚µ‚½ƒNƒ‰ƒX‚É‚¨‚¢‚ÄƒAƒNƒZƒX‰Â”\‚ÈƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğ•Ô‚·D
-     * ƒAƒNƒZƒX‰Â”\‚ÈƒNƒ‰ƒX‚Æ‚ÍCw’è‚³‚ê‚½ƒNƒ‰ƒXC‚à‚µ‚­‚Í‚»‚ÌeƒNƒ‰ƒX“à‚É’è‹`‚³‚ê‚½ƒNƒ‰ƒX‚ ‚éD
-     * ˆê“xÅŠO•”ƒNƒ‰ƒX‚Ü‚Å‚½‚Ç‚Á‚ÄC‚»‚Ì“à•”ƒNƒ‰ƒXCeƒNƒ‰ƒX‚ğƒ`ƒFƒbƒN‚·‚é.
+     * æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ãªã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’è¿”ã™ï¼
+     * ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ãªã‚¯ãƒ©ã‚¹ã¨ã¯ï¼ŒæŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ï¼Œã‚‚ã—ãã¯ãã®è¦ªã‚¯ãƒ©ã‚¹å†…ã«å®šç¾©ã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã‚ã‚‹ï¼
+     * ä¸€åº¦æœ€å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã¾ã§ãŸã©ã£ã¦ï¼Œãã®å†…éƒ¨ã‚¯ãƒ©ã‚¹ï¼Œè¦ªã‚¯ãƒ©ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹.
      * 
-     * @param classInfo w’è‚³‚ê‚½ƒNƒ‰ƒX
-     * @return w’è‚µ‚½ƒNƒ‰ƒX‚É‚¨‚¢‚ÄƒAƒNƒZƒX‰Â”\‚ÈƒCƒ“ƒi[ƒNƒ‰ƒXˆê——‚ğ•Ô‚·D
+     * @param classInfo æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹
+     * @return æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹ã«ãŠã„ã¦ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ãªã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ä¸€è¦§ã‚’è¿”ã™ï¼
      */
     static public SortedSet<ClassInfo> getAccessibleInnerClasses(final ClassInfo classInfo) {
 
@@ -116,17 +116,17 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * –¼‘O‹óŠÔ–¼CƒNƒ‰ƒX–¼‚ğ—^‚¦‚ÄƒNƒ‰ƒXî•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * åå‰ç©ºé–“åï¼Œã‚¯ãƒ©ã‚¹åã‚’ä¸ãˆã¦ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param namespace –¼‘O‹óŠÔ–¼
-     * @param className ƒNƒ‰ƒX–¼
-     * @param isInterface ƒCƒ“ƒ^[ƒtƒF[ƒX‚©‚Ç‚¤‚©
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param namespace åå‰ç©ºé–“å
+     * @param className ã‚¯ãƒ©ã‚¹å
+     * @param isInterface ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‹ã©ã†ã‹
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final boolean isInterface, final boolean isEnum,
@@ -154,16 +154,16 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * Š®‘SŒÀ’è–¼‚ğ—^‚¦‚ÄCƒNƒ‰ƒXî•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å®Œå…¨é™å®šåã‚’ä¸ãˆã¦ï¼Œã‚¯ãƒ©ã‚¹æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param fullQualifiedName Š®‘SŒÀ’è–¼
-     * @param isInterface ƒCƒ“ƒ^ƒtƒF[ƒX‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param fileInfo ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param fullQualifiedName å®Œå…¨é™å®šå
+     * @param isInterface ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param fileInfo ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final boolean isInterface, final boolean isEnum, final FileInfo fileInfo,
@@ -189,9 +189,9 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU[‚ğ’Ç‰Á‚·‚é
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ãƒ¼ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param instanceInitializer ’Ç‰Á‚³‚ê‚éƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU[
+     * @param instanceInitializer è¿½åŠ ã•ã‚Œã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ãƒ¼
      */
     public final void addInstanceInitializer(final InstanceInitializerInfo instanceInitializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -203,9 +203,9 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU[‚ğ’Ç‰Á‚·‚é
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ãƒ¼ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param staticInitializer ’Ç‰Á‚³‚ê‚éƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU[
+     * @param staticInitializer è¿½åŠ ã•ã‚Œã‚‹ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ãƒ¼
      */
     public final void addStaticInitializer(final StaticInitializerInfo staticInitializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -226,58 +226,58 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌˆÃ–Ù‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Ô‚·
-     * @return ˆÃ–Ù‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®æš—é»™ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿”ã™
+     * @return æš—é»™ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public InstanceInitializerInfo getImplicitInstanceInitializer() {
         return this.implicitInstanceInitializer;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Ô‚·
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒUˆê——
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’è¿”ã™
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§
      */
     public SortedSet<InstanceInitializerInfo> getInstanceInitializers() {
         return this.instanceInitializers;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌˆÃ–Ù‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Ô‚·
-     * @return ˆÃ–Ù‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®æš—é»™ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’è¿”ã™
+     * @return æš—é»™ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶
      */
     public StaticInitializerInfo getImplicitStaticInitializer() {
         return this.implicitStaticInitializer;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Ô‚·
-     * @return ƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒUˆê——
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’è¿”ã™
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§
      */
     public SortedSet<StaticInitializerInfo> getStaticInitializers() {
         return this.staticInitializers;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Set
      */
     @Override
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
 
         final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
 
-        // ƒƒ\ƒbƒh“à‚Åg—p‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // ãƒ¡ã‚½ãƒƒãƒ‰å†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             variableUsages.addAll(definedMethod.getVariableUsages());
         }
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^“à‚Åg—p‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             variableUsages.addAll(definedConstructor.getVariableUsages());
         }
 
-        // “à•”ƒNƒ‰ƒX‚Åg—p‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final InnerClassInfo innerClass : this.getInnerClasses()) {
             variableUsages.addAll(((ClassInfo) innerClass).getVariableUsages());
         }
@@ -286,29 +286,29 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Set
      */
     @Override
     public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
 
         final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
 
-        // ’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ’Ç‰Á
+        // å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’è¿½åŠ 
         definedVariables.addAll(this.getDefinedFields());
 
-        // ƒƒ\ƒbƒh“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // ãƒ¡ã‚½ãƒƒãƒ‰å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             definedVariables.addAll(definedMethod.getDefinedVariables());
         }
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             definedVariables.addAll(definedConstructor.getDefinedVariables());
         }
 
-        // “à•”ƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ğ’Ç‰Á
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿½åŠ 
         for (final InnerClassInfo innerClass : this.getInnerClasses()) {
             definedVariables.addAll(((ClassInfo) innerClass).getDefinedVariables());
         }
@@ -317,26 +317,26 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX“à‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹å†…ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX“à‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹å†…ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public final Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
 
         final Set<CallInfo<? extends CallableUnitInfo>> calls = new HashSet<CallInfo<? extends CallableUnitInfo>>();
 
-        // ƒƒ\ƒbƒh“à‚Å‚ÌŒÄ‚Ño‚µ‚ğ’Ç‰Á
+        // ãƒ¡ã‚½ãƒƒãƒ‰å†…ã§ã®å‘¼ã³å‡ºã—ã‚’è¿½åŠ 
         for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             calls.addAll(definedMethod.getCalls());
         }
 
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^“à‚Å‚ÌŒÄ‚Ño‚µ‚ğ’Ç‰Á
+        // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å†…ã§ã®å‘¼ã³å‡ºã—ã‚’è¿½åŠ 
         for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             calls.addAll(definedConstructor.getCalls());
         }
 
-        // “à•”ƒNƒ‰ƒX‚Å‚ÌŒÄ‚Ño‚µ‚ğ’Ç‰Á
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã§ã®å‘¼ã³å‡ºã—ã‚’è¿½åŠ 
         for (final InnerClassInfo innerClass : this.getInnerClasses()) {
             calls.addAll(((ClassInfo) innerClass).getCalls());
         }
@@ -345,7 +345,7 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¯‚é—˜—p‰Â”\‚ÈŒ^ƒpƒ‰ƒ[ƒ^‚Æ‚»‚ÌÀÛ‚ÌŒ^‚ğ“o˜^‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã‘ã‚‹åˆ©ç”¨å¯èƒ½ãªå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ãã®å®Ÿéš›ã®å‹ã‚’ç™»éŒ²ã™ã‚‹
      * 
      * @param map
      */
@@ -355,7 +355,7 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚É‚¨‚¯‚é—˜—p‰Â”\‚ÈŒ^ƒpƒ‰ƒ[ƒ^‚Æ‚»‚ÌÀÛ‚ÌŒ^‚ğ“o˜^‚·‚é
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã«ãŠã‘ã‚‹åˆ©ç”¨å¯èƒ½ãªå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ãã®å®Ÿéš›ã®å‹ã‚’ç™»éŒ²ã™ã‚‹
      * 
      * @param map
      */
@@ -378,43 +378,43 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ğ•Ô‚·
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
      */
     public final FileInfo getOwnerFile() {
         return this.ownerFile;
     }
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<StaticInitializerInfo> staticInitializers;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒUˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<InstanceInitializerInfo> instanceInitializers;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌˆÃ–Ù‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®æš—é»™ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final InstanceInitializerInfo implicitInstanceInitializer;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ÌˆÃ–Ù‚ÌƒXƒ^ƒeƒBƒbƒNƒCƒjƒVƒƒƒ‰ƒCƒU‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã®æš—é»™ã®ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final StaticInitializerInfo implicitStaticInitializer;
 
     private final SortedSet<ImportStatementInfo<?>> importStatements;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ğéŒ¾‚µ‚Ä‚¢‚éƒtƒ@ƒCƒ‹î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final FileInfo ownerFile;
 
     /**
-     * ‚±‚ÌƒNƒ‰ƒX‚Å—˜—p‚µ‚Ä‚¢‚éŒ^ƒpƒ‰ƒ[ƒ^‚ÌÀÛ‚ÌŒ^î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ã‚¯ãƒ©ã‚¹ã§åˆ©ç”¨ã—ã¦ã„ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å®Ÿéš›ã®å‹æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Map<TypeParameterInfo, TypeInfo> availableTypeParameters;
 }

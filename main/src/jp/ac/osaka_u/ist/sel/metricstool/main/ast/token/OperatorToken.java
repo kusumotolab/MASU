@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 
 
 /**
- * ‰‰Zq‚ğ•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX
+ * æ¼”ç®—å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -13,98 +13,98 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 public class OperatorToken extends AstTokenAdapter {
 
     /**
-     * ƒLƒƒƒXƒg‚Í‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚­ãƒ£ã‚¹ãƒˆã¯æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken CAST = new OperatorToken(null, "CAST", 2, false, false,
             new int[] { 0 });
 
     /**
-     * ƒCƒ“ƒNƒŠƒƒ“ƒg‰‰Zq‚ÆƒfƒNƒŠƒƒ“ƒg‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆæ¼”ç®—å­ã¨ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆæ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken INCL_AND_DECL = new OperatorToken(null, "INCLEMENT", 1, true,
             true, new int[] { 0 });
 
     /**
-     * ‘ã“ü‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ä»£å…¥æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken ASSIGNMENT = new OperatorToken(OPERATOR_TYPE.ASSIGNMENT,
             "ASSIMENT", 2, true, false, new int[] { 0 });
 
     /**
-     * •¡‡‘ã“ü‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * è¤‡åˆä»£å…¥æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken(
             OPERATOR_TYPE.ASSIGNMENT, "COMPOUND_ASSIGNMENT", 2, true, true, new int[] { 0 });
 
     /**
-     * ’P€Zp‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * å˜é …ç®—è¡“æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken ARITHMETHIC_UNARY = new OperatorToken(
             OPERATOR_TYPE.ARITHMETIC, "ARITHMETIC_UNARY", 1, false, true, new int[] { 0 });
 
     /**
-     * “ñ€Zp‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * äºŒé …ç®—è¡“æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken ARITHMETICH_BINOMIAL = new OperatorToken(
             OPERATOR_TYPE.ARITHMETIC, "ARITHMETIC_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
-     * ’P€˜_—‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * å˜é …è«–ç†æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken LOGICAL_UNARY = new OperatorToken(OPERATOR_TYPE.LOGICAL,
             "NOT_UNARY", 1, false, true, new int[] { 0 });
 
     /**
-     * “ñ€˜_—‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * äºŒé …è«–ç†æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken LOGICAL_BINOMIAL = new OperatorToken(OPERATOR_TYPE.LOGICAL,
             "LOGICAL_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
-     * ’P€ƒrƒbƒg‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * å˜é …ãƒ“ãƒƒãƒˆæ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken BIT_UNARY = new OperatorToken(OPERATOR_TYPE.BITS,
             "BIT_UNARY", 1, false, true, new int[] { 0 });
 
     /**
-     * “ñ€ƒrƒbƒg‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * äºŒé …ãƒ“ãƒƒãƒˆæ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken BIT_BINOMIAL = new OperatorToken(OPERATOR_TYPE.BITS,
             "BIT_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
-     * “ñ€ƒVƒtƒg‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * äºŒé …ã‚·ãƒ•ãƒˆæ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken SHIFT = new OperatorToken(OPERATOR_TYPE.SHIFT, "SHIFT", 2,
             false, true, new int[] { 0, 1 });
 
     /**
-     * “ñ€”äŠr‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * äºŒé …æ¯”è¼ƒæ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken COMPARATIVE = new OperatorToken(OPERATOR_TYPE.COMPARATIVE,
             "COMPARATIVE", 2, false, true, new int[] {});
 
     /**
-     * O€‰‰Zq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ä¸‰é …æ¼”ç®—å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken TERNARY = new OperatorToken(null, "TERNARY", 3, false, true,
             new int[] { 1, 2 });
 
     /**
-     * ”z—ñ‹Lqq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * é…åˆ—è¨˜è¿°å­ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final OperatorToken ARRAY = new OperatorToken(null, "ARRAY", 2, false, true,
             new int[] {});
 
     /**
-     * ‰‰Zq‚Ì•¶š—ñCˆµ‚¤€‚Ì”C¶•Ó’l‚Ö‚ÌQÆ‚Æ‘ã“ü‚ğs‚¤‚©‚Ç‚¤‚©C‰‰ZŒ‹‰Ê‚ÌŒ^‚ğw’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * æ¼”ç®—å­ã®æ–‡å­—åˆ—ï¼Œæ‰±ã†é …ã®æ•°ï¼Œå·¦è¾ºå€¤ã¸ã®å‚ç…§ã¨ä»£å…¥ã‚’è¡Œã†ã‹ã©ã†ã‹ï¼Œæ¼”ç®—çµæœã®å‹ã‚’æŒ‡å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * 
-     * @param text ‰‰Zq‚Ì•¶š—ñ
-     * @param termCount ˆµ‚¤€‚Ì”
-     * @param leftIsAssignmentee ¶•Ó’l‚Ö‚Ì‘ã“ü‚ª‚ ‚éê‡‚Ítrue
-     * @param leftIsReferencee ¶•Ó’l‚Ö‚Ì‚ª‚ ‚éê‡‚Ítrue
-     * @param specifiedResultType ‰‰ZŒ‹‰Ê‚ÌŒ^‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡‚Í‚»‚ÌŒ^‚ğCŒˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull‚ğw’è‚·‚é
-     * @throws IllegalArgumentException termCount‚ª0ˆÈ‰º‚Ìê‡
+     * @param text æ¼”ç®—å­ã®æ–‡å­—åˆ—
+     * @param termCount æ‰±ã†é …ã®æ•°
+     * @param leftIsAssignmentee å·¦è¾ºå€¤ã¸ã®ä»£å…¥ãŒã‚ã‚‹å ´åˆã¯true
+     * @param leftIsReferencee å·¦è¾ºå€¤ã¸ã®ãŒã‚ã‚‹å ´åˆã¯true
+     * @param specifiedResultType æ¼”ç®—çµæœã®å‹ãŒæ±ºã¾ã£ã¦ã„ã‚‹å ´åˆã¯ãã®å‹ã‚’ï¼Œæ±ºã¾ã£ã¦ã„ãªã„å ´åˆã¯nullã‚’æŒ‡å®šã™ã‚‹
+     * @throws IllegalArgumentException termCountãŒ0ä»¥ä¸‹ã®å ´åˆ
      */
     public OperatorToken(final OPERATOR_TYPE operator, final String text, final int termCount,
             final boolean leftIsAssignmentee, final boolean leftIsReferencee,
@@ -123,16 +123,16 @@ public class OperatorToken extends AstTokenAdapter {
     }
 
     /**
-     * ‚±‚Ì‰‰Zq‚ªæ‚èˆµ‚¤€‚Ì”‚ğ•Ô‚·.
-     * @return ‚±‚Ì‰‰Zq‚ªæ‚èˆµ‚¤€‚Ì”
+     * ã“ã®æ¼”ç®—å­ãŒå–ã‚Šæ‰±ã†é …ã®æ•°ã‚’è¿”ã™.
+     * @return ã“ã®æ¼”ç®—å­ãŒå–ã‚Šæ‰±ã†é …ã®æ•°
      */
     public int getTermCount() {
         return this.termCount;
     }
 
     /**
-     * ¶•Ó’l‚Ö‚Ì‘ã“ü‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * @return@¶•Ó’l‚Ö‚Ì‘ã“ü‚ª‚ ‚éê‡‚Ítrue
+     * å·¦è¾ºå€¤ã¸ã®ä»£å…¥ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * @returnã€€å·¦è¾ºå€¤ã¸ã®ä»£å…¥ãŒã‚ã‚‹å ´åˆã¯true
      */
     @Override
     public boolean isAssignmentOperator() {
@@ -140,9 +140,9 @@ public class OperatorToken extends AstTokenAdapter {
     }
 
     /**
-     * ‰‰Zq‚ğ•\‚·ƒg[ƒNƒ“‚©‚Ç‚¤‚©‚ğ•Ô‚·.
+     * æ¼”ç®—å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã©ã†ã‹ã‚’è¿”ã™.
      * 
-     * @return@true
+     * @returnã€€true
      */
     @Override
     public boolean isOperator() {
@@ -150,53 +150,53 @@ public class OperatorToken extends AstTokenAdapter {
     }
 
     /**
-     * ¶•Ó’l‚ªQÆ‚Æ‚µ‚Ä—˜—p‚³‚ê‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * @return@¶•Ó’l‚ªQÆ‚Æ‚µ‚Ä—˜—p‚³‚ê‚éê‡‚Ítrue
+     * å·¦è¾ºå€¤ãŒå‚ç…§ã¨ã—ã¦åˆ©ç”¨ã•ã‚Œã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * @returnã€€å·¦è¾ºå€¤ãŒå‚ç…§ã¨ã—ã¦åˆ©ç”¨ã•ã‚Œã‚‹å ´åˆã¯true
      */
     public boolean isLeftTermIsReferencee() {
         return this.leftIsReferencee;
     }
 
     /**
-     * –¼‘O‰ğŒˆ•”‚ª—˜—p‚·‚éEnum OPERATOR‚Ì—v‘f‚ğ•Ô‚·D
-     * –¼‘O‰ğŒˆ•”‚ÉŒ^‰ğŒˆ‚ğˆÏ÷‚µ‚È‚¢í—Ş‚Ì‰‰Zq‚Ìê‡‚Ínull‚ğ•Ô‚·D
-     * @return –¼‘O‰ğŒˆ•”‚ª—˜—p‚·‚éEnum OPERATOR‚Ì—v‘fC–¼‘O‰ğŒˆ•”‚ÉŒ^‰ğŒˆ‚ğˆÏ÷‚µ‚È‚¢í—Ş‚Ì‰‰Zq‚Ìê‡‚Ínull
+     * åå‰è§£æ±ºéƒ¨ãŒåˆ©ç”¨ã™ã‚‹Enum OPERATORã®è¦ç´ ã‚’è¿”ã™ï¼
+     * åå‰è§£æ±ºéƒ¨ã«å‹è§£æ±ºã‚’å§”è­²ã—ãªã„ç¨®é¡ã®æ¼”ç®—å­ã®å ´åˆã¯nullã‚’è¿”ã™ï¼
+     * @return åå‰è§£æ±ºéƒ¨ãŒåˆ©ç”¨ã™ã‚‹Enum OPERATORã®è¦ç´ ï¼Œåå‰è§£æ±ºéƒ¨ã«å‹è§£æ±ºã‚’å§”è­²ã—ãªã„ç¨®é¡ã®æ¼”ç®—å­ã®å ´åˆã¯null
      */
     public OPERATOR_TYPE getOperator() {
         return this.operator;
     }
 
     /**
-     * ‰‰ZŒ‹‰Ê‚ÌŒ^‚ğŒˆ’è‚³‚ê‚éÛ‚Él—¶‚³‚ê‚é€‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”z—ñ‚ğ•Ô‚·.
-     * €‚ÌŒ^‚Æ‚ÍŠÖŒW‚È‚­Œ^‚ªŒˆ’è‚³‚ê‚éê‡‚Í‹ó‚Ì”z—ñ‚ğ•Ô‚·.
-     * @return ‰‰ZŒ‹‰Ê‚ÌŒ^‚ğŒˆ’è‚³‚ê‚éÛ‚Él—¶‚³‚ê‚é€‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”z—ñ
+     * æ¼”ç®—çµæœã®å‹ã‚’æ±ºå®šã•ã‚Œã‚‹éš›ã«è€ƒæ…®ã•ã‚Œã‚‹é …ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é…åˆ—ã‚’è¿”ã™.
+     * é …ã®å‹ã¨ã¯é–¢ä¿‚ãªãå‹ãŒæ±ºå®šã•ã‚Œã‚‹å ´åˆã¯ç©ºã®é…åˆ—ã‚’è¿”ã™.
+     * @return æ¼”ç®—çµæœã®å‹ã‚’æ±ºå®šã•ã‚Œã‚‹éš›ã«è€ƒæ…®ã•ã‚Œã‚‹é …ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é…åˆ—
      */
     public int[] getTypeSpecifiedTermIndexes() {
         return this.typeSpecifiedTermIndexes;
     }
 
     /**
-     * ¶•Ó’l‚Ö‚Ì‘ã“ü‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•\‚·
+     * å·¦è¾ºå€¤ã¸ã®ä»£å…¥ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean leftIsAssignmentee;
 
     /**
-     * ¶•Ó’l‚ªQÆ‚Æ‚µ‚Ä—˜—p‚³‚ê‚é‚©‚Ç‚¤‚©‚ğ•\‚·
+     * å·¦è¾ºå€¤ãŒå‚ç…§ã¨ã—ã¦åˆ©ç”¨ã•ã‚Œã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean leftIsReferencee;
 
     /**
-     * ‚±‚Ì‰‰Zq‚ªæ‚èˆµ‚¤€‚Ì”
+     * ã“ã®æ¼”ç®—å­ãŒå–ã‚Šæ‰±ã†é …ã®æ•°
      */
     private final int termCount;
 
     /**
-     * ‰‰Zq
+     * æ¼”ç®—å­
      */
     private final OPERATOR_TYPE operator;
 
     /**
-     * ‰‰ZŒ‹‰Ê‚ÌŒ^‚ğŒˆ’è‚³‚ê‚éÛ‚Él—¶‚³‚ê‚é€‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”z—ñ
+     * æ¼”ç®—çµæœã®å‹ã‚’æ±ºå®šã•ã‚Œã‚‹éš›ã«è€ƒæ…®ã•ã‚Œã‚‹é …ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é…åˆ—
      */
     private final int[] typeSpecifiedTermIndexes;
 }

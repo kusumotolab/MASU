@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * switch •¶‚Ì case ƒGƒ“ƒgƒŠ‚ğ•\‚·ƒNƒ‰ƒX
+ * switch æ–‡ã® case ã‚¨ãƒ³ãƒˆãƒªã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -17,21 +17,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class CaseEntryInfo extends UnitInfo implements StatementInfo {
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä case ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ case ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–
      * 
-     * @param ownerSwitchBlock ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN
-     * @param label ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSwitchBlock ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
+     * @param label ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final ExpressionInfo label,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerSwitchBlock) || (null == label)) {
             throw new IllegalArgumentException();
@@ -44,21 +44,21 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä case ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ case ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–
      * 
-     * @param ownerSwitchBlock ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN
-     * @param breakStatement ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª break •¶‚ğ‚Â‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSwitchBlock ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
+     * @param breakStatement ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒ break æ–‡ã‚’æŒã¤ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     protected CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException();
@@ -69,10 +69,10 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì•¶icase ƒGƒ“ƒgƒŠj‚Å—p‚¢‚ç‚ê‚Ä‚¢‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
-     * ‚Ç‚Ì•Ï”‚à—p‚¢‚ç‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅC‹ó‚Ìset‚ª•Ô‚³‚ê‚é
+     * ã“ã®æ–‡ï¼ˆcase ã‚¨ãƒ³ãƒˆãƒªï¼‰ã§ç”¨ã„ã‚‰ã‚Œã¦ã„ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
+     * ã©ã®å¤‰æ•°ã‚‚ç”¨ã„ã‚‰ã‚Œã¦ã„ãªã„ã®ã§ï¼Œç©ºã®setãŒè¿”ã•ã‚Œã‚‹
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -80,9 +80,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * •Ï”’è‹`‚ÌSet‚ğ•Ô‚·
+     * å¤‰æ•°å®šç¾©ã®Setã‚’è¿”ã™
      * 
-     * @return •Ï”’è‹`‚ÌSet‚ğ•Ô‚·
+     * @return å¤‰æ•°å®šç¾©ã®Setã‚’è¿”ã™
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -90,9 +90,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -100,9 +100,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚ÌcaseƒGƒ“ƒgƒŠ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®caseã‚¨ãƒ³ãƒˆãƒªã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌcaseƒGƒ“ƒgƒŠ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®caseã‚¨ãƒ³ãƒˆãƒªã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -120,9 +120,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN‚ğ•Ô‚·
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN
+     * @return ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯
      */
     public final SwitchBlockInfo getOwnerSwitchBlock() {
         return this.ownerSwitchBlock;
@@ -139,16 +139,16 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ì‚Ìƒ‰ƒxƒ‹‚ğ•Ô‚·
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ã®ãƒ©ãƒ™ãƒ«ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹
+     * @return ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«
      */
     public final ExpressionInfo getLabel() {
         return this.label;
     }
 
     /**
-     * caseƒGƒ“ƒgƒŠ‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * caseã‚¨ãƒ³ãƒˆãƒªã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     public final int hashCode() {
@@ -157,9 +157,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -183,12 +183,12 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚ª‘®‚·‚é switch ƒuƒƒbƒN‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªãŒå±ã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ìƒ‰ƒxƒ‹‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã® case ã‚¨ãƒ³ãƒˆãƒªã®ãƒ©ãƒ™ãƒ«ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private ExpressionInfo label;
 }

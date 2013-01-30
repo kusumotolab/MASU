@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 
 /**
- * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -17,7 +17,7 @@ import java.util.TreeSet;
 public final class ExternalConstructorInfo extends ConstructorInfo {
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      */
     public ExternalConstructorInfo(final Set<ModifierInfo> modifiers) {
         super(modifiers, getDummyPosition(), getDummyPosition(), getDummyPosition(),
@@ -25,7 +25,7 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
     }
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      */
     public ExternalConstructorInfo() {
         super(new HashSet<ModifierInfo>(), getDummyPosition(), getDummyPosition(),
@@ -33,7 +33,7 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
     }
 
     /**
-     * ‹ó‚ÌSortedSet‚ğ•Ô‚·
+     * ç©ºã®SortedSetã‚’è¿”ã™
      */
     @Override
     public SortedSet<StatementInfo> getStatements() {

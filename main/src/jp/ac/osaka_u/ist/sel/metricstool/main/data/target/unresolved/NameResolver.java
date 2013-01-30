@@ -30,7 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 
 
 /**
- * –¢‰ğŒˆŒ^î•ñ‚ğ‰ğŒˆ‚·‚é‚½‚ß‚Ìƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX
+ * æœªè§£æ±ºå‹æƒ…å ±ã‚’è§£æ±ºã™ã‚‹ãŸã‚ã®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -38,11 +38,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 public final class NameResolver {
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚Å‚ ‚èC‚©‚ÂŠO•”ƒNƒ‰ƒX(ExternalClassInfo)‚Å‚ ‚é‚à‚Ì‚ğ•Ô‚·D ƒNƒ‰ƒXŠK‘w“I‚ÉÅ‚à‰ºˆÊ‚ÉˆÊ’u‚·‚éŠO•”ƒNƒ‰ƒX‚ğ•Ô‚·D
-     * ŠY“–‚·‚éƒNƒ‰ƒX‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍC null ‚ğ•Ô‚·D
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã§ã‚ã‚Šï¼Œã‹ã¤å¤–éƒ¨ã‚¯ãƒ©ã‚¹(ExternalClassInfo)ã§ã‚ã‚‹ã‚‚ã®ã‚’è¿”ã™ï¼ ã‚¯ãƒ©ã‚¹éšå±¤çš„ã«æœ€ã‚‚ä¸‹ä½ã«ä½ç½®ã™ã‚‹å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™ï¼
+     * è©²å½“ã™ã‚‹ã‚¯ãƒ©ã‚¹ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ï¼Œ null ã‚’è¿”ã™ï¼
      * 
-     * @param classInfo ‘ÎÛƒNƒ‰ƒX
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX‚Å‚ ‚èC‚©‚ÂƒNƒ‰ƒXŠK‘w“I‚ÉÅ‚à‰ºˆÊ‚ÉˆÊ’u‚·‚éŠO•”ƒNƒ‰ƒX
+     * @param classInfo å¯¾è±¡ã‚¯ãƒ©ã‚¹
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹ã§ã‚ã‚Šï¼Œã‹ã¤ã‚¯ãƒ©ã‚¹éšå±¤çš„ã«æœ€ã‚‚ä¸‹ä½ã«ä½ç½®ã™ã‚‹å¤–éƒ¨ã‚¯ãƒ©ã‚¹
      */
     public static ExternalClassInfo getExternalSuperClass(final ClassInfo classInfo) {
 
@@ -67,10 +67,10 @@ public final class NameResolver {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚ğ“à•”ƒNƒ‰ƒX‚Æ‚µ‚Ä‚ÂCÅ‚àŠO‘¤‚ÌiƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚È‚¢jƒNƒ‰ƒX‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã‚’å†…éƒ¨ã‚¯ãƒ©ã‚¹ã¨ã—ã¦æŒã¤ï¼Œæœ€ã‚‚å¤–å´ã®ï¼ˆã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ãªã„ï¼‰ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @param innerClass ƒCƒ“ƒi[ƒNƒ‰ƒX
-     * @return Å‚àŠO‘¤‚ÌƒNƒ‰ƒX
+     * @param innerClass ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹
+     * @return æœ€ã‚‚å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     public static ClassInfo getOuterstClass(final InnerClassInfo innerClass) {
 
@@ -84,10 +84,10 @@ public final class NameResolver {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX“à‚Ì—˜—p‰Â”\‚È“à•”ƒNƒ‰ƒX‚Ì SortedSet ‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹å†…ã®åˆ©ç”¨å¯èƒ½ãªå†…éƒ¨ã‚¯ãƒ©ã‚¹ã® SortedSet ã‚’è¿”ã™
      * 
-     * @param classInfo ƒNƒ‰ƒX
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX“à‚Ì—˜—p‰Â”\‚È“à•”ƒNƒ‰ƒX‚Ì SortedSet
+     * @param classInfo ã‚¯ãƒ©ã‚¹
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹å†…ã®åˆ©ç”¨å¯èƒ½ãªå†…éƒ¨ã‚¯ãƒ©ã‚¹ã® SortedSet
      */
     public static SortedSet<InnerClassInfo> getAvailableInnerClasses(final ClassInfo classInfo) {
 
@@ -114,13 +114,13 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        // Šù‚Éƒ`ƒFƒbƒN‚µ‚½ƒNƒ‰ƒX‚Å‚ ‚éê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+        // æ—¢ã«ãƒã‚§ãƒƒã‚¯ã—ãŸã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ä½•ã‚‚ã›ãšã«çµ‚äº†ã™ã‚‹
         if (availableClasses.contains(superClass)) {
             return;
         }
 
-        // ©ƒNƒ‰ƒX‚ğ’Ç‰Á
-        // qƒNƒ‰ƒX‚ÆeƒNƒ‰ƒX‚Ì–¼‘O‹óŠÔ‚ª“¯‚¶ê‡‚ÍC–¼‘O‹óŠÔ‰Â‹‚à‚µ‚­‚ÍŒp³‰Â‹‚ª‚ ‚ê‚Î‚æ‚¢
+        // è‡ªã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ 
+        // å­ã‚¯ãƒ©ã‚¹ã¨è¦ªã‚¯ãƒ©ã‚¹ã®åå‰ç©ºé–“ãŒåŒã˜å ´åˆã¯ï¼Œåå‰ç©ºé–“å¯è¦–ã‚‚ã—ãã¯ç¶™æ‰¿å¯è¦–ãŒã‚ã‚Œã°ã‚ˆã„
         if (subClass.getNamespace().equals(superClass.getNamespace())) {
 
             if (superClass.isInheritanceVisible() || superClass.isNamespaceVisible()) {
@@ -130,7 +130,7 @@ public final class NameResolver {
                 }
             }
 
-            //qƒNƒ‰ƒX‚ÆeƒNƒ‰ƒX‚Ì–¼‘O‹óŠÔ‚ªˆá‚¤ê‡‚ÍCŒp³‰Â‹‚ª‚ ‚ê‚Î‚æ‚¢
+            //å­ã‚¯ãƒ©ã‚¹ã¨è¦ªã‚¯ãƒ©ã‚¹ã®åå‰ç©ºé–“ãŒé•ã†å ´åˆã¯ï¼Œç¶™æ‰¿å¯è¦–ãŒã‚ã‚Œã°ã‚ˆã„
         } else {
 
             if (superClass.isInheritanceVisible()) {
@@ -141,7 +141,7 @@ public final class NameResolver {
             }
         }
 
-        // eƒNƒ‰ƒX‚ğ’Ç‰Á
+        // è¦ªã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ 
         for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
             NameResolver.getAvailableSuperClasses(subClass, superSuperClass, availableClasses);
         }
@@ -154,19 +154,19 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        // Šù‚Éƒ`ƒFƒbƒN‚µ‚½ƒNƒ‰ƒX‚Å‚ ‚éê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+        // æ—¢ã«ãƒã‚§ãƒƒã‚¯ã—ãŸã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ä½•ã‚‚ã›ãšã«çµ‚äº†ã™ã‚‹
         if (availableClasses.contains(classInfo)) {
             return;
         }
 
-        // –³–¼ƒCƒ“ƒi[ƒNƒ‰ƒX‚Ìê‡‚Í’Ç‰Á‚¹‚¸‚ÉI—¹‚·‚é
+        // ç„¡åã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯è¿½åŠ ã›ãšã«çµ‚äº†ã™ã‚‹
         if (classInfo instanceof AnonymousClassInfo) {
             return;
         }
 
         availableClasses.add(classInfo);
 
-        // “à•”ƒNƒ‰ƒX‚ğ’Ç‰Á
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ 
         for (final InnerClassInfo innerClass : classInfo.getInnerClasses()) {
             NameResolver.getAvailableInnerClasses((ClassInfo) innerClass, availableClasses);
         }
@@ -175,7 +175,7 @@ public final class NameResolver {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒXŒ^‚ÅŒÄ‚Ño‚µ‰Â”\‚ÈƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌList‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹å‹ã§å‘¼ã³å‡ºã—å¯èƒ½ãªã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®Listã‚’è¿”ã™
      * 
      * @param classType
      * @return
@@ -197,10 +197,10 @@ public final class NameResolver {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚Ì’¼Ú‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ•Ô‚·DeƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚½ƒCƒ“ƒi[ƒNƒ‰ƒX‚àŠÜ‚Ü‚ê‚éD
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ç›´æ¥ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™ï¼è¦ªã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚ŒãŸã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚‚å«ã¾ã‚Œã‚‹ï¼
      * 
-     * @param classInfo ƒNƒ‰ƒX
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚Ì’¼Ú‚ÌƒCƒ“ƒi[ƒNƒ‰ƒXCeƒNƒ‰ƒX‚Å’è‹`‚³‚ê‚½ƒCƒ“ƒi[ƒNƒ‰ƒX‚àŠÜ‚Ü‚ê‚éD
+     * @param classInfo ã‚¯ãƒ©ã‚¹
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ç›´æ¥ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ï¼Œè¦ªã‚¯ãƒ©ã‚¹ã§å®šç¾©ã•ã‚ŒãŸã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚‚å«ã¾ã‚Œã‚‹ï¼
      */
     public static final SortedSet<InnerClassInfo> getAvailableDirectInnerClasses(
             final ClassInfo classInfo) {
@@ -211,10 +211,10 @@ public final class NameResolver {
 
         final SortedSet<InnerClassInfo> availableDirectInnerClasses = new TreeSet<InnerClassInfo>();
 
-        // ˆø”‚Å—^‚¦‚ç‚ê‚½ƒNƒ‰ƒX‚Ì’¼Ú‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚ğ’Ç‰Á
+        // å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ç›´æ¥ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ 
         availableDirectInnerClasses.addAll(classInfo.getInnerClasses());
 
-        // eƒNƒ‰ƒX‚É‘Î‚µ‚ÄÄ‹A“I‚Éˆ—
+        // è¦ªã‚¯ãƒ©ã‚¹ã«å¯¾ã—ã¦å†å¸°çš„ã«å‡¦ç†
         for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             final SortedSet<InnerClassInfo> availableDirectInnerClassesInSuperClass = NameResolver
@@ -244,7 +244,7 @@ public final class NameResolver {
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½ƒNƒ‰ƒX‚Å—˜—p‰Â”\‚ÈCƒNƒ‰ƒX‚ÌList‚ğ•Ô‚·
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã§åˆ©ç”¨å¯èƒ½ãªï¼Œã‚¯ãƒ©ã‚¹ã®Listã‚’è¿”ã™
      * 
      * @param usingClass
      * @return
@@ -290,7 +290,7 @@ public final class NameResolver {
 
         checkedClasses.add(usedClass);
 
-        // used‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©‚ğ’²¸‚µC‰Â”\‚Å‚ ‚ê‚ÎƒŠƒXƒg‚É’Ç‰Á
+        // usedãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’èª¿æŸ»ã—ï¼Œå¯èƒ½ã§ã‚ã‚Œã°ãƒªã‚¹ãƒˆã«è¿½åŠ 
         if (!addAvailableClass(usedClass, usingClass, _SAME_CLASS, _INHERITANCE, _SAME_NAMESPACE)) {
             return;
         }
@@ -314,9 +314,9 @@ public final class NameResolver {
     }
 
     /**
-     * usedClass‚ªusingClass‚É‚¨‚¢‚ÄƒAƒNƒZƒX‰Â”\‚©‚ğ•Ô‚·D
-     * ‚È‚¨CusedClass‚ªpublic‚Å‚ ‚éê‡‚Íl—¶‚µ‚Ä‚¢‚È‚¢D
-     * public‚ÅƒAƒNƒZƒX‰Â”\‚©‚Ç‚¤‚©‚ÍCƒCƒ“ƒ|[ƒg•¶‚à’²‚×‚È‚¯‚ê‚Î‚í‚©‚ç‚È‚¢
+     * usedClassãŒusingClassã«ãŠã„ã¦ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã‹ã‚’è¿”ã™ï¼
+     * ãªãŠï¼ŒusedClassãŒpublicã§ã‚ã‚‹å ´åˆã¯è€ƒæ…®ã—ã¦ã„ãªã„ï¼
+     * publicã§ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã‹ã©ã†ã‹ã¯ï¼Œã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡ã‚‚èª¿ã¹ãªã‘ã‚Œã°ã‚ã‹ã‚‰ãªã„
      * 
      * @param usedClass
      * @param usingClass
@@ -326,24 +326,24 @@ public final class NameResolver {
             final List<ClassInfo> _SAME_CLASS, final List<ClassInfo> _INHERITANCE,
             final List<ClassInfo> _SAME_NAMESPACE) {
 
-        // using‚Æused‚ª“¯‚¶‚Å‚ ‚ê‚ÎC—˜—p‰Â”\
+        // usingã¨usedãŒåŒã˜ã§ã‚ã‚Œã°ï¼Œåˆ©ç”¨å¯èƒ½
         if (usingClass.equals(usedClass)) {
             _SAME_CLASS.add(usedClass);
             return true;
         }
 
-        // used‚ªƒCƒ“ƒi[ƒNƒ‰ƒX‚Ì‚Æ‚«
+        // usedãŒã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®ã¨ã
         if (usedClass instanceof InnerClassInfo) {
 
             final ClassInfo outerUsedClass = ((InnerClassInfo) usedClass).getOuterClass();
 
-            //’¼‚ÌouterƒNƒ‰ƒX‚©‚ç‚ÍƒAƒNƒZƒX‰Â
+            //ç›´ã®outerã‚¯ãƒ©ã‚¹ã‹ã‚‰ã¯ã‚¢ã‚¯ã‚»ã‚¹å¯
             if (outerUsedClass.equals(usingClass)) {
                 _SAME_CLASS.add(usedClass);
                 return true;
             }
 
-            // using‚àƒCƒ“ƒi[ƒNƒ‰ƒX‚Ìê‡‚ÍCused‚Æ“¯‚¶ƒNƒ‰ƒX‚ÌƒCƒ“ƒi[ƒNƒ‰ƒX‚©‚Ç‚¤‚©‚ğ’²‚×‚é
+            // usingã‚‚ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ï¼Œusedã¨åŒã˜ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹
             if (usingClass instanceof InnerClassInfo) {
                 final ClassInfo outerUsingClass = ((InnerClassInfo) usingClass).getOuterClass();
                 if (outerUsedClass.equals(outerUsingClass)) {
@@ -352,7 +352,7 @@ public final class NameResolver {
                 }
             }
 
-            // ’¼‚ÌouterƒNƒ‰ƒX‚Æusing‚Ì–¼‘O‹óŠÔ‚ª“¯‚¶ê‡
+            // ç›´ã®outerã‚¯ãƒ©ã‚¹ã¨usingã®åå‰ç©ºé–“ãŒåŒã˜å ´åˆ
             if (outerUsedClass.getNamespace().equals(usingClass.getNamespace())) {
                 if (outerUsedClass instanceof InnerClassInfo) {
                     _SAME_CLASS.add(usedClass);
@@ -363,13 +363,13 @@ public final class NameResolver {
                 }
             }
 
-            // ’¼‚ÌouterƒNƒ‰ƒX‚ªƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚È‚¢ê‡
+            // ç›´ã®outerã‚¯ãƒ©ã‚¹ãŒã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ãªã„å ´åˆ
             if (!(outerUsedClass instanceof InnerClassInfo)) {
                 final ClassInfo outestUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                         .getOutestClass((InnerClassInfo) usingClass)
                         : usingClass;
 
-                // –¼‘O‹óŠÔ‚ª“¯‚¶
+                // åå‰ç©ºé–“ãŒåŒã˜æ™‚
                 if (outerUsedClass.getNamespace().equals(outestUsingClass.getNamespace())) {
 
                     ClassInfo outerUsingClass = usingClass;
@@ -387,7 +387,7 @@ public final class NameResolver {
                     }
                 }
 
-                // –¼‘O‹óŠÔ‚ªˆá‚¤
+                // åå‰ç©ºé–“ãŒé•ã†æ™‚
                 else {
                     if (usedClass.isInheritanceVisible()) {
 
@@ -409,15 +409,15 @@ public final class NameResolver {
             }
         }
 
-        // used‚ªƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚È‚¢‚Æ‚«
+        // usedãŒã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ãªã„ã¨ã
         else {
 
-            // using‚ªƒCƒ“ƒi[ƒNƒ‰ƒX‚Å‚ ‚ê‚ÎCÅŠOƒNƒ‰ƒX‚ğæ“¾
+            // usingãŒã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°ï¼Œæœ€å¤–ã‚¯ãƒ©ã‚¹ã‚’å–å¾—
             final ClassInfo outestUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
                     : usingClass;
 
-            //used‚Æusing‚ª“¯‚¶ƒNƒ‰ƒXi“àj‚Ì‚Æ‚«                    
+            //usedã¨usingãŒåŒã˜ã‚¯ãƒ©ã‚¹ï¼ˆå†…ï¼‰ã®ã¨ã                    
             if (outestUsingClass.equals(usedClass)) {
                 _SAME_CLASS.add(usedClass);
                 return true;
@@ -438,10 +438,10 @@ public final class NameResolver {
     }
 
     /**
-     * g—p‚·‚éƒNƒ‰ƒX‚Æg—p‚³‚ê‚éƒNƒ‰ƒX‚ğ—^‚¦‚é‚±‚Æ‚É‚æ‚èC—˜—p‰Â”\‚Èƒƒ\ƒbƒh‚ÌList‚ğ•Ô‚·
+     * ä½¿ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¨ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã‚‹ã“ã¨ã«ã‚ˆã‚Šï¼Œåˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ã®Listã‚’è¿”ã™
      * 
-     * @param usedClass g—p‚³‚ê‚éƒNƒ‰ƒX
-     * @param usingClass g—p‚·‚éƒNƒ‰ƒX
+     * @param usedClass ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingClass ä½¿ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹
      * @return
      */
     public static synchronized List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
@@ -459,10 +459,10 @@ public final class NameResolver {
     }
 
     /**
-     * g—p‚·‚éƒNƒ‰ƒX‚Æg—p‚³‚ê‚éƒNƒ‰ƒX‚ğ—^‚¦‚é‚±‚Æ‚É‚æ‚èC—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ÌList‚ğ•Ô‚·
+     * ä½¿ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¨ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã‚‹ã“ã¨ã«ã‚ˆã‚Šï¼Œåˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®Listã‚’è¿”ã™
      * 
-     * @param usedClass g—p‚³‚ê‚éƒNƒ‰ƒX
-     * @param usingClass g—p‚·‚éƒNƒ‰ƒX
+     * @param usedClass ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingClass ä½¿ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹
      * @return
      */
     public static synchronized List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
@@ -482,31 +482,31 @@ public final class NameResolver {
     private static List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
             final ClassInfo usingClass, final Set<ClassInfo> checkedClasses) {
 
-        // ‚·‚Å‚Éƒ`ƒFƒbƒN‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚Å‚ ‚ê‚Î‰½‚à‚¹‚¸‚É”²‚¯‚é
+        // ã™ã§ã«ãƒã‚§ãƒƒã‚¯ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°ä½•ã‚‚ã›ãšã«æŠœã‘ã‚‹
         if (checkedClasses.contains(usedClass)) {
             return Collections.<MethodInfo> emptyList();
         }
 
-        // ƒ`ƒFƒbƒNÏ‚İƒNƒ‰ƒX‚É’Ç‰Á
+        // ãƒã‚§ãƒƒã‚¯æ¸ˆã¿ã‚¯ãƒ©ã‚¹ã«è¿½åŠ 
         checkedClasses.add(usedClass);
 
-        // used‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì‚¤‚¿C—˜—p‰Â”\‚È‚à‚Ì‚ğ’Ç‰Á
+        // usedã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã®ã†ã¡ï¼Œåˆ©ç”¨å¯èƒ½ãªã‚‚ã®ã‚’è¿½åŠ 
         final List<MethodInfo> availableMethods = new NonDuplicationLinkedList<MethodInfo>();
         availableMethods.addAll(extractAvailableMethods(usedClass, usingClass));
 
-        // used‚ÌŠOƒNƒ‰ƒX‚ğƒ`ƒFƒbƒN
+        // usedã®å¤–ã‚¯ãƒ©ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
         if (usedClass instanceof InnerClassInfo) {
             final ClassInfo outerClass = ((InnerClassInfo) usedClass).getOuterClass();
             availableMethods.addAll(getAvailableMethods(outerClass, usingClass, checkedClasses));
         }
 
-        // eƒNƒ‰ƒX‚ğƒ`ƒFƒbƒN
+        // è¦ªã‚¯ãƒ©ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
         for (final ClassTypeInfo superClassType : usedClass.getSuperClasses()) {
             final ClassInfo superClass = superClassType.getReferencedClass();
             availableMethods.addAll(getAvailableMethods(superClass, usingClass, checkedClasses));
         }
 
-        // ƒI[ƒo[ƒ‰ƒCƒh‚É‚æ‚èŒÄ‚Ño‚µ•s‰Â‚Æ‚È‚Á‚½ƒƒ\ƒbƒh‚Ííœ
+        // ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã«ã‚ˆã‚Šå‘¼ã³å‡ºã—ä¸å¯ã¨ãªã£ãŸãƒ¡ã‚½ãƒƒãƒ‰ã¯å‰Šé™¤
         final List<MethodInfo> deletedMethods = new NonDuplicationLinkedList<MethodInfo>();
         for (final MethodInfo method : availableMethods) {
             deletedMethods.addAll(method.getOverridees());
@@ -519,25 +519,25 @@ public final class NameResolver {
     private static List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
             final ClassInfo usingClass, final Set<ClassInfo> checkedClasses) {
 
-        // ‚·‚Å‚Éƒ`ƒFƒbƒN‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚Å‚ ‚ê‚Î‰½‚à‚¹‚¸‚É”²‚¯‚é
+        // ã™ã§ã«ãƒã‚§ãƒƒã‚¯ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°ä½•ã‚‚ã›ãšã«æŠœã‘ã‚‹
         if (checkedClasses.contains(usedClass)) {
             return Collections.<FieldInfo> emptyList();
         }
 
-        // ƒ`ƒFƒbƒNÏ‚İƒNƒ‰ƒX‚É’Ç‰Á
+        // ãƒã‚§ãƒƒã‚¯æ¸ˆã¿ã‚¯ãƒ©ã‚¹ã«è¿½åŠ 
         checkedClasses.add(usedClass);
 
-        // used‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì‚¤‚¿C—˜—p‰Â”\‚È‚à‚Ì‚ğ’Ç‰Á
+        // usedã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã®ã†ã¡ï¼Œåˆ©ç”¨å¯èƒ½ãªã‚‚ã®ã‚’è¿½åŠ 
         final List<FieldInfo> availableFields = new NonDuplicationLinkedList<FieldInfo>();
         availableFields.addAll(extractAvailableFields(usedClass, usingClass));
 
-        // used‚ÌŠOƒNƒ‰ƒX‚ğƒ`ƒFƒbƒN
+        // usedã®å¤–ã‚¯ãƒ©ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
         if (usedClass instanceof InnerClassInfo) {
             final ClassInfo outerClass = ((InnerClassInfo) usedClass).getOuterClass();
             availableFields.addAll(getAvailableFields(outerClass, usingClass, checkedClasses));
         }
 
-        // eƒNƒ‰ƒX‚ğƒ`ƒFƒbƒN
+        // è¦ªã‚¯ãƒ©ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
         for (final ClassTypeInfo superClassType : usedClass.getSuperClasses()) {
             final ClassInfo superClass = superClassType.getReferencedClass();
             availableFields.addAll(getAvailableFields(superClass, usingClass, checkedClasses));
@@ -551,7 +551,7 @@ public final class NameResolver {
 
         final List<MethodInfo> availableMethods = new NonDuplicationLinkedList<MethodInfo>();
 
-        // using‚Æused‚ª“™‚µ‚¢ê‡‚ÍC‚·‚×‚Ä‚Ìƒƒ\ƒbƒh‚ğg—p‰Â”\
+        // usingã¨usedãŒç­‰ã—ã„å ´åˆã¯ï¼Œã™ã¹ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨å¯èƒ½
         {
             final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
@@ -564,7 +564,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚Æ“¯‚¶ƒpƒbƒP[ƒW‚Å‚ ‚ê‚ÎCprivate ˆÈŠO‚Ìƒƒ\ƒbƒh‚ªg—p‰Â”\
+        // usingãŒusedã¨åŒã˜ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã§ã‚ã‚Œã°ï¼Œprivate ä»¥å¤–ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒä½¿ç”¨å¯èƒ½
         {
             final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
@@ -581,7 +581,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚ÌƒTƒuƒNƒ‰ƒX‚Å‚ ‚ê‚Î,publicˆÈŠO‚Ìƒƒ\ƒbƒh‚ªg—p‰Â”\
+        // usingãŒusedã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°,publicä»¥å¤–ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒä½¿ç”¨å¯èƒ½
         if (usingClass.isSubClass(usedClass)) {
             for (final MethodInfo method : usedClass.getDefinedMethods()) {
                 if (method.isInheritanceVisible()) {
@@ -590,7 +590,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ÌeƒNƒ‰ƒX‚ªused‚ÌƒTƒuƒNƒ‰ƒX‚Å‚ ‚Á‚Ä‚àCpublicˆÈŠO‚Ìƒƒ\ƒbƒh‚ğg—p‰Â”\
+        // usingã®è¦ªã‚¯ãƒ©ã‚¹ãŒusedã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ã£ã¦ã‚‚ï¼Œpublicä»¥å¤–ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨å¯èƒ½
         if (usingClass instanceof InnerClassInfo) {
             final ClassInfo outestUsingClass = TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass);
@@ -603,7 +603,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚ÆŠÖŒW‚Ì‚È‚¢ƒNƒ‰ƒX‚Å‚ ‚ê‚ÎCpublic‚Ìƒƒ\ƒbƒh‚ª—˜—p‰Â”\
+        // usingãŒusedã¨é–¢ä¿‚ã®ãªã„ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°ï¼Œpublicã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒåˆ©ç”¨å¯èƒ½
         for (final MethodInfo method : usedClass.getDefinedMethods()) {
             if (method.isPublicVisible()) {
                 availableMethods.add(method);
@@ -618,7 +618,7 @@ public final class NameResolver {
 
         final List<FieldInfo> availableFields = new NonDuplicationLinkedList<FieldInfo>();
 
-        // using‚Æused‚ª“™‚µ‚¢ê‡‚ÍC‚·‚×‚Ä‚ÌƒtƒB[ƒ‹ƒh‚ğg—p‰Â”\
+        // usingã¨usedãŒç­‰ã—ã„å ´åˆã¯ï¼Œã™ã¹ã¦ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ä½¿ç”¨å¯èƒ½
         {
             final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
@@ -631,7 +631,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚Æ“¯‚¶ƒpƒbƒP[ƒW‚Å‚ ‚ê‚ÎCprivate ˆÈŠO‚ÌƒtƒB[ƒ‹ƒh‚ªg—p‰Â”\
+        // usingãŒusedã¨åŒã˜ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã§ã‚ã‚Œã°ï¼Œprivate ä»¥å¤–ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒä½¿ç”¨å¯èƒ½
         {
             final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
@@ -648,7 +648,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚ÌƒTƒuƒNƒ‰ƒX‚Å‚ ‚ê‚Î,protectedˆÈŠO‚ÌƒtƒB[ƒ‹ƒh‚ªg—p‰Â”\
+        // usingãŒusedã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°,protectedä»¥å¤–ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒä½¿ç”¨å¯èƒ½
         if (usingClass.isSubClass(usedClass)) {
             for (final FieldInfo field : usedClass.getDefinedFields()) {
                 if (field.isInheritanceVisible()) {
@@ -657,7 +657,7 @@ public final class NameResolver {
             }
         }
 
-        // using‚ªused‚ÆŠÖŒW‚Ì‚È‚¢ƒNƒ‰ƒX‚Å‚ ‚ê‚ÎCpublic‚ÌƒtƒB[ƒ‹ƒh‚ª—˜—p‰Â”\
+        // usingãŒusedã¨é–¢ä¿‚ã®ãªã„ã‚¯ãƒ©ã‚¹ã§ã‚ã‚Œã°ï¼Œpublicã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒåˆ©ç”¨å¯èƒ½
         for (final FieldInfo field : usedClass.getDefinedFields()) {
             if (field.isPublicVisible()) {
                 availableFields.add(field);
@@ -674,7 +674,7 @@ public final class NameResolver {
     private static final Cache<FieldInfo> FIELD_CACHE = new Cache<FieldInfo>();
 
     /**
-     * g—p‚·‚éƒNƒ‰ƒX‚Æg—p‚³‚ê‚éƒNƒ‰ƒX‚ÌŠÖŒW‚©‚ç—˜—p‰Â”\‚Èƒƒ“ƒo[‚ÌƒLƒƒƒbƒVƒ…‚ğ’~‚¦‚Ä‚¨‚­‚½‚ß‚ÌƒNƒ‰ƒX
+     * ä½¿ç”¨ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¨ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã®é–¢ä¿‚ã‹ã‚‰åˆ©ç”¨å¯èƒ½ãªãƒ¡ãƒ³ãƒãƒ¼ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è“„ãˆã¦ãŠããŸã‚ã®ã‚¯ãƒ©ã‚¹
      * 
      * @author higo
      *

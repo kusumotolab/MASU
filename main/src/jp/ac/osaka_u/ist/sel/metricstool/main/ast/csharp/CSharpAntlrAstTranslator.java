@@ -33,7 +33,7 @@ import antlr.collections.AST;
 
 
 /**
- * {@link Java15Parser}‚©‚ç¶¬‚³‚ê‚éASTƒm[ƒh‚ğ {@link AstToken}‚É•ÏŠ·‚·‚éƒNƒ‰ƒX.
+ * {@link Java15Parser}ã‹ã‚‰ç”Ÿæˆã•ã‚Œã‚‹ASTãƒãƒ¼ãƒ‰ã‚’ {@link AstToken}ã«å¤‰æ›ã™ã‚‹ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -41,16 +41,16 @@ import antlr.collections.AST;
 public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
 
     /**
-     *  {@link Java15Parser}‚©‚ç¶¬‚³‚ê‚éASTƒm[ƒh‚ğ {@link AstToken}‚É•ÏŠ·‚·‚é.
+     *  {@link Java15Parser}ã‹ã‚‰ç”Ÿæˆã•ã‚Œã‚‹ASTãƒãƒ¼ãƒ‰ã‚’ {@link AstToken}ã«å¤‰æ›ã™ã‚‹.
      *  
-     *  @param node •ÏŠ·‘ÎÛ‚Ìƒm[ƒh
-     *  @return •ÏŠ·Œ‹‰Ê‚ÌAstToken
+     *  @param node å¤‰æ›å¯¾è±¡ã®ãƒãƒ¼ãƒ‰
+     *  @return å¤‰æ›çµæœã®AstToken
      */
     public AstToken translate(AST node) {
         int type = node.getType();
         AstToken result = null;
 
-        //¯•Êq‚¾‚¯‚Í–¼‘O‚ğg‚Á‚½ê—p‚ÌƒLƒƒƒbƒVƒ…‚ğg‚¤.
+        //è­˜åˆ¥å­ã ã‘ã¯åå‰ã‚’ä½¿ã£ãŸå°‚ç”¨ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ä½¿ã†.
         if (type == CSharpTokenTypes.IDENT) {
             String name = node.getText();
             if (identifierTokenMap.containsKey(name)) {
@@ -60,12 +60,12 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             }
         }
 
-        //‘¼‚ÌŒ^‚ÍƒLƒƒƒbƒVƒ…‚ğ’T‚µ‚Ä•Ô‚·
+        //ä»–ã®å‹ã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’æ¢ã—ã¦è¿”ã™
         if (tokenMap.containsKey(type)) {
             return tokenMap.get(type);
         }
 
-        //ƒLƒƒƒbƒVƒ…‚ª‚È‚¢‚Ì‚Å‘“–‚è
+        //ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãŒãªã„ã®ã§ç·å½“ã‚Š
         switch (type) {
         case CSharpTokenTypes.PACKAGE_DEF:
             result = DefinitionToken.NAMESPACE_DEFINITION;
@@ -73,7 +73,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
         /*case CSharpTokenTypes.ANNOTATIONS:
         case CSharpTokenTypes.ANNOTATION_DEF:
             result = VisitControlToken.SKIP;
-            //ƒAƒmƒe[ƒVƒ‡ƒ“ŠÖ˜A‚Í‘S•”–³‹
+            //ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³é–¢é€£ã¯å…¨éƒ¨ç„¡è¦–
             break;*/
         case CSharpTokenTypes.IMPORT:
             //        case CSharpTokenTypes.STATIC_IMPORT:
@@ -97,14 +97,14 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
         case CSharpTokenTypes.INTERFACE_DEF:
             result = JavaAstToken.INTERFACE_DEFINITION;
             break;
-        case CSharpTokenTypes.ENUM_DEF://enum‚ÍƒNƒ‰ƒX‚Æ‚µ‚Äˆµ‚¤
+        case CSharpTokenTypes.ENUM_DEF://enumã¯ã‚¯ãƒ©ã‚¹ã¨ã—ã¦æ‰±ã†
             result = DefinitionToken.CLASS_DEFINITION;
             break;
         case CSharpTokenTypes.ENUM_CONSTANT_DEF:
             result = JavaAstToken.ENUM_CONSTANT;
             break;
         case CSharpTokenTypes.FIELD_DEF:
-            // C#‚Å‚Í‚½‚¾‚ÌVARIABLE_DEF‚É‚È‚Á‚Ä‚¢‚é\•¶’è‹`ƒtƒ@ƒCƒ‹‚ğ‘‚«Š·‚¦‚é•K—v‚ª‚ ‚éD
+            // C#ã§ã¯ãŸã ã®VARIABLE_DEFã«ãªã£ã¦ã„ã‚‹æ§‹æ–‡å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãæ›ãˆã‚‹å¿…è¦ãŒã‚ã‚‹ï¼
             result = DefinitionToken.FIELD_DEFINITION;
             break;
         case CSharpTokenTypes.PARAMETER_DEF:
@@ -396,7 +396,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case CSharpTokenTypes.LITERAL_for:
         case CSharpTokenTypes.LITERAL_foreach:
-            // TODO ‚¢‚¸‚êfor‚Æforeach‚Í‹æ•Ê‚·‚×‚«
+            // TODO ã„ãšã‚Œforã¨foreachã¯åŒºåˆ¥ã™ã¹ã
             result = BlockNameToken.FOR_BLOCK;
             break;
         case CSharpTokenTypes.LITERAL_try:
@@ -440,7 +440,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             result = SyntaxToken.PROPERTY_SET_BODY;
             break;
         default:
-            //•ÏŠ·‚Å‚«‚È‚©‚Á‚½ƒm[ƒh‚Íæ‚è‚ ‚¦‚¸‚»‚Ìq‹Ÿ‚Éi‚Ş
+            //å¤‰æ›ã§ããªã‹ã£ãŸãƒãƒ¼ãƒ‰ã¯å–ã‚Šã‚ãˆãšãã®å­ä¾›ã«é€²ã‚€
             result = VisitControlToken.ENTER;
             break;
         }
@@ -451,12 +451,12 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
     }
 
     /**
-     * ƒg[ƒNƒ“‚ÌƒLƒƒƒbƒVƒ…
+     * ãƒˆãƒ¼ã‚¯ãƒ³ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
      */
     private final Map<Integer, AstToken> tokenMap = new HashMap<Integer, AstToken>();
 
     /**
-     * ¯•Êqƒg[ƒNƒ“‚ÌƒLƒƒƒbƒVƒ…
+     * è­˜åˆ¥å­ãƒˆãƒ¼ã‚¯ãƒ³ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
      */
     private final Map<String, AstToken> identifierTokenMap = new HashMap<String, AstToken>();
 }

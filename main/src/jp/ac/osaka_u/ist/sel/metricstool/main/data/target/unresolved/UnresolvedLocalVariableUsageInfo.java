@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒ[ƒJƒ‹•Ï”g—p‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -22,15 +22,15 @@ public class UnresolvedLocalVariableUsageInfo extends
         UnresolvedVariableUsageInfo<LocalVariableUsageInfo> {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param usedVariable g—p‚³‚ê‚Ä‚¢‚é•Ï”
-     * @param reference QÆ‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedVariable ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
+     * @param reference å‚ç…§ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
             boolean reference, final boolean assignment,
@@ -47,10 +47,10 @@ public class UnresolvedLocalVariableUsageInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -72,9 +72,9 @@ public class UnresolvedLocalVariableUsageInfo extends
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿”ã™
      * 
-     * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”
+     * @return ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
      */
     public UnresolvedLocalVariableInfo getUsedVariable() {
         return this.usedVariable;

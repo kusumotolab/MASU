@@ -21,10 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒ[ƒJƒ‹•Ï”‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD ˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * <ul>
- * <li>•Ï”–¼</li>
- * <li>–¢‰ğŒˆŒ^–¼</li>
+ * <li>å¤‰æ•°å</li>
+ * <li>æœªè§£æ±ºå‹å</li>
  * </ul>
  * 
  * @author higo
@@ -35,16 +35,16 @@ public final class UnresolvedLocalVariableInfo
         UnresolvedVariableInfo<LocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
 
     /**
-     * ƒ[ƒJƒ‹•Ï”ƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD
+     * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼
      * 
-     * @param name •Ï”–¼
-     * @param type –¢‰ğŒˆŒ^–¼
-     * @param definitionSpace éŒ¾‚µ‚Ä‚¢‚éƒ[ƒJƒ‹‹óŠÔ
-     * @param initializer ƒ[ƒJƒ‹•Ï”‚Ì‰Šú‰»®
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param name å¤‰æ•°å
+     * @param type æœªè§£æ±ºå‹å
+     * @param definitionSpace å®£è¨€ã—ã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«ç©ºé–“
+     * @param initializer ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®åˆæœŸåŒ–å¼
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo<?> type,
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace,
@@ -56,32 +56,32 @@ public final class UnresolvedLocalVariableInfo
     }
 
     /**
-     * –¢‰ğŒˆƒ[ƒJƒ‹•Ï”î•ñ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İQÆ‚ğ•Ô‚·D
+     * æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°æƒ…å ±ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿å‚ç…§ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆƒ[ƒJƒ‹•Ï”‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆƒ[ƒJƒ‹•Ï”‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İƒ[ƒJƒ‹•Ï”î•ñ
+     * @param usingClass æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°æƒ…å ±
      */
     @Override
     public LocalVariableInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // CüqC•Ï”–¼CŒ^‚ğæ“¾
+        // ä¿®é£¾å­ï¼Œå¤‰æ•°åï¼Œå‹ã‚’å–å¾—
         final Set<ModifierInfo> localModifiers = this.getModifiers();
         final String variableName = this.getName();
         final UnresolvedTypeInfo<?> unresolvedVariableType = this.getType();
@@ -104,7 +104,7 @@ public final class UnresolvedLocalVariableInfo
 
             } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ğŠi”[‚·‚é
+                // TODO å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹
                 final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
@@ -126,22 +126,22 @@ public final class UnresolvedLocalVariableInfo
         final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ƒ[ƒJƒ‹•Ï”ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µCMethodInfo‚É’Ç‰Á
+        // ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ï¼ŒMethodInfoã«è¿½åŠ 
         this.resolvedInfo = new LocalVariableInfo(localModifiers, variableName, variableType,
                 definitionSpace, localFromLine, localFromColumn, localToLine, localToColumn);
         return this.resolvedInfo;
     }
 
     /**
-     * •Ï”‚Ì‰Šú‰»®‚ğ•Ô‚·
-     * @return •Ï”‚Ì‰Šú‰»®D‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
+     * @return å¤‰æ•°ã®åˆæœŸåŒ–å¼ï¼åˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã„å ´åˆã¯null
      */
     public final UnresolvedExpressionInfo<? extends ExpressionInfo> getInitilizer() {
         return this.initializer;
     }
 
     /**
-     * •Ï”‚Ì‰Šú‰»®‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã®åˆæœŸåŒ–å¼ã‚’è¡¨ã™å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer;
 }

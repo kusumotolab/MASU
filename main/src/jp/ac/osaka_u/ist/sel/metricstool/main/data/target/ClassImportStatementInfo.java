@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 
 
 /**
- * import•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * importæ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * @param fromLine 
      * @param fromColumn
      * @param toLine
@@ -32,9 +32,9 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
     }
 
     /**
-     * ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet‚ğ•Ô‚·
+     * ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSetã‚’è¿”ã™
      * 
-     * @return@ƒCƒ“ƒ|[ƒg‚³‚ê‚½ƒNƒ‰ƒX‚ÌSortedSet
+     * @returnã€€ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®SortedSet
      */
     @Override
     public Set<ClassInfo> getImportedUnits() {

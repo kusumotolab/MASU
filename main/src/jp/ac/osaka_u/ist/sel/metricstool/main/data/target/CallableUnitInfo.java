@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ŒÄ‚Ño‚µ‰Â”\‚È’PˆÊ(ƒƒ\ƒbƒh‚âƒRƒ“ƒXƒgƒ‰ƒNƒ^)‚ğ•\‚·ƒNƒ‰ƒX
+ * å‘¼ã³å‡ºã—å¯èƒ½ãªå˜ä½(ãƒ¡ã‚½ãƒƒãƒ‰ã‚„ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿)ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -26,14 +26,14 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         TypeParameterizable {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param modifiers Cüq‚ÌSet
-     * @param ownerClass Š—LƒNƒ‰ƒX
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®Set
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     CallableUnitInfo(final Set<ModifierInfo> modifiers, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
@@ -54,9 +54,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -67,7 +67,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ƒƒ\ƒbƒhŠÔ‚Ì‡˜‚Ì‚ÍC’è‹`‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX‚ğl—¶‚·‚é‚½‚ß‚É’è‹`‚µ‚Ä‚¢‚éD
+     * ãƒ¡ã‚½ãƒƒãƒ‰é–“ã®é †åºã®æ™‚ã¯ï¼Œå®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è€ƒæ…®ã™ã‚‹ãŸã‚ã«å®šç¾©ã—ã¦ã„ã‚‹ï¼
      */
     @Override
     final public int compareTo(final Position o) {
@@ -90,7 +90,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ŒÄ‚Ño‚µƒ†ƒjƒbƒg‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ãƒ¦ãƒ‹ãƒƒãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     final public int hashCode() {
@@ -98,10 +98,10 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªCˆø”‚Å—^‚¦‚ç‚ê‚½î•ñ‚ğg‚Á‚ÄŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éD
+     * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒï¼Œå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæƒ…å ±ã‚’ä½¿ã£ã¦å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param actualParameters Àˆø”‚ÌƒŠƒXƒg
-     * @return ŒÄ‚Ño‚¹‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @param actualParameters å®Ÿå¼•æ•°ã®ãƒªã‚¹ãƒˆ
+     * @return å‘¼ã³å‡ºã›ã‚‹å ´åˆã¯ trueï¼Œãã†ã§ãªã„å ´åˆã¯ false
      */
     boolean canCalledWith(final List<ExpressionInfo> actualParameters) {
 
@@ -120,17 +120,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             final ParameterInfo dummyParameter = dummyParameterArray[index];
             final TypeInfo dummyType = dummyParameter.getType();
 
-            //‰¼ˆø”‚ª‰Â•Ï’·ˆø”‚Ìê‡
+            //ä»®å¼•æ•°ãŒå¯å¤‰é•·å¼•æ•°ã®å ´åˆ
             if (dummyParameter instanceof VariableLengthParameterInfo) {
 
-                // TODO Œ»İ‚Ì‚Æ‚±‚ëğŒ‚È‚µ‚ÅOK‚É‚µ‚Ä‚¢‚é
+                // TODO ç¾åœ¨ã®ã¨ã“ã‚æ¡ä»¶ãªã—ã§OKã«ã—ã¦ã„ã‚‹
                 return true;
             }
 
-            // ‰Â•Ï’·ˆø”ˆÈŠO‚Ìê‡
+            // å¯å¤‰é•·å¼•æ•°ä»¥å¤–ã®å ´åˆ
             else {
 
-                // Àˆø”‚Ì”‚ª‘«‚è‚È‚¢ê‡‚ÍŒÄ‚Ño‚µ•s‰Â               
+                // å®Ÿå¼•æ•°ã®æ•°ãŒè¶³ã‚Šãªã„å ´åˆã¯å‘¼ã³å‡ºã—ä¸å¯               
                 if (!(index < actualParameterArray.length)) {
                     return false;
                 }
@@ -138,14 +138,14 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 final ExpressionInfo actualParameter = actualParameterArray[index];
                 TypeInfo actualType = actualParameter.getType();
 
-                // <?> ‚â <? super A>‚Ìê‡‚Íjava.lang.Object‚É•ÏŠ·‚·‚é
+                // <?> ã‚„ <? super A>ã®å ´åˆã¯java.lang.Objectã«å¤‰æ›ã™ã‚‹
                 if (actualType instanceof ArbitraryTypeInfo || actualType instanceof SuperTypeInfo) {
                     final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                             .getClassInfo(new String[] { "java", "lang", "Object" });
                     actualType = new ClassTypeInfo(objectClass);
                 }
 
-                // <? extends B>‚Ìê‡‚Í B‚É•ÏŠ·‚·‚é
+                // <? extends B>ã®å ´åˆã¯ Bã«å¤‰æ›ã™ã‚‹
                 else if (actualType instanceof ExtendsTypeInfo) {
                     actualType = ((ExtendsTypeInfo) actualType).getExtendsType();
                 }
@@ -164,17 +164,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
     private static boolean canCallWith(final TypeInfo dummyType, final TypeInfo actualType) {
 
-        //‰¼ˆø”‚ªƒNƒ‰ƒXQÆŒ^‚Ìê‡
+        //ä»®å¼•æ•°ãŒã‚¯ãƒ©ã‚¹å‚ç…§å‹ã®å ´åˆ
         if (dummyType instanceof ClassTypeInfo) {
 
             final ClassInfo dummyClass = ((ClassTypeInfo) dummyType).getReferencedClass();
 
-            // Àˆø”‚ÌŒ^‚ªUnknownTypeInfo‚Ì‚Æ‚«‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢‚Ì‚ÅOK‚É‚·‚é
+            // å®Ÿå¼•æ•°ã®å‹ãŒUnknownTypeInfoã®ã¨ãã¯ã©ã†ã—ã‚ˆã†ã‚‚ãªã„ã®ã§OKã«ã™ã‚‹
             if (actualType instanceof UnknownTypeInfo) {
                 return true;
             }
 
-            // ‰¼ˆø”‚ªObjectŒ^‚Ì‚Æ‚«‚ÍCƒNƒ‰ƒXQÆŒ^C”z—ñŒ^CŒ^ƒpƒ‰ƒ[ƒ^Œ^‚ªOK
+            // ä»®å¼•æ•°ãŒObjectå‹ã®ã¨ãã¯ï¼Œã‚¯ãƒ©ã‚¹å‚ç…§å‹ï¼Œé…åˆ—å‹ï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‹ãŒOK
             final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                     .getClassInfo(new String[] { "java", "lang", "Object" });
             if (((ClassTypeInfo) dummyType).getReferencedClass().equals(objectClass)) {
@@ -183,7 +183,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
             }
 
-            // AutoBoxing, InBoxing‚Ì‰Â”\«‚ğl—¶
+            // AutoBoxing, InBoxingã®å¯èƒ½æ€§ã‚’è€ƒæ…®
             if (PrimitiveTypeInfo.isJavaWrapperType((ClassTypeInfo) dummyType)
                     && actualType instanceof PrimitiveTypeInfo) {
                 if (PrimitiveTypeInfo.getPrimitiveType((ClassTypeInfo) dummyType) == actualType) {
@@ -199,11 +199,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
             final ClassInfo actualClass = ((ClassTypeInfo) actualType).getReferencedClass();
 
-            // ‰¼ˆø”CÀˆø”‹¤‚É‘ÎÛƒNƒ‰ƒX‚Å‚ ‚éê‡‚ÍC‚»‚ÌŒp³ŠÖŒW‚ğl—¶‚·‚éD
-            // ‚Â‚Ü‚èCÀˆø”‚ª‰¼ˆø”‚ÌƒTƒuƒNƒ‰ƒX‚Å‚È‚¢ê‡‚ÍCŒÄ‚Ño‚µ‰Â”\‚Å‚Í‚È‚¢
+            // ä»®å¼•æ•°ï¼Œå®Ÿå¼•æ•°å…±ã«å¯¾è±¡ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ï¼Œãã®ç¶™æ‰¿é–¢ä¿‚ã‚’è€ƒæ…®ã™ã‚‹ï¼
+            // ã¤ã¾ã‚Šï¼Œå®Ÿå¼•æ•°ãŒä»®å¼•æ•°ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ãªã„å ´åˆã¯ï¼Œå‘¼ã³å‡ºã—å¯èƒ½ã§ã¯ãªã„
             if ((actualClass instanceof TargetClassInfo) && (dummyClass instanceof TargetClassInfo)) {
 
-                // Àˆø”‚ª‰¼ˆø”‚Æ“¯‚¶QÆŒ^iƒNƒ‰ƒXj‚Å‚à‚È‚­C‰¼ˆø”‚ÌƒTƒuƒNƒ‰ƒX‚Å‚à‚È‚¢ê‡‚ÍŠY“–‚µ‚È‚¢
+                // å®Ÿå¼•æ•°ãŒä»®å¼•æ•°ã¨åŒã˜å‚ç…§å‹ï¼ˆã‚¯ãƒ©ã‚¹ï¼‰ã§ã‚‚ãªãï¼Œä»®å¼•æ•°ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚‚ãªã„å ´åˆã¯è©²å½“ã—ãªã„
                 if (actualClass.equals(dummyClass)) {
                     return true;
 
@@ -215,37 +215,37 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
             }
 
-            // ‰¼ˆø”CÀˆø”‚Æ‚à‚ÉŠO•”ƒNƒ‰ƒX‚Å‚ ‚éê‡‚ÍCğŒ‚È‚µ‚ÅŒÄ‚Ño‚µ‰Â”\‚Æ‚·‚éD
-            // “™‚µ‚­‚È‚¢‚Æƒ_ƒ‚Æ‚¢‚¤ğŒ‚ÍŒµ‚µ‚·‚¬‚Ä³‚µ‚­”»’è‚Å‚«‚È‚¢ê‡‚ª‚ ‚éD
-            // ‰¼ˆø”CÀˆø”‹¤‚ÉŠO•”ƒNƒ‰ƒX‚Å‚ ‚éê‡‚ÍC/*“™‚µ‚¢ê‡‚Ì‚İŒÄ‚Ño‚µ*/‰Â”\‚Æ‚·‚é
+            // ä»®å¼•æ•°ï¼Œå®Ÿå¼•æ•°ã¨ã‚‚ã«å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ï¼Œæ¡ä»¶ãªã—ã§å‘¼ã³å‡ºã—å¯èƒ½ã¨ã™ã‚‹ï¼
+            // ç­‰ã—ããªã„ã¨ãƒ€ãƒ¡ã¨ã„ã†æ¡ä»¶ã¯å³ã—ã™ãã¦æ­£ã—ãåˆ¤å®šã§ããªã„å ´åˆãŒã‚ã‚‹ï¼
+            // ä»®å¼•æ•°ï¼Œå®Ÿå¼•æ•°å…±ã«å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹å ´åˆã¯ï¼Œ/*ç­‰ã—ã„å ´åˆã®ã¿å‘¼ã³å‡ºã—*/å¯èƒ½ã¨ã™ã‚‹
             else if ((actualClass instanceof ExternalClassInfo)
                     && (dummyClass instanceof ExternalClassInfo)) {
                 return true;
             }
 
-            // ‰¼ˆø”‚ªŠO•”ƒNƒ‰ƒXCÀˆø”‚ª‘ÎÛƒNƒ‰ƒX‚Ìê‡‚ÍCŒÄ‚Ño‚µ‰Â”\‚Æ‚·‚é
-            // “™‚µ‚­‚È‚¢‚Æƒ_ƒ‚Æ‚¢‚¤ğŒ‚ÍŒµ‚µ‚·‚¬‚Ä³‚µ‚­”»’è‚Å‚«‚È‚¢ê‡‚ª‚ ‚éD
+            // ä»®å¼•æ•°ãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹ï¼Œå®Ÿå¼•æ•°ãŒå¯¾è±¡ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ï¼Œå‘¼ã³å‡ºã—å¯èƒ½ã¨ã™ã‚‹
+            // ç­‰ã—ããªã„ã¨ãƒ€ãƒ¡ã¨ã„ã†æ¡ä»¶ã¯å³ã—ã™ãã¦æ­£ã—ãåˆ¤å®šã§ããªã„å ´åˆãŒã‚ã‚‹ï¼
             else if ((actualClass instanceof TargetClassInfo)
                     && (dummyClass instanceof ExternalClassInfo)) {
                 return true;
             }
 
-            // ‰¼ˆø”‚ª‘ÎÛƒNƒ‰ƒXCÀˆø”‚ªŠO•”ƒNƒ‰ƒX‚Ìê‡‚ÍCŒÄ‚Ño‚µ‰Â”\‚Æ‚·‚é
-            // “™‚µ‚­‚È‚¢‚Æƒ_ƒ‚Æ‚¢‚¤ğŒ‚ÍŒµ‚µ‚·‚¬‚Ä³‚µ‚­”»’è‚Å‚«‚È‚¢ê‡‚ª‚ ‚éD
+            // ä»®å¼•æ•°ãŒå¯¾è±¡ã‚¯ãƒ©ã‚¹ï¼Œå®Ÿå¼•æ•°ãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®å ´åˆã¯ï¼Œå‘¼ã³å‡ºã—å¯èƒ½ã¨ã™ã‚‹
+            // ç­‰ã—ããªã„ã¨ãƒ€ãƒ¡ã¨ã„ã†æ¡ä»¶ã¯å³ã—ã™ãã¦æ­£ã—ãåˆ¤å®šã§ããªã„å ´åˆãŒã‚ã‚‹ï¼
             else {
                 return true;
             }
         }
 
-        // ‰¼ˆø”‚ªƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìê‡
+        // ä»®å¼•æ•°ãŒãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã®å ´åˆ
         else if (dummyType instanceof PrimitiveTypeInfo) {
 
-            // Àˆø”‚ÌŒ^‚ªUnknownTypeInfo‚Ì‚Æ‚«‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢‚Ì‚ÅOK‚É‚·‚é
+            // å®Ÿå¼•æ•°ã®å‹ãŒUnknownTypeInfoã®ã¨ãã¯ã©ã†ã—ã‚ˆã†ã‚‚ãªã„ã®ã§OKã«ã™ã‚‹
             if (actualType instanceof UnknownTypeInfo) {
                 return true;
             }
 
-            // autoboxing, inboxing‚Ì‰Â”\«‚ğl—¶
+            // autoboxing, inboxingã®å¯èƒ½æ€§ã‚’è€ƒæ…®
             if (actualType instanceof ClassTypeInfo
                     && PrimitiveTypeInfo.isJavaWrapperType((ClassTypeInfo) actualType)) {
                 if (PrimitiveTypeInfo.getPrimitiveType((ClassTypeInfo) actualType) == dummyType) {
@@ -255,7 +255,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
             }
 
-            // Àˆø”‚ªƒvƒŠƒ~ƒeƒBƒuŒ^‚Å‚È‚¢ê‡‚ÍŒÄ‚Ño‚µ•s‰Â
+            // å®Ÿå¼•æ•°ãŒãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã§ãªã„å ´åˆã¯å‘¼ã³å‡ºã—ä¸å¯
             if (!(actualType instanceof PrimitiveTypeInfo)) {
                 return false;
             }
@@ -263,36 +263,36 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             return true;
         }
 
-        // ‰¼ˆø”‚ª”z—ñŒ^‚Ìê‡
+        // ä»®å¼•æ•°ãŒé…åˆ—å‹ã®å ´åˆ
         else if (dummyType instanceof ArrayTypeInfo) {
 
-            // Àˆø”‚ÌŒ^‚ªUnknownTypeInfo‚Ì‚Æ‚«‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢‚Ì‚ÅOK‚É‚·‚é
+            // å®Ÿå¼•æ•°ã®å‹ãŒUnknownTypeInfoã®ã¨ãã¯ã©ã†ã—ã‚ˆã†ã‚‚ãªã„ã®ã§OKã«ã™ã‚‹
             if (actualType instanceof UnknownTypeInfo) {
                 return true;
             }
 
-            // Àˆø”‚ª”z—ñŒ^‚Å‚È‚¢ê‡‚ÍŒÄ‚Ño‚µ•s‰Â
+            // å®Ÿå¼•æ•°ãŒé…åˆ—å‹ã§ãªã„å ´åˆã¯å‘¼ã³å‡ºã—ä¸å¯
             if (!(actualType instanceof ArrayTypeInfo)) {
                 return false;
             }
 
-            // ŸŒ³”‚ªˆá‚¤ê‡‚ÍŒÄ‚Ño‚µ•s‰Â
+            // æ¬¡å…ƒæ•°ãŒé•ã†å ´åˆã¯å‘¼ã³å‡ºã—ä¸å¯
             final int dummyDimenstion = ((ArrayTypeInfo) dummyType).getDimension();
             final int actualDimenstion = ((ArrayTypeInfo) actualType).getDimension();
             if (dummyDimenstion != actualDimenstion) {
                 return false;
             }
 
-            // —v‘f‚ÌŒ^‚ğƒ`ƒFƒbƒN
+            // è¦ç´ ã®å‹ã‚’ãƒã‚§ãƒƒã‚¯
             final TypeInfo dummyElementType = ((ArrayTypeInfo) dummyType).getElementType();
             final TypeInfo actualElementType = ((ArrayTypeInfo) actualType).getElementType();
             return canCallWith(dummyElementType, actualElementType);
         }
 
-        // ‰¼ˆø”‚ªŒ^ƒpƒ‰ƒ[ƒ^Œ^‚Ìê‡
+        // ä»®å¼•æ•°ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‹ã®å ´åˆ
         else if (dummyType instanceof TypeParameterTypeInfo) {
 
-            // TODO ¡‚Ì‚Æ‚±‚ëCğŒ‚È‚µ‚ÅOK‚É‚µ‚Ä‚¢‚éDÀ‘•‚Ì•K—v‚ ‚è
+            // TODO ä»Šã®ã¨ã“ã‚ï¼Œæ¡ä»¶ãªã—ã§OKã«ã—ã¦ã„ã‚‹ï¼å®Ÿè£…ã®å¿…è¦ã‚ã‚Š
             return true;
         }
 
@@ -301,13 +301,13 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ˆø”‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param parameter ’Ç‰Á‚·‚éˆø”
+     * @param parameter è¿½åŠ ã™ã‚‹å¼•æ•°
      */
     public final void addParameter(final ParameterInfo parameter) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == parameter) {
             throw new IllegalArgumentException();
@@ -317,13 +317,13 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ˆø”‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param parameters ’Ç‰Á‚·‚éˆø”
+     * @param parameters è¿½åŠ ã™ã‚‹å¼•æ•°
      */
     public final void addParameters(final List<ParameterInfo> parameters) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == parameters) {
             throw new IllegalArgumentException();
@@ -333,27 +333,27 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚Ìˆø”‚Ì List ‚ğ•Ô‚·D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã® List ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚Ìˆø”‚Ì List
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã® List
      */
     public final List<ParameterInfo> getParameters() {
         return Collections.unmodifiableList(this.parameters);
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚Ìˆø”‚Ì”‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã®æ•°ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚Ìˆø”‚Ì”
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã®æ•°
      */
     public final int getParameterNumber() {
         return this.parameters.size();
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½Œ^ƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param typeParameter ’Ç‰Á‚·‚éŒ^ƒpƒ‰ƒ[ƒ^
+     * @param typeParameter è¿½åŠ ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     @Override
     public final void addTypeParameter(final TypeParameterInfo typeParameter) {
@@ -367,10 +367,10 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğ•Ô‚·
+     * æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿”ã™
      * 
-     * @param index Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX
-     * @return@w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^
+     * @param index å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+     * @returnã€€æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      */
     @Override
     public final TypeParameterInfo getTypeParameter(final int index) {
@@ -378,9 +378,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚Ì List ‚ğ•Ô‚·D
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚Ì List
+     * @return ã“ã®ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã® List
      */
     @Override
     public final List<TypeParameterInfo> getTypeParameters() {
@@ -388,7 +388,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Œ^ƒpƒ‰ƒ[ƒ^‚ª‚±‚Ìƒ†ƒjƒbƒg‚Å’è‹`‚³‚ê‚½‚à‚Ì‚Å‚ ‚é‚©‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆã§å®šç¾©ã•ã‚ŒãŸã‚‚ã®ã§ã‚ã‚‹ã‹ã‚’è¿”ã™
      * 
      * @param typeParameter
      * @return
@@ -410,9 +410,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½—áŠO‚ğ’Ç‰Á‚·‚é
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸä¾‹å¤–ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param thrownException ’Ç‰Á‚·‚é—áŠO
+     * @param thrownException è¿½åŠ ã™ã‚‹ä¾‹å¤–
      */
     public final void addThrownException(final ReferenceTypeInfo thrownException) {
 
@@ -425,18 +425,18 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ƒXƒ[‚³‚ê‚é—áŠO‚Ì List ‚ğ•Ô‚·D
+     * ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã® List ã‚’è¿”ã™ï¼
      * 
-     * @return ƒXƒ[‚³‚ê‚é—áŠO‚Ì List
+     * @return ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã® List
      */
     public final List<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableList(this.thrownExceptions);
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µƒ†ƒjƒbƒg“à‚ÅC–¼‘O‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ƒNƒ‰ƒXQÆCƒtƒB[ƒ‹ƒhQÆE‘ã“üCƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ğ’Ç‰Á‚·‚éD ƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®å‘¼ã³å‡ºã—ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã§ï¼Œåå‰è§£æ±ºã§ããªã‹ã£ãŸã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãƒ»ä»£å…¥ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã‚’è¿½åŠ ã™ã‚‹ï¼ ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param entityUsage –¼‘O‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ƒNƒ‰ƒXQÆCƒtƒB[ƒ‹ƒhQÆE‘ã“üCƒƒ\ƒbƒhŒÄ‚Ño‚µ
+     * @param entityUsage åå‰è§£æ±ºã§ããªã‹ã£ãŸã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãƒ»ä»£å…¥ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—
      */
     public void addUnresolvedUsage(final UnresolvedExpressionInfo<?> entityUsage) {
 
@@ -449,18 +449,18 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µƒ†ƒjƒbƒg“à‚ÅC–¼‘O‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ƒNƒ‰ƒXQÆCƒtƒB[ƒ‹ƒhQÆE‘ã“üCƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Ì Set ‚ğ•Ô‚·D
+     * ã“ã®å‘¼ã³å‡ºã—ãƒ¦ãƒ‹ãƒƒãƒˆå†…ã§ï¼Œåå‰è§£æ±ºã§ããªã‹ã£ãŸã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãƒ»ä»£å…¥ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã® Set ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh“à‚ÅC–¼‘O‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ƒNƒ‰ƒXQÆCƒtƒB[ƒ‹ƒhQÆE‘ã“üCƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Ì Set
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å†…ã§ï¼Œåå‰è§£æ±ºã§ããªã‹ã£ãŸã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãƒ»ä»£å…¥ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã® Set
      */
     public Set<UnresolvedExpressionInfo<?>> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
     /**
-     * Cüq‚Ì Set ‚ğ•Ô‚·
+     * ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return Cüq‚Ì Set
+     * @return ä¿®é£¾å­ã® Set
      */
     @Override
     public final Set<ModifierInfo> getModifiers() {
@@ -468,9 +468,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isInheritanceVisible() {
@@ -479,9 +479,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isNamespaceVisible() {
@@ -490,9 +490,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isPublicVisible() {
@@ -501,9 +501,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param caller ’Ç‰Á‚·‚éŒÄ‚Ño‚·ƒƒ\ƒbƒh
+     * @param caller è¿½åŠ ã™ã‚‹å‘¼ã³å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public final void addCaller(final CallableUnitInfo caller) {
 
@@ -516,60 +516,60 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì SortedSet
+     * @return ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã® SortedSet
      */
     public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^Aƒƒ\ƒbƒh‚ÌˆÊ’uî•ñ‚É“ü‚ê‚éƒ_ƒ~[‚Ì’l‚ğ‚©‚¦‚· 
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€ãƒ¡ã‚½ãƒƒãƒ‰ã®ä½ç½®æƒ…å ±ã«å…¥ã‚Œã‚‹ãƒ€ãƒŸãƒ¼ã®å€¤ã‚’ã‹ãˆã™ 
      */
     protected final static int getDummyPosition() {
         return dummyPosition--;
     }
 
     /**
-     * ‚±‚ÌCallableUnitInfo‚ÌƒVƒOƒlƒ`ƒƒ‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * ã“ã®CallableUnitInfoã®ã‚·ã‚°ãƒãƒãƒ£ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌCallableUnitInfo‚ÌƒVƒOƒlƒ`ƒƒ‚ÌƒeƒLƒXƒg•\Œ»
+     * @return ã“ã®CallableUnitInfoã®ã‚·ã‚°ãƒãƒãƒ£ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      */
     public abstract String getSignatureText();
 
     /**
-     * Cüq‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä¿®é£¾å­ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Set<ModifierInfo> modifiers;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğ•Û‘¶‚·‚é•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final List<TypeParameterInfo> typeParameters;
 
     /**
-     * ƒXƒ[‚³‚ê‚é—áŠO‚ğ•Û‘¶‚·‚é•Ï”
+     * ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final List<ReferenceTypeInfo> thrownExceptions;
 
     /**
-     * ˆø”‚ÌƒŠƒXƒg‚Ì•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¼•æ•°ã®ãƒªã‚¹ãƒˆã®ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<ParameterInfo> parameters;
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Ä‚¢‚éƒƒ\ƒbƒhˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<CallableUnitInfo> callers;
 
     /**
-     * –¼‘O‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ƒNƒ‰ƒXQÆCƒtƒB[ƒ‹ƒhQÆE‘ã“üCƒƒ\ƒbƒhŒÄ‚Ño‚µ‚È‚Ç‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åå‰è§£æ±ºã§ããªã‹ã£ãŸã‚¯ãƒ©ã‚¹å‚ç…§ï¼Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å‚ç…§ãƒ»ä»£å…¥ï¼Œãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãªã©ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final transient Set<UnresolvedExpressionInfo<?>> unresolvedUsage;
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^Aƒƒ\ƒbƒh‚ÌˆÊ’uî•ñ‚É“ü‚ê‚éƒ_ƒ~[‚Ì’lB
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€ãƒ¡ã‚½ãƒƒãƒ‰ã®ä½ç½®æƒ…å ±ã«å…¥ã‚Œã‚‹ãƒ€ãƒŸãƒ¼ã®å€¤ã€‚
      */
     private static int dummyPosition = -1;
 }

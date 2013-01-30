@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * ”z—ñ—v‘f‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—è¦ç´ ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -16,15 +16,15 @@ import java.util.Set;
 public final class ArrayElementUsageInfo extends ExpressionInfo {
 
     /**
-     * —v‘f‚ÌeC‚Â‚Ü‚è”z—ñŒ^‚Ì®‚ÆƒCƒ“ƒfƒbƒNƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * è¦ç´ ã®è¦ªï¼Œã¤ã¾ã‚Šé…åˆ—å‹ã®å¼ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param indexExpression ƒCƒ“ƒfƒbƒNƒX
-     * @param qualifierExpression ”z—ñŒ^‚Ì®
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param indexExpression ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+     * @param qualifierExpression é…åˆ—å‹ã®å¼
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ArrayElementUsageInfo(final ExpressionInfo indexExpression,
             final ExpressionInfo qualifierExpression, final CallableUnitInfo ownerMethod,
@@ -43,54 +43,54 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì”z—ñ—v‘f‚Ìg—p‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®é…åˆ—è¦ç´ ã®ä½¿ç”¨ã®å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì”z—ñ—v‘f‚Ìg—p‚ÌŒ^
+     * @return ã“ã®é…åˆ—è¦ç´ ã®ä½¿ç”¨ã®å‹
      */
     @Override
     public TypeInfo getType() {
 
         final TypeInfo ownerType = this.getQualifierExpression().getType();
 
-        // e‚ª”z—ñŒ^‚Å‚ ‚éC‚Æ‰ğŒˆ‚Å‚«‚Ä‚¢‚éê‡
+        // è¦ªãŒé…åˆ—å‹ã§ã‚ã‚‹ï¼Œã¨è§£æ±ºã§ãã¦ã„ã‚‹å ´åˆ
         if (ownerType instanceof ArrayTypeInfo) {
-            // ”z—ñ‚ÌŸŒ³‚É‰‚¶‚ÄŒ^‚ğ¶¬
+            // é…åˆ—ã®æ¬¡å…ƒã«å¿œã˜ã¦å‹ã‚’ç”Ÿæˆ
             final int ownerArrayDimension = ((ArrayTypeInfo) ownerType).getDimension();
             final TypeInfo ownerArrayElement = ((ArrayTypeInfo) ownerType).getElementType();
 
-            // ”z—ñ‚ª“ñŸŒ³ˆÈã‚Ìê‡‚ÍCŸŒ³‚ğˆê‚Â—‚Æ‚µ‚½”z—ñ‚ğ•Ô‚µCˆêŸŒ³‚Ìê‡‚ÍC—v‘f‚ÌŒ^‚ğ•Ô‚·D
+            // é…åˆ—ãŒäºŒæ¬¡å…ƒä»¥ä¸Šã®å ´åˆã¯ï¼Œæ¬¡å…ƒã‚’ä¸€ã¤è½ã¨ã—ãŸé…åˆ—ã‚’è¿”ã—ï¼Œä¸€æ¬¡å…ƒã®å ´åˆã¯ï¼Œè¦ç´ ã®å‹ã‚’è¿”ã™ï¼
             return 1 < ownerArrayDimension ? ArrayTypeInfo.getType(ownerArrayElement,
                     ownerArrayDimension - 1) : ownerArrayElement;
         }
 
-        // ”z—ñŒ^‚Å‚È‚¢C‚©‚Â•s–¾Œ^‚Å‚È‚¢ê‡‚Í‚¨‚©‚µ‚¢
+        // é…åˆ—å‹ã§ãªã„ï¼Œã‹ã¤ä¸æ˜å‹ã§ãªã„å ´åˆã¯ãŠã‹ã—ã„
         assert ownerType instanceof UnknownTypeInfo : "ArrayElementUsage attaches unappropriate type!";
 
         return ownerType;
     }
 
     /**
-     * ‚±‚Ì—v‘f‚ÌeC‚Â‚Ü‚è”z—ñŒ^‚Ì®‚ğ•Ô‚·
+     * ã“ã®è¦ç´ ã®è¦ªï¼Œã¤ã¾ã‚Šé…åˆ—å‹ã®å¼ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì—v‘f‚Ìe‚ğ•Ô‚·
+     * @return ã“ã®è¦ç´ ã®è¦ªã‚’è¿”ã™
      */
     public ExpressionInfo getQualifierExpression() {
         return this.qualifierExpression;
     }
 
     /**
-     * ‚±‚Ì—v‘f‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+     * ã“ã®è¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì—v‘f‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @returnã€€ã“ã®è¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public ExpressionInfo getIndexExpression() {
         return this.indexExpression;
     }
 
     /**
-     * ‚±‚Ì®i”z—ñ—v‘f‚Ìg—pj‚É‚¨‚¯‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·
+     * ã“ã®å¼ï¼ˆé…åˆ—è¦ç´ ã®ä½¿ç”¨ï¼‰ã«ãŠã‘ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -102,9 +102,9 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -124,9 +124,9 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì”z—ñ—v‘fg—p‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®é…åˆ—è¦ç´ ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì”z—ñ—v‘fg—p‚ÌƒeƒLƒXƒg•\Œ»
+     * @return ã“ã®é…åˆ—è¦ç´ ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      */
     @Override
     public String getText() {
@@ -147,9 +147,9 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

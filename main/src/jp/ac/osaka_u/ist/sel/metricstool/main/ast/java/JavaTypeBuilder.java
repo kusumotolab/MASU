@@ -12,9 +12,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * Java—p‚ÌŒ^\’z‚ğs‚¤ƒrƒ‹ƒ_[D
- * ƒWƒFƒlƒŠƒNƒX‚ÌŒ^ˆø”‚ÅƒƒCƒ‹ƒhƒJ[ƒhg—p‚ÉCeƒNƒ‰ƒX‚ªw’è‚³‚ê‚È‚©‚Á‚½ê‡‚ÉC
- * java.lang.Object‚ğ“o˜^‚·‚éD
+ * Javaç”¨ã®å‹æ§‹ç¯‰ã‚’è¡Œã†ãƒ“ãƒ«ãƒ€ãƒ¼ï¼
+ * ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹ã®å‹å¼•æ•°ã§ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ä½¿ç”¨æ™‚ã«ï¼Œè¦ªã‚¯ãƒ©ã‚¹ãŒæŒ‡å®šã•ã‚Œãªã‹ã£ãŸå ´åˆã«ï¼Œ
+ * java.lang.Objectã‚’ç™»éŒ²ã™ã‚‹ï¼
  * 
  * @author kou-tngt
  *
@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class JavaTypeBuilder extends TypeBuilder {
 
     /**
-     * eƒNƒ‰ƒX‚Ì“¯‚¶ˆø”‚ğó‚¯æ‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğŒÄ‚Ño‚·D
+     * è¦ªã‚¯ãƒ©ã‚¹ã®åŒã˜å¼•æ•°ã‚’å—ã‘å–ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‘¼ã³å‡ºã™ï¼
      * 
      * @param buildDataManager
      */
@@ -31,9 +31,9 @@ public class JavaTypeBuilder extends TypeBuilder {
     }
 
     /**
-     * ƒƒCƒ‹ƒhƒJ[ƒhg—p‚É‹«ŠE‚Æ‚µ‚Äw’è‚³‚ê‚½Œ^‚ğ•Ô‚·D
-     * Java‚Ìê‡w’è‚³‚ê‚È‚¯‚ê‚Îjava.lang.Object‚ğ•Ô‚·D
-     * @return ãŒÀƒNƒ‰ƒX‚Æ‚µ‚Äw’è‚³‚ê‚½Œ^‚ğCw’è‚³‚ê‚È‚¯‚ê‚Îjava.lang.Object‚ğ•Ô‚·D
+     * ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ä½¿ç”¨æ™‚ã«å¢ƒç•Œã¨ã—ã¦æŒ‡å®šã•ã‚ŒãŸå‹ã‚’è¿”ã™ï¼
+     * Javaã®å ´åˆæŒ‡å®šã•ã‚Œãªã‘ã‚Œã°java.lang.Objectã‚’è¿”ã™ï¼
+     * @return ä¸Šé™ã‚¯ãƒ©ã‚¹ã¨ã—ã¦æŒ‡å®šã•ã‚ŒãŸå‹ã‚’ï¼ŒæŒ‡å®šã•ã‚Œãªã‘ã‚Œã°java.lang.Objectã‚’è¿”ã™ï¼
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder#getCurrentUpperBounds()
      */
     @Override
@@ -47,7 +47,7 @@ public class JavaTypeBuilder extends TypeBuilder {
     }
 
     /**
-     * java.lang.Object‚ğ•\‚·Œ^QÆ
+     * java.lang.Objectã‚’è¡¨ã™å‹å‚ç…§
      */
     public final static UnresolvedClassTypeInfo JAVA_LANG_OBJECT = new UnresolvedClassTypeInfo(
             new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang",

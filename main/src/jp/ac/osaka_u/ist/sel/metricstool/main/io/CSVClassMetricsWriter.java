@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
- * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğCSVƒ@ƒCƒ‹‚É‘‚«o‚·ƒNƒ‰ƒX
+ * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’CSVã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -24,9 +24,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWriter, MessageSource {
 
     /**
-     * CSVƒtƒ@ƒCƒ‹‚ğ—^‚¦‚é
+     * CSVãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸ãˆã‚‹
      * 
-     * @param fileName CSVƒtƒ@ƒCƒ‹–¼
+     * @param fileName CSVãƒ•ã‚¡ã‚¤ãƒ«å
      */
     public CSVClassMetricsWriter(final String fileName) {
 
@@ -39,7 +39,7 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
     }
 
     /**
-     * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğCSVƒtƒ@ƒCƒ‹‚É‘‚«o‚·
+     * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’CSVãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™
      */
     public void write() {
 
@@ -47,7 +47,7 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileName));
 
-            // ƒƒgƒŠƒNƒX–¼‚È‚Ç‚ğ‘‚«o‚µ
+            // ãƒ¡ãƒˆãƒªã‚¯ã‚¹åãªã©ã‚’æ›¸ãå‡ºã—
             writer.write(CLASS_NAME);
             for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
                     .getPlugins()) {
@@ -61,7 +61,7 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
 
             writer.newLine();
 
-            // ƒƒgƒŠƒNƒX’l‚ğ‘‚«o‚µ
+            // ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ã‚’æ›¸ãå‡ºã—
             for (final ClassMetricsInfo classMetricsInfo : DataManager.getInstance()
                     .getClassMetricsInfoManager()) {
                 final ClassInfo classInfo = classMetricsInfo.getMeasuredObject();
@@ -96,19 +96,19 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
     }
 
     /**
-     * MessagerPrinter ‚ğ—p‚¢‚é‚½‚ß‚É•K—v‚Èƒƒ\ƒbƒhDƒƒbƒZ[ƒW‘—MÒ–¼‚ğ•Ô‚·
+     * MessagerPrinter ã‚’ç”¨ã„ã‚‹ãŸã‚ã«å¿…è¦ãªãƒ¡ã‚½ãƒƒãƒ‰ï¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…åã‚’è¿”ã™
      * 
      * @see MessagePrinter
      * @see MessageSource
      * 
-     * @return ƒƒbƒZ[ƒW‘—MÒ–¼
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…å
      */
     public String getMessageSourceName() {
         return this.getClass().toString();
     }
 
     /**
-     * ƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğ‘‚«‚¾‚·ƒtƒ@ƒCƒ‹–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’æ›¸ãã ã™ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String fileName;
 }

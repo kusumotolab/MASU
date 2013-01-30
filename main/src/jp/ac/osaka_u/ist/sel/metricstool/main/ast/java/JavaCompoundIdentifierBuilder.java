@@ -55,7 +55,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             pushElement(new UsageElement(classReference));
         } else if (right instanceof InstanceSpecificElement) {
 
-            // ‰E‘¤‚Ì—v‘f‚ªthis‚Å¶‘¤‚É¯•Êq‚ª‚ ‚éê‡CŠO•”ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÌQÆ
+            // å³å´ã®è¦ç´ ãŒthisã§å·¦å´ã«è­˜åˆ¥å­ãŒã‚ã‚‹å ´åˆï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å‚ç…§
             if (((InstanceSpecificElement) right).isThisInstance()) {
                 UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
 
@@ -93,7 +93,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 && ((JavaExpressionElement) right).isSuper()) {
             UnresolvedClassInfo classInfo = null;
             if (left instanceof IdentifierElement) {
-                //‚Ü‚¸•Ï”–¼.super()‚Æ‚¢‚¤ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚©‚Ç‚¤‚©‚ğŠm”F‚·‚é
+                //ã¾ãšå¤‰æ•°å.super()ã¨ã„ã†ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‹ã©ã†ã‹ã‚’ç¢ºèªã™ã‚‹
                 IdentifierElement identifier = (IdentifierElement) left;
                 UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage = identifier
                         .resolveReferencedEntityIfPossible(buildDataManager);
@@ -105,7 +105,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 }
 
                 if (null != variable) {
-                    //•Ï”‚ªŒ©‚Â‚©‚Á‚½
+                    //å¤‰æ•°ãŒè¦‹ã¤ã‹ã£ãŸ
 
                     boolean match = false;
                     UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
@@ -117,7 +117,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                         names = currentSuperClass.getReferenceName();
                     }
                     if (null != names && variable.getType() instanceof UnresolvedClassTypeInfo) {
-                        // TODO UnresolvedReferenceType‚É‚·‚×‚«‚©‚à —vƒeƒXƒg
+                        // TODO UnresolvedReferenceTypeã«ã™ã¹ãã‹ã‚‚ è¦ãƒ†ã‚¹ãƒˆ
                         UnresolvedClassTypeInfo variableType = (UnresolvedClassTypeInfo) variable
                                 .getType();
                         for (String name : names) {
@@ -134,13 +134,13 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 }
 
                 if (null == classInfo) {
-                    //•Ï”–¼.super‚Æ‚¢‚¤ŒÄ‚Ño‚µ‚Æ‚µ‚Ä‰ğŒˆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚İ‚½‚¯‚Ç–³—‚¾‚Á‚½‚Ì‚Å
-                    //OuterClass.super.method()‚Æ‚¢‚¤ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Ì‚æ‚¤‚¾
+                    //å¤‰æ•°å.superã¨ã„ã†å‘¼ã³å‡ºã—ã¨ã—ã¦è§£æ±ºã—ã‚ˆã†ã¨ã—ã¦ã¿ãŸã‘ã©ç„¡ç†ã ã£ãŸã®ã§
+                    //OuterClass.super.method()ã¨ã„ã†ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®ã‚ˆã†ã 
                     classInfo = getSpecifiedOuterClass((IdentifierElement) left);
                 }
 
                 if (null == classInfo) {
-                    // ŠY“–ƒNƒ‰ƒX‚ªŒ©“–‚½‚ç‚È‚¢‚Ì‚Å‚Æ‚è‚ ‚¦‚¸Œ»İ‚ÌƒNƒ‰ƒX‚ÌƒX[ƒp[ƒNƒ‰ƒX‚Æ”»’f‚·‚é
+                    // è©²å½“ã‚¯ãƒ©ã‚¹ãŒè¦‹å½“ãŸã‚‰ãªã„ã®ã§ã¨ã‚Šã‚ãˆãšç¾åœ¨ã®ã‚¯ãƒ©ã‚¹ã®ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã¨åˆ¤æ–­ã™ã‚‹
                     classInfo = buildDataManager.getCurrentClass();
                 }
             } else if (left.getUsage() instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
@@ -176,7 +176,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 UnresolvedCallableUnitInfo<?> outerCallable = (UnresolvedCallableUnitInfo<CallableUnitInfo>) outerUnit;
                 currentClass = outerCallable.getOwnerClass();
             } else {
-                // TODO ¡‚Ì‚Æ‚±‚ëƒƒ\ƒbƒh“à‚ÅéŒ¾‚³‚ê‚½ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^“à‚Å"¯•Êq.super()"‚Æ‚¢‚¤\•¶‚ÍƒTƒ|[ƒg‚µ‚Ä‚¢‚È‚¢
+                // TODO ä»Šã®ã¨ã“ã‚ãƒ¡ã‚½ãƒƒãƒ‰å†…ã§å®£è¨€ã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å†…ã§"è­˜åˆ¥å­.super()"ã¨ã„ã†æ§‹æ–‡ã¯ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ãªã„
                 throw new ASTParseException("unsupported super constructor call");
             }
         }

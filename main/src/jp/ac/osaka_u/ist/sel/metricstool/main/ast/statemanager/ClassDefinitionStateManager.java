@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒNƒ‰ƒX’è‹`•”‚Æ‚»‚ÌŒã‚ÌƒNƒ‰ƒXƒuƒƒbƒN‚É‘Î‚·‚éƒrƒWƒ^[‚Ìó‘Ô‚ğŠÇ—‚µCó‘Ô‘JˆÚƒCƒxƒ“ƒg‚ğ”­s‚·‚éƒNƒ‰ƒXD
+ * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã¨ãã®å¾Œã®ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«å¯¾ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’ç®¡ç†ã—ï¼ŒçŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author kou-tngt
  *
@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚Æ‚»‚ÌŒã‚ÌƒNƒ‰ƒXƒuƒƒbƒN‚ÉŠÖ‚·‚éó‘Ô‘JˆÚƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•\‚·Enum
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã¨ãã®å¾Œã®ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«é–¢ã™ã‚‹çŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¡¨ã™Enum
      * @author kou-tngt
      *
      */
@@ -24,8 +24,8 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ƒNƒ‰ƒXƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒNƒ‰ƒXƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockEnterEventType() {
@@ -33,8 +33,8 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ƒNƒ‰ƒXƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒNƒ‰ƒXƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockExitEventType() {
@@ -42,8 +42,8 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒNƒ‰ƒX’è‹`•”‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionEnterEventType() {
@@ -51,8 +51,8 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ƒNƒ‰ƒX’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return ƒNƒ‰ƒX’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionExitEventType() {
@@ -60,11 +60,11 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ˆø”‚ÌƒCƒxƒ“ƒg‚ªƒNƒ‰ƒX’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isClassDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isClassDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param event@ƒNƒ‰ƒX’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ASTƒCƒxƒ“ƒg
-     * @return ƒNƒ‰ƒX’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param eventã€€ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ASTã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return ã‚¯ãƒ©ã‚¹å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {
@@ -72,11 +72,11 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ˆø”‚Ìƒg[ƒNƒ“‚ªƒNƒ‰ƒXƒuƒƒbƒN‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isClassblock()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ãƒˆãƒ¼ã‚¯ãƒ³ãŒã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isClassblock()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param token@ƒNƒ‰ƒXƒuƒƒbƒN‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ASTƒg[ƒNƒ“
-     * @return ƒNƒ‰ƒXƒuƒƒbƒN‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param tokenã€€ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ASTãƒˆãƒ¼ã‚¯ãƒ³
+     * @return ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isBlockToken(final AstToken token) {

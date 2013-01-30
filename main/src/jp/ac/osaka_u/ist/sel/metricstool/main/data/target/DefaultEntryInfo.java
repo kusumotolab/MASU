@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * switch •¶‚Ì default ƒGƒ“ƒgƒŠ‚ğ•\‚·ƒNƒ‰ƒX
+ * switch æ–‡ã® default ã‚¨ãƒ³ãƒˆãƒªã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -10,13 +10,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public final class DefaultEntryInfo extends CaseEntryInfo {
 
     /**
-     * ‘Î‰‚·‚é switch ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä default ƒGƒ“ƒgƒŠ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ switch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ default ã‚¨ãƒ³ãƒˆãƒªã‚’åˆæœŸåŒ–
      * 
-     * @param ownerSwitchBlock ‘Î‰‚·‚é switchƒuƒƒbƒN
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSwitchBlock å¯¾å¿œã™ã‚‹ switchãƒ–ãƒ­ãƒƒã‚¯
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public DefaultEntryInfo(final SwitchBlockInfo ownerSwitchBlock, int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -24,9 +24,9 @@ public final class DefaultEntryInfo extends CaseEntryInfo {
     }
 
     /**
-     * ‚±‚ÌdefaultƒGƒ“ƒgƒŠ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®defaultã‚¨ãƒ³ãƒˆãƒªã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌdefaultƒGƒ“ƒgƒŠ‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®defaultã‚¨ãƒ³ãƒˆãƒªã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {

@@ -123,11 +123,11 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
         if (null != name && name.length > 0 && !enumClassStack.isEmpty() && null != buildManager) {
             String elementName = name[0];
             UnresolvedClassInfo enumClass = enumClassStack.peek();
-            //Enum‚Í—ñ‹“q‚Æ“¯‚¶–¼‘O‚ÌƒtƒB[ƒ‹ƒh‚ğ‚Â‚ğ‚İ‚È‚·
+            //Enumã¯åˆ—æŒ™å­ã¨åŒã˜åå‰ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æŒã¤ã‚’ã¿ãªã™
             UnresolvedClassConstructorCallInfo _initializer = new UnresolvedClassConstructorCallInfo(
                     enumClass.getClassType());
 
-            //—ñ‹“q‚ÉŠÜ‚Ü‚ê‚éˆø”‚ğ’Ç‰Á
+            //åˆ—æŒ™å­ã«å«ã¾ã‚Œã‚‹å¼•æ•°ã‚’è¿½åŠ 
             for (final ExpressionElement expressionElement : this.expressionElementList) {
                 _initializer.addArgument(expressionElement.getUsage());
             }
@@ -138,7 +138,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
                     UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, _initializer,
                     startLine, startColumn, endLine, endColumn);
-            //Enum‚ÌƒtƒB[ƒ‹ƒh‚Ípublic final staticˆµ‚¢
+            //Enumã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯public final staticæ‰±ã„
             element.addModifier(JavaPredefinedModifierInfo.STATIC);
             element.addModifier(JavaPredefinedModifierInfo.PUBLIC);
             element.addModifier(JavaPredefinedModifierInfo.FINAL);
@@ -155,8 +155,8 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
     }
 
     /**
-     * —ñ‹“q‚Éˆø”‚ª“ü‚Á‚Ä‚¢‚éê‡expressionElementList‚ÉŠi”[‚·‚é
-     * ’¼ÚExpressionManager‚ğG‚Á‚Ä‚¢‚é‚Ì‚Å‚ ‚ñ‚Ü‚èƒXƒ}[ƒg‚Å‚È‚¢??
+     * åˆ—æŒ™å­ã«å¼•æ•°ãŒå…¥ã£ã¦ã„ã‚‹å ´åˆexpressionElementListã«æ ¼ç´ã™ã‚‹
+     * ç›´æ¥ExpressionManagerã‚’è§¦ã£ã¦ã„ã‚‹ã®ã§ã‚ã‚“ã¾ã‚Šã‚¹ãƒãƒ¼ãƒˆã§ãªã„??
      */
     private void getExpressionListFromExpressionElementManager() {
         final int count = this.expressionManager.getExpressionStackSize();

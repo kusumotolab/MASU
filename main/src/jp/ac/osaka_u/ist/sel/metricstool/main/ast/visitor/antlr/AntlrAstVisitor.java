@@ -17,7 +17,7 @@ import antlr.collections.AST;
 
 
 /**
- * antlr‚ÌAST‚ğ–K–â‚·‚é {@link AstVisitor}.
+ * antlrã®ASTã‚’è¨ªå•ã™ã‚‹ {@link AstVisitor}.
  * 
  * 
  * @author kou-tngt
@@ -26,25 +26,25 @@ import antlr.collections.AST;
 public class AntlrAstVisitor implements AstVisitor<AST> {
 
     /**
-     * ˆø”translator‚Åw’è‚³‚ê‚½ {@link AstTokenTranslator} ‚ÆƒfƒtƒHƒ‹ƒg‚Ì {@link AstVisitStrategy}‚ğ
-     * İ’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-     * ‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚©‚ç¶¬‚³‚ê‚½ƒfƒtƒHƒ‹ƒg‚ÌAstVisitStrategy‚ÍƒNƒ‰ƒX‚âƒƒ\ƒbƒh“à•”‚Ìƒm[ƒh‚à–K–â‚·‚é‚æ‚¤‚ÉƒrƒWƒ^[‚ğ—U“±‚·‚é.
+     * å¼•æ•°translatorã§æŒ‡å®šã•ã‚ŒãŸ {@link AstTokenTranslator} ã¨ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã® {@link AstVisitStrategy}ã‚’
+     * è¨­å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+     * ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‹ã‚‰ç”Ÿæˆã•ã‚ŒãŸãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®AstVisitStrategyã¯ã‚¯ãƒ©ã‚¹ã‚„ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã®ãƒãƒ¼ãƒ‰ã‚‚è¨ªå•ã™ã‚‹ã‚ˆã†ã«ãƒ“ã‚¸ã‚¿ãƒ¼ã‚’èª˜å°ã™ã‚‹.
      * 
-     * @param translator@‚±‚ÌƒrƒWƒ^[‚ªg—p‚·‚éASTƒm[ƒh‚Ì–|–ó‹@
+     * @param translatorã€€ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒä½¿ç”¨ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¿»è¨³æ©Ÿ
      */
     public AntlrAstVisitor(final AstTokenTranslator<AST> translator) {
         this(translator, true, true);
     }
 
     /**
-     * ˆø”translator‚Åw’è‚³‚ê‚½ {@link AstTokenTranslator} ‚ÆƒfƒtƒHƒ‹ƒg‚Ì {@link AstVisitStrategy}‚ğ
-     * İ’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * å¼•æ•°translatorã§æŒ‡å®šã•ã‚ŒãŸ {@link AstTokenTranslator} ã¨ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã® {@link AstVisitStrategy}ã‚’
+     * è¨­å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * 
-     * ƒNƒ‰ƒX‚âƒƒ\ƒbƒh“à•”‚Ìƒm[ƒh‚ğ–K–â‚·‚é‚©‚Ç‚¤‚©‚ğˆø”intoClass‚ÆintoMethod‚Åw’è‚·‚é.
+     * ã‚¯ãƒ©ã‚¹ã‚„ãƒ¡ã‚½ãƒƒãƒ‰å†…éƒ¨ã®ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹ã‹ã©ã†ã‹ã‚’å¼•æ•°intoClassã¨intoMethodã§æŒ‡å®šã™ã‚‹.
      * 
-     * @param translator@‚±‚ÌƒrƒWƒ^[‚ªg—p‚·‚éASTƒm[ƒh‚Ì–|–ó‹@
-     * @param intoClass ƒNƒ‰ƒX‚ğ•\‚·AST‚Ì“à•”‚ğ–K–â‚·‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚é.–K–â‚·‚éê‡‚Ítrue.
-     * @param intoMethod@ƒƒ\ƒbƒh‚ğ•\‚·AST‚Ì“à•”‚ğ–K–â‚·‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚é.–K–â‚·‚éê‡‚Ítrue.
+     * @param translatorã€€ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒä½¿ç”¨ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¿»è¨³æ©Ÿ
+     * @param intoClass ã‚¯ãƒ©ã‚¹ã‚’è¡¨ã™ASTã®å†…éƒ¨ã‚’è¨ªå•ã™ã‚‹ã‹ã©ã†ã‹ã‚’æŒ‡å®šã™ã‚‹.è¨ªå•ã™ã‚‹å ´åˆã¯true.
+     * @param intoMethodã€€ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¡¨ã™ASTã®å†…éƒ¨ã‚’è¨ªå•ã™ã‚‹ã‹ã©ã†ã‹ã‚’æŒ‡å®šã™ã‚‹.è¨ªå•ã™ã‚‹å ´åˆã¯true.
      */
     public AntlrAstVisitor(final AstTokenTranslator<AST> translator, final boolean intoClass,
             final boolean intoMethod) {
@@ -52,11 +52,11 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½ {@link AstTokenTranslator} ‚Æ {@link AstVisitStrategy}‚ğ
-     * İ’è‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸ {@link AstTokenTranslator} ã¨ {@link AstVisitStrategy}ã‚’
+     * è¨­å®šã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
      * 
-     * @param translator@‚±‚ÌƒrƒWƒ^[‚ªg—p‚·‚éASTƒm[ƒh‚Ì–|–ó‹@
-     * @param strategy@‚±‚ÌƒrƒWƒ^[‚Ì–K–âæ‚ğ—U“±‚·‚éAstVisitStrategyƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param translatorã€€ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒä½¿ç”¨ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®ç¿»è¨³æ©Ÿ
+     * @param strategyã€€ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã®è¨ªå•å…ˆã‚’èª˜å°ã™ã‚‹AstVisitStrategyã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public AntlrAstVisitor(final AstTokenTranslator<AST> translator,
             final AstVisitStrategy<AST> strategy) {
@@ -72,10 +72,10 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚ª”­s‚·‚éŠe {@link AstVisitEvent} ‚Ì’Ê’m‚ğó‚¯‚éƒŠƒXƒi‚ğ“o˜^‚·‚é.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç™ºè¡Œã™ã‚‹å„ {@link AstVisitEvent} ã®é€šçŸ¥ã‚’å—ã‘ã‚‹ãƒªã‚¹ãƒŠã‚’ç™»éŒ²ã™ã‚‹.
      * 
-     * @param listener “o˜^‚·‚éƒŠƒXƒi
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * @param listener ç™»éŒ²ã™ã‚‹ãƒªã‚¹ãƒŠ
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void addVisitListener(final AstVisitListener listener) {
         if (null == listener) {
@@ -86,18 +86,18 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚ª”­s‚·‚éŠe {@link AstVisitEvent} ‚Ì’Ê’m‚ğó‚¯‚éƒŠƒXƒi‚ğíœ‚·‚é.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç™ºè¡Œã™ã‚‹å„ {@link AstVisitEvent} ã®é€šçŸ¥ã‚’å—ã‘ã‚‹ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹.
      * 
-     * @param listener@íœ‚·‚éƒŠƒXƒi
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * @param listenerã€€å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void removeVisitListener(final AstVisitListener listener) {
         this.listeners.remove(listener);
     }
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚Ìó‘Ô‚ğ‰Šúó‘Ô‚É–ß‚·.
-     * ƒCƒxƒ“ƒgƒŠƒXƒi‚Ííœ‚³‚ê‚È‚¢.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’åˆæœŸçŠ¶æ…‹ã«æˆ»ã™.
+     * ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠã¯å‰Šé™¤ã•ã‚Œãªã„.
      */
     public void reset() {
         this.eventStack.clear();
@@ -127,10 +127,10 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
 
         AstToken parentToken = null;
         while (null != nextNode) {
-            //‚±‚Ìƒm[ƒh‚Ìƒg[ƒNƒ“‚©‚çAstToken‚É•ÏŠ·‚·‚é
+            //ã“ã®ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã‚‰AstTokenã«å¤‰æ›ã™ã‚‹
             final AstToken token = this.translator.translate(nextNode);
 
-            //ˆÊ’uî•ñ‚ª—˜—p‚Å‚«‚é‚È‚çæ“¾‚·‚é.
+            //ä½ç½®æƒ…å ±ãŒåˆ©ç”¨ã§ãã‚‹ãªã‚‰å–å¾—ã™ã‚‹.
             int startLine = 0;
             int startColumn = 0;
             int endLine = 0;
@@ -143,34 +143,34 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
                 endColumn = node.getToColumn();
             }
             
-            //–K–âƒCƒxƒ“ƒg‚ğì¬
+            //è¨ªå•ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä½œæˆ
             final AstVisitEvent event = new AstVisitEvent(this, token, nextNode.getText(), parentToken, startLine, startColumn,
                     endLine, endColumn);
 
             this.fireVisitEvent(event);
 
             if (this.visitStrategy.needToVisitChildren(nextNode, event.getToken())) {
-                //qƒm[ƒh‚ğ–K–â‚·‚éê‡
+                //å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹å ´åˆ
 
                 this.fireEnterEvent(event);
                 this.eventStack.push(event);
                 this.nodeStack.push(nextNode);
                 nextNode = nextNode.getFirstChild();
                 
-                //qƒm[ƒh‚ğ–K–â‚·‚é‚Ì‚ÅCŒ»İ‚Ìƒm[ƒh‚ªeƒm[ƒh‚É‚È‚é
+                //å­ãƒãƒ¼ãƒ‰ã‚’è¨ªå•ã™ã‚‹ã®ã§ï¼Œç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒè¦ªãƒãƒ¼ãƒ‰ã«ãªã‚‹
                 parentToken = token;
 
             } else {
-                //Ÿ‚ÌŒZ’í‚Éi‚Şê‡
+                //æ¬¡ã®å…„å¼Ÿã«é€²ã‚€å ´åˆ
                 nextNode = nextNode.getNextSibling();
             }
 
             if (null == nextNode) {
-                //Ÿ‚Ìs‚«æ‚ª‚È‚¢
+                //æ¬¡ã®è¡Œãå…ˆãŒãªã„
 
                 AstVisitEvent exitedEvent = null;
                 
-                //‚Ü‚¾ƒXƒ^ƒbƒN‚ğ‘k‚Á‚Ä‚Ü‚¾’H‚Á‚Ä‚È‚¢ŒZ’í‚ğ’T‚·
+                //ã¾ã ã‚¹ã‚¿ãƒƒã‚¯ã‚’é¡ã£ã¦ã¾ã è¾¿ã£ã¦ãªã„å…„å¼Ÿã‚’æ¢ã™
                 while (!this.nodeStack.isEmpty()
                         && null == (nextNode = this.nodeStack.pop().getNextSibling())) {
                     exitedEvent = this.eventStack.pop();
@@ -190,8 +190,8 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * Œ»İ‚Ìƒm[ƒh‚Ì“à•”‚É“ü‚éƒCƒxƒ“ƒg‚ğ”­s‚·‚é
-     * @param event@”­s‚·‚éƒCƒxƒ“ƒg
+     * ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã«å…¥ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
+     * @param eventã€€ç™ºè¡Œã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     private void fireEnterEvent(final AstVisitEvent event) {
         for (final AstVisitListener listener : this.listeners) {
@@ -200,8 +200,8 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * Œ»İ‚Ìƒm[ƒh‚Ì“à•”‚©‚ço‚éƒCƒxƒ“ƒg‚ğ”­s‚·‚é
-     * @param event@”­s‚·‚éƒCƒxƒ“ƒg
+     * ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã‹ã‚‰å‡ºã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
+     * @param eventã€€ç™ºè¡Œã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     private void fireExitEvent(final AstVisitEvent event) throws ASTParseException {
         for (final AstVisitListener listener : this.listeners) {
@@ -210,8 +210,8 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * ƒm[ƒh‚É–K–â‚·‚éƒCƒxƒ“ƒg‚ğ”­s‚·‚é
-     * @param event@”­s‚·‚éƒCƒxƒ“ƒg
+     * ãƒãƒ¼ãƒ‰ã«è¨ªå•ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
+     * @param eventã€€ç™ºè¡Œã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     private void fireVisitEvent(final AstVisitEvent event) {
         for (final AstVisitListener listener : this.listeners) {
@@ -220,27 +220,27 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚Ì–K–âæ‚ğ—U“±‚·‚é.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã®è¨ªå•å…ˆã‚’èª˜å°ã™ã‚‹.
      */
     private final AstVisitStrategy<AST> visitStrategy;
 
     /**
-     * –K–â‚µ‚½ASTƒm[ƒh‚ğAstToken‚É•ÏŠ·‚·‚é
+     * è¨ªå•ã—ãŸASTãƒãƒ¼ãƒ‰ã‚’AstTokenã«å¤‰æ›ã™ã‚‹
      */
     private final AstTokenTranslator<AST> translator;
 
     /**
-     * ƒCƒxƒ“ƒg‚ğŠÇ—‚·‚éƒXƒ^ƒbƒN
+     * ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç®¡ç†ã™ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<AstVisitEvent> eventStack = new Stack<AstVisitEvent>();
 
     /**
-     * ƒm[ƒh‚ğŠÇ—‚·‚éƒXƒ^ƒbƒN
+     * ãƒãƒ¼ãƒ‰ã‚’ç®¡ç†ã™ã‚‹ã‚¹ã‚¿ãƒƒã‚¯
      */
     private final Stack<AST> nodeStack = new Stack<AST>();
 
     /**
-     * ƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚éƒŠƒXƒi[‚ÌƒZƒbƒg
+     * ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠãƒ¼ã®ã‚»ãƒƒãƒˆ
      */
     private final Set<AstVisitListener> listeners = new LinkedHashSet<AstVisitListener>();
 

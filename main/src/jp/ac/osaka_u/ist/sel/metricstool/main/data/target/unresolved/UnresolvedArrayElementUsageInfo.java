@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ”z—ñ‚É‘Î‚·‚é—v‘f‚ÌQÆ‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXDˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * æœªè§£æ±ºé…åˆ—ã«å¯¾ã™ã‚‹è¦ç´ ã®å‚ç…§ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * 
  * @author kou-tngt, higo
  * @see UnresolvedExpressionInfo
@@ -21,10 +21,10 @@ public final class UnresolvedArrayElementUsageInfo extends
         UnresolvedExpressionInfo<ArrayElementUsageInfo> {
 
     /**
-     * —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^‚ğ—^‚¦‚é.
+     * è¦ç´ ãŒå‚ç…§ã•ã‚ŒãŸé…åˆ—ã®å‹ã‚’ä¸ãˆã‚‹.
      * 
-     * @param qualifierArrayType —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^
-     * @param indexExpression QÆ‚³‚ê‚½—v‘f‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @param qualifierArrayType è¦ç´ ãŒå‚ç…§ã•ã‚ŒãŸé…åˆ—ã®å‹
+     * @param indexExpression å‚ç…§ã•ã‚ŒãŸè¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public UnresolvedArrayElementUsageInfo(final UnresolvedExpressionInfo<?> qualifierArrayType,
             final UnresolvedExpressionInfo<?> indexExpression) {
@@ -38,52 +38,52 @@ public final class UnresolvedArrayElementUsageInfo extends
     }
 
     /**
-     * –¢‰ğŒˆ”z—ñ—v‘f‚ÌQÆ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İQÆ‚ğ•Ô‚·D
+     * æœªè§£æ±ºé…åˆ—è¦ç´ ã®å‚ç…§ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿å‚ç…§ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆ”z—ñ—v‘fQÆ‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆ”z—ñ—v‘fQÆ‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İQÆ
+     * @param usingClass æœªè§£æ±ºé…åˆ—è¦ç´ å‚ç…§ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºé…åˆ—è¦ç´ å‚ç…§ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿å‚ç…§
      */
     @Override
     public ArrayElementUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == fieldInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // —v‘fg—p‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ–¼‘O‰ğŒˆ
+        // è¦ç´ ä½¿ç”¨ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’åå‰è§£æ±º
         final UnresolvedExpressionInfo<?> unresolvedIndexExpression = this.getIndexExpression();
         final ExpressionInfo indexExpression = unresolvedIndexExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert indexExpression != null : "method \"resolve\" returned null!";
 
-        // —v‘fg—p‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é("."‚Ì‘O‚Ì‚±‚Æ)–¢’è‹`Œ^‚ğæ“¾
+        // è¦ç´ ä½¿ç”¨ãŒãã£ã¤ã„ã¦ã„ã‚‹("."ã®å‰ã®ã“ã¨)æœªå®šç¾©å‹ã‚’å–å¾—
         final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierArrayType();
         ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "method \"resolve\" returned null!";
 
-        // e‚ª“Á’è‚Å‚«‚È‚¢ê‡‚à”z—ñ‚Ì—v‘fg—p‚ğì¬‚µ‚Ä•Ô‚·
-        // ‚à‚µ‚©‚·‚é‚ÆCUnknownEntityUsageInfo‚ğ•Ô‚·•û‚ª“KØ‚©‚à‚µ‚ê‚È‚¢
+        // è¦ªãŒç‰¹å®šã§ããªã„å ´åˆã‚‚é…åˆ—ã®è¦ç´ ä½¿ç”¨ã‚’ä½œæˆã—ã¦è¿”ã™
+        // ã‚‚ã—ã‹ã™ã‚‹ã¨ï¼ŒUnknownEntityUsageInfoã‚’è¿”ã™æ–¹ãŒé©åˆ‡ã‹ã‚‚ã—ã‚Œãªã„
         this.resolvedInfo = new ArrayElementUsageInfo(indexExpression, qualifierUsage, usingMethod,
                 fromLine, fromColumn, toLine, toColumn);
 
@@ -91,30 +91,30 @@ public final class UnresolvedArrayElementUsageInfo extends
     }
 
     /**
-     * —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^‚ğ•Ô‚·
+     * è¦ç´ ãŒå‚ç…§ã•ã‚ŒãŸé…åˆ—ã®å‹ã‚’è¿”ã™
      * 
-     * @return —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^
+     * @return è¦ç´ ãŒå‚ç…§ã•ã‚ŒãŸé…åˆ—ã®å‹
      */
     public UnresolvedExpressionInfo<?> getQualifierArrayType() {
         return this.qualifierArrayType;
     }
 
     /**
-     * QÆ‚³‚ê‚½—v‘f‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+     * å‚ç…§ã•ã‚ŒãŸè¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
      * 
-     * @return@QÆ‚³‚ê‚½—v‘f‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @returnã€€å‚ç…§ã•ã‚ŒãŸè¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public UnresolvedExpressionInfo<?> getIndexExpression() {
         return this.indexExpression;
     }
 
     /**
-     * —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^
+     * è¦ç´ ãŒå‚ç…§ã•ã‚ŒãŸé…åˆ—ã®å‹
      */
     private final UnresolvedExpressionInfo<?> qualifierArrayType;
 
     /**
-     * ”z—ñ—v‘fg—p‚ÌƒCƒ“ƒfƒbƒNƒX‚ğŠi”[‚·‚é•Ï”
+     * é…åˆ—è¦ç´ ä½¿ç”¨ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<?> indexExpression;
 

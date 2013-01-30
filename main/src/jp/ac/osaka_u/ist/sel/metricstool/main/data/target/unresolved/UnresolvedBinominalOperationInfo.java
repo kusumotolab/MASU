@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
- * –¢‰ğŒˆ“ñ€‰‰Z‚ğŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºäºŒé …æ¼”ç®—ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -21,11 +21,11 @@ public class UnresolvedBinominalOperationInfo extends
         UnresolvedExpressionInfo<BinominalOperationInfo> {
 
     /**
-     * ‰‰Zq‚Æ2‚Â‚ÌƒIƒyƒ‰ƒ“ƒh‚ğ—^‚¦‚Ä‰Šú‰»‚·‚é
+     * æ¼”ç®—å­ã¨2ã¤ã®ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’ä¸ãˆã¦åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param operator ‰‰Zq
-     * @param firstOperand ‘æˆêi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
-     * @param secondOperand ‘æ“ñi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
+     * @param operator æ¼”ç®—å­
+     * @param firstOperand ç¬¬ä¸€ï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
+     * @param secondOperand ç¬¬äºŒï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public UnresolvedBinominalOperationInfo(final OPERATOR operator,
             final UnresolvedExpressionInfo<?> firstOperand,
@@ -42,21 +42,21 @@ public class UnresolvedBinominalOperationInfo extends
     }
 
     /**
-     * –¢‰ğŒˆ“ñ€‰‰Z‚ğ‰ğŒˆ‚µC‚»‚ÌŒ^‚ğ•Ô‚·D
+     * æœªè§£æ±ºäºŒé …æ¼”ç®—ã‚’è§£æ±ºã—ï¼Œãã®å‹ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆ“ñ€‰‰Z‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆ“ñ€‰‰Z‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İ“ñ€‰‰Zi‚Â‚Ü‚èC‰‰ZŒ‹‰Ê‚ÌŒ^j
+     * @param usingClass æœªè§£æ±ºäºŒé …æ¼”ç®—ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºäºŒé …æ¼”ç®—ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿äºŒé …æ¼”ç®—ï¼ˆã¤ã¾ã‚Šï¼Œæ¼”ç®—çµæœã®å‹ï¼‰
      */
     @Override
     public BinominalOperationInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -69,13 +69,13 @@ public class UnresolvedBinominalOperationInfo extends
         final ExpressionInfo secondOperand = unresolvedSecondOperand.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        /*// è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
@@ -90,36 +90,36 @@ public class UnresolvedBinominalOperationInfo extends
     }
 
     /**
-     * ‰‰Zq‚ğæ“¾‚·‚é
+     * æ¼”ç®—å­ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‰‰Zq
+     * @return æ¼”ç®—å­
      */
     public OPERATOR getOperator() {
         return this.operator;
     }
 
     /**
-     * ‘æˆêi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh‚ğæ“¾‚·‚é
+     * ç¬¬ä¸€ï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‘æˆêi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
+     * @return ç¬¬ä¸€ï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public UnresolvedExpressionInfo<?> getFirstOperand() {
         return this.firstOperand;
     }
 
     /**
-     * ‘æ“ñi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh‚ğæ“¾‚·‚é
+     * ç¬¬äºŒï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‘æ“ñi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
+     * @return ç¬¬äºŒï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public UnresolvedExpressionInfo<?> getSecondOperand() {
         return this.secondOperand;
     }
 
     /**
-     * ‰‰Zq‚ğƒZƒbƒg‚·‚é
+     * æ¼”ç®—å­ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param operator ‰‰Zq
+     * @param operator æ¼”ç®—å­
      */
     public void setOperator(final OPERATOR operator) {
 
@@ -131,9 +131,9 @@ public class UnresolvedBinominalOperationInfo extends
     }
 
     /**
-     * ‘æˆêi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh‚ğƒZƒbƒg‚·‚é
+     * ç¬¬ä¸€ï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param firstOperand ‘æˆêi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
+     * @param firstOperand ç¬¬ä¸€ï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public void setFirstOperand(final UnresolvedExpressionInfo<?> firstOperand) {
 
@@ -145,9 +145,9 @@ public class UnresolvedBinominalOperationInfo extends
     }
 
     /**
-     * ‘æ“ñi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh‚ğƒZƒbƒg‚·‚é
+     * ç¬¬äºŒï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param secondOperand ‘æ“ñi–¢‰ğŒˆjƒIƒyƒ‰ƒ“ƒh
+     * @param secondOperand ç¬¬äºŒï¼ˆæœªè§£æ±ºï¼‰ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public void setSecondOperand(final UnresolvedExpressionInfo<?> secondOperand) {
 

@@ -5,11 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class MethodStateManager extends CallableUnitStateManager {
 
     /**
-     * ˆø”‚ÌƒCƒxƒ“ƒg‚ªƒƒ\ƒbƒh’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isMethodDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isMethodDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param event ƒƒ\ƒbƒh’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ASTƒCƒxƒ“ƒg
-     * @return ƒƒ\ƒbƒh’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param event ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ASTã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {

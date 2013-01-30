@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒŠƒeƒ‰ƒ‹g—p‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -22,10 +22,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<LiteralUsageInfo> {
 
     /**
-     * ƒŠƒeƒ‰ƒ‹‚Ì•¶š—ñ•\Œ»‚ÆƒŠƒeƒ‰ƒ‹‚ÌŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒªãƒ†ãƒ©ãƒ«ã®æ–‡å­—åˆ—è¡¨ç¾ã¨ãƒªãƒ†ãƒ©ãƒ«ã®å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param literal ƒŠƒeƒ‰ƒ‹‚Ì•¶š—ñ•\Œ»
-     * @param type ƒŠƒeƒ‰ƒ‹‚ÌŒ^
+     * @param literal ãƒªãƒ†ãƒ©ãƒ«ã®æ–‡å­—åˆ—è¡¨ç¾
+     * @param type ãƒªãƒ†ãƒ©ãƒ«ã®å‹
      */
     public UnresolvedLiteralUsageInfo(final String literal, final TypeInfo type) {
 
@@ -44,19 +44,19 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<L
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -73,18 +73,18 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<L
     }
 
     /**
-     * ‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚Ì•¶š—ñ‚ğ•Ô‚·
+     * ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®æ–‡å­—åˆ—ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚Ì•¶š—ñ
+     * @return ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®æ–‡å­—åˆ—
      */
     public final String getLiteral() {
         return this.literal;
     }
 
     /**
-     * ‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚ÌŒ^•Ô‚·
+     * ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®å‹è¿”ã™
      * 
-     * @return@‚±‚ÌƒŠƒeƒ‰ƒ‹g—p‚ÌŒ^‚ğ•Ô‚·
+     * @returnã€€ã“ã®ãƒªãƒ†ãƒ©ãƒ«ä½¿ç”¨ã®å‹ã‚’è¿”ã™
      */
     public final UnresolvedTypeInfo<?> getType() {
 

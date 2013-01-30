@@ -14,14 +14,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒtƒB[ƒ‹ƒhƒIƒuƒWƒFƒNƒg‚ğ•\‚·ƒNƒ‰ƒXD ˆÈ‰º‚Ìî•ñ‚ğ‚à‚ÂD
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼ ä»¥ä¸‹ã®æƒ…å ±ã‚’ã‚‚ã¤ï¼
  * <ul>
- * <li>ƒtƒB[ƒ‹ƒh–¼</li>
- * <li>ƒtƒB[ƒ‹ƒh‚ÌŒ^</li>
- * <li>ƒtƒB[ƒ‹ƒh‚ÌCüq</li>
- * <li>ƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX</li>
- * <li>ƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒhŒQ</li>
- * <li>ƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒhŒQ</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å‹</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ä¿®é£¾å­</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤</li>
+ * <li>ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤</li>
  * </ul>
  * 
  * @author higo
@@ -31,15 +31,15 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
         Member, Visualizable, StaticOrInstance {
 
     /**
-     * ƒtƒB[ƒ‹ƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD ƒtƒB[ƒ‹ƒh–¼‚ÆŒ^C’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ª—^‚¦‚ç‚ê‚È‚¯‚ê‚Î‚È‚ç‚È‚¢D
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼ ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã¨å‹ï¼Œå®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ãŒä¸ãˆã‚‰ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼
      * 
-     * @param modifiers Cüq‚ÌƒZƒbƒg
-     * @param name ƒtƒB[ƒ‹ƒh–¼
-     * @param definitionClass ƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®ã‚»ãƒƒãƒˆ
+     * @param name ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
+     * @param definitionClass ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     FieldInfo(final Set<ModifierInfo> modifiers, final String name,
             final ClassInfo definitionClass, final boolean instance, final int fromLine,
@@ -59,9 +59,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğSet‚Æ‚µ‚Ä•Ô‚·
-     * @param variables •Ï”‚ÌSet
-     * @return —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚éƒtƒB[ƒ‹ƒh‚ÌSet
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’Setã¨ã—ã¦è¿”ã™
+     * @param variables å¤‰æ•°ã®Set
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®Set
      */
     public static Set<FieldInfo> getLocalVariables(Collection<VariableInfo<?>> variables) {
         final Set<FieldInfo> fields = new HashSet<FieldInfo>();
@@ -74,9 +74,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O‚ğ•Ô‚·
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Æ‚µ‚Ä‚Ì–¼‘O
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã¨ã—ã¦ã®åå‰
      */
     public final String getMeasuredUnitName() {
 
@@ -88,9 +88,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ’Ç‰Á‚·‚é
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param referencer ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @param referencer ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      */
     public final void addReferencer(final CallableUnitInfo referencer) {
 
@@ -103,9 +103,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ’Ç‰Á‚·‚é
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param assignmenter ‚±‚ÌƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒh
+     * @param assignmenter ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      */
     public final void addAssignmenter(final CallableUnitInfo assignmenter) {
 
@@ -118,10 +118,10 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒhƒIƒuƒWƒFƒNƒg‚Ì‡˜‚ğ’è‹`‚·‚éƒƒ\ƒbƒhD‚»‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚Ì‡˜‚É]‚¤D“¯‚¶ƒNƒ‰ƒX“à‚É’è‹`‚³‚ê‚Ä‚¢‚éê‡‚ÍC
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é †åºã‚’å®šç¾©ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼ãã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã®é †åºã«å¾“ã†ï¼åŒã˜ã‚¯ãƒ©ã‚¹å†…ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ï¼Œ
      * 
-     * @param fieldInfo ”äŠr‘ÎÛƒIƒuƒWƒFƒNƒg
-     * @return ƒtƒB[ƒ‹ƒh‚Ì‡˜ŠÖŒW
+     * @param fieldInfo æ¯”è¼ƒå¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é †åºé–¢ä¿‚
      */
     //    @Override
     //    public final int compareTo(final TargetFieldInfo fieldInfo) {
@@ -135,36 +135,36 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     //        return 0 != classOrder ? classOrder : super.compareTo(fieldInfo);
     //    }
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Ô‚·
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
+     * @return ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public final ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet
+     * @return ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet
      */
     public final SortedSet<CallableUnitInfo> getReferences() {
         return Collections.unmodifiableSortedSet(this.referencers);
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet ‚ğ•Ô‚·D
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì SortedSet
+     * @return ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® SortedSet
      */
     public final SortedSet<CallableUnitInfo> getAssignmenters() {
         return Collections.unmodifiableSortedSet(this.assignmenters);
     }
 
     /**
-     * qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return qƒNƒ‰ƒX‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isInheritanceVisible() {
@@ -174,9 +174,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return “¯‚¶–¼‘O‹óŠÔ‚©‚çQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return åŒã˜åå‰ç©ºé–“ã‹ã‚‰å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isNamespaceVisible() {
@@ -186,9 +186,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\‚Èê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return ã©ã“ã‹ã‚‰ã§ã‚‚å‚ç…§å¯èƒ½ãªå ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     @Override
     public final boolean isPublicVisible() {
@@ -197,9 +197,9 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     @Override
     public final boolean isInstanceMember() {
@@ -207,31 +207,31 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
-     * ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ƒXƒ^ƒeƒBƒbƒNƒƒ“ƒo[‚Ìê‡ trueC‚»‚¤‚Å‚È‚¢ê‡ false
+     * @return ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ³ãƒãƒ¼ã®å ´åˆ trueï¼Œãã†ã§ãªã„å ´åˆ false
      */
     public final boolean isStaticMember() {
         return !this.instance;
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final ClassInfo ownerClass;
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğQÆ‚µ‚Ä‚¢‚éƒƒ\ƒbƒhŒQ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected final SortedSet<CallableUnitInfo> referencers;
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒh‚É‘Î‚µ‚Ä‘ã“ü‚ğs‚Á‚Ä‚¢‚éƒƒ\ƒbƒhŒQ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å¯¾ã—ã¦ä»£å…¥ã‚’è¡Œã£ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected final SortedSet<CallableUnitInfo> assignmenters;
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final boolean instance;
 }

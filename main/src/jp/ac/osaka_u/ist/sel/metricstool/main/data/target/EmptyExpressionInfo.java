@@ -7,8 +7,8 @@ import java.util.Set;
 
 
 /**
- * ‹ó‚Ì®‚ğ•\‚·ƒNƒ‰ƒX
- * return ; ‚â for ( ; ; ) ‚È‚Ç‚É—p‚¢‚é
+ * ç©ºã®å¼ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
+ * return ; ã‚„ for ( ; ; ) ãªã©ã«ç”¨ã„ã‚‹
  * 
  * @author higo
  *
@@ -17,11 +17,11 @@ import java.util.Set;
 public final class EmptyExpressionInfo extends ExpressionInfo {
 
     /**
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public EmptyExpressionInfo(final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -29,9 +29,9 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * void Œ^‚ğ•Ô‚·
+     * void å‹ã‚’è¿”ã™
      * 
-     * return voidŒ^ 
+     * return voidå‹ 
      */
     @Override
     public TypeInfo getType() {
@@ -39,9 +39,9 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ’·‚³0‚ÌString‚ğ•Ô‚·
+     * é•·ã•0ã®Stringã‚’è¿”ã™
      * 
-     * return ’·‚³0‚ÌString
+     * return é•·ã•0ã®String
      */
     @Override
     public String getText() {
@@ -49,10 +49,10 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet‚ğ•Ô‚·D
-     * ÀÛ‚Í‚È‚É‚àg—p‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅC‹ó‚ÌSet‚ª•Ô‚³‚ê‚éD
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Setã‚’è¿”ã™ï¼
+     * å®Ÿéš›ã¯ãªã«ã‚‚ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ã®ã§ï¼Œç©ºã®SetãŒè¿”ã•ã‚Œã‚‹ï¼
      * 
-     * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet
+     * @return ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -60,9 +60,9 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -70,9 +70,9 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

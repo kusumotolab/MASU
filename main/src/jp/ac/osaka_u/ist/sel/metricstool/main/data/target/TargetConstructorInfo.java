@@ -5,7 +5,7 @@ import java.util.Set;
 
 
 /**
- * •ªÍ‘ÎÛƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ•\‚·ƒNƒ‰ƒX
+ * åˆ†æå¯¾è±¡ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -14,13 +14,13 @@ import java.util.Set;
 public final class TargetConstructorInfo extends ConstructorInfo {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param modifiers Cüq‚ÌƒZƒbƒg
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã®ã‚»ãƒƒãƒˆ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetConstructorInfo(final Set<ModifierInfo> modifiers, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {

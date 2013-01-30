@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ª FileInfo ‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚É—p‚¢‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒ FileInfo ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -18,9 +18,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 public class DefaultFileInfoAccessor implements FileInfoAccessor {
 
     /**
-     * FileInfo ‚ÌƒCƒeƒŒ[ƒ^‚ğ•Ô‚·D ‚±‚ÌƒCƒeƒŒ[ƒ^‚ÍQÆê—p‚Å‚ ‚è•ÏXˆ—‚ğs‚¤‚±‚Æ‚Í‚Å‚«‚È‚¢D
+     * FileInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’è¿”ã™ï¼ ã“ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã¯å‚ç…§å°‚ç”¨ã§ã‚ã‚Šå¤‰æ›´å‡¦ç†ã‚’è¡Œã†ã“ã¨ã¯ã§ããªã„ï¼
      * 
-     * @return FileInfo ‚ÌƒCƒeƒŒ[ƒ^
+     * @return FileInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
      */
     @Override
     public Iterator<FileInfo> iterator() {
@@ -30,8 +30,8 @@ public class DefaultFileInfoAccessor implements FileInfoAccessor {
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°
      */
     @Override
     public int getFileCount() {

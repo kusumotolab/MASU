@@ -22,9 +22,9 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ��`���ꂽ�ϐ���Set��Ԃ�
+     * 定義された変数のSetを返す
      * 
-     * @return ��`���ꂽ�ϐ���Set
+     * @return 定義された変数のSet
      */
     @Override
     public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -32,9 +32,9 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * �Ăяo����Set��Ԃ�
+     * 呼び出しのSetを返す
      * 
-     * @return �Ăяo����Set
+     * @return 呼び出しのSet
      */
     @Override
     public final Set<CallInfo<?>> getCalls() {
@@ -54,9 +54,9 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     protected abstract String getReservedKeyword();
 
     /**
-     * ���̎��œ�������\���������O��Set��Ԃ�
+     * この式で投げられる可能性がある例外のSetを返す
      * 
-     * @return�@���̎��œ�������\���������O��Set
+     * @return　この式で投げられる可能性がある例外のSet
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

@@ -24,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 
 
 /**
- * ‘S‚Ä‚Ìƒ}ƒl[ƒWƒƒ[‚ğŠÇ—‚·‚éƒ}ƒl[ƒWƒƒ[
+ * å…¨ã¦ã®ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ç®¡ç†ã™ã‚‹ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
  * 
  * @author higo
  *
@@ -32,9 +32,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 public class DataManager {
 
     /**
-     * ƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é
+     * ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return@ƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @returnã€€ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static DataManager getInstance() {
 
@@ -47,7 +47,7 @@ public class DataManager {
     }
 
     /**
-     * ƒf[ƒ^ƒ}ƒl[ƒWƒƒ[‚É“o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğƒNƒŠƒA‚·‚é
+     * ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹æƒ…å ±ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
      */
     public static void clear() {
         SINGLETON = null;
@@ -111,7 +111,7 @@ public class DataManager {
     }
 
     /**
-     * TargetFileManager@‚ğ•Ô‚·
+     * TargetFileManagerã€€ã‚’è¿”ã™
      * 
      * @return TargetFileManager
      */
@@ -124,7 +124,7 @@ public class DataManager {
     }
 
     /**
-     * ClassMetricsInfoManager@‚ğ•Ô‚·
+     * ClassMetricsInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return ClassMetricsInfoManager
      */
@@ -133,7 +133,7 @@ public class DataManager {
     }
 
     /**
-     * FieldMetricsInfoManager@‚ğ•Ô‚·
+     * FieldMetricsInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return FieldMetricsInfoManager
      */
@@ -142,7 +142,7 @@ public class DataManager {
     }
 
     /**
-     * FileMetricsInfoManager@‚ğ•Ô‚·
+     * FileMetricsInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return FileMetricsInfoManager
      */
@@ -151,7 +151,7 @@ public class DataManager {
     }
 
     /**
-     * MethodMetricsInfoManager@‚ğ•Ô‚·
+     * MethodMetricsInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return MethodMetricsInfoManager
      */
@@ -160,7 +160,7 @@ public class DataManager {
     }
 
     /**
-     * UnresolvedClassInfoManager@‚ğ•Ô‚·
+     * UnresolvedClassInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return UnresolvedClassInfoManager
      */
@@ -173,7 +173,7 @@ public class DataManager {
     }
 
     /**
-     * ClassInfoManager@‚ğ•Ô‚·
+     * ClassInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return ClassInfoManager
      */
@@ -182,7 +182,7 @@ public class DataManager {
     }
 
     /**
-     * FieldInfoManager@‚ğ•Ô‚·
+     * FieldInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return FieldInfoManager
      */
@@ -191,7 +191,7 @@ public class DataManager {
     }
 
     /**
-     * FileInfoManager@‚ğ•Ô‚·
+     * FileInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return FileInfoManager
      */
@@ -204,7 +204,7 @@ public class DataManager {
     }
 
     /**
-     * MethodInfoManager@‚ğ•Ô‚·
+     * MethodInfoManagerã€€ã‚’è¿”ã™
      * 
      * @return MethodInfoManager
      */
@@ -213,7 +213,7 @@ public class DataManager {
     }
 
     /**
-     * PluginManager@‚ğ•Ô‚·
+     * PluginManagerã€€ã‚’è¿”ã™
      * 
      * @return PluginManager
      */

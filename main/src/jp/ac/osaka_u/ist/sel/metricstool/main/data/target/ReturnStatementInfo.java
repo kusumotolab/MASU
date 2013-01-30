@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * return•¶‚Ìî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * returnæ–‡ã®æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -15,9 +15,9 @@ import java.util.Set;
 public class ReturnStatementInfo extends SingleStatementInfo {
 
     /**
-     * return•¶‚Ì–ß‚è’l‚ğ•\‚·®‚ÆˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param ownerSpace •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
+     * returnæ–‡ã®æˆ»ã‚Šå€¤ã‚’è¡¨ã™å¼ã¨ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param ownerSpace æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
      * @param returnedExpression
      * @param fromLine
      * @param fromColumn
@@ -36,9 +36,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * return•¶‚Ì–ß‚è’l‚ğ•\‚·®‚ğ•Ô‚·
+     * returnæ–‡ã®æˆ»ã‚Šå€¤ã‚’è¡¨ã™å¼ã‚’è¿”ã™
      * 
-     * @return return•¶‚Ì–ß‚è’l‚ğ•\‚·®
+     * @return returnæ–‡ã®æˆ»ã‚Šå€¤ã‚’è¡¨ã™å¼
      */
     public final ExpressionInfo getReturnedExpression() {
         return this.returnedExpression;
@@ -50,9 +50,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -60,9 +60,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -70,9 +70,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ìreturn•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®returnæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìreturn•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®returnæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -90,9 +90,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -117,7 +117,7 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * return•¶‚Ì–ß‚è’l‚ğ•\‚·®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * returnæ–‡ã®æˆ»ã‚Šå€¤ã‚’è¡¨ã™å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final ExpressionInfo returnedExpression;
 }

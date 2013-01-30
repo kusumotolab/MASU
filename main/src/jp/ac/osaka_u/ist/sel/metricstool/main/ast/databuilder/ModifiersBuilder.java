@@ -16,7 +16,7 @@ public class ModifiersBuilder extends CompoundDataBuilder<ModifierInfo[]> { //St
     public ModifiersBuilder() {
         addStateManager(this.stateMachine);
 
-        //アノテーションを識別するために追加
+        //繧｢繝弱ユ繝ｼ繧ｷ繝ｧ繝ｳ繧定ｭ伜挨縺吶ｋ縺溘ａ縺ｫ霑ｽ蜉
         this.addInnerBuilder(this.annotationBuilder);
     }
 
@@ -47,7 +47,7 @@ public class ModifiersBuilder extends CompoundDataBuilder<ModifierInfo[]> { //St
     }
 
     private ModifierInfo[] buildModifiers() {
-        //アノテーションをModifierとして追加
+        //繧｢繝弱ユ繝ｼ繧ｷ繝ｧ繝ｳ繧樽odifier縺ｨ縺励※霑ｽ蜉
         modifiers.addAll(this.annotationBuilder.getAnnotations());
         this.annotationBuilder.clearAnnotations(); 
         ModifierInfo[] result = new ModifierInfo[modifiers.size()];

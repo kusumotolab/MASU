@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒtƒ@ƒCƒ‹î•ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒXD FileInfo ‚ğ—v‘f‚Æ‚µ‚Ä‚ÂD
+ * ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼ FileInfo ã‚’è¦ç´ ã¨ã—ã¦æŒã¤ï¼
  * 
  * @author higo
  * 
@@ -21,7 +21,7 @@ public final class FileInfoManager {
 
     /**
      * 
-     * @param fileInfo ’Ç‰Á‚·‚éƒNƒ‰ƒXî•ñ
+     * @param fileInfo è¿½åŠ ã™ã‚‹ã‚¯ãƒ©ã‚¹æƒ…å ±
      */
     public void add(final FileInfo fileInfo, final Thread thread) {
 
@@ -42,9 +42,9 @@ public final class FileInfoManager {
     }
 
     /**
-     * Œ»İ‰ğÍ’†‚Ìƒtƒ@ƒCƒ‹î•ñ‚ğ•Ô‚·
+     * ç¾åœ¨è§£æä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return Œ»İ‰ğÍ’†‚Ìƒtƒ@ƒCƒ‹î•ñD‰ğÍ‚ªn‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚ÍnullC‰ğÍ‚ªI—¹‚µ‚Ä‚¢‚éê‡‚ÍÅŒã‚É‰ğÍ‚µ‚½ƒtƒ@ƒCƒ‹
+     * @return ç¾åœ¨è§£æä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ï¼è§£æãŒå§‹ã¾ã£ã¦ã„ãªã„å ´åˆã¯nullï¼Œè§£æãŒçµ‚äº†ã—ã¦ã„ã‚‹å ´åˆã¯æœ€å¾Œã«è§£æã—ãŸãƒ•ã‚¡ã‚¤ãƒ«
      */
     public FileInfo getCurrentFile(final Thread thread) {
         final List<FileInfo> files = this.threadMap.get(thread);
@@ -52,9 +52,9 @@ public final class FileInfoManager {
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
+     * ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
      * 
-     * @return ƒtƒ@ƒCƒ‹î•ñ‚Ì SortedSet
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã® SortedSet
      */
     public SortedSet<FileInfo> getFileInfos() {
         final SortedSet<FileInfo> files = new TreeSet<FileInfo>();
@@ -63,7 +63,7 @@ public final class FileInfoManager {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½ƒpƒX‚Ìƒtƒ@ƒCƒ‹‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ‘ã‚¹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿”ã™
      * 
      * @param filepath
      * @return
@@ -73,18 +73,18 @@ public final class FileInfoManager {
     }
     
     /**
-     * î•ñ‚ğ‚Á‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚ÌŒÂ”‚ğ•Ô‚·
+     * æƒ…å ±ã‚’æŒã£ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®å€‹æ•°ã‚’è¿”ã™
      * 
-     * @return ƒtƒ@ƒCƒ‹‚ÌŒÂ”
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«ã®å€‹æ•°
      */
     public int getFileCount() {
         return this.fileInfos.size();
     }
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚Ì‘s”‚ğ•Ô‚·
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·è¡Œæ•°ã‚’è¿”ã™
      * 
-     * @return “o˜^‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚Ì‘s”
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·è¡Œæ•°
      */
     public int getTotalLOC() {
         int loc = 0;
@@ -95,7 +95,7 @@ public final class FileInfoManager {
     }
 
     /**
-     * ƒtƒ@ƒCƒ‹î•ñ‚ğƒNƒŠƒA
+     * ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ã‚¯ãƒªã‚¢
      */
     public void clear() {
         this.fileInfos.clear();
@@ -103,7 +103,7 @@ public final class FileInfoManager {
 
     /**
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^D ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“‚ÅÀ‘•‚µ‚Ä‚¢‚é‚½‚ß‚É private ‚ª‚Â‚¢‚Ä‚¢‚éD
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã§å®Ÿè£…ã—ã¦ã„ã‚‹ãŸã‚ã« private ãŒã¤ã„ã¦ã„ã‚‹ï¼
      */
     public FileInfoManager() {
         this.fileInfos = new ConcurrentHashMap<String, FileInfo>();
@@ -112,12 +112,12 @@ public final class FileInfoManager {
 
     /**
      * 
-     * ƒtƒ@ƒCƒ‹î•ñ (FileInfo) ‚ğŠi”[‚·‚é•Ï”D
+     * ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ± (FileInfo) ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼
      */
     private final ConcurrentMap<String, FileInfo> fileInfos;
 
     /**
-     * ƒXƒŒƒbƒh‚Æ“o˜^‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì‘Î‰ŠÖŒW‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã‚¹ãƒ¬ãƒƒãƒ‰ã¨ç™»éŒ²ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å¯¾å¿œé–¢ä¿‚ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final ConcurrentMap<Thread, List<FileInfo>> threadMap;
 }

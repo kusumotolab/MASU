@@ -2,35 +2,35 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 
 /**
- * �v���O�C����`XML�t�@�C������͂��C�v���O�C����`XML�t�@�C������͂��C
- * ���̒��ŋL�q����Ă���v���O�C�������擾���郁�\�b�h�Q��񋟂���D
+ * プラグイン定義XMLファイルを解析し，プラグイン定義XMLファイルを解析し，
+ * その中で記述されているプラグイン情報を取得するメソッド群を提供する．
  * <p>
- * �v���O�C����`XML�t�@�C���̋L�q�`�����ύX���ꂽ�ꍇ�͂��̃C���^�t�F�[�X�ɃA�N�Z�T���\�b�h��ǉ�����K�v������D
+ * プラグイン定義XMLファイルの記述形式が変更された場合はこのインタフェースにアクセサメソッドを追加する必要がある．
  * @author kou-tngt
  *
  */
 public interface PluginXmlInterpreter {
     /**
-     * ��͑Ώۂ�xml�t�@�C�����ɋL�q����Ă���C�v���O�C���N���X����Ԃ����\�b�h
-     * @return �v���O�C���N���X��\��������
+     * 解析対象のxmlファイル中に記述されている，プラグインクラス名を返すメソッド
+     * @return プラグインクラスを表す文字列
      */
     public String getPluginClassName();
 
     /**
-     * ��͑Ώۂ�xml�t�@�C�����ɋL�q����Ă���C�t�@�C���ւ̃N���X�p�X�w��ꗗ��Ԃ����\�b�h
-     * @return �t�@�C���ւ̃N���X�p�X�w���\��������̔z��
+     * 解析対象のxmlファイル中に記述されている，ファイルへのクラスパス指定一覧を返すメソッド
+     * @return ファイルへのクラスパス指定を表す文字列の配列
      */
     public String[] getClassPathFileNames();
 
     /**
-     * ��͑Ώۂ�xml�t�@�C�����ɋL�q����Ă���C�f�B���N�g���ւ̃N���X�p�X�w��ꗗ��Ԃ����\�b�h
-     * @return �f�B���N�g���ւ̃N���X�p�X�w���\��������̔z��
+     * 解析対象のxmlファイル中に記述されている，ディレクトリへのクラスパス指定一覧を返すメソッド
+     * @return ディレクトリへのクラスパス指定を表す文字列の配列
      */
     public String[] getClassPathDirectoryNames();
 
     /**
-     * ��͑Ώۂ�xml�t�@�C�����ɋL�q����Ă���C�N���X�p�X�w��ꗗ��Ԃ����\�b�h
-     * @return �N���X�p�X�w���\��������̔z��
+     * 解析対象のxmlファイル中に記述されている，クラスパス指定一覧を返すメソッド
+     * @return クラスパス指定を表す文字列の配列
      */
     public String[] getClassPathAttributeNames();
 }

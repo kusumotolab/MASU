@@ -10,8 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ¯•Êq‚Ìî•ñ‚ğ\’z‚·‚éƒNƒ‰ƒXD
- * ƒsƒŠƒIƒh‚Å‹æØ‚ç‚ê‚½¯•Êq‚ğStringŒ^‚Ì”z—ñ‚Æ‚µ‚Ä\’z‚·‚éD
+ * è­˜åˆ¥å­ã®æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
+ * ãƒ”ãƒªã‚ªãƒ‰ã§åŒºåˆ‡ã‚‰ã‚ŒãŸè­˜åˆ¥å­ã‚’Stringå‹ã®é…åˆ—ã¨ã—ã¦æ§‹ç¯‰ã™ã‚‹ï¼
  * 
  * @author kou-tang, t-miyake
  *
@@ -50,7 +50,7 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
                         registBuiltData(buitIdentifier);
                     }
                 } else if (0 > this.separatorCount) {
-                    //activate‚³‚ê‚éƒ^ƒCƒ~ƒ“ƒO‚É‚æ‚Á‚Ä‚Í•‰’l‚É‚È‚é
+                    //activateã•ã‚Œã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã«ã‚ˆã£ã¦ã¯è² å€¤ã«ãªã‚‹
                     this.separatorCount = 0;
                 }
             } else {
@@ -91,9 +91,9 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
     }
 
     /**
-     * ‰ğÍ‚µ‚½¯•Êq‚Ìî•ñ‚ğStringŒ^‚Ì”z—ñ‚Æ‚µ‚Ä\’z‚·‚éD
+     * è§£æã—ãŸè­˜åˆ¥å­ã®æƒ…å ±ã‚’Stringå‹ã®é…åˆ—ã¨ã—ã¦æ§‹ç¯‰ã™ã‚‹ï¼
      * 
-     * @return ¯•Êq
+     * @return è­˜åˆ¥å­
      */
     private String[] buildIdentifier() {
         if (!this.buildingIdentifiers.isEmpty()) {
@@ -106,12 +106,12 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
     }
 
     /**
-     * ƒrƒ‹ƒh’†‚Ì¯•Êq‚ÉŠÜ‚Ü‚ê‚é‹æØ‚èiƒsƒŠƒIƒhj‚Ì”D
+     * ãƒ“ãƒ«ãƒ‰ä¸­ã®è­˜åˆ¥å­ã«å«ã¾ã‚Œã‚‹åŒºåˆ‡ã‚Šï¼ˆãƒ”ãƒªã‚ªãƒ‰ï¼‰ã®æ•°ï¼
      */
     private int separatorCount;
 
     /**
-     * ƒrƒ‹ƒh’†‚Ì¯•Êq‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒtƒB[ƒ‹ƒhD
+     * ãƒ“ãƒ«ãƒ‰ä¸­ã®è­˜åˆ¥å­ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼
      */
     private final List<String> buildingIdentifiers = new ArrayList<String>();
 }

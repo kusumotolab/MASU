@@ -9,41 +9,41 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒtƒB[ƒ‹ƒhCˆø”Cƒ[ƒJƒ‹•Ï”‚Ì‹¤’Ê‚ÌeƒNƒ‰ƒXD ˆÈ‰º‚Ìî•ñ‚ğ‚ÂD
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼Œå¼•æ•°ï¼Œãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®å…±é€šã®è¦ªã‚¯ãƒ©ã‚¹ï¼ ä»¥ä¸‹ã®æƒ…å ±ã‚’æŒã¤ï¼
  * <ul>
- * <li>•Ï”–¼</li>
- * <li>Œ^</li>
- * <li>Cüq</li>
- * <li>ˆÊ’uî•ñ</li>
+ * <li>å¤‰æ•°å</li>
+ * <li>å‹</li>
+ * <li>ä¿®é£¾å­</li>
+ * <li>ä½ç½®æƒ…å ±</li>
  * 
  * @author higo
- * @param <TUnit> ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg 
+ * @param <TUnit> ã“ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ 
  */
 @SuppressWarnings("serial")
 public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier {
 
     /**
-     * Cüq‚Ì Set ‚ğ•Ô‚·
+     * ä¿®é£¾å­ã® Set ã‚’è¿”ã™
      * 
-     * @return Cüq‚Ì Set
+     * @return ä¿®é£¾å­ã® Set
      */
     public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * •Ï”–¼‚ğ•Ô‚·
+     * å¤‰æ•°åã‚’è¿”ã™
      * 
-     * @return •Ï”–¼
+     * @return å¤‰æ•°å
      */
     public final String getName() {
         return this.name;
     }
 
     /**
-     * •Ï”‚ÌŒ^‚ğ•Ô‚·
+     * å¤‰æ•°ã®å‹ã‚’è¿”ã™
      * 
-     * @return •Ï”‚ÌŒ^
+     * @return å¤‰æ•°ã®å‹
      */
     public final TypeInfo getType() {
         assert null != this.type : "variable type is not set.";
@@ -51,9 +51,9 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * •Ï”‚ÌŒ^‚ğİ’è‚·‚é
+     * å¤‰æ•°ã®å‹ã‚’è¨­å®šã™ã‚‹
      * 
-     * @param type •Ï”‚ÌŒ^
+     * @param type å¤‰æ•°ã®å‹
      */
     public final void setType(final TypeInfo type) {
 
@@ -66,16 +66,16 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * •Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return •Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
+     * @return å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     public final TUnit getDefinitionUnit() {
         return this.definitionUnit;
     }
 
     /**
-     * •Ï”‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * å¤‰æ•°ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     public final int hashCode() {
@@ -83,10 +83,10 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * •Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
-     * ‚Ç‚Ì•Ï”‚à—p‚¢‚ç‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅC‹ó‚Ìset‚ª•Ô‚³‚ê‚é
+     * å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
+     * ã©ã®å¤‰æ•°ã‚‚ç”¨ã„ã‚‰ã‚Œã¦ã„ãªã„ã®ã§ï¼Œç©ºã®setãŒè¿”ã•ã‚Œã‚‹
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -94,9 +94,9 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * •Ï”’è‹`‚ÌSet‚ğ•Ô‚·
+     * å¤‰æ•°å®šç¾©ã®Setã‚’è¿”ã™
      * 
-     * @return •Ï”’è‹`‚ÌSet
+     * @return å¤‰æ•°å®šç¾©ã®Set
      */
     @Override
     public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -106,9 +106,9 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public final Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -116,16 +116,16 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * •Ï”ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å¤‰æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param name •Ï”–¼
-     * @param type •Ï”‚ÌŒ^
-     * @param definitionUnit éŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param name å¤‰æ•°å
+     * @param type å¤‰æ•°ã®å‹
+     * @param definitionUnit å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     VariableInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
             final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
@@ -146,27 +146,27 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
-     * Cüq‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä¿®é£¾å­ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final Set<ModifierInfo> modifiers;
 
     /**
-     * •Ï”–¼‚ğ•\‚·•Ï”
+     * å¤‰æ•°åã‚’è¡¨ã™å¤‰æ•°
      */
     private final String name;
 
     /**
-     * •Ï”‚ÌŒ^‚ğ•\‚·•Ï”
+     * å¤‰æ•°ã®å‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private TypeInfo type;
 
     /**
-     * ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final TUnit definitionUnit;
 
     /**
-     * ‹ó‚Ì•Ï”‚ÌSet‚ğ•\‚·
+     * ç©ºã®å¤‰æ•°ã®Setã‚’è¡¨ã™
      */
     public static final Set<VariableInfo<? extends UnitInfo>> EmptySet = Collections
             .unmodifiableSet(new HashSet<VariableInfo<? extends UnitInfo>>());

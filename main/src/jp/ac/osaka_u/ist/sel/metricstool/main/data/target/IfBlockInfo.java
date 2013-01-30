@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * if ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * if ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -16,12 +16,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class IfBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä if ƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public IfBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -29,9 +29,9 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * else •¶‚ğ’Ç‰Á‚·‚é
+     * else æ–‡ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param sequentElseBlock ’Ç‰Á‚·‚é else •¶
+     * @param sequentElseBlock è¿½åŠ ã™ã‚‹ else æ–‡
      */
     public void setSequentElseBlock(final ElseBlockInfo sequentElseBlock) {
 
@@ -44,26 +44,26 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚ÌIf•¶‚É‘Î‰‚·‚éElse•¶‚ğ•Ô‚·
+     * ã“ã®Ifæ–‡ã«å¯¾å¿œã™ã‚‹Elseæ–‡ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌIf•¶‚É‘Î‰‚·‚éElse•¶
+     * @return ã“ã®Ifæ–‡ã«å¯¾å¿œã™ã‚‹Elseæ–‡
      */
     public ElseBlockInfo getSequentElseBlock() {
         return this.sequentElseBlock;
     }
 
     /**
-     * ‘Î‰‚·‚éelseƒuƒƒbƒN‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©•\‚·
-     * @return ‘Î‰‚·‚éelseƒuƒƒbƒN‚ª‘¶İ‚·‚é‚È‚çtrue
+     * å¯¾å¿œã™ã‚‹elseãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹è¡¨ã™
+     * @return å¯¾å¿œã™ã‚‹elseãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ãªã‚‰true
      */
     public boolean hasElseBlock() {
         return null != this.sequentElseBlock;
     }
 
     /**
-     * ‚±‚Ìif•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®ifæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìif•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®ifæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {

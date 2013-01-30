@@ -16,22 +16,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ğÀsƒXƒŒƒbƒh‚ğ‹N“®‚·‚éƒ‰ƒ“ƒ`ƒƒ[
- * ‚Ù‚Æ‚ñ‚Ç‚ÌƒpƒuƒŠƒbƒNƒƒ\ƒbƒh‚ÌÀs‚É“Á•ÊŒ ŒÀ‚ğ•K—v‚Æ‚·‚é.
- * ‘S‚Ä‚Ìƒvƒ‰ƒOƒCƒ“‚ÌÀs‚ªI‚í‚Á‚½Œã‚ÉC•K‚¸ {@link #stopLaunching()}‚Ü‚½‚Í
- * {@link #stopLaunchingNow()}‚ğŒÄ‚Î‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ã‚’èµ·å‹•ã™ã‚‹ãƒ©ãƒ³ãƒãƒ£ãƒ¼
+ * ã»ã¨ã‚“ã©ã®ãƒ‘ãƒ–ãƒªãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè¡Œã«ç‰¹åˆ¥æ¨©é™ã‚’å¿…è¦ã¨ã™ã‚‹.
+ * å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡ŒãŒçµ‚ã‚ã£ãŸå¾Œã«ï¼Œå¿…ãš {@link #stopLaunching()}ã¾ãŸã¯
+ * {@link #stopLaunchingNow()}ã‚’å‘¼ã°ãªã‘ã‚Œã°ãªã‚‰ãªã„.
  * @author kou-tngt
  *
  */
 public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEndListener {
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌÀs‚ğƒLƒƒƒ“ƒZƒ‹‚·‚éƒƒ\ƒbƒh.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @param plugin ƒLƒƒƒ“ƒZƒ‹‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @return ƒLƒƒƒ“ƒZƒ‹‚Å‚«‚½ê‡‚Ítrue‚Å‚«‚È‚©‚Á‚½‚èC‚·‚Å‚ÉI—¹‚µ‚Ä‚¢‚½ê‡‚Ífalse
-     * @throws NullPointerException plugin‚ªnull‚Ìê‡
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®å®Ÿè¡Œã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @param plugin ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @return ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã§ããŸå ´åˆã¯trueã§ããªã‹ã£ãŸã‚Šï¼Œã™ã§ã«çµ‚äº†ã—ã¦ã„ãŸå ´åˆã¯false
+     * @throws NullPointerException pluginãŒnullã®å ´åˆ
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆ
      */
     public boolean cancel(final AbstractPlugin plugin) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -50,11 +50,11 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * Às‚ğ‚Ü‚Æ‚ß‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚éƒƒ\ƒbƒh.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @param plugins ƒLƒƒƒ“ƒZƒ‹‚·‚éƒvƒ‰ƒOƒCƒ“ŒQ‚ğŠÜ‚ŞƒRƒŒƒNƒVƒ‡ƒ“
-     * @throws NullPointerException plugins‚ªnull‚Ìê‡
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡
+     * å®Ÿè¡Œã‚’ã¾ã¨ã‚ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @param plugins ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç¾¤ã‚’å«ã‚€ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+     * @throws NullPointerException pluginsãŒnullã®å ´åˆ
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆ
      */
     public void cancelAll(final Collection<AbstractPlugin> plugins) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -69,9 +69,9 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * Às’†CÀs‘Ò‚¿‚Ìƒ^ƒXƒN‚ğ‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚é.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡
+     * å®Ÿè¡Œä¸­ï¼Œå®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã‚’å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆ
      */
     public void cancelAll() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -81,7 +81,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * ÀsI—¹’Ê’m‚ğó‚¯æ‚éƒŠƒXƒi
+     * å®Ÿè¡Œçµ‚äº†é€šçŸ¥ã‚’å—ã‘å–ã‚‹ãƒªã‚¹ãƒŠ
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.ExecutionEndListener#executionEnd(jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin)
      */
@@ -90,35 +90,35 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ì”‚ğ•Ô‚·.
-     * @return Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ì”
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã®æ•°ã‚’è¿”ã™.
+     * @return å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã®æ•°
      */
     public int getLaunchWaitingTaskNum() {
         return this.workQueue.size();
     }
 
     /**
-     * Œ»İÀs’†‚Ìƒvƒ‰ƒOƒCƒ“‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return Às’†‚Ìƒvƒ‰ƒOƒCƒ“‚Ì”.
+     * ç¾åœ¨å®Ÿè¡Œä¸­ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å®Ÿè¡Œä¸­ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æ•°.
      */
     public int getCurrentLaunchingNum() {
         return this.threadPool.getActiveCount();
     }
 
     /**
-     * Œ»İ‚Ì“¯ÀsÅ‘å”‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @return “¯ÀsÅ‘å”
+     * ç¾åœ¨ã®åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°
      */
     public int getMaximumLaunchingNum() {
         return this.threadPool.getMaximumPoolSize();
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğÀs‚·‚éƒƒ\ƒbƒh.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @param plugin Às‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
-     * @throws NullPointerException plugin‚ªnull‚Ìê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @param plugin å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
+     * @throws NullPointerException pluginãŒnullã®å ´åˆ
      */
     public void launch(final AbstractPlugin plugin) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -136,11 +136,11 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ğ‚Ü‚Æ‚ß‚ÄÀs‚·‚éƒƒ\ƒbƒh.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @param plugins Às‚·‚éƒvƒ‰ƒOƒCƒ“ŒQ‚ğŠÜ‚ŞƒRƒŒƒNƒVƒ‡ƒ“
-     * @throws NullPointerException plugins‚ªnull‚Ìê‡
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ã¾ã¨ã‚ã¦å®Ÿè¡Œã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @param plugins å®Ÿè¡Œã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç¾¤ã‚’å«ã‚€ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
+     * @throws NullPointerException pluginsãŒnullã®å ´åˆ
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public void launchAll(final Collection<AbstractPlugin> plugins) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -155,11 +155,11 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * “¯ÀsÅ‘å”‚ğİ’è‚·‚éƒƒ\ƒbƒh.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * @param size “¯ÀsÅ‘å”
-     * @throws IllegalArgumentException size‚ª0ˆÈ‰º‚¾‚Á‚½ê‡
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     * åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°ã‚’è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * @param size åŒæ™‚å®Ÿè¡Œæœ€å¤§æ•°
+     * @throws IllegalArgumentException sizeãŒ0ä»¥ä¸‹ã ã£ãŸå ´åˆ
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public void setMaximumLaunchingNum(final int size) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -171,10 +171,10 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     *  ƒ‰ƒ“ƒ`ƒƒ[‚ğI—¹‚·‚é.
-     *  “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     *  Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCÀs’†‚Ìƒ^ƒXƒN‚ÍI‚í‚é‚Ü‚Å‘Ò‚Â.
-     *  @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     *  ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’çµ‚äº†ã™ã‚‹.
+     *  ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     *  å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã¯çµ‚ã‚ã‚‹ã¾ã§å¾…ã¤.
+     *  @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public void stopLaunching() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -185,10 +185,10 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * ƒ‰ƒ“ƒ`ƒƒ[‚ğI—¹‚·‚é.
-     * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚©‚ç‚µ‚©Às‚Å‚«‚È‚¢.
-     * Às‘Ò‚¿‚Ìƒ^ƒXƒN‚Ííœ‚µCÀs’†‚Ìƒ^ƒXƒN‚à‘S‚ÄƒLƒƒƒ“ƒZƒ‹‚·‚é.
-     * @throws AccessControlException “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     * ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’çµ‚äº†ã™ã‚‹.
+     * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã—ã‹å®Ÿè¡Œã§ããªã„.
+     * å®Ÿè¡Œå¾…ã¡ã®ã‚¿ã‚¹ã‚¯ã¯å‰Šé™¤ã—ï¼Œå®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã‚‚å…¨ã¦ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹.
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public void stopLaunchingNow() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -197,14 +197,14 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“Às—pƒXƒŒƒbƒh‚Ìƒtƒ@ƒNƒgƒŠƒNƒ‰ƒX
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè¡Œç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚¯ãƒ©ã‚¹
      * @author kou-tngt
      *
      */
     private class PluginThreadFactory implements ThreadFactory {
         /**
-         * ƒvƒ‰ƒOƒCƒ“Às—p‚ÌƒXƒŒƒbƒh‚ğì¬‚·‚éƒƒ\ƒbƒh.
-         * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚Æ‚µ‚Ä“o˜^‚à‚·‚é.
+         * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å®Ÿè¡Œç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ä½œæˆã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+         * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã¨ã—ã¦ç™»éŒ²ã‚‚ã™ã‚‹.
          * @see ThreadFactory#newThread(Runnable)
          */
         public Thread newThread(final Runnable r) {
@@ -215,33 +215,33 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
         }
 
         /**
-         * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh—p‚ÌƒXƒŒƒbƒhƒOƒ‹[ƒv
+         * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚°ãƒ«ãƒ¼ãƒ—
          */
         private final ThreadGroup PLUGIN_THREAD_GROUP = new ThreadGroup("PluginThreads");
 
         /**
-         * ƒXƒŒƒbƒh‚Ìƒiƒ“ƒoƒŠƒ“ƒO—p•Ï”
+         * ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒŠãƒ³ãƒãƒªãƒ³ã‚°ç”¨å¤‰æ•°
          */
         private int threadNameCount = 0;
     }
 
     /**
-     * Še {@link RunnablePlugin} ‚ÌFuture‚ğ•Û‘¶‚·‚éƒ}ƒbƒv
+     * å„ {@link RunnablePlugin} ã®Futureã‚’ä¿å­˜ã™ã‚‹ãƒãƒƒãƒ—
      */
     private final Map<AbstractPlugin, Future<?>> futureMap = new ConcurrentHashMap<AbstractPlugin, Future<?>>();
 
     /**
-     * ƒ‰ƒ“ƒ`ƒƒ[‚ğ’â~‚³‚ê‚½‚©‚Ç‚¤‚©‚ğ•\‚·•Ï”
+     * ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚’åœæ­¢ã•ã‚ŒãŸã‹ã©ã†ã‹ã‚’è¡¨ã™å¤‰æ•°
      */
     private boolean stoped = false;
 
     /**
-     * ƒXƒŒƒbƒhƒv[ƒ‹‚Ég—p‚³‚¹‚éƒLƒ…[
+     * ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ¼ãƒ«ã«ä½¿ç”¨ã•ã›ã‚‹ã‚­ãƒ¥ãƒ¼
      */
     private final ClosableLinkedBlockingQueue<Runnable> workQueue = new ClosableLinkedBlockingQueue<Runnable>();
 
     /**
-     * “à•”“I‚ÉÀÛ‚ÉƒXƒŒƒbƒh‚ğÀs‚·‚éƒXƒŒƒbƒhƒv[ƒ‹
+     * å†…éƒ¨çš„ã«å®Ÿéš›ã«ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å®Ÿè¡Œã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ¼ãƒ«
      */
     private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(Integer.MAX_VALUE,
             Integer.MAX_VALUE, 0, TimeUnit.SECONDS, this.workQueue, new PluginThreadFactory());

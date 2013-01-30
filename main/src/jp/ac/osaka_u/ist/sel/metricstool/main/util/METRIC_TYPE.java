@@ -4,26 +4,26 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 /**
  * @author kou-tngt,higo
  * 
- * ���g���N�X�̎�ނ�\��Enum�D
+ * メトリクスの種類を表すEnum．
  */
 public enum METRIC_TYPE {
     /**
-     * �t�@�C���P�ʂ̃��g���N�X
+     * ファイル単位のメトリクス
      */
     FILE_METRIC,
 
     /**
-     * �N���X�P�ʂ̃��g���N�X
+     * クラス単位のメトリクス
      */
     CLASS_METRIC,
 
     /**
-     * ���\�b�h�P�ʂ̃��g���N�X
+     * メソッド単位のメトリクス
      */
     METHOD_METRIC,
     
     /**
-     * �t�B�[���h�P�ʂ̃��g���N�X
+     * フィールド単位のメトリクス
      */
     FIELD_METRIC
 }

@@ -5,37 +5,37 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 
 
 /**
- * ƒtƒ@ƒCƒ‹“à‚Å‚ÌˆÊ’uî•ñ‚ğƒZƒbƒg‚·‚é‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ•ã‚¡ã‚¤ãƒ«å†…ã§ã®ä½ç½®æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  */
 public interface PositionSetting extends Position {
 
     /**
-     * ŠJns‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param line ŠJns
+     * @param line é–‹å§‹è¡Œ
      */
     void setFromLine(int line);
 
     /**
-     * ŠJn—ñ‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param column ŠJn—ñ
+     * @param column é–‹å§‹åˆ—
      */
     void setFromColumn(int column);
 
     /**
-     * I—¹s‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param line I—¹s
+     * @param line çµ‚äº†è¡Œ
      */
     void setToLine(int line);
 
     /**
-     * I—¹—ñ‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param column I—¹—ñ
+     * @param column çµ‚äº†åˆ—
      */
     void setToColumn(int column);
 }

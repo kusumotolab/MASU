@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedU
 
 
 /**
- * Œ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+ * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
  * 
  * @author kou-tngt, t-miyake
  *
@@ -27,18 +27,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedU
 public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypeParameterInfo> {
 
     /**
-     * ˆø”‚É—^‚¦‚ç‚ê‚½\’zƒf[ƒ^‚ÌŠÇ—Ò‚ÆƒfƒtƒHƒ‹ƒg‚Ì–¼‘Oî•ñƒrƒ‹ƒ_[CŒ^î•ñƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚é
-     * @param buildDataManager@\’zƒf[ƒ^‚ÌŠÇ—Ò
+     * å¼•æ•°ã«ä¸ãˆã‚‰ã‚ŒãŸæ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…ã¨ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®åå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œå‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹
+     * @param buildDataManagerã€€æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…
      */
     public TypeParameterBuilder(final BuildDataManager buildDataManager) {
         this(buildDataManager, new NameBuilder(), new TypeBuilder(buildDataManager));
     }
 
     /**
-     * ˆø”‚É—^‚¦‚ç‚ê‚½\’zƒf[ƒ^‚ÌŠÇ—ÒC–¼‘Oî•ñƒrƒ‹ƒ_[CŒ^î•ñƒrƒ‹ƒ_[‚ğ—p‚¢‚Ä‰Šú‰»‚·‚é
-     * @param buildDataManager@\’zƒf[ƒ^‚ÌŠÇ—Ò
-     * @param nameBuilder@–¼‘Oî•ñƒrƒ‹ƒ_[
-     * @param typeBuilder@Œ^î•ñƒrƒ‹ƒ_[
+     * å¼•æ•°ã«ä¸ãˆã‚‰ã‚ŒãŸæ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…ï¼Œåå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ï¼Œå‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’ç”¨ã„ã¦åˆæœŸåŒ–ã™ã‚‹
+     * @param buildDataManagerã€€æ§‹ç¯‰ãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†è€…
+     * @param nameBuilderã€€åå‰æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼
+     * @param typeBuilderã€€å‹æƒ…å ±ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     public TypeParameterBuilder(final BuildDataManager buildDataManager,
             final NameBuilder nameBuilder, final TypeBuilder typeBuilder) {
@@ -58,17 +58,17 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         this.nameBuilder = nameBuilder;
         this.typeBuilder = typeBuilder;
 
-        //“à•”ƒrƒ‹ƒ_[‚Ì“o˜^
+        //å†…éƒ¨ãƒ“ãƒ«ãƒ€ãƒ¼ã®ç™»éŒ²
         this.addInnerBuilder(nameBuilder);
         this.addInnerBuilder(typeBuilder);
 
-        //ó‘Ô’Ê’m‚ğó‚¯æ‚è‚½‚¢‚à‚Ì‚ğ“o˜^
+        //çŠ¶æ…‹é€šçŸ¥ã‚’å—ã‘å–ã‚ŠãŸã„ã‚‚ã®ã‚’ç™»éŒ²
         this.addStateManager(typeParameterStateManager);
     }
 
     /**
-     * ó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ì’Ê’m‚ğó‚¯‚éƒƒ\ƒbƒhD
-     * @param event ó‘Ô•Ï‰»ƒCƒxƒ“ƒg
+     * çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®é€šçŸ¥ã‚’å—ã‘ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * @param event çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChanged(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
     @Override
@@ -77,13 +77,13 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
 
         if (this.isActive()) {
             if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_PARAMETER_DEF)) {
-                //Œ^ƒpƒ‰ƒ[ƒ^’è‹`‚É“ü‚Á‚½‚Ì‚Å‚ª‚ñ‚Î‚é
+                //å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©ã«å…¥ã£ãŸã®ã§ãŒã‚“ã°ã‚‹
                 this.nameBuilder.activate();
                 this.typeBuilder.activate();
                 this.inTypeParameterDefinition = true;
             } else if (type
                     .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_PARAMETER_DEF)) {
-                //Œ^ƒpƒ‰ƒ[ƒ^’è‹`‚ªI‚í‚Á‚½‚Ì‚ÅCƒf[ƒ^‚ğ\’z‚µ‚ÄŒãn––
+                //å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©ãŒçµ‚ã‚ã£ãŸã®ã§ï¼Œãƒ‡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã—ã¦å¾Œå§‹æœ«
                 this.buildTypeParameter();
 
                 this.nameBuilder.deactivate();
@@ -95,24 +95,24 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 this.inTypeParameterDefinition = false;
 
             } else if (this.inTypeParameterDefinition) {
-                //Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚È‚¢‚Å‚Ìo—ˆ–
-                /* (Œ^•Ï”)Type Variable‚É‚Í"Super"‚Ìƒg[ƒNƒ“‚Í•¶–@ã—ˆ‚È‚¢‚Ì‚Åíœ
+                //å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ãªã„ã§ã®å‡ºæ¥äº‹
+                /* (å‹å¤‰æ•°)Type Variableã«ã¯"Super"ã®ãƒˆãƒ¼ã‚¯ãƒ³ã¯æ–‡æ³•ä¸Šæ¥ãªã„ã®ã§å‰Šé™¤
                 if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_LOWER_BOUNDS)) {
-                    //Œ^‚Ì‰ºŒÀéŒ¾‚ª‚«‚½‚Ì‚ÅŒ^\’z•”‚ª‚ª‚ñ‚Î‚é
+                    //å‹ã®ä¸‹é™å®£è¨€ãŒããŸã®ã§å‹æ§‹ç¯‰éƒ¨ãŒãŒã‚“ã°ã‚‹
                     this.nameBuilder.deactivate();
                     this.typeBuilder.activate();
                 } else if (type
                         .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS)) {
-                    //Œ^‚Ì‰ºŒÀî•ñ‚ğ\’z‚·‚é
+                    //å‹ã®ä¸‹é™æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹
                     this.lowerBoundsType = this.builtTypeBounds(); 
                 } else */
                 if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS)) {
-                    //Œ^‚ÌãŒÀéŒ¾‚ª—ˆ‚½‚Ì‚Å\’z•”‚ª‚ª‚ñ‚Î‚é
+                    //å‹ã®ä¸Šé™å®£è¨€ãŒæ¥ãŸã®ã§æ§‹ç¯‰éƒ¨ãŒãŒã‚“ã°ã‚‹
                     this.nameBuilder.deactivate();
                     this.typeBuilder.activate();
                 } else if (type
                         .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS)) {
-                    //Œ^‚ÌãŒÀî•ñ‚ğ\’z‚·‚é
+                    //å‹ã®ä¸Šé™æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹
                     UnresolvedTypeInfo<?> typeInfo = this.builtTypeBounds();
                     if (this.typeParameterStateManager.isInTypeParameterDefinition()) {
                         this.upperBoundsType.add(typeInfo);
@@ -130,16 +130,16 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚ÌI—¹‚ÉŒÄ‚Ño‚³‚êCŒ^ƒpƒ‰ƒ[ƒ^‚ğ\’z‚·‚éƒƒ\ƒbƒh
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅCŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Å”CˆÓ‚Ìˆ—‚ğs‚í‚¹‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã®çµ‚äº†æ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã§ä»»æ„ã®å‡¦ç†ã‚’è¡Œã‚ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      */
     protected void buildTypeParameter() {
-        //Œ^ƒpƒ‰ƒ[ƒ^‚Ì–¼‘O‚ª•¡”‡‚Á‚½‚ç‚¨‚©‚µ‚¢
+        //å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åå‰ãŒè¤‡æ•°åˆã£ãŸã‚‰ãŠã‹ã—ã„
         assert (this.nameBuilder.getBuiltDataCount() == 1);
 
         final String[] name = this.nameBuilder.getFirstBuiltData();
 
-        //Œ^ƒpƒ‰ƒ[ƒ^‚Ì–¼‘O‚ª•¡”ŒÂ‚É•ª‚©‚ê‚Ä‚Ä‚à‚¨‚©‚µ‚¢
+        //å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åå‰ãŒè¤‡æ•°å€‹ã«åˆ†ã‹ã‚Œã¦ã¦ã‚‚ãŠã‹ã—ã„
         assert (name.length == 1);
 
         final UnresolvedUnitInfo<? extends UnitInfo> ownerUnit = this.buildDataManager
@@ -148,7 +148,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         assert (ownerUnit instanceof UnresolvedCallableUnitInfo)
                 || (ownerUnit instanceof UnresolvedClassInfo) : "Illegal state: not parametrized unit";
 
-        //Œ^‚ÌãŒÀî•ñ‰ºŒÀî•ñ‚ğæ“¾
+        //å‹ã®ä¸Šé™æƒ…å ±ä¸‹é™æƒ…å ±ã‚’å–å¾—
         final List<UnresolvedTypeInfo<? extends TypeInfo>> upperBounds = this.getUpperBounds();
         final UnresolvedTypeInfo<? extends TypeInfo> lowerBounds = this.getLowerBounds();
         final int index = buildDataManager.getCurrentTypeParameterCount();
@@ -163,23 +163,23 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
             parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
                     upperReferenceBounds);
             //            else {
-            //                //‰ºŒÀ‚ª‚ ‚éê‡‚Í‚±‚Á‚¿‚ğì‚é
+            //                //ä¸‹é™ãŒã‚ã‚‹å ´åˆã¯ã“ã£ã¡ã‚’ä½œã‚‹
             //                parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
             //                        (UnresolvedReferenceTypeInfo<?>) upperBounds,
             //                        (UnresolvedReferenceTypeInfo<?>) lowerBounds);
             //            }
         } else {
-            // ­‚È‚­‚Æ‚àJava‚Å‚Í‚±‚±‚É“’B‚µ‚Ä‚Í‚¢‚¯‚È‚¢(Œ^ƒpƒ‰ƒ[ƒ^‚ÍQÆŒ^‚µ‚©’è‹`‚Å‚«‚È‚¢)
-            // TODO C#‚Ìê‡‚ÍŒ^ƒpƒ‰ƒ[ƒ^‚ªƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìê‡‚à‚ ‚é‚Ì‚Å‘Îˆ‚ª•K—v
+            // å°‘ãªãã¨ã‚‚Javaã§ã¯ã“ã“ã«åˆ°é”ã—ã¦ã¯ã„ã‘ãªã„(å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯å‚ç…§å‹ã—ã‹å®šç¾©ã§ããªã„)
+            // TODO C#ã®å ´åˆã¯å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å‹ã®å ´åˆã‚‚ã‚ã‚‹ã®ã§å¯¾å‡¦ãŒå¿…è¦
             assert false : "Illegal state: type parameter is not reference type";
         }
-        //ÅŒã‚Éƒf[ƒ^ŠÇ—Ò‚É“o˜^‚·‚é
+        //æœ€å¾Œã«ãƒ‡ãƒ¼ã‚¿ç®¡ç†è€…ã«ç™»éŒ²ã™ã‚‹
         this.buildDataManager.addTypeParameger(parameter);
     }
 
     /**
-     * upperBounds‚ÉŠi”[‚³‚ê‚Ä‚¢‚éTypeInfo‚ª‘S‚ÄReferenceTypeInfo‚©‚Ç‚¤‚©‚ğ’²‚×‚é
-     * @return upperBounds‚ÉŠi”[‚³‚ê‚Ä‚¢‚éTypeInfo‚ª‘S‚ÄReferenceTypeInfo‚È‚çtrue
+     * upperBoundsã«æ ¼ç´ã•ã‚Œã¦ã„ã‚‹TypeInfoãŒå…¨ã¦ReferenceTypeInfoã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹
+     * @return upperBoundsã«æ ¼ç´ã•ã‚Œã¦ã„ã‚‹TypeInfoãŒå…¨ã¦ReferenceTypeInfoãªã‚‰true
      */
     private boolean checkUpperBounds() {
         for (final UnresolvedTypeInfo<?> typeInfo : this.getUpperBounds()) {
@@ -192,73 +192,73 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
     }
 
     /**
-     * Œ^‚ÌãŒÀî•ñ‚ğ•Ô‚·D
-     * @return@Œ^‚ÌãŒÀî•ñ
+     * å‹ã®ä¸Šé™æƒ…å ±ã‚’è¿”ã™ï¼
+     * @returnã€€å‹ã®ä¸Šé™æƒ…å ±
      */
     protected List<UnresolvedTypeInfo<? extends TypeInfo>> getUpperBounds() {
         return this.upperBoundsType;
     }
 
     /**
-     * Œ^‚Ì‰ºŒÀî•ñ‚ğ•Ô‚·D
-     * @return@Œ^‚Ì‰ºŒÀî•ñ
+     * å‹ã®ä¸‹é™æƒ…å ±ã‚’è¿”ã™ï¼
+     * @returnã€€å‹ã®ä¸‹é™æƒ…å ±
      */
     protected UnresolvedTypeInfo<? extends TypeInfo> getLowerBounds() {
         return this.lowerBoundsType;
     }
 
     /**
-     * ÅŒã‚É\’z‚³‚ê‚½Œ^‚Ìî•ñ‚ğ•Ô‚·D
-     * @return@ÅŒã‚É\’z‚³‚ê‚½Œ^
+     * æœ€å¾Œã«æ§‹ç¯‰ã•ã‚ŒãŸå‹ã®æƒ…å ±ã‚’è¿”ã™ï¼
+     * @returnã€€æœ€å¾Œã«æ§‹ç¯‰ã•ã‚ŒãŸå‹
      */
     protected UnresolvedTypeInfo<? extends TypeInfo> builtTypeBounds() {
         return this.typeBuilder.popLastBuiltData();
     }
 
     /**
-     * –¼‘O\’z‚ğs‚¤ƒrƒ‹ƒ_[‚ğ•Ô‚·D
-     * @return@–¼‘O\’z‚ğs‚¤ƒrƒ‹ƒ_[
+     * åå‰æ§‹ç¯‰ã‚’è¡Œã†ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’è¿”ã™ï¼
+     * @returnã€€åå‰æ§‹ç¯‰ã‚’è¡Œã†ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     protected NameBuilder getNameBuilder() {
         return this.nameBuilder;
     }
 
     /**
-     * Œ^î•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[‚ğ•Ô‚·
-     * @return@Œ^î•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼ã‚’è¿”ã™
+     * @returnã€€å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     protected TypeBuilder getTypeBuilder() {
         return this.typeBuilder;
     }
 
     /**
-     * –¼‘O\’z‚ğs‚¤ƒrƒ‹ƒ_[
+     * åå‰æ§‹ç¯‰ã‚’è¡Œã†ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final NameBuilder nameBuilder;
 
     /**
-     * Œ^î•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[
+     * å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€ãƒ¼
      */
     private final TypeBuilder typeBuilder;
 
     /**
-     * \’zî•ñ‚ÌŠÇ—Ò
+     * æ§‹ç¯‰æƒ…å ±ã®ç®¡ç†è€…
      */
     private final BuildDataManager buildDataManager;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ÌãŒÀ
-     * ãŒÀ‚Í•¡”ŒÂw’è‚Å‚«‚é‚Ì‚ÅƒŠƒXƒg‚ÅŠÇ—
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä¸Šé™
+     * ä¸Šé™ã¯è¤‡æ•°å€‹æŒ‡å®šã§ãã‚‹ã®ã§ãƒªã‚¹ãƒˆã§ç®¡ç†
      */
     private List<UnresolvedTypeInfo<? extends TypeInfo>> upperBoundsType = new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>();
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚Ì‰ºŒÀ
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä¸‹é™
      */
     private UnresolvedTypeInfo<? extends TypeInfo> lowerBoundsType;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚É‚¢‚é‚©‚Ç‚¤‚©‚ğ•\‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã«ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private boolean inTypeParameterDefinition = false;
 

@@ -6,8 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * �v���~�e�B�u�^��\�����߂̃N���X�D�v���~�e�B�u�^�̓v���O���~���O����ɂ���Ē񏥂���Ă���^�ł��邽�߁C ���[�U���V���炵���^����邱�Ƃ��ł��Ȃ��悤�C�R���X�g���N�^�� private
- * �ɂ��Ă���D
+ * プリミティブ型を表すためのクラス．プリミティブ型はプログラミング言語によって提唱されている型であるため， ユーザが新たらしい型を作ることができないよう，コンストラクタは private
+ * にしている．
  * 
  * @author higo
  * 
@@ -17,7 +17,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
 
     public static boolean isJavaWrapperType(final TypeInfo type) {
 
-        // �N���X�Q�ƌ^�łȂ��ꍇ��false
+        // クラス参照型でない場合はfalse
         if (!(type instanceof ClassTypeInfo)) {
             return false;
         }
@@ -49,8 +49,8 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * �����ŗ^����ꂽ�N���X�^�ƑΉ�����v���~�e�B�u�^��Ԃ�.
-     * �^����ꂽ�N���X�^���s���Ȃ��̂ł���ꍇ�́Cnull��Ԃ��D
+     * 引数で与えられたクラス型と対応するプリミティブ型を返す.
+     * 与えられたクラス型が不正なものである場合は，nullを返す．
      * 
      * @param classType
      * @return
@@ -98,7 +98,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * �v���~�e�B�u�^�̊e�v�f��\�����߂̗񋓌^
+     * プリミティブ型の各要素を表すための列挙型
      * 
      * @author higo
      * 
@@ -106,7 +106,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     public enum TYPE {
 
         /**
-         * �u�[���^��\��
+         * ブール型を表す
          */
         BOOLEAN {
 
@@ -117,7 +117,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * BYTE�^��\��
+         * BYTE型を表す
          */
         BYTE {
             @Override
@@ -127,7 +127,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * CHAR�^��\��
+         * CHAR型を表す
          */
         CHAR {
             @Override
@@ -137,7 +137,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * SHORT��\��
+         * SHORTを表す
          */
         SHORT {
             @Override
@@ -147,7 +147,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * INT��\��
+         * INTを表す
          */
         INT {
             @Override
@@ -157,7 +157,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * LONG�^��\��
+         * LONG型を表す
          */
         LONG {
             @Override
@@ -167,7 +167,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * FLOAT�^��\��
+         * FLOAT型を表す
          */
         FLOAT {
             @Override
@@ -177,7 +177,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         },
 
         /**
-         * DOUBLE�^��\��
+         * DOUBLE型を表す
          */
         DOUBLE {
             @Override
@@ -187,98 +187,98 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
         };
 
         /**
-         * �^����Ԃ�
+         * 型名を返す
          * 
-         * @return �^��
+         * @return 型名
          */
         public abstract String getName();
     }
 
     /**
-     * boolean ��\���萔
+     * boolean を表す定数
      */
     public static final String BOOLEAN_STRING = TYPE.BOOLEAN.getName();
 
     /**
-     * byte ��\���萔
+     * byte を表す定数
      */
     public static final String BYTE_STRING = TYPE.BYTE.getName();
 
     /**
-     * char ��\���萔
+     * char を表す定数
      */
     public static final String CHAR_STRING = TYPE.CHAR.getName();
 
     /**
-     * short ��\���萔
+     * short を表す定数
      */
     public static final String SHORT_STRING = TYPE.SHORT.getName();
 
     /**
-     * int ��\���萔
+     * int を表す定数
      */
     public static final String INT_STRING = TYPE.INT.getName();
 
     /**
-     * long ��\���萔
+     * long を表す定数
      */
     public static final String LONG_STRING = TYPE.LONG.getName();
 
     /**
-     * float ��\���萔
+     * float を表す定数
      */
     public static final String FLOAT_STRING = TYPE.FLOAT.getName();
 
     /**
-     * double ��\���萔
+     * double を表す定数
      */
     public static final String DOUBLE_STRING = TYPE.DOUBLE.getName();
 
     /**
-     * boolean �^��\�����߂̒萔�D
+     * boolean 型を表すための定数．
      */
     public static final PrimitiveTypeInfo BOOLEAN = new PrimitiveTypeInfo(TYPE.BOOLEAN);
 
     /**
-     * byte �^��\�����߂̒萔�D
+     * byte 型を表すための定数．
      */
     public static final PrimitiveTypeInfo BYTE = new PrimitiveTypeInfo(TYPE.BYTE);
 
     /**
-     * char �^��\�����߂̒萔�D
+     * char 型を表すための定数．
      */
     public static final PrimitiveTypeInfo CHAR = new PrimitiveTypeInfo(TYPE.CHAR);
 
     /**
-     * short �^��\�����߂̒萔�D
+     * short 型を表すための定数．
      */
     public static final PrimitiveTypeInfo SHORT = new PrimitiveTypeInfo(TYPE.SHORT);
 
     /**
-     * int �^��\�����߂̒萔�D
+     * int 型を表すための定数．
      */
     public static final PrimitiveTypeInfo INT = new PrimitiveTypeInfo(TYPE.INT);
 
     /**
-     * long �^��\�����߂̒萔�D
+     * long 型を表すための定数．
      */
     public static final PrimitiveTypeInfo LONG = new PrimitiveTypeInfo(TYPE.LONG);
 
     /**
-     * float �^��\�����߂̒萔�D
+     * float 型を表すための定数．
      */
     public static final PrimitiveTypeInfo FLOAT = new PrimitiveTypeInfo(TYPE.FLOAT);
 
     /**
-     * double �^��\�����߂̒萔�D
+     * double 型を表すための定数．
      */
     public static final PrimitiveTypeInfo DOUBLE = new PrimitiveTypeInfo(TYPE.DOUBLE);
 
     /**
-     * {@link PrimitiveTypeInfo}�̃t�@�N�g�����\�b�h�D
+     * {@link PrimitiveTypeInfo}のファクトリメソッド．
      * 
-     * @param type �쐬����^�̗񋓌^
-     * @return �w�肳�ꂽ����\�� {@link PrimitiveTypeInfo} �̃C���X�^���X�D
+     * @param type 作成する型の列挙型
+     * @return 指定された方を表す {@link PrimitiveTypeInfo} のインスタンス．
      */
     public static PrimitiveTypeInfo getType(final TYPE type) {
 
@@ -309,33 +309,33 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * ���ɉ����ς݂��ǂ�����Ԃ�
+     * 既に解決済みかどうかを返す
      * 
-     * @return ��� true ���Ԃ����
+     * @return 常に true が返される
      */
     public boolean alreadyResolved() {
         return true;
     }
 
     /**
-     * �^�������ꂽ����Ԃ�
+     * 型解決された情報を返す
      * 
-     * @return �������g��Ԃ�
+     * @return 自分自身を返す
      */
     public PrimitiveTypeInfo getResolved() {
         return this;
     }
 
     /**
-     * ���O�������s��
+     * 名前解決を行う
      * 
-     * @param usingClass ���O�������s���G���e�B�e�B������N���X
-     * @param usingMethod ���O�������s���G���e�B�e�B�����郁�\�b�h
-     * @param classInfoManager �p����N���X�}�l�[�W��
-     * @param fieldInfoManager �p����t�B�[���h�}�l�[�W��
-     * @param methodInfoManager �p���郁�\�b�h�}�l�[�W��
+     * @param usingClass 名前解決を行うエンティティがあるクラス
+     * @param usingMethod 名前解決を行うエンティティがあるメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      * 
-     * @return �����ς݂̌^�i�������g�j
+     * @return 解決済みの型（自分自身）
      */
     public PrimitiveTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -344,18 +344,18 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * ���̌^�̃v���~�e�B�u�^��Ԃ�
+     * この型のプリミティブ型を返す
      * 
-     * @return ���̌^�̃v���~�e�B�u�^
+     * @return この型のプリミティブ型
      */
     public TYPE getPrimitiveType() {
         return this.type;
     }
 
     /**
-     * �^����Ԃ��D
+     * 型名を返す．
      * 
-     * @return �^��
+     * @return 型名
      */
     @Override
     public String getTypeName() {
@@ -363,7 +363,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * �I�u�W�F�N�g�̓������̃`�F�b�N���s��
+     * オブジェクトの等価性のチェックを行う
      */
     @Override
     public boolean equals(final TypeInfo typeInfo) {
@@ -380,9 +380,9 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * �I�u�W�F�N�g�Ɍ^��^���ď���������D �^���͌Œ�ł��邽�߁C�O������̓I�u�W�F�N�g�𐶐��ł��Ȃ��悤�ɂ��Ă���D
+     * オブジェクトに型を与えて初期化する． 型名は固定であるため，外部からはオブジェクトを生成できないようにしている．
      * 
-     * @param type �^
+     * @param type 型
      */
     private PrimitiveTypeInfo(final TYPE type) {
 
@@ -394,7 +394,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
-     * �^��\���ϐ��D
+     * 型を表す変数．
      */
     private final TYPE type;
 }

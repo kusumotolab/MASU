@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * finally ƒuƒƒbƒNî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * finally ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -16,12 +16,12 @@ public final class FinallyBlockInfo extends BlockInfo implements
         SubsequentialBlockInfo<TryBlockInfo> {
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä finally ƒuƒƒbƒN‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ finally ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public FinallyBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -30,9 +30,9 @@ public final class FinallyBlockInfo extends BlockInfo implements
     }
 
     /**
-     * ‚±‚Ìfinallyß‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®finallyç¯€ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìfinallyß‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®finallyç¯€ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -54,11 +54,11 @@ public final class FinallyBlockInfo extends BlockInfo implements
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
-     * ‚±‚Ìƒƒ\ƒbƒh‚Í«—ˆ”p~‚³‚ê‚é‚½‚ßCg—p‚Í„§‚³‚ê‚È‚¢
-     * {@link FinallyBlockInfo#getOwnerBlock()} ‚ğg—p‚·‚×‚«‚Å‚ ‚éD
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å°†æ¥å»ƒæ­¢ã•ã‚Œã‚‹ãŸã‚ï¼Œä½¿ç”¨ã¯æ¨å¥¨ã•ã‚Œãªã„
+     * {@link FinallyBlockInfo#getOwnerBlock()} ã‚’ä½¿ç”¨ã™ã¹ãã§ã‚ã‚‹ï¼
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      * @deprecated
      */
     public TryBlockInfo getOwnerTryBlock() {
@@ -66,9 +66,9 @@ public final class FinallyBlockInfo extends BlockInfo implements
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      */
     @Override
     public TryBlockInfo getOwnerBlock() {

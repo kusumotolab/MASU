@@ -68,7 +68,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         assert (elements.getAvailableElements().size() > 0) : "Illegal state: constructor element not found.";
 
         if (elements.isJavaArrayInstantiation()) {
-            //”z—ñ‚Ìnew•¶‚Í‚±‚Á‚¿‚Åˆ—‚·‚é
+            //é…åˆ—ã®newæ–‡ã¯ã“ã£ã¡ã§å‡¦ç†ã™ã‚‹
 
             final UnresolvedArrayTypeInfo arrayType = elements.resolveArrayElement();
             final UnresolvedArrayConstructorCallInfo constructorCall = new UnresolvedArrayConstructorCallInfo(
@@ -100,7 +100,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
             pushElement(new UsageElement(constructorCall));
         } else {
-            //‚»‚êˆÈŠO‚Í•’Ê‚Éˆ—‚·‚é
+            //ãã‚Œä»¥å¤–ã¯æ™®é€šã«å‡¦ç†ã™ã‚‹
             super.buildNewConstructorCall(fromLine, fromColumn, toLine, toColumn);
         }
 
@@ -213,14 +213,14 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         final String className = superClassReferenceName[superClassReferenceName.length - 1];
 
         if (elements.length > 0 && elements[0] instanceof TypeElement) {
-            //‹ê‚µ•´‚ê‚Ì“Á•Êˆ—
-            //elements‚Ì1ŒÂ–Ú‚ªUnresolvedReferenceTypeInfo‚Å‚ ‚è‚©‚ÂsuperClass‚ÌƒAƒEƒ^[ƒNƒ‰ƒX‚Å‚ ‚é‚È‚ç
-            //‚»‚ê‚ÍOuterClass.this.super()‚Æ‚¢‚¤ŒÄ‚Ño‚µŒ`®‚Å‚ ‚é‚Æ‚İ‚È‚·
+            //è‹¦ã—ç´›ã‚Œã®ç‰¹åˆ¥å‡¦ç†
+            //elementsã®1å€‹ç›®ãŒUnresolvedReferenceTypeInfoã§ã‚ã‚Šã‹ã¤superClassã®ã‚¢ã‚¦ã‚¿ãƒ¼ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ãªã‚‰
+            //ãã‚Œã¯OuterClass.this.super()ã¨ã„ã†å‘¼ã³å‡ºã—å½¢å¼ã§ã‚ã‚‹ã¨ã¿ãªã™
 
             final UnresolvedTypeInfo<? extends TypeInfo> type = ((TypeElement) elements[0])
                     .getType();
             if (type instanceof UnresolvedClassTypeInfo) {
-                // TODO UnresolvedReferenceType‚É‚·‚×‚«‚©‚à —vƒeƒXƒg
+                // TODO UnresolvedReferenceTypeã«ã™ã¹ãã‹ã‚‚ è¦ãƒ†ã‚¹ãƒˆ
                 final String[] firstElementReference = ((UnresolvedClassTypeInfo) type)
                         .getReferenceName();
                 //.getFullReferenceName();
@@ -253,10 +253,10 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
                 fromColumn, toLine, toColumn);
     }
 
-    /*FIXME this()‚âsuper()‚ÍExpressoinStatement‚Å‚Í‚È‚­A’Pƒ‚ÈExpression‚Å‚ ‚éBStatement‚Ì“o˜^‚Í‚±‚Ìƒrƒ‹ƒ_‚Å‚Í‚È‚­A‚»‚êˆÈ‘O‚É‹N“®‚µ‚Ä‚¢‚é
-     * ExpressionStatementBuilder‚ªs‚Á‚Ä‚¢‚éB‚¾‚©‚çAnew ‚É‚æ‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ(‚±‚ê‚ÍExpressionStatement)‚Ì‚æ‚¤‚ÉStatement‚ğ
-     * Ÿè‚É“o˜^‚µ‚Ä‚­‚ê‚È‚¢B
-     * ‰‹}ˆ’u‚Æ‚µ‚ÄA–{ƒrƒ‹ƒ_’P“Æ‚ÅStatement‚Ì“o˜^‚ğs‚Á‚Ä‚¢‚é‚ªA‚±‚ê‚Í‘¼‚ÌŒ¾Œêd—l‚È‚Ç‚àl—¶‚µAê‡‚É‚æ‚Á‚Ä‚ÍC³‚³‚ê‚é‚×‚«‚Å‚ ‚éB
+    /*FIXME this()ã‚„super()ã¯ExpressoinStatementã§ã¯ãªãã€å˜ç´”ãªExpressionã§ã‚ã‚‹ã€‚Statementã®ç™»éŒ²ã¯ã“ã®ãƒ“ãƒ«ãƒ€ã§ã¯ãªãã€ãã‚Œä»¥å‰ã«èµ·å‹•ã—ã¦ã„ã‚‹
+     * ExpressionStatementBuilderãŒè¡Œã£ã¦ã„ã‚‹ã€‚ã ã‹ã‚‰ã€new ã«ã‚ˆã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—(ã“ã‚Œã¯ExpressionStatement)ã®ã‚ˆã†ã«Statementã‚’
+     * å‹æ‰‹ã«ç™»éŒ²ã—ã¦ãã‚Œãªã„ã€‚
+     * å¿œæ€¥å‡¦ç½®ã¨ã—ã¦ã€æœ¬ãƒ“ãƒ«ãƒ€å˜ç‹¬ã§Statementã®ç™»éŒ²ã‚’è¡Œã£ã¦ã„ã‚‹ãŒã€ã“ã‚Œã¯ä»–ã®è¨€èªä»•æ§˜ãªã©ã‚‚è€ƒæ…®ã—ã€å ´åˆã«ã‚ˆã£ã¦ã¯ä¿®æ­£ã•ã‚Œã‚‹ã¹ãã§ã‚ã‚‹ã€‚
      */
     private void registStatement(final UnresolvedExpressionInfo<? extends ExpressionInfo> callInfo,
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,

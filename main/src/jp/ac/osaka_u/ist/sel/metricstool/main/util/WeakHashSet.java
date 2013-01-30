@@ -8,7 +8,7 @@ import java.util.WeakHashMap;
 
 
 /**
- * ’†g‚ğãQÆ‚Å‚Á‚Ä‚¨‚­Set
+ * ä¸­èº«ã‚’å¼±å‚ç…§ã§æŒã£ã¦ãŠãSet
  * 
  * @author kou-tngt
  *
@@ -16,17 +16,17 @@ import java.util.WeakHashMap;
 public class WeakHashSet<T> implements Set<T> {
 
     /**
-     * ˆø”–³‚µƒRƒ“ƒXƒgƒ‰ƒNƒ^D
-     * ‰Šú—e—ÊC‰Šú•‰‰×ŒW”‚ÅC‹ó‚ÌƒZƒbƒg‚ğì¬‚·‚éD
+     * å¼•æ•°ç„¡ã—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼
+     * åˆæœŸå®¹é‡ï¼ŒåˆæœŸè² è·ä¿‚æ•°ã§ï¼Œç©ºã®ã‚»ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ï¼
      */
     public WeakHashSet() {
         this.innerMap = new WeakHashMap<T, Object>();
     }
 
     /**
-     * ‰Šú—e—ÊC‰Šú•‰‰×ŒW”‚Å‚¹‚Á‚Æ‚ğì¬‚µD
-     * ˆø”‚ÌƒRƒŒƒNƒVƒ‡ƒ“‚Ì—v‘f‚ğ‚±‚ÌƒZƒbƒg‚É“ü‚ê‚é
-     * @param c ‚±‚ÌƒZƒbƒg‚É“ü‚ê‚½‚¢—v‘f‚ğ‚Á‚Ä‚¢‚éƒRƒŒƒNƒVƒ‡ƒ“
+     * åˆæœŸå®¹é‡ï¼ŒåˆæœŸè² è·ä¿‚æ•°ã§ã›ã£ã¨ã‚’ä½œæˆã—ï¼
+     * å¼•æ•°ã®ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®è¦ç´ ã‚’ã“ã®ã‚»ãƒƒãƒˆã«å…¥ã‚Œã‚‹
+     * @param c ã“ã®ã‚»ãƒƒãƒˆã«å…¥ã‚ŒãŸã„è¦ç´ ã‚’æŒã£ã¦ã„ã‚‹ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
      */
     public WeakHashSet(final Collection<? extends T> c) {
         this.innerMap = new WeakHashMap<T, Object>();
@@ -36,17 +36,17 @@ public class WeakHashSet<T> implements Set<T> {
     }
 
     /**
-     * ‰Šú—e—ÊinitialCapacity‚Å‹ó‚ÌƒZƒbƒg‚ğì¬‚·‚éD
-     * @param initialCapacity ‚±‚ÌƒZƒbƒg‚Ì‰Šú—e—Ê
+     * åˆæœŸå®¹é‡initialCapacityã§ç©ºã®ã‚»ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ï¼
+     * @param initialCapacity ã“ã®ã‚»ãƒƒãƒˆã®åˆæœŸå®¹é‡
      */
     public WeakHashSet(final int initialCapacity) {
         this.innerMap = new WeakHashMap<T, Object>(initialCapacity);
     }
 
     /**
-     * ‰Šú—e—ÊinitialCapacity‚Å•‰‰×ŒW”loadFactor‚ğ—p‚¢‚éA‹ó‚ÌƒZƒbƒg‚ğì¬‚·‚éD
-     * @param initialCapacity ‰Šú—e—Ê
-     * @param loadFactor ŒÂ‚ÌƒZƒbƒg‚Ì•‰‰×ŒW”
+     * åˆæœŸå®¹é‡initialCapacityã§è² è·ä¿‚æ•°loadFactorã‚’ç”¨ã„ã‚‹ã€ç©ºã®ã‚»ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ï¼
+     * @param initialCapacity åˆæœŸå®¹é‡
+     * @param loadFactor å€‹ã®ã‚»ãƒƒãƒˆã®è² è·ä¿‚æ•°
      */
     public WeakHashSet(final int initialCapacity, final float loadFactor) {
         this.innerMap = new WeakHashMap<T, Object>(initialCapacity, loadFactor);
@@ -160,12 +160,12 @@ public class WeakHashSet<T> implements Set<T> {
     }
 
     /**
-     * ƒ_ƒ~[‚Ì’l—pƒIƒuƒWƒFƒNƒg
+     * ãƒ€ãƒŸãƒ¼ã®å€¤ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     private static final Object DUMMY = "Dummy";
 
     /**
-     * “à•”‚Å—˜—p‚·‚é {@link WeakHashMap}
+     * å†…éƒ¨ã§åˆ©ç”¨ã™ã‚‹ {@link WeakHashMap}
      */
     private final WeakHashMap<T, Object> innerMap;
 }

@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
 /**
- * –¢‰ğŒˆ‚ÈCŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ‚Â‚±‚Æ‚ğ•\‚·ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * æœªè§£æ±ºãªï¼Œå¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’æŒã¤ã“ã¨ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *

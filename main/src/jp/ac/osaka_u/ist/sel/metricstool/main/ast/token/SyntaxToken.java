@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * •¶–@î•ñ‚ð•\‚·ƒg[ƒNƒ“ƒNƒ‰ƒX
+ * æ–‡æ³•æƒ…å ±ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class SyntaxToken extends AstTokenAdapter {
 
     /**
-     * –¼‘O‹æØ‚è‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * åå‰åŒºåˆ‡ã‚Šã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken NAME_SEPARATOR = new SyntaxToken("NAME_SEPARATOR") {
         @Override
@@ -20,7 +20,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒNƒ‰ƒXƒuƒƒbƒNˆÈŠO‚ÌƒuƒƒbƒN‚ÌŠJŽn‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ä»¥å¤–ã®ãƒ–ãƒ­ãƒƒã‚¯ã®é–‹å§‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken BLOCK_START = new SyntaxToken("BLOCK_START") {
         @Override
@@ -30,7 +30,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒNƒ‰ƒXƒuƒƒbƒN‚ÌŠJŽn‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¯ãƒ©ã‚¹ãƒ–ãƒ­ãƒƒã‚¯ã®é–‹å§‹ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken CLASSBLOCK_START = new SyntaxToken("CLASSBLOCK_START") {
         @Override
@@ -45,7 +45,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒƒ\ƒbƒhŒÄ‚Ño‚µ•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—æ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken METHOD_CALL = new SyntaxToken("METHOD_CALL") {
         @Override
@@ -55,7 +55,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * new•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * newæ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken NEW = new SyntaxToken("NEW") {
         @Override
@@ -65,7 +65,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ”z—ñéŒ¾‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * é…åˆ—å®£è¨€ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken ARRAY = new SyntaxToken("ARRAY") {
         @Override
@@ -75,7 +75,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * break•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * breakæ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken BREAK = new SyntaxToken("BREAK") {
         @Override
@@ -102,7 +102,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * return•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * returnæ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken RETURN = new SyntaxToken("RETURN") {
         @Override
@@ -117,7 +117,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * throw•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * throwæ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken THROW = new SyntaxToken("THROW") {
         @Override
@@ -132,7 +132,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * assert•¶‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * assertæ–‡ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken ASSERT = new SyntaxToken("ASSERT") {
 
@@ -149,7 +149,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒvƒƒpƒeƒB‚Ìget•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®getéƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken PROPERTY_GET_BODY = new SyntaxToken("PROPERTY_GET_BODY") {
         @Override
@@ -165,7 +165,7 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒvƒƒpƒeƒB‚Ìset•”‚ð•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®setéƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final SyntaxToken PROPERTY_SET_BODY = new SyntaxToken("PROPERTY_SET_BODY") {
         @Override
@@ -180,8 +180,8 @@ public class SyntaxToken extends AstTokenAdapter {
     };
 
     /**
-     * Žw’è‚³‚ê‚½•¶Žš—ñ‚Å•\‚³‚ê‚éƒg[ƒNƒ“‚ðì¬‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @param text ƒg[ƒNƒ“‚ð•\‚·•¶Žš—ñ
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã§è¡¨ã•ã‚Œã‚‹ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @param text ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¡¨ã™æ–‡å­—åˆ—
      */
     public SyntaxToken(final String text) {
         super(text);

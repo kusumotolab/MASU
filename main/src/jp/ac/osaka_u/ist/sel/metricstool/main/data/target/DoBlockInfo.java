@@ -5,7 +5,7 @@ import java.util.SortedSet;
 
 
 /**
- * do ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * do ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -14,12 +14,12 @@ import java.util.SortedSet;
 public final class DoBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä do ƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ do ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public DoBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -27,9 +27,9 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
-     * ‚±‚ÌDo•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ï‚¦‚·
+     * ã“ã®Doæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’å¤‰ãˆã™
      * 
-     * @return ‚±‚ÌDo•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®Doæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {

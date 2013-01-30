@@ -7,30 +7,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 
 
 /**
- * ’ŠÛ\•¶–Ø‚ÌƒrƒWƒ^[‚©‚ç {@link AstVisitEvent} ‚Ì’Ê’m‚ğó‚¯æ‚éƒCƒ“ƒ^ƒtƒF[ƒX.
+ * æŠ½è±¡æ§‹æ–‡æœ¨ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã‹ã‚‰ {@link AstVisitEvent} ã®é€šçŸ¥ã‚’å—ã‘å–ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * 
- * ”CˆÓ‚Ìƒm[ƒha‚É‚Â‚¢‚Ä,{@link #visited(AstVisitEvent)},{@link #entered(AstVisitEvent)},{@link #exited(AstVisitEvent)}
- * ‚Ì‡”Ô‚É’Ê’m‚³‚ê‚é.
- * –Ø\‘¢‚Ì—t‚Å‚ ‚éƒm[ƒh‚É‚Â‚¢‚Ä‚àC {@link #entered(AstVisitEvent)}‚Æ{@link #exited(AstVisitEvent)}ƒƒ\ƒbƒh‚ªŒÄ‚Î‚ê‚é.
+ * ä»»æ„ã®ãƒãƒ¼ãƒ‰aã«ã¤ã„ã¦,{@link #visited(AstVisitEvent)},{@link #entered(AstVisitEvent)},{@link #exited(AstVisitEvent)}
+ * ã®é †ç•ªã«é€šçŸ¥ã•ã‚Œã‚‹.
+ * æœ¨æ§‹é€ ã®è‘‰ã§ã‚ã‚‹ãƒãƒ¼ãƒ‰ã«ã¤ã„ã¦ã‚‚ï¼Œ {@link #entered(AstVisitEvent)}ã¨{@link #exited(AstVisitEvent)}ãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã°ã‚Œã‚‹.
  * 
  * @author kou-tngt
  *
  */
 public interface AstVisitListener extends EventListener {
     /**
-     * ƒrƒWƒ^[‚ª‚ ‚é’¸“_‚É“’B‚µ‚½‚ÉƒCƒxƒ“ƒg‚ğó‚¯æ‚é.
-     * @param e “’BƒCƒxƒ“ƒg
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒã‚ã‚‹é ‚ç‚¹ã«åˆ°é”ã—ãŸæ™‚ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚‹.
+     * @param e åˆ°é”ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void visited(AstVisitEvent e);
 
     /**
-     * ƒrƒWƒ^[‚ª‚ ‚é’¸“_‚Ì’†‚É“ü‚é‚ÉƒCƒxƒ“ƒg‚ğó‚¯æ‚é.
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒã‚ã‚‹é ‚ç‚¹ã®ä¸­ã«å…¥ã‚‹æ™‚ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚‹.
      * @param e
      */
     public void entered(AstVisitEvent e);
 
     /**
-     * ƒrƒWƒ^[‚ª‚ ‚é’¸“_‚Ì’†‚©‚ço‚½‚ÉƒCƒxƒ“ƒg‚ğó‚¯æ‚é
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒã‚ã‚‹é ‚ç‚¹ã®ä¸­ã‹ã‚‰å‡ºãŸæ™‚ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘å–ã‚‹
      * @param e
      */
     public void exited(AstVisitEvent e) throws ASTParseException;

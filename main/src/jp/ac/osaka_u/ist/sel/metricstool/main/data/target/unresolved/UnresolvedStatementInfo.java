@@ -5,11 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 
 
 /**
- * –¢‰ğŒˆ•¶‚ğ•\‚·ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * æœªè§£æ±ºæ–‡ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
- * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®å‹
  */
 public interface UnresolvedStatementInfo<T extends StatementInfo> extends
         UnresolvedExecutableElementInfo<T> {

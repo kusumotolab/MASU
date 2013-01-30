@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒ[ƒJƒ‹—Ìˆæ(ƒƒ\ƒbƒh‚Æƒƒ\ƒbƒh“à‚ÌƒuƒƒbƒN)‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸ(ãƒ¡ã‚½ãƒƒãƒ‰ã¨ãƒ¡ã‚½ãƒƒãƒ‰å†…ã®ãƒ–ãƒ­ãƒƒã‚¯)ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -32,7 +32,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         UnresolvedUnitInfo<T> implements UnresolvedHavingOuterUnit {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      */
     public UnresolvedLocalSpaceInfo(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
@@ -46,13 +46,13 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ’Ç‰Á‚·‚é
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param call ƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ
+     * @param call ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—
      */
     public final void addCall(final UnresolvedCallInfo<?> call) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == call) {
             throw new NullPointerException();
@@ -62,14 +62,14 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * •Ï”g—p‚ğ’Ç‰Á‚·‚é
+     * å¤‰æ•°ä½¿ç”¨ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param variableUsage •Ï”g—p
+     * @param variableUsage å¤‰æ•°ä½¿ç”¨
      */
     public final void addVariableUsage(
             final UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsage) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == variableUsage) {
             throw new NullPointerException();
@@ -79,13 +79,13 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ƒ[ƒJƒ‹•Ï”‚ğ’Ç‰Á‚·‚é
+     * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param localVariable ƒ[ƒJƒ‹•Ï”
+     * @param localVariable ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
      */
     public final void addLocalVariable(final UnresolvedLocalVariableInfo localVariable) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == localVariable) {
             throw new NullPointerException();
@@ -95,19 +95,19 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * –¢‰ğŒˆ•¶‚ğ’Ç‰Á‚·‚é
+     * æœªè§£æ±ºæ–‡ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param statement –¢‰ğŒˆ•¶
+     * @param statement æœªè§£æ±ºæ–‡
      */
     public void addStatement(final UnresolvedStatementInfo<?> statement) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == statement) {
             throw new NullPointerException();
         }
 
-        // Catch, Finally, ElseƒuƒƒbƒN‚Ì‚Æ‚«‚ÍC’Ç‰Á‚µ‚È‚¢
+        // Catch, Finally, Elseãƒ–ãƒ­ãƒƒã‚¯ã®ã¨ãã¯ï¼Œè¿½åŠ ã—ãªã„
         if (statement instanceof UnresolvedCatchBlockInfo
                 || statement instanceof UnresolvedFinallyBlockInfo
                 || statement instanceof UnresolvedElseBlockInfo) {
@@ -118,10 +118,10 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * TODO –¼‘O‚ğ•Ï‚¦‚é
-     * ƒCƒ“ƒi[ƒuƒƒbƒN‚ğ’Ç‰Á‚·‚é
+     * TODO åå‰ã‚’å¤‰ãˆã‚‹
+     * ã‚¤ãƒ³ãƒŠãƒ¼ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * @param innerLocalInfo ’Ç‰Á‚·‚éƒCƒ“ƒi[ƒuƒƒbƒN
+     * @param innerLocalInfo è¿½åŠ ã™ã‚‹ã‚¤ãƒ³ãƒŠãƒ¼ãƒ–ãƒ­ãƒƒã‚¯
      */
     public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> innerLocalInfo) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -135,57 +135,57 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN“à‚Ås‚í‚ê‚Ä‚¢‚é–¢‰ğŒˆƒƒ\ƒbƒhŒÄ‚Ño‚µ‚¨‚æ‚ÑƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚Ì Set ‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§è¡Œã‚ã‚Œã¦ã„ã‚‹æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŠã‚ˆã³ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã® Set ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN“à‚Ås‚í‚ê‚Ä‚¢‚é–¢‰ğŒˆƒƒ\ƒbƒhŒÄ‚Ño‚µ‚¨‚æ‚ÑƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚Ì Set
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§è¡Œã‚ã‚Œã¦ã„ã‚‹æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŠã‚ˆã³ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã® Set
      */
     public final Set<UnresolvedCallInfo<?>> getCalls() {
         return Collections.unmodifiableSet(this.calls);
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN“à‚Ås‚í‚ê‚Ä‚¢‚é–¢‰ğŒˆ•Ï”g—p‚Ì Set ‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§è¡Œã‚ã‚Œã¦ã„ã‚‹æœªè§£æ±ºå¤‰æ•°ä½¿ç”¨ã® Set ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN“à‚Ås‚í‚ê‚Ä‚¢‚é–¢‰ğŒˆ•Ï”g—p‚Ì Set
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§è¡Œã‚ã‚Œã¦ã„ã‚‹æœªè§£æ±ºå¤‰æ•°ä½¿ç”¨ã® Set
      */
     public final Set<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>> getVariableUsages() {
         return Collections.unmodifiableSet(this.variableUsages);
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆƒ[ƒJƒ‹•Ï”‚Ì Set ‚ğ•Ô‚·
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã® Set ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN“à‚Å’è‹`‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆƒ[ƒJƒ‹•Ï”‚Ì Set
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹æœªè§£æ±ºãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã® Set
      */
     public final Set<UnresolvedLocalVariableInfo> getLocalVariables() {
         return Collections.unmodifiableSet(this.localVariables);
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN“à‚Ì–¢‰ğŒˆ“à•”ƒuƒƒbƒN‚Ì Set ‚ğ•Ô‚·
-     * else, catch, finallyƒuƒƒbƒN‚ÍŠÜ‚Ü‚ê‚È‚¢
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã®æœªè§£æ±ºå†…éƒ¨ãƒ–ãƒ­ãƒƒã‚¯ã® Set ã‚’è¿”ã™
+     * else, catch, finallyãƒ–ãƒ­ãƒƒã‚¯ã¯å«ã¾ã‚Œãªã„
      * 
-     * @return ‚±‚ÌƒuƒƒbƒN“à‚Ì–¢‰ğŒˆ“à•”ƒuƒƒbƒN‚Ì Set
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã®æœªè§£æ±ºå†…éƒ¨ãƒ–ãƒ­ãƒƒã‚¯ã® Set
      */
     public final Set<UnresolvedStatementInfo<? extends StatementInfo>> getStatements() {
         return Collections.unmodifiableSet(this.statements);
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚È‚ÇCSubsequentialBlockInfo‚ğŠÜ‚Ş
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoãªã©ï¼ŒSubsequentialBlockInfoã‚’å«ã‚€
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì“à‚ÌSubsequentialBlock‚ğŠÜ‚Ş•¶î•ñ‚Ì SortedSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®å†…ã®SubsequentialBlockã‚’å«ã‚€æ–‡æƒ…å ±ã® SortedSet
      */
     public final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> getStatementsWithSubsequencialBlocks() {
         return Collections.unmodifiableSortedSet(this.statements);
     }
 
     /** 
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚ÍŠÜ‚Ü‚ê‚È‚¢D
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoã¯å«ã¾ã‚Œãªã„ï¼
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet
      */
     public final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> getStatementsWithOutSubsequencialBlocks() {
         final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> statements = new TreeSet<UnresolvedStatementInfo<? extends StatementInfo>>();
@@ -199,18 +199,18 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN“à‚Ì–¢‰ğŒˆ“à•”ƒuƒƒbƒN
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å†…ã®æœªè§£æ±ºå†…éƒ¨ãƒ–ãƒ­ãƒƒã‚¯
      * 
      */
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚ÌƒCƒ“ƒi[—Ìˆæ‚ğ–¼‘O‰ğŒˆ‚·‚é
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®ã‚¤ãƒ³ãƒŠãƒ¼é ˜åŸŸã‚’åå‰è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod ‚±‚Ì—Ìˆæ‚ª‘¶İ‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager ƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager ƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager ƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod ã“ã®é ˜åŸŸãŒå­˜åœ¨ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     public void resolveInnerBlock(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -223,7 +223,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
 
-            // ƒXƒe[ƒgƒƒ“ƒg‚ªƒuƒƒbƒN‚Ì            
+            // ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆãŒãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚            
             if (unresolvedStatement instanceof UnresolvedBlockInfo<?>) {
 
                 final UnresolvedBlockInfo<?> unresolvedBlock = (UnresolvedBlockInfo<?>) unresolvedStatement;
@@ -235,7 +235,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
                         fieldInfoManager, methodInfoManager);
             }
 
-            // ƒXƒe[ƒgƒƒ“ƒg‚ª single ƒXƒe[ƒgƒƒ“ƒg‚Ì
+            // ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆãŒ single ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã®æ™‚
             else {
                 final StatementInfo statement = unresolvedStatement.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -253,7 +253,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     @Override
     public final void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == outerUnit) {
             throw new IllegalArgumentException();
@@ -263,9 +263,9 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     @Override
     public final UnresolvedClassInfo getOuterClass() {
@@ -274,7 +274,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         while (true) {
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚È‚Ì‚Å‚©‚È‚ç‚¸ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚ ‚é
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ãªã®ã§ã‹ãªã‚‰ãšå¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹
             if (null == outer) {
                 throw new IllegalStateException();
             }
@@ -288,9 +288,9 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ŠO‘¤‚Ìƒƒ\ƒbƒh‚ğ•Ô‚·.
+     * å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚Ìƒƒ\ƒbƒh
+     * @returnã€€å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
@@ -316,22 +316,22 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * ƒƒ\ƒbƒh‚Ü‚½‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•Û‘¶‚·‚é•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final Set<UnresolvedCallInfo<?>> calls;
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ğ•Û‘¶‚·‚é•Ï”
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final Set<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>> variableUsages;
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ“à‚Å’è‹`‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸå†…ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final Set<UnresolvedLocalVariableInfo> localVariables;
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ“à‚Å’è‹`‚³‚ê‚½–¢‰ğŒˆ•¶‚ğ•Û‘¶‚·‚é•Ï”
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸå†…ã§å®šç¾©ã•ã‚ŒãŸæœªè§£æ±ºæ–‡ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     protected final SortedSet<UnresolvedStatementInfo<?>> statements;
 

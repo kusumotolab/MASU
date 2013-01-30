@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆŒ^ƒpƒ‰ƒ[ƒ^‚ğ•\‚·’ŠÛƒNƒ‰ƒX
+ * æœªè§£æ±ºå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¡¨ã™æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -25,11 +25,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo> {
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param ownerUnit ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğ’è‹`‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
-     * @param name Œ^ƒpƒ‰ƒ[ƒ^–¼
-     * @param index ‰½”Ô–Ú‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚Å‚ ‚é‚©‚ğ•\‚·
+     * @param ownerUnit ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®šç¾©ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
+     * @param name å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+     * @param index ä½•ç•ªç›®ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ã‚ã‚‹ã‹ã‚’è¡¨ã™
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
             final int index) {
@@ -39,7 +39,7 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
             throw new IllegalArgumentException();
         }
 
-        // ownerUnit‚ªƒƒ\ƒbƒh‚©ƒNƒ‰ƒX‚Å‚È‚¢ê‡‚ÍƒGƒ‰[
+        // ownerUnitãŒãƒ¡ã‚½ãƒƒãƒ‰ã‹ã‚¯ãƒ©ã‚¹ã§ãªã„å ´åˆã¯ã‚¨ãƒ©ãƒ¼
         if ((!(ownerUnit instanceof UnresolvedClassInfo))
                 && (!(ownerUnit instanceof UnresolvedCallableUnitInfo<?>))) {
             throw new IllegalArgumentException();
@@ -52,12 +52,12 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param ownerUnit ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğ’è‹`‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
-     * @param name Œ^ƒpƒ‰ƒ[ƒ^–¼
-     * @param index ‰½”Ô–Ú‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚Å‚ ‚é‚©‚ğ•\‚·
-     * @param extendsType –¢‰ğŒˆŠî’êƒNƒ‰ƒXŒ^
+     * @param ownerUnit ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®šç¾©ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
+     * @param name å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+     * @param index ä½•ç•ªç›®ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ã‚ã‚‹ã‹ã‚’è¡¨ã™
+     * @param extendsType æœªè§£æ±ºåŸºåº•ã‚¯ãƒ©ã‚¹å‹
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
             final int index,
@@ -67,18 +67,18 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * Šù‚É–¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * æ—¢ã«åå‰è§£æ±ºã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return Šù‚É–¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í true, ‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     * @return æ—¢ã«åå‰è§£æ±ºã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ true, ãã†ã§ãªã„å ´åˆã¯ false
      */
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğ•Ô‚·
+     * åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±ã‚’è¿”ã™
      * 
-     * @return –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ
+     * @return åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±
      * @throws NotResolvedException
      */
     public final TypeParameterInfo getResolved() {
@@ -91,32 +91,32 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      * 
-     * @param usingClass –¼‘O‰ğŒˆ‚ğs‚¤ƒGƒ“ƒeƒBƒeƒB‚ª‚ ‚éƒNƒ‰ƒX
-     * @param usingMethod –¼‘O‰ğŒˆ‚ğs‚¤ƒGƒ“ƒeƒBƒeƒB‚ª‚ ‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass åå‰è§£æ±ºã‚’è¡Œã†ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod åå‰è§£æ±ºã‚’è¡Œã†ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      * 
-     * @return ‰ğŒˆÏ‚İ‚ÌƒGƒ“ƒeƒBƒeƒB
+     * @return è§£æ±ºæ¸ˆã¿ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
      */
     public TypeParameterInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@Œ^ƒpƒ‰ƒ[ƒ^‚ÌŠ—Lƒ†ƒjƒbƒg‚ğ‰ğŒˆ
+        //ã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ‰€æœ‰ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è§£æ±º
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
         final TypeParameterizable ownerUnit = (TypeParameterizable) unresolvedOwnerUnit.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -129,34 +129,34 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)‚ğ•Ô‚·
+     * ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg(ƒNƒ‰ƒX or ƒƒ\ƒbƒh)
+     * @return ã“ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆ(ã‚¯ãƒ©ã‚¹ or ãƒ¡ã‚½ãƒƒãƒ‰)
      */
     public final UnresolvedUnitInfo<?> getOwnerUnit() {
         return this.ownerUnit;
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’è¿”ã™
      * 
-     * @return Œ^ƒpƒ‰ƒ[ƒ^–¼
+     * @return å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
      */
     public final String getName() {
         return this.name;
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
      * 
-     * @return@Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @returnã€€å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public final int getIndex() {
         return this.index;
     }
 
     /**
-     * Šî’êƒNƒ‰ƒXŒ^‚ğ’Ç‰Á‚·‚é
+     * åŸºåº•ã‚¯ãƒ©ã‚¹å‹ã‚’è¿½åŠ ã™ã‚‹
      * 
      * @param extendsType
      */
@@ -172,9 +172,9 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * Šî’êƒNƒ‰ƒX‚Ì–¢‰ğŒˆŒ^î•ñ‚ğ•Ô‚·
+     * åŸºåº•ã‚¯ãƒ©ã‚¹ã®æœªè§£æ±ºå‹æƒ…å ±ã‚’è¿”ã™
      * 
-     * @return Šî’êƒNƒ‰ƒX‚Ì–¢‰ğŒˆŒ^î•ñ
+     * @return åŸºåº•ã‚¯ãƒ©ã‚¹ã®æœªè§£æ±ºå‹æƒ…å ±
      */
     public final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getExtendsType() {
         return this.extendsTypes.get(0);
@@ -185,36 +185,36 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
-     * Šî’êƒNƒ‰ƒX‚ğ‚Â‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * åŸºåº•ã‚¯ãƒ©ã‚¹ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return Šî’êƒNƒ‰ƒX‚ğ‚Âê‡‚Í true, ‚½‚È‚¢ê‡‚Í false
+     * @return åŸºåº•ã‚¯ãƒ©ã‚¹ã‚’æŒã¤å ´åˆã¯ true, æŒãŸãªã„å ´åˆã¯ false
      */
     public final boolean hasExtendsType() {
         return 0 < this.extendsTypes.size();
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedUnitInfo<?> ownerUnit;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String name;
 
     /**
-     * Šî’êƒNƒ‰ƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åŸºåº•ã‚¯ãƒ©ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> extendsTypes;
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int index;
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected TypeParameterInfo resolvedInfo;
 }

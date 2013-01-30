@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * extends ‚ğ—˜—p‚µ‚½Œ^‚ğ•\‚·ƒNƒ‰ƒX
- * List<? extends T> ‚Ì ? extends T ‚ğ•\‚·D
+ * extends ã‚’åˆ©ç”¨ã—ãŸå‹ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
+ * List<? extends T> ã® ? extends T ã‚’è¡¨ã™ï¼
  * 
  * @author higo
  *

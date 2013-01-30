@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 /**
- * CüŽq‚ð•\‚·ƒg[ƒNƒ“
+ * ä¿®é£¾å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³
  * 
  * @author kou-tngt
  *
@@ -11,8 +11,8 @@ public class ModifierToken extends AstTokenAdapter {
     
     
     /**
-     * Žw’è‚³‚ê‚½•¶Žš—ñ‚ÌCüŽq‚ð•\‚·ƒg[ƒNƒ“‚ðì¬‚·‚é
-     * @param text CüŽq‚Ì•¶Žš—ñ
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã®ä¿®é£¾å­ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹
+     * @param text ä¿®é£¾å­ã®æ–‡å­—åˆ—
      */
     public ModifierToken(final String text) {
         super(text);

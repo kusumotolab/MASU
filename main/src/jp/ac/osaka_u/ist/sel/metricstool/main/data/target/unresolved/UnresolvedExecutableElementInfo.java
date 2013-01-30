@@ -5,11 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 
 /**
- * 実行可能な単位を表す要素を表すインターフェース
+ * 螳溯｡悟庄閭ｽ縺ｪ蜊倅ｽ阪ｒ陦ｨ縺呵ｦ∫ｴ繧定｡ｨ縺吶う繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  *
- * @param <T> 名前書解決された型を表す型パラメータ
+ * @param <T> 蜷榊燕譖ｸ隗｣豎ｺ縺輔ｌ縺溷梛繧定｡ｨ縺吝梛繝代Λ繝｡繝ｼ繧ｿ
  */
 public interface UnresolvedExecutableElementInfo<T extends ExecutableElementInfo> extends
         Resolvable<T>, PositionSetting, UnresolvedHavingOuterUnit {

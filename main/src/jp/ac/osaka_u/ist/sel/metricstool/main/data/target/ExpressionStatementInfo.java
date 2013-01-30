@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * ®•¶‚Ìî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * å¼æ–‡ã®æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -15,14 +15,14 @@ import java.util.Set;
 public class ExpressionStatementInfo extends SingleStatementInfo {
 
     /**
-     * ®‚ÆˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * å¼ã¨ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param ownerSpace ŠO‘¤‚ÌƒXƒR[ƒv
-     * @param expression ®•¶‚ğ\¬‚·‚é®
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSpace å¤–å´ã®ã‚¹ã‚³ãƒ¼ãƒ—
+     * @param expression å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ExpressionStatementInfo(final LocalSpaceInfo ownerSpace,
             final ExpressionInfo expression, final int fromLine, final int fromColumn,
@@ -39,9 +39,9 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ®•¶‚ğ\¬‚·‚é®‚ğ•Ô‚·
+     * å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼ã‚’è¿”ã™
      * 
-     * @return ®•¶‚ğ\¬‚·‚é®
+     * @return å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼
      */
     public final ExpressionInfo getExpression() {
         return this.expression;
@@ -56,9 +56,9 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -66,9 +66,9 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -76,9 +76,9 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ì®•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®å¼æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì®•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®å¼æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -94,9 +94,9 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -120,7 +120,7 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
 
     /**
-     * ®•¶‚ğ\¬‚·‚é®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¼æ–‡ã‚’æ§‹æˆã™ã‚‹å¼ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final ExpressionInfo expression;
 

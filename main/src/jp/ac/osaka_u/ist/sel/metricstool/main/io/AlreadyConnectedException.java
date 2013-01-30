@@ -3,8 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * �d����������Ă��Ȃ��ڑ����d�ɒ��낤�Ƃ������ɔ�������.
- * ��̓I�ɂ́C�i���񍐗p�̐ڑ��𓯂��v���O�C������Q��낤�Ƃ����ꍇ�Ȃǂł���.
+ * 重複が許可されていない接続を二重に張ろうとした時に発生する.
+ * 具体的には，進捗報告用の接続を同じプラグインから２つ作ろうとした場合などである.
  * @author kou-tngt
  *
  */

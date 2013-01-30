@@ -63,7 +63,7 @@ public class MethodParameterBuilder
 
         final int index = buildDataManager.getCurrentParameterCount();
         final UnresolvedParameterInfo parameter;
-        //パラメータが可変長引数であるかチェック
+        //繝代Λ繝｡繝ｼ繧ｿ縺悟庄螟蛾聞蠑墓焚縺ｧ縺ゅｋ縺九メ繧ｧ繝�繧ｯ
         if (this.isAnalyzingVariableParameter()) {
             parameter = new UnresolvedVariableLengthParameterInfo(varName, type, index,
                     definitionMehtod, startLine, startColumn, endLine, endColumn);

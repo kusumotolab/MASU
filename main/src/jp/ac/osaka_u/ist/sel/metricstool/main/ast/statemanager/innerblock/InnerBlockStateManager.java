@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * “à•”ƒuƒƒbƒN‚Ì‰ğÍó‘Ô‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+ * å†…éƒ¨ãƒ–ãƒ­ãƒƒã‚¯ã®è§£æçŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -29,13 +29,13 @@ public abstract class InnerBlockStateManager extends DeclaredBlockStateManager {
 
     @Override
     protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
-        // Šù‚ÉƒCƒxƒ“ƒg‚ª”­sÏ‚İ‚Ìê‡C‰½‚à‚¹‚¸I—¹
+        // æ—¢ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œæ¸ˆã¿ã®å ´åˆï¼Œä½•ã‚‚ã›ãšçµ‚äº†
         if (super.fireStateChangeEnterEvent(event)) {
             return true;
         }
 
         if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.getState()){
-            //’è‹`•”‚É‚¢‚éó‘Ô‚ÅğŒß‚ğ•\‚·ƒm[ƒh‚ª‚­‚ê‚Îó‘Ô‘JˆÚ‚µ‚ÄƒCƒxƒ“ƒg‚ğ”­s
+            //å®šç¾©éƒ¨ã«ã„ã‚‹çŠ¶æ…‹ã§æ¡ä»¶ç¯€ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ãŒãã‚Œã°çŠ¶æ…‹é·ç§»ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œ
             this.setState(INNER_BLOCK_STATE.CONDITIONAL_CLAUSE);
             this.fireStateChangeEvent(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE, event);
             return true;
@@ -46,13 +46,13 @@ public abstract class InnerBlockStateManager extends DeclaredBlockStateManager {
 
     @Override
     protected boolean fireStateChangeExitEvent(AstVisitEvent event) {
-        // Šù‚ÉƒCƒxƒ“ƒg‚ª”­sÏ‚İ‚Ìê‡C‰½‚à‚¹‚¸I—¹
+        // æ—¢ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œæ¸ˆã¿ã®å ´åˆï¼Œä½•ã‚‚ã›ãšçµ‚äº†
         if (super.fireStateChangeExitEvent(event)) {
             return true;
         }
         
         if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.getState()) {
-            //’è‹`•”‚É‚¢‚éó‘Ô‚ÅƒuƒƒbƒN‚ğ•\‚·ƒm[ƒh‚ª—ˆ‚ê‚ÎƒCƒxƒ“ƒg‚ğ”­s
+            //å®šç¾©éƒ¨ã«ã„ã‚‹çŠ¶æ…‹ã§ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ãƒãƒ¼ãƒ‰ãŒæ¥ã‚Œã°ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œ
             this.fireStateChangeEvent(INNER_BLOCK_STATE_CHANGE.EXIT_CLAUSE, event);
             return true;
         } else {

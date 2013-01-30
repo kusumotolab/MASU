@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
- * ‚±‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ÍCƒNƒ‰ƒXƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒhŒQ‚ğ’ñ‹Ÿ‚·‚éD
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã¯ï¼Œã‚¯ãƒ©ã‚¹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤ã‚’æä¾›ã™ã‚‹ï¼
  * 
  * @author higo
  * 
@@ -14,11 +14,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public interface ClassMetricsRegister {
 
     /**
-     * ‘æˆêˆø”‚ÌƒNƒ‰ƒX‚ÌƒƒgƒŠƒNƒX’li‘æ“ñˆø”j‚ğ“o˜^‚·‚é
+     * ç¬¬ä¸€å¼•æ•°ã®ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ï¼ˆç¬¬äºŒå¼•æ•°ï¼‰ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param classInfo ƒƒgƒŠƒNƒX‚ÌŒv‘ª‘ÎÛƒNƒ‰ƒX
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException “o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒƒgƒŠƒNƒX‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @param classInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®è¨ˆæ¸¬å¯¾è±¡ã‚¯ãƒ©ã‚¹
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     void registMetric(TargetClassInfo classInfo, Number value)
             throws MetricAlreadyRegisteredException;

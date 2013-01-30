@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * else ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * else ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -15,12 +15,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlockInfo<IfBlockInfo> {
 
     /**
-     * ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ—^‚¦‚ÄCelse ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¸ãˆã¦ï¼Œelse ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ElseBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -29,9 +29,9 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
     }
 
     /**
-     * ‚±‚Ìelse•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®elseæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìelse•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®elseæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -53,11 +53,11 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Ô‚·
-     * ‚±‚Ìƒƒ\ƒbƒh‚Í«—ˆ”p~—\’è‚Å‚ ‚èCg—p‚Í„§‚³‚ê‚È‚¢
-     * {@link ElseBlockInfo#getOwnerBlock()} ‚ğg—p‚·‚×‚«‚Å‚ ‚éD
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å°†æ¥å»ƒæ­¢äºˆå®šã§ã‚ã‚Šï¼Œä½¿ç”¨ã¯æ¨å¥¨ã•ã‚Œãªã„
+     * {@link ElseBlockInfo#getOwnerBlock()} ã‚’ä½¿ç”¨ã™ã¹ãã§ã‚ã‚‹ï¼
      * 
-     * @return ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN
+     * @return ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯
      * @deprecated
      */
     public IfBlockInfo getOwnerIfBlock() {
@@ -65,9 +65,9 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Ô‚·
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN
+     * @return ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯
      */
     @Override
     public IfBlockInfo getOwnerBlock() {
@@ -113,7 +113,7 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private IfBlockInfo ownerIfBlock;
 

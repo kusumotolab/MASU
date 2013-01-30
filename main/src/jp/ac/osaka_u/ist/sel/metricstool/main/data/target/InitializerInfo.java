@@ -5,9 +5,9 @@ import java.util.Collections;
 
 
 /**
- *�@�C�j�V�����C�U�̋��ʂ̐e�N���X
+ *　イニシャライザの共通の親クラス
  *<br>
- *�C�j�V�����C�U�Ƃ́C�X�^�e�B�b�N�E�C�j�V�����C�U��C���X�^���X�E�C�j�V�����C�U�@�Ȃǂł��� 
+ *イニシャライザとは，スタティック・イニシャライザやインスタンス・イニシャライザ　などである 
  * @author g-yamada
  *
  */

@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 
 
 /**
- * ƒAƒmƒe[ƒVƒ‡ƒ“‚ÉŠÖ‚·‚éî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_
+ * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ãƒ“ãƒ«ãƒ€
  * @author a-saitoh
  *
  */
@@ -49,11 +49,11 @@ public class AnnotationBuilder extends CompoundDataBuilder<ModifierInfo[]> {
             this.annotationStatementBuilder.deactivate();
         }
 
-        /* ^–Ê–Ú‚ÉƒAƒmƒe[ƒVƒ‡ƒ“‚ğ‰ğÍ‚·‚é‚È‚çC‰º‹L‚ÌƒCƒxƒ“ƒg‚ğg‚Á‚Äˆ—‚ğ‹Lq‚·‚é
+        /* çœŸé¢ç›®ã«ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è§£æã™ã‚‹ãªã‚‰ï¼Œä¸‹è¨˜ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä½¿ã£ã¦å‡¦ç†ã‚’è¨˜è¿°ã™ã‚‹
         else if (eventType.equals(AnnotationStateManager.ANNOTATION_STATE.ENTER_ANNOTATION_ARRAY_INIT)
                 || eventType.equals(AnnotationStateManager.ANNOTATION_STATE.ENTER_ANNOTATION_MEMBER)
                 || eventType.equals(AnnotationStateManager.ANNOTATION_STATE.ENTER_ANNOTATION_MEMBER_VALUE_PAIR)){
-            //‚Æ‚è‚ ‚¦‚¸ƒrƒ‹ƒ_‚ğ“®‚©‚³‚È‚¢CŒã‚ÅÀ‘•
+            //ã¨ã‚Šã‚ãˆãšãƒ“ãƒ«ãƒ€ã‚’å‹•ã‹ã•ãªã„ï¼Œå¾Œã§å®Ÿè£…
             this.identifierBuilder.deactivate();
         }  else if(eventType.equals(AnnotationStateManager.ANNOTATION_STATE.EXIT_ANNOTATION_ARRAY_INIT)
                 || eventType.equals(AnnotationStateManager.ANNOTATION_STATE.EXIT_ANNOTATION_MEMBER)

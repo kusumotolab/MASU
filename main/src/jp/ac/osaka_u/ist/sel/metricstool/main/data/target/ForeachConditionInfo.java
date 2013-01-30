@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * Foreach •¶‚Ì®‚ğ•\‚·ƒNƒ‰ƒX
+ * Foreach æ–‡ã®å¼ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *

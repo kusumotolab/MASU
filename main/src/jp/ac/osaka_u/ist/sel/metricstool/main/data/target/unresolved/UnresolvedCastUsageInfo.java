@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒLƒƒƒXƒgg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚­ãƒ£ã‚¹ãƒˆä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -21,10 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<CastUsageInfo> {
 
     /**
-     * ƒLƒƒƒXƒg‚³‚ê‚½ƒGƒ“ƒeƒBƒeƒB‚ÆƒLƒƒƒXƒg‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
+     * ã‚­ãƒ£ã‚¹ãƒˆã•ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã¨ã‚­ãƒ£ã‚¹ãƒˆã®å‹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param castType ƒLƒƒƒXƒg‚ÌŒ^
-     * @param castedUsage ƒLƒƒƒXƒg‚³‚ê‚½ƒGƒ“ƒeƒBƒeƒB
+     * @param castType ã‚­ãƒ£ã‚¹ãƒˆã®å‹
+     * @param castedUsage ã‚­ãƒ£ã‚¹ãƒˆã•ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
      * 
      */
     public UnresolvedCastUsageInfo(final UnresolvedTypeInfo<?> castType,
@@ -40,16 +40,16 @@ public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<Cast
     }
 
     /**
-     * ƒLƒƒƒXƒg‚µ‚½Œ^‚ğ•Ô‚·
-     * @return ƒLƒƒƒXƒg‚µ‚½Œ^
+     * ã‚­ãƒ£ã‚¹ãƒˆã—ãŸå‹ã‚’è¿”ã™
+     * @return ã‚­ãƒ£ã‚¹ãƒˆã—ãŸå‹
      */
     public UnresolvedTypeInfo<?> getCastType() {
         return this.castType;
     }
 
     /**
-     * ƒLƒƒƒXƒg‚ªs‚í‚ê‚½ƒGƒ“ƒeƒBƒeƒBg—p‚ğ•Ô‚·
-     * @return ƒLƒƒƒXƒg‚ªs‚í‚ê‚½ƒGƒ“ƒeƒBƒeƒBg—p
+     * ã‚­ãƒ£ã‚¹ãƒˆãŒè¡Œã‚ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚’è¿”ã™
+     * @return ã‚­ãƒ£ã‚¹ãƒˆãŒè¡Œã‚ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨
      */
     public UnresolvedExpressionInfo<? extends ExpressionInfo> getCastedUsage() {
         return this.castedUsage;
@@ -60,41 +60,41 @@ public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<Cast
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒLƒƒƒXƒgŒ^g—p‚ğ‰ğŒˆ
+        // ã‚­ãƒ£ã‚¹ãƒˆå‹ä½¿ç”¨ã‚’è§£æ±º
         final UnresolvedTypeInfo<?> unresolvedCastType = this.getCastType();
         final TypeInfo castType = unresolvedCastType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ƒLƒƒƒXƒg‚³‚ê‚½ƒGƒ“ƒeƒBƒeƒBg—p‚ğ‰ğŒˆ
+        // ã‚­ãƒ£ã‚¹ãƒˆã•ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚’è§£æ±º
         final ExpressionInfo castedUsage = this.getCastedUsage().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // —v‘fg—p‚ÌƒI[ƒi[—v‘f‚ğ•Ô‚·
+        // è¦ç´ ä½¿ç”¨ã®ã‚ªãƒ¼ãƒŠãƒ¼è¦ç´ ã‚’è¿”ã™
         /*final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        // ƒLƒƒƒXƒgg—p‚ğ‰ğŒˆ
+        // ã‚­ãƒ£ã‚¹ãƒˆä½¿ç”¨ã‚’è§£æ±º
         this.resolvedInfo = new CastUsageInfo(castType, castedUsage, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
@@ -103,12 +103,12 @@ public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<Cast
     }
 
     /**
-     * ƒLƒƒƒXƒg‚µ‚½Œ^‚ğ•Û‘¶‚·‚é•Ï”
+     * ã‚­ãƒ£ã‚¹ãƒˆã—ãŸå‹ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private final UnresolvedTypeInfo<?> castType;
 
     /**
-     * ƒLƒƒƒXƒg‚ªs‚í‚ê‚½ƒGƒ“ƒeƒBƒeƒBg—p‚ğ•Û‘¶‚·‚½‚ß‚Ì•Ï”
+     * ã‚­ãƒ£ã‚¹ãƒˆãŒè¡Œã‚ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ä½¿ç”¨ã‚’ä¿å­˜ã™ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> castedUsage;
 

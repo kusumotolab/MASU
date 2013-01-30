@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒ[ƒJƒ‹•Ï”‚ğ•\‚·ƒNƒ‰ƒXDŒ^‚ğ’ñ‹Ÿ‚·‚é‚Ì‚İD
+ * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼å‹ã‚’æä¾›ã™ã‚‹ã®ã¿ï¼
  * 
  * @author higo
  * 
@@ -19,16 +19,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
 
     /**
-     * ƒ[ƒJƒ‹•Ï”ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD•Ï”–¼‚Æ•Ï”‚ÌŒ^‚ª•K—vD
+     * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼å¤‰æ•°åã¨å¤‰æ•°ã®å‹ãŒå¿…è¦ï¼
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param name ƒ[ƒJƒ‹•Ï”–¼
-     * @param type ƒ[ƒJƒ‹•Ï”‚ÌŒ^
-     * @param definitionSpace ‚±‚Ì•Ï”‚ğ’è‹`‚µ‚Ä‚¢‚éƒuƒƒbƒN
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param name ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å
+     * @param type ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®å‹
+     * @param definitionSpace ã“ã®å¤‰æ•°ã‚’å®šç¾©ã—ã¦ã„ã‚‹ãƒ–ãƒ­ãƒƒã‚¯
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public LocalVariableInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo type, final LocalSpaceInfo definitionSpace, final int fromLine,
@@ -40,9 +40,9 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”‚ğSet‚Æ‚µ‚Ä•Ô‚·
-     * @param variables •Ï”‚ÌSet
-     * @return —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚éƒ[ƒJƒ‹•Ï”‚ÌSet
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’Setã¨ã—ã¦è¿”ã™
+     * @param variables å¤‰æ•°ã®Set
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°ã®Setã«å«ã¾ã‚Œã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®Set
      */
     public static Set<LocalVariableInfo> getLocalVariables(
             Collection<VariableInfo<? extends UnitInfo>> variables) {
@@ -64,9 +64,9 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹•Ï”‚ğ’è‹`‚µ‚Ä‚¢‚é•¶‚ğ•Ô‚·
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’å®šç¾©ã—ã¦ã„ã‚‹æ–‡ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹•Ï”‚ğ’è‹`‚µ‚Ä‚¢‚é•¶
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’å®šç¾©ã—ã¦ã„ã‚‹æ–‡
      */
     public VariableDeclarationStatementInfo getDeclarationStatement() {
         return this.declarationStatement;

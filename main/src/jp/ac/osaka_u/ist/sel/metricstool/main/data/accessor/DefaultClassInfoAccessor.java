@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ª ClassInfo ‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚É—p‚¢‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒ ClassInfo ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  * 
@@ -18,9 +18,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public class DefaultClassInfoAccessor implements ClassInfoAccessor {
 
     /**
-     * ClassInfo ‚ÌƒCƒeƒŒ[ƒ^‚ğ•Ô‚·D ‚±‚ÌƒCƒeƒŒ[ƒ^‚ÍQÆê—p‚Å‚ ‚è•ÏXˆ—‚ğs‚¤‚±‚Æ‚Í‚Å‚«‚È‚¢D
+     * ClassInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’è¿”ã™ï¼ ã“ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã¯å‚ç…§å°‚ç”¨ã§ã‚ã‚Šå¤‰æ›´å‡¦ç†ã‚’è¡Œã†ã“ã¨ã¯ã§ããªã„ï¼
      * 
-     * @return ClassInfo ‚ÌƒCƒeƒŒ[ƒ^
+     * @return ClassInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
      */
     @Override
     public Iterator<TargetClassInfo> iterator() {
@@ -30,9 +30,9 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
     }
 
     /**
-     * ‘ÎÛƒNƒ‰ƒX‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @return ‘ÎÛƒNƒ‰ƒX‚Ì”
+     * @return å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°
      */
     @Override
     public int getClassCount() {

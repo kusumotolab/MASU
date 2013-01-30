@@ -6,43 +6,43 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 
 
 /**
- * ”CˆÓ‚Ì\‘¢‚ÌAST‚ğ–K–â‚·‚éƒrƒWƒ^[‚ÌƒCƒ“ƒ^ƒtƒF[ƒX.
+ * ä»»æ„ã®æ§‹é€ ã®ASTã‚’è¨ªå•ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * <p>
- * ‚±‚ÌƒCƒ“ƒ^ƒtƒF[ƒX‚ğÀ‘•‚·‚éƒNƒ‰ƒX‚ÍCASTƒm[ƒh‚ğ‡”Ô‚É–K–â‚µC
- * Šeƒm[ƒh‚É“’B‚µ‚½C‚»‚Ìƒm[ƒh‚Ì“à•”‚É“ü‚éC‚»‚Ìƒm[ƒh‚Ì“à•”‚©‚ço‚é‚ÉC
- * “o˜^‚³‚ê‚½ {@link AstVisitListener} ‚É‘Î‚µ‚Ä“KØ‚ÈƒCƒxƒ“ƒg‚ğ”­s‚·‚é.
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å®Ÿè£…ã™ã‚‹ã‚¯ãƒ©ã‚¹ã¯ï¼ŒASTãƒãƒ¼ãƒ‰ã‚’é †ç•ªã«è¨ªå•ã—ï¼Œ
+ * å„ãƒãƒ¼ãƒ‰ã«åˆ°é”ã—ãŸæ™‚ï¼Œãã®ãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã«å…¥ã‚‹æ™‚ï¼Œãã®ãƒãƒ¼ãƒ‰ã®å†…éƒ¨ã‹ã‚‰å‡ºã‚‹æ™‚ã«ï¼Œ
+ * ç™»éŒ²ã•ã‚ŒãŸ {@link AstVisitListener} ã«å¯¾ã—ã¦é©åˆ‡ãªã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹.
  * 
  * @author kou-tngt
  *
- * @param <T>@–K–â‚·‚éASTƒm[ƒh‚ÌŒ^
+ * @param <T>ã€€è¨ªå•ã™ã‚‹ASTãƒãƒ¼ãƒ‰ã®å‹
  */
 public interface AstVisitor<T> {
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚ª”­s‚·‚éŠe {@link AstVisitEvent} ‚Ì’Ê’m‚ğó‚¯‚éƒŠƒXƒi‚ğ“o˜^‚·‚é.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç™ºè¡Œã™ã‚‹å„ {@link AstVisitEvent} ã®é€šçŸ¥ã‚’å—ã‘ã‚‹ãƒªã‚¹ãƒŠã‚’ç™»éŒ²ã™ã‚‹.
      * 
-     * @param listener “o˜^‚·‚éƒŠƒXƒi
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * @param listener ç™»éŒ²ã™ã‚‹ãƒªã‚¹ãƒŠ
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void addVisitListener(AstVisitListener listener);
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚ª”­s‚·‚éŠe {@link AstVisitEvent} ‚Ì’Ê’m‚ğó‚¯‚éƒŠƒXƒi‚ğíœ‚·‚é.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ãŒç™ºè¡Œã™ã‚‹å„ {@link AstVisitEvent} ã®é€šçŸ¥ã‚’å—ã‘ã‚‹ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹.
      * 
-     * @param listener@íœ‚·‚éƒŠƒXƒi
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * @param listenerã€€å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void removeVisitListener(AstVisitListener listener);
 
     /**
-     * ‚±‚ÌƒrƒWƒ^[‚Ìó‘Ô‚ğ‰Šúó‘Ô‚É–ß‚·.
-     * ƒCƒxƒ“ƒgƒŠƒXƒi‚Ííœ‚³‚ê‚È‚¢.
+     * ã“ã®ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’åˆæœŸçŠ¶æ…‹ã«æˆ»ã™.
+     * ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠã¯å‰Šé™¤ã•ã‚Œãªã„.
      */
     public void reset();
 
     /**
-     * ƒrƒWƒ^[‚Ì–K–â‚ğŠJn‚·‚é
-     * @param startNode@Å‰‚É–K–â‚·‚éASTƒm[ƒh
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã®è¨ªå•ã‚’é–‹å§‹ã™ã‚‹
+     * @param startNodeã€€æœ€åˆã«è¨ªå•ã™ã‚‹ASTãƒãƒ¼ãƒ‰
      */
     public void startVisiting(T startNode) throws ASTParseException;
 }

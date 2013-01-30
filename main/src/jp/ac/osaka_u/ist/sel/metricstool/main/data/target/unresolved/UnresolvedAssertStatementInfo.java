@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * assert•¶‚Ì–¢‰ğŒˆî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * assertæ–‡ã®æœªè§£æ±ºæƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -23,9 +23,9 @@ public class UnresolvedAssertStatementInfo extends
         UnresolvedSingleStatementInfo<AssertStatementInfo> {
 
     /**
-     * –¢‰ğŒˆƒAƒT[ƒg•¶‚ğ¶¬
+     * æœªè§£æ±ºã‚¢ã‚µãƒ¼ãƒˆæ–‡ã‚’ç”Ÿæˆ
      * 
-     * @param outerLocalSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param outerLocalSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedAssertStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
@@ -37,24 +37,24 @@ public class UnresolvedAssertStatementInfo extends
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        //@ˆÊ’uî•ñ‚ğæ“¾
+        //ã€€ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒ[ƒJƒ‹ƒXƒy[ƒX‚ğ‰ğŒˆ
+        // ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã‚’è§£æ±º
         final UnresolvedLocalSpaceInfo<?> unresolvedOuterLocalSpace = this.getOuterLocalSpace();
         final LocalSpaceInfo outerLocalSpace = unresolvedOuterLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -76,7 +76,7 @@ public class UnresolvedAssertStatementInfo extends
     }
 
     /**
-     * ŒŸØ‚ÌŒ‹‰Ê‚ªfalse‚Å‚ ‚Á‚½‚Æ‚«‚Éo—Í‚³‚ê‚éƒƒbƒZ[ƒW‚ğ•\‚·®‚Ì–¢‰ğŒˆî•ñ‚ğİ’è‚·‚é
+     * æ¤œè¨¼ã®çµæœãŒfalseã§ã‚ã£ãŸã¨ãã«å‡ºåŠ›ã•ã‚Œã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ã™å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’è¨­å®šã™ã‚‹
      * @param messageExpression
      */
     public final void setMessageExpression(
@@ -90,17 +90,17 @@ public class UnresolvedAssertStatementInfo extends
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
      * 
-     * @return@ƒƒbƒZ[ƒW
+     * @returnã€€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public final UnresolvedExpressionInfo<? extends ExpressionInfo> getMessageExpression() {
         return this.messageExpression;
     }
 
     /**
-     * ŒŸØ®‚Ì–¢‰ğŒˆî•ñ‚ğİ’è‚·‚é
-     * @param assertedExpression ŒŸØ®‚Ì–¢‰ğŒˆî•ñ
+     * æ¤œè¨¼å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’è¨­å®šã™ã‚‹
+     * @param assertedExpression æ¤œè¨¼å¼ã®æœªè§£æ±ºæƒ…å ±
      */
     public final void setAsserttedExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> assertedExpression) {
@@ -114,21 +114,21 @@ public class UnresolvedAssertStatementInfo extends
     }
 
     /**
-     * ŒŸØ®‚ğ•Ô‚·
+     * æ¤œè¨¼å¼ã‚’è¿”ã™
      * 
-     * @return@ŒŸØ®
+     * @returnã€€æ¤œè¨¼å¼
      */
     public final UnresolvedExpressionInfo<? extends ExpressionInfo> getAssertedExpression() {
         return this.assertedExpression;
     }
 
     /**
-     * ŒŸØ®‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * æ¤œè¨¼å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private UnresolvedExpressionInfo<? extends ExpressionInfo> assertedExpression;
 
     /**
-     * ŒŸØ®‚ªfalse‚ğ•Ô‚·‚Æ‚«‚Éo—Í‚³‚ê‚éƒƒbƒZ[ƒW‚ğ•\‚·®‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * æ¤œè¨¼å¼ãŒfalseã‚’è¿”ã™ã¨ãã«å‡ºåŠ›ã•ã‚Œã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ã™å¼ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private UnresolvedExpressionInfo<? extends ExpressionInfo> messageExpression;
 

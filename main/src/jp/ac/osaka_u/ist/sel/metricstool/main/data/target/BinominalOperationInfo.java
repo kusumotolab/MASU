@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * ƒj€‰‰Zg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ‹é …æ¼”ç®—ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -23,16 +23,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class BinominalOperationInfo extends ExpressionInfo {
 
     /**
-     * ƒj€‰‰Z‚ÌŠeƒIƒyƒ‰ƒ“ƒhCƒIƒyƒŒ[ƒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒ‹é …æ¼”ç®—ã®å„ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼Œã‚ªãƒšãƒ¬ãƒ¼ã‚¿ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param operator ƒIƒyƒŒ[ƒ^
-     * @param firstOperand ‘æˆêƒIƒyƒ‰ƒ“ƒh
-     * @param secondOperand ‘æ“ñƒIƒyƒ‰ƒ“ƒh
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param operator ã‚ªãƒšãƒ¬ãƒ¼ã‚¿
+     * @param firstOperand ç¬¬ä¸€ã‚ªãƒšãƒ©ãƒ³ãƒ‰
+     * @param secondOperand ç¬¬äºŒã‚ªãƒšãƒ©ãƒ³ãƒ‰
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public BinominalOperationInfo(final OPERATOR operator, final ExpressionInfo firstOperand,
             final ExpressionInfo secondOperand, final CallableUnitInfo ownerMethod,
@@ -54,9 +54,9 @@ public final class BinominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì“ñ€‰‰Z‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®äºŒé …æ¼”ç®—ã®å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì“ñ€‰‰Z‚ÌŒ^
+     * @return ã“ã®äºŒé …æ¼”ç®—ã®å‹
      */
     @Override
     public TypeInfo getType() {
@@ -146,8 +146,8 @@ public final class BinominalOperationInfo extends ExpressionInfo {
                     return UnknownTypeInfo.getInstance();
                 }
 
-                //‚»‚êˆÈŠO‚Ì‚Íjava.lang.StringŒ^‚É‚È‚é
-                //"+"‚ğ’è‹`‚µ‚½Œã‚ÍC+‚©‚Ç‚¤‚©‚ğƒ`ƒFƒbƒN‚·‚é•K—v‚ ‚è
+                //ãã‚Œä»¥å¤–ã®æ™‚ã¯java.lang.Stringå‹ã«ãªã‚‹
+                //"+"ã‚’å®šç¾©ã—ãŸå¾Œã¯ï¼Œ+ã‹ã©ã†ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹å¿…è¦ã‚ã‚Š
                 return STRING;
 
             case COMPARATIVE:
@@ -219,36 +219,36 @@ public final class BinominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‰‰Zq‚ğæ“¾‚·‚é
+     * æ¼”ç®—å­ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‰‰Zq
+     * @return æ¼”ç®—å­
      */
     public OPERATOR getOperator() {
         return this.operator;
     }
 
     /**
-     * ‘æˆêƒIƒyƒ‰ƒ“ƒh‚ğæ“¾‚·‚é
+     * ç¬¬ä¸€ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‘æˆêƒIƒyƒ‰ƒ“ƒh
+     * @return ç¬¬ä¸€ã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public ExpressionInfo getFirstOperand() {
         return this.firstOperand;
     }
 
     /**
-     * ‘æ“ñƒIƒyƒ‰ƒ“ƒh‚ğæ“¾‚·‚é
+     * ç¬¬äºŒã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å–å¾—ã™ã‚‹
      * 
-     * @return ‘æ“ñƒIƒyƒ‰ƒ“ƒh
+     * @return ç¬¬äºŒã‚ªãƒšãƒ©ãƒ³ãƒ‰
      */
     public ExpressionInfo getSecondOperand() {
         return this.secondOperand;
     }
 
     /**
-     * ‚±‚Ì“ñ€‰‰Z‚É‚¨‚¯‚é•Ï”g—pŒQ‚ğ•Ô‚·
+     * ã“ã®äºŒé …æ¼”ç®—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤ã‚’è¿”ã™
      * 
-     * return ‚±‚Ì“ñ€‰‰Z‚É‚¨‚¯‚é•Ï”g—pŒQ
+     * return ã“ã®äºŒé …æ¼”ç®—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -259,9 +259,9 @@ public final class BinominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -274,9 +274,9 @@ public final class BinominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì“ñ€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®äºŒé …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì“ñ€‰‰Z‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®äºŒé …æ¼”ç®—ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -300,9 +300,9 @@ public final class BinominalOperationInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {

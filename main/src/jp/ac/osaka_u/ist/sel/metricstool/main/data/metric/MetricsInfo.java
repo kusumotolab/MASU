@@ -14,18 +14,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.MetricTypeAndNamePluginComp
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
 /**
- * ƒƒgƒŠƒNƒX‚ğ•\‚·’ŠÛƒNƒ‰ƒX
+ * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’è¡¨ã™æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
- * @param <T> ƒƒgƒŠƒNƒX‚ÌŒv‘ª’PˆÊ
+ * @param <T> ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®è¨ˆæ¸¬å˜ä½
  */
 public abstract class MetricsInfo<T extends MetricMeasurable> implements MessageSource {
 
     /**
-     * Œv‘ª‘ÎÛƒIƒuƒWƒFƒNƒg‚ğ—^‚¦‚Ä‰Šú‰»
+     * è¨ˆæ¸¬å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param measuredObject Œv‘ª‘ÎÛƒIƒuƒWƒFƒNƒg
+     * @param measuredObject è¨ˆæ¸¬å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public MetricsInfo(final T measuredObject) {
 
@@ -39,20 +39,20 @@ public abstract class MetricsInfo<T extends MetricMeasurable> implements Message
     }
 
     /**
-     * ‚±‚ÌƒƒgƒŠƒNƒX‚ÌŒv‘ª‘ÎÛƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+     * ã“ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®è¨ˆæ¸¬å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌƒƒgƒŠƒNƒX‚ÌŒv‘ª‘ÎÛƒIƒuƒWƒFƒNƒg
+     * @return ã“ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®è¨ˆæ¸¬å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      */
     public final T getMeasuredObject() {
         return this.measuredObject;
     }
 
     /**
-     * ˆø”‚Åw’è‚µ‚½ƒvƒ‰ƒOƒCƒ“‚É‚æ‚Á‚Ä“o˜^‚³‚ê‚½ƒƒgƒŠƒNƒXî•ñ‚ğæ“¾‚·‚éƒƒ\ƒbƒhD
+     * å¼•æ•°ã§æŒ‡å®šã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«ã‚ˆã£ã¦ç™»éŒ²ã•ã‚ŒãŸãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
      * 
-     * @param key ‚Ù‚µ‚¢ƒƒgƒŠƒNƒX‚ğ“o˜^‚µ‚½ƒvƒ‰ƒOƒCƒ“
-     * @return ƒƒgƒŠƒNƒX’l
-     * @throws MetricNotRegisteredException ƒƒgƒŠƒNƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚ÉƒXƒ[‚³‚ê‚é
+     * @param key ã»ã—ã„ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricNotRegisteredException ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ã¨ãã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     public final Number getMetric(final AbstractPlugin key) throws MetricNotRegisteredException {
 
@@ -69,11 +69,11 @@ public abstract class MetricsInfo<T extends MetricMeasurable> implements Message
     }
 
     /**
-     * ‘æˆêˆø”‚Å—^‚¦‚ç‚ê‚½ƒvƒ‰ƒOƒCƒ“‚ÅŒv‘ª‚³‚ê‚½ƒƒgƒŠƒNƒX’li‘æ“ñˆø”j‚ğ“o˜^‚·‚éD
+     * ç¬¬ä¸€å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§è¨ˆæ¸¬ã•ã‚ŒãŸãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤ï¼ˆç¬¬äºŒå¼•æ•°ï¼‰ã‚’ç™»éŒ²ã™ã‚‹ï¼
      * 
-     * @param key Œv‘ª‚µ‚½ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒXCMap ‚ÌƒL[‚Æ‚µ‚Ä—p‚¢‚éD
-     * @param value “o˜^‚·‚éƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException “o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚½ƒƒgƒŠƒNƒX‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚½ê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @param key è¨ˆæ¸¬ã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ï¼ŒMap ã®ã‚­ãƒ¼ã¨ã—ã¦ç”¨ã„ã‚‹ï¼
+     * @param value ç™»éŒ²ã™ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ãŸãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ãŸå ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     public final void putMetric(final AbstractPlugin key, final Number value)
             throws MetricAlreadyRegisteredException {
@@ -90,7 +90,7 @@ public abstract class MetricsInfo<T extends MetricMeasurable> implements Message
     }
 
     /**
-     * ‚±‚ÌƒƒgƒŠƒNƒXî•ñ‚É•s‘«‚ª‚È‚¢‚©‚ğƒ`ƒFƒbƒN‚·‚é
+     * ã“ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã«ä¸è¶³ãŒãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
      * 
      * @throws MetricNotRegisteredException
      */
@@ -116,7 +116,7 @@ public abstract class MetricsInfo<T extends MetricMeasurable> implements Message
     private final T measuredObject;
 
     /**
-     * ƒƒgƒŠƒNƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedMap<AbstractPlugin, Number> metrics;
 }

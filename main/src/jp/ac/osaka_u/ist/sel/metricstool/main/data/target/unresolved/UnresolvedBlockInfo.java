@@ -6,19 +6,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 
 
 /**
- * if•¶‚âwhile•¶‚È‚Ç‚Ìƒƒ\ƒbƒh“à‚Ì\‘¢iƒuƒƒbƒNj‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒX
+ * ifæ–‡ã‚„whileæ–‡ãªã©ã®ãƒ¡ã‚½ãƒƒãƒ‰å†…ã®æ§‹é€ ï¼ˆãƒ–ãƒ­ãƒƒã‚¯ï¼‰ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
- * @param <T> ‰ğŒˆÏ‚İ‚ÌƒuƒƒbƒN‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å‹
  * 
  */
 public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends UnresolvedLocalSpaceInfo<T>
         implements UnresolvedStatementInfo<T> {
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN‚ÌŠO‘¤‚ÉˆÊ’u‚·‚éƒuƒƒbƒN‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å¤–å´ã«ä½ç½®ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param outerSpace ‚±‚ÌƒuƒƒbƒN‚ÌŠO‘¤‚ÉˆÊ’u‚·‚éƒuƒƒbƒN
+     * @param outerSpace ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å¤–å´ã«ä½ç½®ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯
      * 
      */
     public UnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
@@ -30,8 +30,8 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
     }
 
     /**
-     * ‚±‚ÌƒuƒƒbƒN‚ª‘®‚·‚é‹óŠÔ‚ğ•Ô‚·
-     * @return ‚±‚ÌƒuƒƒbƒN‚ª‘®‚·‚é‹óŠÔ
+     * ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå±ã™ã‚‹ç©ºé–“ã‚’è¿”ã™
+     * @return ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå±ã™ã‚‹ç©ºé–“
      */
     public UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getOuterSpace() {
         return (UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>) this.getOuterUnit();

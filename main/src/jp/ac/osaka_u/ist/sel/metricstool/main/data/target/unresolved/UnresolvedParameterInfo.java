@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ˆø”‚ğ•\‚·‚½‚ß‚ÌƒNƒ‰ƒXD Œ^‚ğ’ñ‹Ÿ‚·‚é‚Ì‚İD
+ * å¼•æ•°ã‚’è¡¨ã™ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼ å‹ã‚’æä¾›ã™ã‚‹ã®ã¿ï¼
  * 
  * @author higo
  * 
@@ -25,16 +25,16 @@ public class UnresolvedParameterInfo
         UnresolvedVariableInfo<TargetParameterInfo, UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> {
 
     /**
-     * ˆø”ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚éD–¼‘O‚ÆŒ^‚ª•K—vD
+     * å¼•æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ï¼åå‰ã¨å‹ãŒå¿…è¦ï¼
      * 
-     * @param name ˆø”–¼
-     * @param type ˆø”‚ÌŒ^
-     * @param index ‰½”Ô–Ú‚Ìˆø”‚Å‚é‚©‚ğ•\‚·
-     * @param definitionMethod ˆø”‚ğéŒ¾‚µ‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param name å¼•æ•°å
+     * @param type å¼•æ•°ã®å‹
+     * @param index ä½•ç•ªç›®ã®å¼•æ•°ã§ã‚‹ã‹ã‚’è¡¨ã™
+     * @param definitionMethod å¼•æ•°ã‚’å®£è¨€ã—ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo<?> type,
             final int index,
@@ -46,27 +46,27 @@ public class UnresolvedParameterInfo
     }
 
     /**
-     * –¢‰ğŒˆˆø”î•ñ‚ğ‰ğŒˆ‚µC‰ğŒˆÏ‚İQÆ‚ğ•Ô‚·D
+     * æœªè§£æ±ºå¼•æ•°æƒ…å ±ã‚’è§£æ±ºã—ï¼Œè§£æ±ºæ¸ˆã¿å‚ç…§ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆˆø”î•ñ‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆˆø”î•ñ‚Ì’è‹`‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İˆø”î•ñ
+     * @param usingClass æœªè§£æ±ºå¼•æ•°æƒ…å ±ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºå¼•æ•°æƒ…å ±ã®å®šç¾©ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿å¼•æ•°æƒ…å ±
      */
     @Override
     public TargetParameterInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -78,7 +78,7 @@ public class UnresolvedParameterInfo
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // CüqCƒpƒ‰ƒ[ƒ^–¼CŒ^CˆÊ’uî•ñ‚ğæ“¾
+        // ä¿®é£¾å­ï¼Œãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åï¼Œå‹ï¼Œä½ç½®æƒ…å ±ã‚’å–å¾—
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String name = this.getName();
         final int index = this.getIndex();
@@ -92,7 +92,7 @@ public class UnresolvedParameterInfo
 
         final CallableUnitInfo ownerCallableUnit = this.getDefinitionUnit().getResolved();
 
-        // ƒpƒ‰ƒ[ƒ^ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚é
+        // ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
         this.resolvedInfo = new TargetParameterInfo(modifiers, name, type, index,
                 ownerCallableUnit, parameterFromLine, parameterFromColumn, parameterToLine,
                 parameterToColumn);
@@ -100,16 +100,16 @@ public class UnresolvedParameterInfo
     }
 
     /**
-     * ˆø”‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+     * å¼•æ•°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
      * 
-     * @return@ˆø”‚ÌƒCƒ“ƒfƒbƒNƒX
+     * @returnã€€å¼•æ•°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
      */
     public int getIndex() {
         return this.index;
     }
 
     /**
-     * ˆø”‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¼•æ•°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final int index;
 

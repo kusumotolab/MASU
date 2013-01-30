@@ -6,7 +6,7 @@ import java.util.WeakHashMap;
 
 
 /**
- * ASTã‚ÌŠe—v‘f‚ÌŠJnsCŠJn—ñCI—¹sCI—¹—ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒX.
+ * ASTä¸Šã®å„è¦ç´ ã®é–‹å§‹è¡Œï¼Œé–‹å§‹åˆ—ï¼Œçµ‚äº†è¡Œï¼Œçµ‚äº†åˆ—ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹.
  * 
  * @author kou-tngt
  *
@@ -14,9 +14,9 @@ import java.util.WeakHashMap;
 public class DefaultPositionManager implements PositionManager {
 
     /**
-     * ˆø”key‚ÌŠJns‚ğ•Ô‚·.
-     * “o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·.
-     * @param key ŠJns‚ğæ“¾‚µ‚½‚¢—v‘f
+     * å¼•æ•°keyã®é–‹å§‹è¡Œã‚’è¿”ã™.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™.
+     * @param key é–‹å§‹è¡Œã‚’å–å¾—ã—ãŸã„è¦ç´ 
      */
     public int getStartLine(final Object key) {
         if (this.dataMap.containsKey(key)) {
@@ -27,9 +27,9 @@ public class DefaultPositionManager implements PositionManager {
     }
 
     /**
-     * ˆø”key‚ÌŠJn—ñ‚ğ•Ô‚·.
-     * “o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·.
-     * @param key ŠJn—ñ‚ğæ“¾‚µ‚½‚¢—v‘f
+     * å¼•æ•°keyã®é–‹å§‹åˆ—ã‚’è¿”ã™.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™.
+     * @param key é–‹å§‹åˆ—ã‚’å–å¾—ã—ãŸã„è¦ç´ 
      */
     public int getStartColumn(final Object key) {
         if (this.dataMap.containsKey(key)) {
@@ -40,9 +40,9 @@ public class DefaultPositionManager implements PositionManager {
     }
 
     /**
-     * ˆø”key‚ÌI—¹s‚ğ•Ô‚·.
-     * “o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·.
-     * @param key I—¹s‚ğæ“¾‚µ‚½‚¢—v‘f
+     * å¼•æ•°keyã®çµ‚äº†è¡Œã‚’è¿”ã™.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™.
+     * @param key çµ‚äº†è¡Œã‚’å–å¾—ã—ãŸã„è¦ç´ 
      */
     public int getEndLine(final Object key) {
         if (this.dataMap.containsKey(key)) {
@@ -53,9 +53,9 @@ public class DefaultPositionManager implements PositionManager {
     }
 
     /**
-     * ˆø”key‚ÌI—¹—ñ‚ğ•Ô‚·.
-     * “o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·.
-     * @param key I—¹—ñ‚ğæ“¾‚µ‚½‚¢—v‘f
+     * å¼•æ•°keyã®çµ‚äº†åˆ—ã‚’è¿”ã™.
+     * ç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™.
+     * @param key çµ‚äº†åˆ—ã‚’å–å¾—ã—ãŸã„è¦ç´ 
      */
     public int getEndColumn(final Object key) {
         if (this.dataMap.containsKey(key)) {
@@ -106,10 +106,10 @@ public class DefaultPositionManager implements PositionManager {
     }
 
     /**
-     * ˆø”key‚Ìs”Ô†î•ñ‚ğ‹L˜^‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·.
-     * ‚·‚Å‚Ékey‚É‘Î‰‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ªì¬‚³‚ê‚Ä‚¢‚ê‚Î‚»‚ê‚ğ•Ô‚µC‚Ü‚¾ì¬‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‚½‚Éì¬‚µ‚Ä•Ô‚·.
-     * @param key î•ñ‚ğ‹L˜^‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚µ‚½‚¢—v‘f
-     * @return ˆø”key‚É‘Î‰‚·‚és”Ô†î•ñ‹L˜^ƒCƒ“ƒXƒ^ƒ“ƒX
+     * å¼•æ•°keyã®è¡Œç•ªå·æƒ…å ±ã‚’è¨˜éŒ²ã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™.
+     * ã™ã§ã«keyã«å¯¾å¿œã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä½œæˆã•ã‚Œã¦ã„ã‚Œã°ãã‚Œã‚’è¿”ã—ï¼Œã¾ã ä½œæˆã•ã‚Œã¦ã„ãªã‘ã‚Œã°æ–°ãŸã«ä½œæˆã—ã¦è¿”ã™.
+     * @param key æƒ…å ±ã‚’è¨˜éŒ²ã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã—ãŸã„è¦ç´ 
+     * @return å¼•æ•°keyã«å¯¾å¿œã™ã‚‹è¡Œç•ªå·æƒ…å ±è¨˜éŒ²ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     private Position getLineColumn(final Object key) {
         if (null == key) {
@@ -126,71 +126,71 @@ public class DefaultPositionManager implements PositionManager {
     }
 
     /**
-     * s‚Æ—ñ‚Ìî•ñ‚ğ‹L˜^‚·‚é“à•”ƒNƒ‰ƒX
+     * è¡Œã¨åˆ—ã®æƒ…å ±ã‚’è¨˜éŒ²ã™ã‚‹å†…éƒ¨ã‚¯ãƒ©ã‚¹
      * 
      * @author kou-tngt
      *
      */
     private static class Position {
         /**
-         * I—¹—ñ‚ğ•Ô‚·.
-         * @return I—¹—ñ
+         * çµ‚äº†åˆ—ã‚’è¿”ã™.
+         * @return çµ‚äº†åˆ—
          */
         public int getEndColumn() {
             return this.endColumn;
         }
 
         /**
-         * I—¹s‚ğ•Ô‚·
-         * @return@I—¹s
+         * çµ‚äº†è¡Œã‚’è¿”ã™
+         * @returnã€€çµ‚äº†è¡Œ
          */
         public int getEndLine() {
             return this.endLine;
         }
 
         /**
-         * ŠJn—ñ‚ğ•Ô‚·
-         * @return@ŠJn—ñ
+         * é–‹å§‹åˆ—ã‚’è¿”ã™
+         * @returnã€€é–‹å§‹åˆ—
          */
         public int getStartColumn() {
             return this.startColumn;
         }
 
         /**
-         * ŠJns‚ğ•Ô‚·
-         * @return@ŠJns
+         * é–‹å§‹è¡Œã‚’è¿”ã™
+         * @returnã€€é–‹å§‹è¡Œ
          */
         public int getStartLine() {
             return this.startLine;
         }
 
         /**
-         * I—¹—ñ‚ğƒZƒbƒg‚·‚é
-         * @param endColumn@I—¹—ñ
+         * çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+         * @param endColumnã€€çµ‚äº†åˆ—
          */
         public void setEndColumn(final int endColumn) {
             this.endColumn = endColumn;
         }
 
         /**
-         * I—¹s‚ğƒZƒbƒg‚·‚é
-         * @param endLine@I—¹s
+         * çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+         * @param endLineã€€çµ‚äº†è¡Œ
          */
         public void setEndLine(final int endLine) {
             this.endLine = endLine;
         }
 
         /**
-         * ŠJn—ñ‚ğƒZƒbƒg‚·‚é
-         * @param startColumn@ŠJn—ñ
+         * é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+         * @param startColumnã€€é–‹å§‹åˆ—
          */
         public void setStartColumn(final int startColumn) {
             this.startColumn = startColumn;
         }
 
         /**
-         * ŠJns‚ğƒZƒbƒg‚·‚é
-         * @param startLine@ŠJns
+         * é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+         * @param startLineã€€é–‹å§‹è¡Œ
          */
         public void setStartLine(final int startLine) {
             this.startLine = startLine;
@@ -206,22 +206,22 @@ public class DefaultPositionManager implements PositionManager {
         }
 
         /**
-         * ŠJns
+         * é–‹å§‹è¡Œ
          */
         private int startLine;
 
         /**
-         * ŠJn—ñ
+         * é–‹å§‹åˆ—
          */
         private int startColumn;
 
         /**
-         * I—¹s
+         * çµ‚äº†è¡Œ
          */
         private int endLine;
 
         /**
-         * I—¹—ñ
+         * çµ‚äº†åˆ—
          */
         private int endColumn;
     }

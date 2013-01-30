@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * Às‰Â”\‚È’PˆÊ‚ğ•\‚·—v‘f
+ * å®Ÿè¡Œå¯èƒ½ãªå˜ä½ã‚’è¡¨ã™è¦ç´ 
  * 
  * @author higo
  *
@@ -14,58 +14,58 @@ import java.util.Set;
 public interface ExecutableElementInfo extends Position, Serializable {
 
     /**
-     * •Ï”‚Ìg—p‚ÌSet‚ğ•Ô‚·
+     * å¤‰æ•°ã®ä½¿ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @return •Ï”‚Ìg—p‚ÌSet
+     * @return å¤‰æ•°ã®ä½¿ç”¨ã®Set
      */
     Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
 
     /**
-     * ’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet‚ğ•Ô‚·
+     * å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return •¶‚Ì’†‚Å’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet
+     * @return æ–‡ã®ä¸­ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Set
      */
     Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
     /**
-     * ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒhŒÄ‚Ño‚µ
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—
      */
     Set<CallInfo<? extends CallableUnitInfo>> getCalls();
 
     /**
-     * ƒI[ƒi[ƒƒ\ƒbƒh‚ğ•Ô‚·
+     * ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™
      * 
-     * @return ƒI[ƒi[ƒƒ\ƒbƒh
+     * @return ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
      */
     CallableUnitInfo getOwnerMethod();
 
     /**
-     * ’¼ÚŠ—L‚·‚é‹óŠÔ‚ğ•Ô‚·
+     * ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“ã‚’è¿”ã™
      * 
-     * @return ’¼ÚŠ—L‚·‚é‹óŠÔ
+     * @return ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
      */
     LocalSpaceInfo getOwnerSpace();
 
     /**
-     * ƒeƒLƒXƒg•\Œ»(StringŒ^)‚ğ•Ô‚·
+     * ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾(Stringå‹)ã‚’è¿”ã™
      * 
-     * @return@ƒeƒLƒXƒg•\Œ»(StringŒ^)‚ğ•Ô‚·
+     * @returnã€€ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾(Stringå‹)ã‚’è¿”ã™
      */
     String getText();
 
     /**
-     * “Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     Set<ReferenceTypeInfo> getThrownExceptions();
 
     /**
-     * ‚±‚ÌƒvƒƒOƒ‰ƒ€—v‘f‚ÌƒfƒB[ƒvƒRƒs[‚ğ•Ô‚·.
-     * ‚½‚¾‚µC©•ª‚æ‚è‚à‰ºˆÊ‚ÉˆÊ’u‚·‚éƒIƒuƒWƒFƒNƒg‚Ì‚İƒfƒB[ƒvƒRƒs[D
-     * ©•ª‚ÌãˆÊ‚ÉˆÊ’u‚·‚é‚à‚Ì‚É‚Â‚¢‚Ä‚ÍƒVƒƒƒ[ƒRƒs[.
+     * ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ è¦ç´ ã®ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼ã‚’è¿”ã™.
+     * ãŸã ã—ï¼Œè‡ªåˆ†ã‚ˆã‚Šã‚‚ä¸‹ä½ã«ä½ç½®ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã¿ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼ï¼
+     * è‡ªåˆ†ã®ä¸Šä½ã«ä½ç½®ã™ã‚‹ã‚‚ã®ã«ã¤ã„ã¦ã¯ã‚·ãƒ£ãƒ­ãƒ¼ã‚³ãƒ”ãƒ¼.
      * 
      * @return
      */

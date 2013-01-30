@@ -10,20 +10,20 @@ import java.util.TreeSet;
 
 
 /**
- * •Ï”g—p‚ğ•\‚·’ŠÛƒNƒ‰ƒX
+ * å¤‰æ•°ä½¿ç”¨ã‚’è¡¨ã™æŠ½è±¡ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
- * @param <T> g—p‚³‚ê‚Ä‚¢‚é•Ï”
+ * @param <T> ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
  */
 @SuppressWarnings("serial")
 public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
         ExpressionInfo {
 
     /**
-     * •Ï”g—p‚ÌCollection‚©‚çg—p‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet‚ğ•Ô‚·
+     * å¤‰æ•°ä½¿ç”¨ã®Collectionã‹ã‚‰ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”g—p‚ÌCollection
-     * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”‚ÌSet
+     * @param variableUsages å¤‰æ•°ä½¿ç”¨ã®Collection
+     * @return ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã®Set
      */
     public static Set<VariableInfo<? extends UnitInfo>> getUsedVariables(
             Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
@@ -37,10 +37,10 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚Ä‚½•Ï”g—p‚ÉŠÜ‚Ü‚ê‚é•Ï”QÆ‚ÌSet‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚Œã¦ãŸå¤‰æ•°ä½¿ç”¨ã«å«ã¾ã‚Œã‚‹å¤‰æ•°å‚ç…§ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”g—p‚ÌSet
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚Ä‚½•Ï”g—p‚ÉŠÜ‚Ü‚ê‚é•Ï”QÆ‚ÌSet
+     * @param variableUsages å¤‰æ•°ä½¿ç”¨ã®Set
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚Œã¦ãŸå¤‰æ•°ä½¿ç”¨ã«å«ã¾ã‚Œã‚‹å¤‰æ•°å‚ç…§ã®Set
      */
     public static Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getReferencees(
             Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
@@ -56,10 +56,10 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚Ä‚½•Ï”g—p‚ÉŠÜ‚Ü‚ê‚é•Ï”‘ã“ü‚ÌSet‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚Œã¦ãŸå¤‰æ•°ä½¿ç”¨ã«å«ã¾ã‚Œã‚‹å¤‰æ•°ä»£å…¥ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”g—p‚ÌSet
-     * @return ˆø”‚Å—^‚¦‚ç‚ê‚Ä‚½•Ï”g—p‚ÉŠÜ‚Ü‚ê‚é•Ï”‘ã“ü‚ÌSet
+     * @param variableUsages å¤‰æ•°ä½¿ç”¨ã®Set
+     * @return å¼•æ•°ã§ä¸ãˆã‚‰ã‚Œã¦ãŸå¤‰æ•°ä½¿ç”¨ã«å«ã¾ã‚Œã‚‹å¤‰æ•°ä»£å…¥ã®Set
      */
     public static Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getAssignments(
             Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
@@ -76,14 +76,14 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
     /**
      * 
-     * @param usedVariable g—p‚³‚ê‚Ä‚¢‚é•Ï”
-     * @param reference QÆ‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedVariable ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
+     * @param reference å‚ç…§ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     VariableUsageInfo(final T usedVariable, final boolean reference, final boolean assignment,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -97,27 +97,27 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’è¿”ã™
      * 
-     * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”
+     * @return ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°
      */
     public final T getUsedVariable() {
         return this.usedVariable;
     }
 
     /**
-     * QÆ‚©‘ã“ü‚©‚ğ•Ô‚·
+     * å‚ç…§ã‹ä»£å…¥ã‹ã‚’è¿”ã™
      * 
-     * @return QÆ‚Å‚ ‚éê‡‚Í trueC‘ã“ü‚Å‚ ‚éê‡‚Í false
+     * @return å‚ç…§ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œä»£å…¥ã§ã‚ã‚‹å ´åˆã¯ false
      */
     public final boolean isReference() {
         return this.reference;
     }
 
     /**
-     * ‚±‚ÌƒtƒB[ƒ‹ƒhg—p‚ª‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
      * 
-     * @return ‘ã“ü‚Å‚ ‚éê‡‚Í trueCQÆ‚Å‚ ‚éê‡‚Í false
+     * @return ä»£å…¥ã§ã‚ã‚‹å ´åˆã¯ trueï¼Œå‚ç…§ã§ã‚ã‚‹å ´åˆã¯ false
      */
     public final boolean isAssignment() {
         return this.assignment;
@@ -131,9 +131,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<?>> getCalls() {
@@ -141,9 +141,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * ‚±‚Ì•Ï”g—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®å¤‰æ•°ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì•Ï”g—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®å¤‰æ•°ä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -152,9 +152,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * •Ï”g—p‚ÌŒ^‚ğ•Ô‚·
+     * å¤‰æ•°ä½¿ç”¨ã®å‹ã‚’è¿”ã™
      * 
-     * @return •Ï”g—p‚ÌŒ^
+     * @return å¤‰æ•°ä½¿ç”¨ã®å‹
      */
     @Override
     public TypeInfo getType() {
@@ -165,9 +165,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public final Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -181,7 +181,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     private final boolean assignment;
 
     /**
-     * ‹ó‚Ì•Ï”—˜—p‚ÌSet‚ğ•\‚·
+     * ç©ºã®å¤‰æ•°åˆ©ç”¨ã®Setã‚’è¡¨ã™
      */
     public static final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> EmptySet = Collections
             .<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> emptySet();

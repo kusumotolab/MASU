@@ -34,7 +34,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * –¢‰ğŒˆƒtƒB[ƒ‹ƒhg—p‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -42,17 +42,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<FieldUsageInfo> {
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚é•Ï”‚ÌŒ^–¼‚Æ•Ï”–¼C—˜—p‰Â”\‚È–¼‘O‹óŠÔ‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‹åã¨å¤‰æ•°åï¼Œåˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param memberImportStatements —˜—p‰Â”\‚È–¼‘O‹óŠÔ
-     * @param qualifierUsage ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚éeƒGƒ“ƒeƒBƒeƒB
-     * @param fieldName •Ï”–¼
-     * @param reference ƒtƒB[ƒ‹ƒhg—p‚ªQÆ‚©
-     * @param assignment ƒtƒB[ƒ‹ƒhg—p‚ª‘ã“ü‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param memberImportStatements åˆ©ç”¨å¯èƒ½ãªåå‰ç©ºé–“
+     * @param qualifierUsage ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹è¦ªã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
+     * @param fieldName å¤‰æ•°å
+     * @param reference ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå‚ç…§ã‹
+     * @param assignment ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒä»£å…¥ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedFieldUsageInfo(
             final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
@@ -73,44 +73,44 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     }
 
     /**
-     * –¢‰ğŒˆƒtƒB[ƒ‹ƒhg—p‚ğ‰ğŒˆ‚µC‚»‚ÌŒ^‚ğ•Ô‚·D
+     * æœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ã‚’è§£æ±ºã—ï¼Œãã®å‹ã‚’è¿”ã™ï¼
      * 
-     * @param usingClass –¢‰ğŒˆƒtƒB[ƒ‹ƒhg—p‚ªs‚í‚ê‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param usingMethod –¢‰ğŒˆƒtƒB[ƒ‹ƒhg—p‚ªs‚í‚ê‚Ä‚¢‚éƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
-     * @return ‰ğŒˆÏ‚İƒtƒB[ƒ‹ƒhg—p
+     * @param usingClass æœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @return è§£æ±ºæ¸ˆã¿ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨
      */
     @Override
     public FieldUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == fieldInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ƒtƒB[ƒ‹ƒh–¼CQÆE‘ã“ü‚ğæ“¾
+        // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åï¼Œå‚ç…§ãƒ»ä»£å…¥ã‚’å–å¾—
         final String fieldName = this.getFieldName();
         final boolean reference = this.isReference();
         final boolean assignment = this.isAssignment();
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒtƒB[ƒ‹ƒhg—p‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚éŒ^("."‚Ì‘O‚Ì‚â‚Â)‚ğ‰ğŒˆ
+        // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒãã£ã¤ã„ã¦ã„ã‚‹å‹("."ã®å‰ã®ã‚„ã¤)ã‚’è§£æ±º
         final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierUsage();
         final ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -131,7 +131,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final int toColumn, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ğ‹‚ß‚é
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆã¯ãã®ç¶™æ‰¿å‹ã‚’æ±‚ã‚ã‚‹
         if (qualifierType instanceof TypeParameterTypeInfo) {
 
             final TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
@@ -160,7 +160,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             }
         }
 
-        // e‚ª‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ê‡‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+        // è¦ªãŒè§£æ±ºã§ããªã‹ã£ãŸå ´åˆã¯ã©ã†ã—ã‚ˆã†ã‚‚ãªã„
         else if (qualifierType instanceof UnknownTypeInfo) {
 
             final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
@@ -170,23 +170,23 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     usingMethod, fromLine, fromColumn, toLine, toColumn);
             return resolved;
 
-            //e‚ªƒNƒ‰ƒXŒ^‚Ìê‡
+            //è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã®å ´åˆ
         } else if (qualifierType instanceof ClassTypeInfo) {
 
             final ClassInfo ownerClass = ((ClassTypeInfo) qualifierType).getReferencedClass();
-            // e‚ª‘ÎÛƒNƒ‰ƒX(TargetClassInfo)‚¾‚Á‚½ê‡
+            // è¦ªãŒå¯¾è±¡ã‚¯ãƒ©ã‚¹(TargetClassInfo)ã ã£ãŸå ´åˆ
             if (ownerClass instanceof TargetClassInfo) {
 
-                // ‚Ü‚¸‚Í—˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚©‚çŒŸõ
+                // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰æ¤œç´¢
                 {
-                    // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒhˆê——‚ğæ“¾
+                    // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸€è¦§ã‚’å–å¾—
                     final List<FieldInfo> availableFields = NameResolver.getAvailableFields(
                             (TargetClassInfo) ownerClass, usingClass);
 
-                    // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ğC–¢‰ğŒˆƒtƒB[ƒ‹ƒh–¼‚ÅŒŸõ
+                    // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ï¼Œæœªè§£æ±ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã§æ¤œç´¢
                     for (final FieldInfo availableField : availableFields) {
 
-                        // ˆê’v‚·‚éƒtƒB[ƒ‹ƒh–¼‚ªŒ©‚Â‚©‚Á‚½ê‡
+                        // ä¸€è‡´ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                         if (fieldName.equals(availableField.getName())) {
 
                             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
@@ -198,7 +198,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     }
                 }
 
-                // ƒXƒ^ƒeƒBƒbƒNƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚ğ’T‚·
+                // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æ¢ã™
                 {
                     for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
                             .getAvailableNamespaces()) {
@@ -225,8 +225,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     }
                 }
 
-                // —˜—p‰Â”\‚ÈƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸
-                // ‚»‚ÌƒNƒ‰ƒX‚Ì•Ï”‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+                // åˆ©ç”¨å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãš
+                // ãã®ã‚¯ãƒ©ã‚¹ã®å¤‰æ•°ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
                 {
                     for (ClassInfo classInfo = ownerClass; true; classInfo = ((InnerClassInfo) classInfo)
                             .getOuterClass()) {
@@ -239,7 +239,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                                     externalSuperClass);
                             fieldInfoManager.add(fieldInfo);
 
-                            // ŠO•”ƒNƒ‰ƒX‚ÉV‹K‚ÅŠO•”•Ï”(ExternalFieldInfo)‚ğ’Ç‰Á‚µ‚½‚Ì‚ÅŒ^‚Í•s–¾D
+                            // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«æ–°è¦ã§å¤–éƒ¨å¤‰æ•°(ExternalFieldInfo)ã‚’è¿½åŠ ã—ãŸã®ã§å‹ã¯ä¸æ˜ï¼
                             final FieldUsageInfo resolved = FieldUsageInfo
                                     .getInstance(qualifierUsage, qualifierUsage.getType(),
                                             fieldInfo, reference, assignment, usingMethod,
@@ -253,7 +253,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     }
                 }
 
-                // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ğs‚¤
+                // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå‡¦ç†ã‚’è¡Œã†
                 {
                     err.println("Resolved as an external element, \"" + this.getFieldName() + "\""
                             + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
@@ -266,14 +266,14 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     return resolved;
                 }
 
-                // e‚ªŠO•”ƒNƒ‰ƒXiExternalClassInfoj‚¾‚Á‚½ê‡
+                // è¦ªãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹ï¼ˆExternalClassInfoï¼‰ã ã£ãŸå ´åˆ
             } else if (ownerClass instanceof ExternalClassInfo) {
 
                 final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
                         (ExternalClassInfo) ownerClass);
                 fieldInfoManager.add(fieldInfo);
 
-                // ŠO•”ƒNƒ‰ƒX‚ÉV‹K‚ÅŠO•”•Ï”(ExternalFieldInfo)‚ğ’Ç‰Á‚µ‚½‚Ì‚ÅŒ^‚Í•s–¾D
+                // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«æ–°è¦ã§å¤–éƒ¨å¤‰æ•°(ExternalFieldInfo)ã‚’è¿½åŠ ã—ãŸã®ã§å‹ã¯ä¸æ˜ï¼
                 final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                         qualifierUsage.getType(), fieldInfo, reference, assignment, usingMethod,
                         fromLine, fromColumn, toLine, toColumn);
@@ -282,10 +282,10 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
         } else if (qualifierType instanceof ArrayTypeInfo) {
 
-            // TODO ‚±‚±‚ÍŒ¾ŒêˆË‘¶‚É‚·‚é‚µ‚©‚È‚¢‚Ì‚©H ”z—ñ.length ‚È‚Ç
+            // TODO ã“ã“ã¯è¨€èªä¾å­˜ã«ã™ã‚‹ã—ã‹ãªã„ã®ã‹ï¼Ÿ é…åˆ—.length ãªã©
 
-            // Java Œ¾Œê‚Å ƒtƒB[ƒ‹ƒh–¼‚ª length ‚¾‚Á‚½ê‡‚Í int Œ^‚ğ•Ô‚·
-            // TODO@‚¿‚á‚ñ‚Æ‚©‚«‚È‚¨‚³‚È‚¢‚Æ‚¢‚¯‚È‚¢
+            // Java è¨€èªã§ ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒ length ã ã£ãŸå ´åˆã¯ int å‹ã‚’è¿”ã™
+            // TODOã€€ã¡ã‚ƒã‚“ã¨ã‹ããªãŠã•ãªã„ã¨ã„ã‘ãªã„
             final Settings settings = Settings.getInstance();
             if ((settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14) || settings.getLanguage()
@@ -303,44 +303,44 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     }
 
     /**
-     * g—p‰Â”\‚È–¼‘O‹óŠÔ‚ğ•Ô‚·
+     * ä½¿ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’è¿”ã™
      * 
-     * @return g—p‰Â”\‚È–¼‘O‹óŠÔ‚ğ•Ô‚·
+     * @return ä½¿ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’è¿”ã™
      */
     public List<UnresolvedMemberImportStatementInfo> getAvailableNamespaces() {
         return this.memberImportStatements;
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚é•Ï”‚Ì–¢‰ğŒˆŒ^–¼‚ğ•Ô‚·
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®æœªè§£æ±ºå‹åã‚’è¿”ã™
      * 
-     * @return ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚é•Ï”‚Ì–¢‰ğŒˆŒ^–¼
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®æœªè§£æ±ºå‹å
      */
     public UnresolvedExpressionInfo<? extends ExpressionInfo> getQualifierUsage() {
         return this.qualifierUsage;
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒh–¼‚ğ•Ô‚·
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‚’è¿”ã™
      * 
-     * @return ƒtƒB[ƒ‹ƒh–¼
+     * @return ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
      */
     public String getFieldName() {
         return this.fieldName;
     }
 
     /**
-     * g—p‰Â”\‚È–¼‘O‹óŠÔ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ä½¿ç”¨å¯èƒ½ãªåå‰ç©ºé–“ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final List<UnresolvedMemberImportStatementInfo> memberImportStatements;
 
     /**
-     * ƒtƒB[ƒ‹ƒh–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String fieldName;
 
     /**
-     * ƒtƒB[ƒ‹ƒhg—p‚ªÀs‚³‚ê‚é•Ï”‚Ì–¢‰ğŒˆŒ^–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä½¿ç”¨ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®æœªè§£æ±ºå‹åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage;
 }

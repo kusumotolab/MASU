@@ -5,11 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 
 
 /**
- * 未解決参照型を表すインターフェース
+ * 譛ｪ隗｣豎ｺ蜿ら�ｧ蝙九ｒ陦ｨ縺吶う繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ
  * 
  * @author higo
  *
- * @param <T> 解決された型を表す型パラメータ
+ * @param <T> 隗｣豎ｺ縺輔ｌ縺溷梛繧定｡ｨ縺吝梛繝代Λ繝｡繝ｼ繧ｿ
  */
 public interface UnresolvedReferenceTypeInfo<T extends ReferenceTypeInfo> extends
         UnresolvedTypeInfo<T> {

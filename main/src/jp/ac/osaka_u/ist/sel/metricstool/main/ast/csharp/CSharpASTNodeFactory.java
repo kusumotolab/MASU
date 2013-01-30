@@ -21,10 +21,10 @@ public class CSharpASTNodeFactory {
             final AST propertyName) {
         final AST definition = this.createMethodDefinitionNode();
 
-        // ƒvƒƒpƒeƒB‚ÌCüq‚ğƒZƒbƒ^ƒƒ\ƒbƒh‚Æ‚µ‚Äˆµ‚¤‚Æ‚«‚ÌCüq‚Æ‚µ‚Äİ’è
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ä¿®é£¾å­ã‚’ã‚»ãƒƒã‚¿ãƒ¡ã‚½ãƒƒãƒ‰ã¨ã—ã¦æ‰±ã†ã¨ãã®ä¿®é£¾å­ã¨ã—ã¦è¨­å®š
         definition.addChild(this.cretateCloneAST(modifier));
 
-        // ƒvƒƒpƒeƒB‚ÌŒ^‚ğƒQƒbƒ^ƒƒ\ƒbƒh‚Æ‚µ‚Äˆµ‚¤‚Æ‚«‚Ì•Ô‚è’l‚Æ‚µ‚Äİ’è
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å‹ã‚’ã‚²ãƒƒã‚¿ãƒ¡ã‚½ãƒƒãƒ‰ã¨ã—ã¦æ‰±ã†ã¨ãã®è¿”ã‚Šå€¤ã¨ã—ã¦è¨­å®š
         definition.addChild(this.cretateCloneAST(propertyType));
 
         definition.addChild(this.cretateCloneAST(propertyName));
@@ -35,17 +35,17 @@ public class CSharpASTNodeFactory {
     public AST createPropertySetterHeadNode(final AST modifier, final AST propertyType,
             final AST propertyName) {
         final AST definition = this.createMethodDefinitionNode();
-        // ƒvƒƒpƒeƒB‚ÌCüq‚ğƒZƒbƒ^ƒƒ\ƒbƒh‚Æ‚µ‚Äˆµ‚¤‚Æ‚«‚ÌCüq‚Æ‚µ‚Äİ’è
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ä¿®é£¾å­ã‚’ã‚»ãƒƒã‚¿ãƒ¡ã‚½ãƒƒãƒ‰ã¨ã—ã¦æ‰±ã†ã¨ãã®ä¿®é£¾å­ã¨ã—ã¦è¨­å®š
         definition.addChild(this.cretateCloneAST(modifier));
 
-        // ƒvƒƒpƒeƒB‚ğƒZƒbƒ^ƒƒ\ƒbƒh‚Æ‚µ‚Äˆµ‚¤‚Æ‚«‚Ì•Ô‚è’l‚ÌŒ^void‚ğİ’è
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã‚»ãƒƒã‚¿ãƒ¡ã‚½ãƒƒãƒ‰ã¨ã—ã¦æ‰±ã†ã¨ãã®è¿”ã‚Šå€¤ã®å‹voidã‚’è¨­å®š
         final AST methodType = this.astFactory.create(CSharpTokenTypes.TYPE, "TYPE");
         methodType.addChild(this.astFactory.create(CSharpTokenTypes.LITERAL_void, "void"));
         definition.addChild(methodType);
 
         definition.addChild(this.cretateCloneAST(propertyName));
 
-        // ƒvƒƒpƒeƒB‚ğƒZƒbƒ^ƒƒ\ƒbƒh‚Æ‚µ‚Äˆµ‚¤‚Æ‚«‚Ìƒpƒ‰ƒ[ƒ^’è‹`‚ğİ’è
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã‚»ãƒƒã‚¿ãƒ¡ã‚½ãƒƒãƒ‰ã¨ã—ã¦æ‰±ã†ã¨ãã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©ã‚’è¨­å®š
         definition.addChild(this.cretateSetterParameterNode(propertyType));
 
         return definition;
@@ -59,13 +59,13 @@ public class CSharpASTNodeFactory {
                 "PARAMETER_DEF");
         definitionHeader.addChild(definition);
 
-        // Cüq‚Ìƒm[ƒh‚ğ’Ç‰ÁD
+        // ä¿®é£¾å­ã®ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ ï¼
         definition.addChild(this.astFactory.create(CSharpTokenTypes.MODIFIERS, "MODIFIERS"));
 
-        // Œ^‚Ìƒm[ƒh‚ğ’Ç‰Á
+        // å‹ã®ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ 
         definition.addChild(this.cretateCloneAST(type));
 
-        // –¼‘O‚Ìƒm[ƒh‚ğ’Ç‰ÁDƒvƒƒpƒeƒB‚Ìset“à‚Å‰Šú’è‹`‚³‚ê‚Ä‚¢‚éƒpƒ‰ƒ[ƒ^–¼‚Ívalue
+        // åå‰ã®ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ ï¼ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®setå†…ã§åˆæœŸå®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã¯value
         final AST name = this.astFactory.create(CSharpTokenTypes.NAME, "NAME");
         name.addChild(this.astFactory.create(CSharpTokenTypes.IDENT, "value"));
         definition.addChild(name);

@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ª MethodInfo ‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚É—p‚¢‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒ MethodInfo ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  * 
@@ -18,9 +18,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
 
     /**
-     * MethodInfo ‚ÌƒCƒeƒŒ[ƒ^‚ğ•Ô‚·D ‚±‚ÌƒCƒeƒŒ[ƒ^‚ÍQÆê—p‚Å‚ ‚è•ÏXˆ—‚ğs‚¤‚±‚Æ‚Í‚Å‚«‚È‚¢D
+     * MethodInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’è¿”ã™ï¼ ã“ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã¯å‚ç…§å°‚ç”¨ã§ã‚ã‚Šå¤‰æ›´å‡¦ç†ã‚’è¡Œã†ã“ã¨ã¯ã§ããªã„ï¼
      * 
-     * @return MethodInfo ‚ÌƒCƒeƒŒ[ƒ^
+     * @return MethodInfo ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
      */
     @Override
     public Iterator<TargetMethodInfo> iterator() {
@@ -31,9 +31,9 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
     }
 
     /**
-     * ‘ÎÛƒƒ\ƒbƒh‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
+     * å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
      * 
-     * @return ‘ÎÛƒƒ\ƒbƒh‚Ì”
+     * @return å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã®æ•°
      */
     @Override
     public int getMethodCount() {

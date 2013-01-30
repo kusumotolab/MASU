@@ -40,7 +40,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * –¢‰ğŒˆƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -48,11 +48,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCallInfo> {
 
     /**
-     * ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚é•Ï”‚ÌŒ^Cƒƒ\ƒbƒh–¼‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‹ï¼Œãƒ¡ã‚½ãƒƒãƒ‰åã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param memberImportStatements ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ª•û‰ğŒˆ‚Ì‚½‚ß‚É—˜—p‚Å‚«‚éƒCƒ“ƒ|[ƒg•¶
-     * @param qualifierUsage ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚é•Ï”‚ÌŒ^
-     * @param methodName ƒƒ\ƒbƒh–¼
+     * @param memberImportStatements ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒæ–¹è§£æ±ºã®ãŸã‚ã«åˆ©ç”¨ã§ãã‚‹ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ–‡
+     * @param qualifierUsage ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‹
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public UnresolvedMethodCallInfo(
             final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
@@ -72,31 +72,31 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfoManager) {
             throw new IllegalArgumentException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // g—pˆÊ’u‚ğæ“¾
+        // ä½¿ç”¨ä½ç½®ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ƒƒ\ƒbƒh‚ÌƒVƒOƒlƒ`ƒƒ‚ğæ“¾
+        // ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚·ã‚°ãƒãƒãƒ£ã‚’å–å¾—
         final String name = this.getName();
         final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚éŒ^("."‚Ì‘O‚Ì‚â‚Â)‚ğ‰ğŒˆ
+        // ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒãã£ã¤ã„ã¦ã„ã‚‹å‹("."ã®å‰ã®ã‚„ã¤)ã‚’è§£æ±º
         final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifier();
         ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -136,7 +136,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             final int toLine, final int toColumn, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ğ‹‚ß‚é
+        // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆã¯ãã®ç¶™æ‰¿å‹ã‚’æ±‚ã‚ã‚‹
         if (qualifierType instanceof TypeParameterTypeInfo) {
 
             TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
@@ -146,7 +146,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 //                System.out.println();
 //            }
 
-            // ‚±‚Ìƒƒ\ƒbƒh‚ÌƒRƒ“ƒeƒLƒXƒg‚©‚çC—˜—p‰Â”\‚ÈŒ^ƒpƒ‰ƒ[ƒ^‚Æ‚»‚ÌÀÛ‚ÌŒ^‚ÌƒyƒA‚ÉŠY“–‚·‚é‚©‚ğ’²‚×‚é
+            // ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‹ã‚‰ï¼Œåˆ©ç”¨å¯èƒ½ãªå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ãã®å®Ÿéš›ã®å‹ã®ãƒšã‚¢ã«è©²å½“ã™ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
             final Map<TypeParameterInfo, TypeInfo> availableTypeParameters = usingClass
                     .getAvailableTypeParameters();
 
@@ -156,14 +156,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
                             .getReferncedTypeParameter();
                 } else {
-                    // Œ^ƒpƒ‰ƒ[ƒ^Œ^‚Å‚È‚­‚È‚Á‚½ê‡‚É‚ÍC‰º‚ÌƒNƒ‰ƒXŒ^‚Ìê‡‚Éˆ—‚ğ‚ä‚¾‚Ë‚é
+                    // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‹ã§ãªããªã£ãŸå ´åˆã«ã¯ï¼Œä¸‹ã®ã‚¯ãƒ©ã‚¹å‹ã®å ´åˆã«å‡¦ç†ã‚’ã‚†ã ã­ã‚‹
                     break;
                 }
             }
 
             if (qualifierType instanceof TypeParameterTypeInfo) {
 
-                // ã‹L‚Å‚Í‚È‚­Cextends ‚ª‚ ‚éê‡
+                // ä¸Šè¨˜ã§ã¯ãªãï¼Œextends ãŒã‚ã‚‹å ´åˆ
                 if (qualifierParameterType.hasExtendsType()) {
                     for (final TypeInfo extendsType : qualifierParameterType.getExtendsTypes()) {
                         final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
@@ -176,7 +176,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     }
                 }
 
-                // extends ‚ª‚È‚¢ê‡
+                // extends ãŒãªã„å ´åˆ
                 else {
                     final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                             .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -189,7 +189,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             }
         }
 
-        // <?>‚â<? super A>‚ÌƒJƒbƒR“à‚ÌŒ^‚Ì
+        // <?>ã‚„<? super A>ã®ã‚«ãƒƒã‚³å†…ã®å‹ã®æ™‚
         if (qualifierType instanceof ArbitraryTypeInfo || qualifierType instanceof SuperTypeInfo) {
 
             final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
@@ -201,7 +201,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             return resolve;
         }
 
-        // <? extends B> ‚ÌƒJƒbƒR“à‚ÌŒ^‚Ì
+        // <? extends B> ã®ã‚«ãƒƒã‚³å†…ã®å‹ã®æ™‚
         else if (qualifierType instanceof ExtendsTypeInfo) {
 
             final TypeInfo extendsType = ((ExtendsTypeInfo) qualifierType).getExtendsType();
@@ -211,7 +211,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             return resolve;
         }
 
-        // e‚ª‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ê‡‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+        // è¦ªãŒè§£æ±ºã§ããªã‹ã£ãŸå ´åˆã¯ã©ã†ã—ã‚ˆã†ã‚‚ãªã„
         else if (qualifierType instanceof UnknownTypeInfo) {
 
             final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
@@ -222,7 +222,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             resolved.addTypeArguments(typeArguments);
             return resolved;
 
-            // e‚ªƒNƒ‰ƒXŒ^‚¾‚Á‚½ê‡
+            // è¦ªãŒã‚¯ãƒ©ã‚¹å‹ã ã£ãŸå ´åˆ
         } else if (qualifierType instanceof ClassTypeInfo
                 || qualifierType instanceof PrimitiveTypeInfo) {
 
@@ -235,28 +235,28 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 ownerClass = ((ClassTypeInfo) qualifierType).getReferencedClass();
             }
 
-            // ‚Ü‚¸‚Í—˜—p‰Â”\‚Èƒƒ\ƒbƒh‚©‚çŒŸõ
+            // ã¾ãšã¯åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ã‹ã‚‰æ¤œç´¢
             {
-                // —˜—p‰Â”\‚Èƒƒ\ƒbƒhˆê——‚ğæ“¾
+                // åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§ã‚’å–å¾—
                 final List<MethodInfo> availableMethods = NameResolver.getAvailableMethods(
                         ownerClass, usingClass);
 
-                // —˜—p‰Â”\‚Èƒƒ\ƒbƒh‚©‚çC–¢‰ğŒˆƒƒ\ƒbƒh‚Æˆê’v‚·‚é‚à‚Ì‚ğŒŸõ
-                // ƒƒ\ƒbƒh–¼Cˆø”‚ÌŒ^‚ÌƒŠƒXƒg‚ğ—p‚¢‚ÄC‚±‚Ìƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µ‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è
+                // åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ã‹ã‚‰ï¼Œæœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰ã¨ä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’æ¤œç´¢
+                // ãƒ¡ã‚½ãƒƒãƒ‰åï¼Œå¼•æ•°ã®å‹ã®ãƒªã‚¹ãƒˆã‚’ç”¨ã„ã¦ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
                 for (final MethodInfo availableMethod : availableMethods) {
 
-                    // ŒÄ‚Ño‚µ‰Â”\‚Èƒƒ\ƒbƒh‚ªŒ©‚Â‚©‚Á‚½ê‡
+                    // å‘¼ã³å‡ºã—å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                     if (availableMethod.canCalledWith(methodName, actualParameters)) {
 
                         final TypeInfo returnType = availableMethod.getReturnType();
 
-                        // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Ìê‡
+                        // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆ
                         if (returnType instanceof TypeParameterTypeInfo) {
                             final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
                                     .getReferncedTypeParameter();
                             final TypeInfo typeArgument;
 
-                            // ƒƒ\ƒbƒh‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚çŒŸõ
+                            // ãƒ¡ã‚½ãƒƒãƒ‰ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
                             if (availableMethod.isDefined(referencedTypeParameter)) {
                                 final int index = referencedTypeParameter.getIndex();
                                 if (index < typeArguments.size()) {
@@ -268,14 +268,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                 }
                             }
 
-                            // ƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚çŒŸõ
+                            // ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
                             else if (((ClassTypeInfo) qualifierType).getReferencedClass()
                                     .isDefined(referencedTypeParameter)) {
                                 typeArgument = ((ClassTypeInfo) qualifierType)
                                         .getTypeArgument(referencedTypeParameter);
                             }
 
-                            // –{—ˆ‚Í‚±‚±‚ÍƒGƒ‰[‚ğo‚·‚×‚«
+                            // æœ¬æ¥ã¯ã“ã“ã¯ã‚¨ãƒ©ãƒ¼ã‚’å‡ºã™ã¹ã
                             else {
                                 final ClassInfo objectClass = classInfoManager
                                         .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -290,7 +290,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             return resolved;
                         }
 
-                        // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Å‚È‚¢ê‡
+                        // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ãªã„å ´åˆ
                         else {
                             final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                     qualifierUsage, availableMethod, returnType, usingMethod,
@@ -303,7 +303,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 }
             }
 
-            // ƒXƒ^ƒeƒBƒbƒNƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒh‚ğ’T‚·
+            // ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’æ¢ã™
             {
                 for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
                         .getImportStatements()) {
@@ -314,12 +314,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         if (importedMember instanceof MethodInfo) {
                             final MethodInfo importedMethod = (MethodInfo) importedMember;
 
-                            // ŒÄ‚Ño‚µ‰Â”\‚Èƒƒ\ƒbƒh‚ªŒ©‚Â‚©‚Á‚½ê‡
+                            // å‘¼ã³å‡ºã—å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                             if (importedMethod.canCalledWith(methodName, actualParameters)) {
 
                                 final TypeInfo returnType = importedMethod.getReturnType();
 
-                                // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Ìê‡
+                                // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆ
                                 if (returnType instanceof TypeParameterTypeInfo) {
                                     final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
                                             .getReferncedTypeParameter();
@@ -336,14 +336,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                         }
                                     }
 
-                                    // ƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚çŒŸõ
+                                    // ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
                                     else if (((ClassTypeInfo) qualifierType).getReferencedClass()
                                             .isDefined(referencedTypeParameter)) {
                                         typeArgument = ((ClassTypeInfo) qualifierType)
                                                 .getTypeArgument(referencedTypeParameter);
                                     }
 
-                                    // –{—ˆ‚Í‚±‚±‚ÍƒGƒ‰[‚ğo‚·‚×‚«
+                                    // æœ¬æ¥ã¯ã“ã“ã¯ã‚¨ãƒ©ãƒ¼ã‚’å‡ºã™ã¹ã
                                     else {
                                         final ClassInfo objectClass = classInfoManager
                                                 .getClassInfo(new String[] { "java", "lang",
@@ -360,7 +360,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                     return resolved;
                                 }
 
-                                // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Å‚È‚¢ê‡
+                                // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ãªã„å ´åˆ
                                 else {
                                     final MethodCallInfo resolved = new MethodCallInfo(
                                             qualifierType, qualifierUsage, importedMethod,
@@ -376,8 +376,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 }
             }
 
-            // —˜—p‰Â”\‚Èƒƒ\ƒbƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍCŠO•”ƒNƒ‰ƒX‚Å‚ ‚éeƒNƒ‰ƒX‚ª‚ ‚é‚Í‚¸D
-            // ‚»‚ÌƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚ğg—p‚µ‚Ä‚¢‚é‚Æ‚İ‚È‚·
+            // åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ï¼Œå¤–éƒ¨ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹è¦ªã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹ã¯ãšï¼
+            // ãã®ã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã¨ã¿ãªã™
             {
                 final ExternalClassInfo externalSuperClass = NameResolver
                         .getExternalSuperClass(ownerClass);
@@ -390,7 +390,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     methodInfo.addParameters(dummyParameters);
                     methodInfoManager.add(methodInfo);
 
-                    // ŠO•”ƒNƒ‰ƒX‚ÉV‹K‚ÅŠO•”ƒƒ\ƒbƒh•Ï”iExternalMethodInfoj‚ğ’Ç‰Á‚µ‚½‚Ì‚ÅŒ^‚Í•s–¾
+                    // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«æ–°è¦ã§å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰å¤‰æ•°ï¼ˆExternalMethodInfoï¼‰ã‚’è¿½åŠ ã—ãŸã®ã§å‹ã¯ä¸æ˜
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                             qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(), usingMethod,
                             fromLine, fromColumn, toLine, toColumn);
@@ -400,7 +400,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 }
             }
 
-            // e‚ªŠO•”ƒNƒ‰ƒXiExternalClassInfoj‚¾‚Á‚½ê‡
+            // è¦ªãŒå¤–éƒ¨ã‚¯ãƒ©ã‚¹ï¼ˆExternalClassInfoï¼‰ã ã£ãŸå ´åˆ
             if (ownerClass instanceof ExternalClassInfo) {
 
                 err.println("Resolved as an external element, \"" + this.getName() + "\""
@@ -414,7 +414,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
 
-                // ŠO•”ƒNƒ‰ƒX‚ÉV‹K‚ÅŠO•”ƒƒ\ƒbƒh(ExternalMethodInfo)‚ğ’Ç‰Á‚µ‚½‚Ì‚ÅŒ^‚Í•s–¾D
+                // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«æ–°è¦ã§å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰(ExternalMethodInfo)ã‚’è¿½åŠ ã—ãŸã®ã§å‹ã¯ä¸æ˜ï¼
                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
                         methodInfo, UnknownTypeInfo.getInstance(), usingMethod, fromLine,
                         fromColumn, toLine, toColumn);
@@ -423,10 +423,10 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 return resolved;
             }
 
-            // e‚ª”z—ñ‚¾‚Á‚½ê‡
+            // è¦ªãŒé…åˆ—ã ã£ãŸå ´åˆ
         } else if (qualifierType instanceof ArrayTypeInfo) {
 
-            // XXX JavaŒ¾Œê‚Å‚ ‚ê‚ÎC java.lang.Object ‚É‘Î‚·‚éŒÄ‚Ño‚µ
+            // XXX Javaè¨€èªã§ã‚ã‚Œã°ï¼Œ java.lang.Object ã«å¯¾ã™ã‚‹å‘¼ã³å‡ºã—
             final Settings settings = Settings.getInstance();
             if (settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14)
@@ -442,7 +442,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     methodInfo.addParameters(parameters);
                     methodInfoManager.add(methodInfo);
 
-                    // ŠO•”ƒNƒ‰ƒX‚ÉV‹K‚ÅŠO•”ƒƒ\ƒbƒh‚ğ’Ç‰Á‚µ‚½‚Ì‚ÅŒ^‚Í•s–¾
+                    // å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«æ–°è¦ã§å¤–éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã—ãŸã®ã§å‹ã¯ä¸æ˜
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                             qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(), usingMethod,
                             fromLine, fromColumn, toLine, toColumn);
@@ -453,27 +453,27 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                 else if (ownerClass instanceof TargetClassInfo) {
 
-                    // —˜—p‰Â”\‚Èƒƒ\ƒbƒhˆê——‚ğæ“¾, NameResolver.getAvailableMethod‚Í‚Â‚©‚Á‚Ä‚Í‚¾‚ßD
-                    //@‚È‚º‚È‚çC‚±‚ÌƒRƒ“ƒeƒLƒXƒg‚Å‚Í‰Â‹‰»Cüq‚ÉŠÖŒW‚È‚­C‚·‚×‚Ä‚Ìƒƒ\ƒbƒh‚ª—˜—p‰Â”\
+                    // åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ä¸€è¦§ã‚’å–å¾—, NameResolver.getAvailableMethodã¯ã¤ã‹ã£ã¦ã¯ã ã‚ï¼
+                    //ã€€ãªãœãªã‚‰ï¼Œã“ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã§ã¯å¯è¦–åŒ–ä¿®é£¾å­ã«é–¢ä¿‚ãªãï¼Œã™ã¹ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ãŒåˆ©ç”¨å¯èƒ½
                     final List<MethodInfo> availableMethods = new LinkedList<MethodInfo>();
                     availableMethods.addAll(((TargetClassInfo) ownerClass).getDefinedMethods());
 
-                    // —˜—p‰Â”\‚Èƒƒ\ƒbƒh‚©‚çC–¢‰ğŒˆƒƒ\ƒbƒh‚Æˆê’v‚·‚é‚à‚Ì‚ğŒŸõ
-                    // ƒƒ\ƒbƒh–¼Cˆø”‚ÌŒ^‚ÌƒŠƒXƒg‚ğ—p‚¢‚ÄC‚±‚Ìƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µ‚Å‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è
+                    // åˆ©ç”¨å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ã‹ã‚‰ï¼Œæœªè§£æ±ºãƒ¡ã‚½ãƒƒãƒ‰ã¨ä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’æ¤œç´¢
+                    // ãƒ¡ã‚½ãƒƒãƒ‰åï¼Œå¼•æ•°ã®å‹ã®ãƒªã‚¹ãƒˆã‚’ç”¨ã„ã¦ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—ã§ã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
                     for (final MethodInfo availableMethod : availableMethods) {
 
-                        // ŒÄ‚Ño‚µ‰Â”\‚Èƒƒ\ƒbƒh‚ªŒ©‚Â‚©‚Á‚½ê‡
+                        // å‘¼ã³å‡ºã—å¯èƒ½ãªãƒ¡ã‚½ãƒƒãƒ‰ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
                         if (availableMethod.canCalledWith(methodName, actualParameters)) {
                             final TypeInfo returnType = availableMethod.getReturnType();
 
-                            // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Ìê‡
+                            // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´åˆ
                             if (returnType instanceof TypeParameterTypeInfo) {
                                 final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
                                         .getReferncedTypeParameter();
 
                                 final TypeInfo typeArgument;
 
-                                // ƒƒ\ƒbƒh‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚çŒŸõ
+                                // ãƒ¡ã‚½ãƒƒãƒ‰ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
                                 if (availableMethod.isDefined(referencedTypeParameter)) {
                                     final int index = referencedTypeParameter.getIndex();
                                     if (index < typeArguments.size()) {
@@ -486,14 +486,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                     }
                                 }
 
-                                // ƒNƒ‰ƒX‚ÌŒ^ƒpƒ‰ƒ[ƒ^‚©‚çŒŸõ
+                                // ã‚¯ãƒ©ã‚¹ã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
                                 else if (((ClassTypeInfo) qualifierType).getReferencedClass()
                                         .isDefined(referencedTypeParameter)) {
                                     typeArgument = ((ClassTypeInfo) qualifierType)
                                             .getTypeArgument(referencedTypeParameter);
                                 }
 
-                                // –{—ˆ‚Í‚±‚±‚ÍƒGƒ‰[‚ğo‚·‚×‚«
+                                // æœ¬æ¥ã¯ã“ã“ã¯ã‚¨ãƒ©ãƒ¼ã‚’å‡ºã™ã¹ã
                                 else {
                                     final ClassInfo objectClass = classInfoManager
                                             .getClassInfo(new String[] { "java", "lang", "Object" });
@@ -508,7 +508,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                 return resolved;
                             }
 
-                            // •Ô‚è’l‚ªŒ^ƒpƒ‰ƒ[ƒ^‚Å‚È‚¢ê‡
+                            // è¿”ã‚Šå€¤ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ãªã„å ´åˆ
                             else {
                                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                         qualifierUsage, availableMethod, returnType, usingMethod,
@@ -534,25 +534,25 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     }
 
     /**
-     * ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚é•Ï”‚ÌŒ^‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‹ã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚é•Ï”‚ÌŒ^
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‹
      */
     public UnresolvedExpressionInfo<?> getQualifier() {
         return this.qualifierUsage;
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh–¼
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public final String getName() {
         return this.methodName;
     }
 
     /**
-     * ƒƒ\ƒbƒh–¼‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private String methodName;
 
@@ -561,7 +561,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     }
 
     /**
-     * ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚é•Ï”‚ÌQÆ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å¤‰æ•°ã®å‚ç…§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedExpressionInfo<?> qualifierUsage;
 

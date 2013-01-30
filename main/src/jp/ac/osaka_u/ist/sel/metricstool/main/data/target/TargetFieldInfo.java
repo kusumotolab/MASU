@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ‘ÎÛƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚Ìî•ñ‚ğŒ»‚·ƒNƒ‰ƒXD
+ * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æƒ…å ±ã‚’ç¾ã™ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  */
@@ -15,16 +15,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class TargetFieldInfo extends FieldInfo {
 
     /**
-     * ƒtƒB[ƒ‹ƒhî•ñƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param modifiers Cüq‚Ì Set
-     * @param name –¼‘O
-     * @param definitionClass ‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
-     * @param instance ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ“ƒo[‚©‚Ç‚¤‚©
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param modifiers ä¿®é£¾å­ã® Set
+     * @param name åå‰
+     * @param definitionClass ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
+     * @param instance ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ãƒ³ãƒãƒ¼ã‹ã©ã†ã‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public TargetFieldInfo(final Set<ModifierInfo> modifiers, final String name,
             final TargetClassInfo definitionClass, final boolean instance, final int fromLine,
@@ -36,9 +36,9 @@ public final class TargetFieldInfo extends FieldInfo {
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒh‚Ì‰Šú‰»®‚ğƒZƒbƒg‚·‚é
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åˆæœŸåŒ–å¼ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param initializer ƒtƒB[ƒ‹ƒh‚Ì‰Šú‰»®
+     * @param initializer ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åˆæœŸåŒ–å¼
      */
     public final void setInitializer(final ExpressionInfo initializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -50,9 +50,9 @@ public final class TargetFieldInfo extends FieldInfo {
     }
 
     /**
-     * ƒtƒB[ƒ‹ƒh‚Ì‰Šú‰»®‚ğ•Ô‚·
+     * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åˆæœŸåŒ–å¼ã‚’è¿”ã™
      * 
-     * @return@ƒtƒB[ƒ‹ƒh‚Ì‰Šú‰»®
+     * @returnã€€ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åˆæœŸåŒ–å¼
      */
     public final ExpressionInfo getInitializer() {
         return this.initializer;

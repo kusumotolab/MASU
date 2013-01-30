@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * nullg—p‚ğ•\‚·ƒNƒ‰ƒXD
+ * nullä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo, t-miyake
  * 
@@ -16,13 +16,13 @@ import java.util.Set;
 public final class NullUsageInfo extends ExpressionInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public NullUsageInfo(final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -30,9 +30,9 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * nullg—p‚ÌŒ^‚Í•s–¾
+     * nullä½¿ç”¨ã®å‹ã¯ä¸æ˜
      * 
-     * @return •s–¾Œ^‚ğ•Ô‚·
+     * @return ä¸æ˜å‹ã‚’è¿”ã™
      */
     @Override
     public TypeInfo getType() {
@@ -40,9 +40,9 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * null‚Ìg—p‚É•Ï”g—p‚ªŠÜ‚Ü‚ê‚é‚±‚Æ‚Í‚È‚¢‚Ì‚Å‹ó‚ÌƒZƒbƒg‚ğ•Ô‚·
+     * nullã®ä½¿ç”¨ã«å¤‰æ•°ä½¿ç”¨ãŒå«ã¾ã‚Œã‚‹ã“ã¨ã¯ãªã„ã®ã§ç©ºã®ã‚»ãƒƒãƒˆã‚’è¿”ã™
      * 
-     * @return ‹ó‚ÌƒZƒbƒg
+     * @return ç©ºã®ã‚»ãƒƒãƒˆ
      */
     @Override
     public final Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -50,9 +50,9 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public final Set<CallInfo<?>> getCalls() {
@@ -60,9 +60,9 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * nullg—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * nullä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return nullg—p‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return nullä½¿ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -70,9 +70,9 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -102,7 +102,7 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * nullg—p‚ÌŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì’è”
+     * nullä½¿ç”¨ã®å‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å®šæ•°
      */
     private static final TypeInfo NULLTYPE = UnknownTypeInfo.getInstance();
 

@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * プラグインとの接続で発生する例外群の親クラス
+ * 繝励Λ繧ｰ繧､繝ｳ縺ｨ縺ｮ謗･邯壹〒逋ｺ逕溘☆繧倶ｾ句､也ｾ､縺ｮ隕ｪ繧ｯ繝ｩ繧ｹ
  * 
  * @author kou-tngt
  *

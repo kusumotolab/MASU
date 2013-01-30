@@ -9,11 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * {@link ConcurrentHashMap}‚ğ—p‚¢‚½“¯ŠúSet
+ * {@link ConcurrentHashMap}ã‚’ç”¨ã„ãŸåŒæœŸSet
  * 
  * @author kou-tngt
  *
- * @param <T> ƒZƒbƒg‚Ì—v‘f‚ÌŒ^
+ * @param <T> ã‚»ãƒƒãƒˆã®è¦ç´ ã®å‹
  * @see Set
  */
 public class ConcurrentHashSet<T> implements Set<T> {
@@ -136,12 +136,12 @@ public class ConcurrentHashSet<T> implements Set<T> {
     }
 
     /**
-     * ƒ}ƒbƒv‚Ì’l‚É“ü‚ê‚éƒ_ƒ~[ƒIƒuƒWƒFƒNƒg.
+     * ãƒãƒƒãƒ—ã®å€¤ã«å…¥ã‚Œã‚‹ãƒ€ãƒŸãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ.
      */
     private static final Object DUMMY_VALUE = new Object();
 
     /**
-     * “à•”‚Å—˜—p‚·‚éƒnƒbƒVƒ…ƒ}ƒbƒv
+     * å†…éƒ¨ã§åˆ©ç”¨ã™ã‚‹ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—
      */
     private final Map<T, Object> INNER_MAP = new ConcurrentHashMap<T, Object>();
 

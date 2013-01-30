@@ -25,31 +25,31 @@ public class UnresolvedForeachConditionInfo extends UnresolvedExpressionInfo<For
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì foreach•¶‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® foreachæ–‡ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ŒJ‚è•Ô‚µ—p‚Ì®‚ğæ“¾
+        // ç¹°ã‚Šè¿”ã—ç”¨ã®å¼ã‚’å–å¾—
         final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
                 .getIteratorExpression();
         final ExpressionInfo iteratorExpression = unresolvedIteratorExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // ŒJ‚è•Ô‚µ—p‚Ì•Ï”‚ğæ“¾
+        // ç¹°ã‚Šè¿”ã—ç”¨ã®å¤‰æ•°ã‚’å–å¾—
         final UnresolvedVariableDeclarationStatementInfo unresolvedIteratorVariable = this
                 .getIteratorVariable();
         final VariableDeclarationStatementInfo iteratorVariable = unresolvedIteratorVariable

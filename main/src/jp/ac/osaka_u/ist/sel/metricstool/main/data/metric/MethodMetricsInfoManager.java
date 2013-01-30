@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚ğŠÇ—‚·‚éƒNƒ‰ƒXD
+ * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -26,9 +26,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInfo>, MessageSource {
 
     /**
-     * ƒƒgƒŠƒNƒXî•ñˆê——‚ÌƒCƒeƒŒ[ƒ^‚ğ•Ô‚·D
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ä¸€è¦§ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’è¿”ã™ï¼
      * 
-     * @return ƒƒgƒŠƒNƒXî•ñ‚ÌƒCƒeƒŒ[ƒ^
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
      */
     public Iterator<MethodMetricsInfo> iterator() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -38,10 +38,10 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     }
 
     /**
-     * ˆø”‚Åw’è‚³‚ê‚½ƒƒ\ƒbƒh‚ÌƒƒgƒŠƒNƒXî•ñ‚ğ•Ô‚·D ˆø”‚Åw’è‚³‚ê‚½ƒƒ\ƒbƒh‚ÌƒƒgƒŠƒNƒXî•ñ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍC null ‚ğ•Ô‚·D
+     * å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã‚’è¿”ã™ï¼ å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ï¼Œ null ã‚’è¿”ã™ï¼
      * 
-     * @param methodInfo ‚Ù‚µ‚¢ƒƒgƒŠƒNƒXî•ñ‚Ìƒƒ\ƒbƒh
-     * @return ƒƒgƒŠƒNƒXî•ñ
+     * @param methodInfo ã»ã—ã„ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±ã®ãƒ¡ã‚½ãƒƒãƒ‰
+     * @return ãƒ¡ãƒˆãƒªã‚¯ã‚¹æƒ…å ±
      */
     public MethodMetricsInfo get(final TargetMethodInfo methodInfo) {
 
@@ -54,19 +54,19 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     }
 
     /**
-     * ƒƒgƒŠƒNƒX‚ğ“o˜^‚·‚é
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
      * 
-     * @param methodInfo ƒƒgƒŠƒNƒXŒv‘ª‘ÎÛ‚Ìƒƒ\ƒbƒhƒIƒuƒWƒFƒNƒg
-     * @param plugin ƒƒgƒŠƒNƒX‚Ìƒvƒ‰ƒOƒCƒ“
-     * @param value ƒƒgƒŠƒNƒX’l
-     * @throws MetricAlreadyRegisteredException “o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒƒgƒŠƒNƒX‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚é
+     * @param methodInfo ãƒ¡ãƒˆãƒªã‚¯ã‚¹è¨ˆæ¸¬å¯¾è±¡ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @param plugin ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @param value ãƒ¡ãƒˆãƒªã‚¯ã‚¹å€¤
+     * @throws MetricAlreadyRegisteredException ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹
      */
     public void putMetric(final TargetMethodInfo methodInfo, final AbstractPlugin plugin,
             final Number value) throws MetricAlreadyRegisteredException {
 
         MethodMetricsInfo methodMetricsInfo = this.methodMetricsInfos.get(methodInfo);
 
-        // ‘ÎÛƒƒ\ƒbƒh‚Ì methodMetricsInfo ‚ª–³‚¢ê‡‚ÍCnew ‚µ‚Ä Map ‚É“o˜^‚·‚é
+        // å¯¾è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã® methodMetricsInfo ãŒç„¡ã„å ´åˆã¯ï¼Œnew ã—ã¦ Map ã«ç™»éŒ²ã™ã‚‹
         if (null == methodMetricsInfo) {
             methodMetricsInfo = new MethodMetricsInfo(methodInfo);
             this.methodMetricsInfos.put(methodInfo, methodMetricsInfo);
@@ -76,9 +76,9 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     }
 
     /**
-     * ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚É“o˜^˜R‚ê‚ª‚È‚¢‚©‚ğƒ`ƒFƒbƒN‚·‚é
+     * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã«ç™»éŒ²æ¼ã‚ŒãŒãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
      * 
-     * @throws MetricNotRegisteredException “o˜^˜R‚ê‚ª‚ ‚Á‚½ê‡‚ÉƒXƒ[‚³‚ê‚é
+     * @throws MetricNotRegisteredException ç™»éŒ²æ¼ã‚ŒãŒã‚ã£ãŸå ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹
      */
     public void checkMetrics() throws MetricNotRegisteredException {
 
@@ -105,16 +105,16 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ–¼‚ğ•Ô‚·
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…åã‚’è¿”ã™
      * 
-     * @return ƒƒbƒZ[ƒW‘—MÒ
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
      */
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
 
     /**
-     * ƒƒ\ƒbƒhƒƒgƒŠƒNƒXƒ}ƒl[ƒWƒƒ‚ÌƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éD 
+     * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ï¼ 
      * 
      */
     public MethodMetricsInfoManager() {
@@ -124,7 +124,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     }
 
     /**
-     * ƒƒ\ƒbƒhƒƒgƒŠƒNƒX‚Ìƒ}ƒbƒv‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ãƒ¡ã‚½ãƒƒãƒ‰ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ãƒãƒƒãƒ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedMap<TargetMethodInfo, MethodMetricsInfo> methodMetricsInfos;
 }

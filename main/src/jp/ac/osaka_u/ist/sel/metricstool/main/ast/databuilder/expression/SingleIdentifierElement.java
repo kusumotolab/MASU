@@ -43,7 +43,7 @@ public class SingleIdentifierElement extends IdentifierElement {
             final boolean reference, final boolean assignment) {
         final UnresolvedVariableUsageInfo<?> localVariableUsage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
-            //•Ï”‚ª‚İ‚Â‚©‚ç‚È‚¢‚Ì‚Å‘½•ª‚Ç‚±‚©‚ÌƒtƒB[ƒ‹ƒh or Œ©‚Â‚©‚Á‚½•Ï”‚ªƒtƒB[ƒ‹ƒh‚¾‚Á‚½
+            //å¤‰æ•°ãŒã¿ã¤ã‹ã‚‰ãªã„ã®ã§å¤šåˆ†ã©ã“ã‹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ or è¦‹ã¤ã‹ã£ãŸå¤‰æ•°ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã ã£ãŸ
             localVariableUsage = new UnresolvedFieldUsageInfo(
                     UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                             .getAllAvaliableNames()), ownerUsage, name, reference, assignment,
@@ -81,7 +81,7 @@ public class SingleIdentifierElement extends IdentifierElement {
 
     @Override
     public IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager) {
-        //“Á‚É‰½‚à‚µ‚È‚¢
+        //ç‰¹ã«ä½•ã‚‚ã—ãªã„
         return this;
     }
 

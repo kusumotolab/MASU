@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 /**
  * 
- * ‚±‚Ì—áŠO‚Íƒvƒ‰ƒOƒCƒ“‚Ìƒ[ƒh‚ğ‚İC¸”s‚µ‚½‚É“Š‚°‚ç‚ê‚éD
+ * ã“ã®ä¾‹å¤–ã¯ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ­ãƒ¼ãƒ‰ã‚’è©¦ã¿ï¼Œå¤±æ•—ã—ãŸæ™‚ã«æŠ•ã’ã‚‰ã‚Œã‚‹ï¼
  * 
  * @author kou-tngt
  */

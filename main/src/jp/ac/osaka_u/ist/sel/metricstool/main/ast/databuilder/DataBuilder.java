@@ -5,13 +5,13 @@ import java.util.List;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 
 /**
- * �f�[�^�r���_�[�̃C���^�[�t�F�[�X�D
+ * データビルダーのインターフェース．
  * 
- * �r���_�̃A�N�e�B�u�C��A�N�e�B�u�̐؂�ւ�������C�ߋ��ɍ\�z�����f�[�^�̊Ǘ��C�擾�Ȃǂ��s�����\�b�h�Q����������D
+ * ビルダのアクティブ，非アクティブの切り替え処理や，過去に構築したデータの管理，取得などを行うメソッド群を実装する．
  * 
  * @author kou-tngt, t-miyake
  * 
- * @param <T> �r���h�����f�[�^�̌^
+ * @param <T> ビルドされるデータの型
  */
 /**
  * @author t-miyake
@@ -21,71 +21,71 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 public interface DataBuilder<T> extends AstVisitListener{
     
     /**
-     * �r���_���A�N�e�B�u�ɂ���D
+     * ビルダをアクティブにする．
      */
     public void activate();
     
     /**
-     * �ߋ��ɍ\�z�����f�[�^���N���A����D
+     * 過去に構築したデータをクリアする．
      */
     public void clearBuiltData();
     
     /**
-     * �r���_���A�N�e�B�u�ɂ���D
+     * ビルダを非アクティブにする．
      */
     public void deactivate();
     
     /**
-     * �ߋ��ɍ\�z���ꂽ�f�[�^�̃��X�g���擾�D
+     * 過去に構築されたデータのリストを取得．
      * 
-     * @return �ߋ��ɍ\�z���ꂽ�f�[�^�̃��X�g
+     * @return 過去に構築されたデータのリスト
      */
     public List<T> getBuiltDatas();
     
     /**
-     * �ߋ��ɍ\�z���ꂽ�f�[�^�̐����擾�D
+     * 過去に構築されたデータの数を取得．
      * 
-     * @return �ߋ��ɍ\�z���ꂽ�f�[�^�̐�
+     * @return 過去に構築されたデータの数
      */
     public int getBuiltDataCount();
     
     /**
-     * �ߋ��ɍ\�z���ꂽ�f�[�^�̂����ł��Â��f�[�^���擾�D
+     * 過去に構築されたデータのうち最も古いデータを取得．
      * 
-     * @return �ߋ��ɍ\�z���ꂽ�f�[�^�̂����ł��Â��f�[�^
+     * @return 過去に構築されたデータのうち最も古いデータ
      */
       public T getFirstBuiltData();
     
     /**
-     * �ߋ��ɍ\�z���ꂽ�f�[�^�̂����ł��V�����f�[�^���擾�D
+     * 過去に構築されたデータのうち最も新しいデータを取得．
      * 
-     * @return �ߋ��ɍ\�z���ꂽ�f�[�^�̂����ł��V�����f�[�^
+     * @return 過去に構築されたデータのうち最も新しいデータ
      */
     public T getLastBuildData();
     
     /**
-     * �X�^�b�N���Ɏc���Ă���f�[�^�ŁC�ł��V�����\�z���ꂽ�f�[�^���X�^�b�N������o���ĕԂ�.
-     * @return �X�^�b�N���Ɏc���Ă���f�[�^�ŁC�ł��V�����\�z���ꂽ�f�[�^�C�f�[�^���������null
+     * スタック内に残っているデータで，最も新しく構築されたデータをスタックから取り出して返す.
+     * @return スタック内に残っているデータで，最も新しく構築されたデータ，データが無ければnull
      */
     public T popLastBuiltData();
     
     /**
-     * �ߋ��ɍ\�z���ꂽ�f�[�^���P�ȏ㎝���Ă��邩�ǂ�����Ԃ�.
+     * 過去に構築されたデータを１つ以上持っているかどうかを返す.
      * 
-     * @return �ߋ��ɍ\�z���ꂽ�f�[�^���P�ȏ㑶�݂���ꍇ��true
+     * @return 過去に構築されたデータが１つ以上存在する場合はtrue
      */
     public boolean hasBuiltData();
     
     /**
-     * �r���_���A�N�e�B�u���ǂ����Ԃ��D
+     * ビルダがアクティブかどうか返す．
      * 
-     * @return �r���_���A�N�e�B�u�̏ꍇ��true
+     * @return ビルダがアクティブの場合はtrue
      */
     public boolean isActive();
     
     /**
-     * �r���_���������D
-     * �ߋ��ɍ\�z���ꂽ�f�[�^�͑S�č폜�����D
+     * ビルダを初期化．
+     * 過去に構築されたデータは全て削除される．
      */
     public void reset();
 }

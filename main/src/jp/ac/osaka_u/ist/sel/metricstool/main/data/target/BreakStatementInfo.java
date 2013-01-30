@@ -5,20 +5,20 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * @author t-miyake
  *
- * break•¶‚ğ•\‚·ƒNƒ‰ƒX
+ * breakæ–‡ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  */
 @SuppressWarnings("serial")
 public class BreakStatementInfo extends JumpStatementInfo {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerSpace ƒI[ƒi[ƒuƒƒbƒN
-     * @param destinationLabel ƒ‰ƒxƒ‹
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSpace ã‚ªãƒ¼ãƒŠãƒ¼ãƒ–ãƒ­ãƒƒã‚¯
+     * @param destinationLabel ãƒ©ãƒ™ãƒ«
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public BreakStatementInfo(LocalSpaceInfo ownerSpace, LabelInfo destinationLabel, int fromLine,
             int fromColumn, int toLine, int toColumn) {

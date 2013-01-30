@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒtƒB[ƒ‹ƒh‚Ìî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒXD
+ * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author higo
  */
@@ -15,10 +15,10 @@ import java.util.Set;
 public final class ExternalFieldInfo extends FieldInfo {
 
     /**
-     * –¼‘OCŒ^C’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒXî•ñ‚ğ—^‚¦‚Ä‰Šú‰»D 
+     * åå‰ï¼Œå‹ï¼Œå®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–ï¼ 
      * 
-     * @param name ƒtƒB[ƒ‹ƒh–¼
-     * @param definitionClass ƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
+     * @param name ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
+     * @param definitionClass ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public ExternalFieldInfo(final Set<ModifierInfo> modifiers, final String name,
             final ExternalClassInfo definitionClass, final boolean instance) {
@@ -27,10 +27,10 @@ public final class ExternalFieldInfo extends FieldInfo {
     }
 
     /**
-     * –¼‘O‚Æ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒXî•ñ‚ğ—^‚¦‚Ä‰Šú‰»D Œ^‚Í•s–¾D
+     * åå‰ã¨å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–ï¼ å‹ã¯ä¸æ˜ï¼
      * 
-     * @param name ƒtƒB[ƒ‹ƒh–¼
-     * @param definitionClass ƒtƒB[ƒ‹ƒh‚ğ’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX
+     * @param name ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
+     * @param definitionClass ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public ExternalFieldInfo(final String name, final ExternalClassInfo definitionClass) {
         super(new HashSet<ModifierInfo>(), name, definitionClass, true, new Random().nextInt(),
@@ -39,9 +39,9 @@ public final class ExternalFieldInfo extends FieldInfo {
     }
 
     /**
-     * –¼‘O‚ğ—^‚¦‚Ä‰Šú‰»D’è‹`‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ª•s–¾‚Èê‡‚É—p‚¢‚éD
+     * åå‰ã‚’ä¸ãˆã¦åˆæœŸåŒ–ï¼å®šç¾©ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ãŒä¸æ˜ãªå ´åˆã«ç”¨ã„ã‚‹ï¼
      * 
-     * @param name ƒtƒB[ƒ‹ƒh–¼
+     * @param name ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å
      */
     public ExternalFieldInfo(final String name) {
         super(new HashSet<ModifierInfo>(), name, ExternalClassInfo.UNKNOWN, true, new Random()

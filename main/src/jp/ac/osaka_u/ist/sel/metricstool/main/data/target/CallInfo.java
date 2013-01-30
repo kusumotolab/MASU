@@ -14,9 +14,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒƒ\ƒbƒhŒÄ‚Ño‚µCƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚Ì‹¤’Ê‚ÌeƒNƒ‰ƒX
+ * ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®å…±é€šã®è¦ªã‚¯ãƒ©ã‚¹
  * 
- * @param <T> ŒÄ‚Ño‚³‚ê‚éƒ†ƒjƒbƒg‚ÌŒ^
+ * @param <T> å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã®å‹
  * @author higo
  *
  */
@@ -24,10 +24,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInfo {
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌCollection‚©‚çŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒ†ƒjƒbƒg‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Collectionã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã®Setã‚’è¿”ã™
      * 
-     * @param calls ŒÄ‚Ño‚µ‚ÌCollection
-     * @return ŒÄ‚Ño‚³‚ê‚Ä‚¢‚éƒ†ƒjƒbƒg‚ÌSet
+     * @param calls å‘¼ã³å‡ºã—ã®Collection
+     * @return å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãƒ¦ãƒ‹ãƒƒãƒˆã®Set
      */
     public static Set<CallableUnitInfo> getCallees(
             Collection<CallInfo<? extends CallableUnitInfo>> calls) {
@@ -41,12 +41,12 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * @param callee ŒÄ‚Î‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒgC‚±‚ÌŒÄ‚Ño‚µ‚ªC”z—ñ‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ìê‡‚Ínull‚ª“ü‚Á‚Ä‚¢‚éD
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param callee å‘¼ã°ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼Œã“ã®å‘¼ã³å‡ºã—ãŒï¼Œé…åˆ—ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å ´åˆã¯nullãŒå…¥ã£ã¦ã„ã‚‹ï¼
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     CallInfo(final T callee, final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -58,16 +58,16 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
 
         this.callee = callee;
 
-        // ƒƒ\ƒbƒhŒÄ‚Ño‚µŠÖŒW‚ğ\’z
+        // ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—é–¢ä¿‚ã‚’æ§‹ç¯‰
         if (null != callee) {
             this.callee.addCaller(ownerMethod);
         }
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌÀˆø”‚ğ’Ç‰ÁDƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢D
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®å®Ÿå¼•æ•°ã‚’è¿½åŠ ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„ï¼
      * 
-     * @param argument ’Ç‰Á‚·‚éÀˆø”
+     * @param argument è¿½åŠ ã™ã‚‹å®Ÿå¼•æ•°
      */
     public final void addArgument(final ExpressionInfo argument) {
 
@@ -81,9 +81,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚ÌÀˆø”‚ğ’Ç‰ÁDƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢D
+     * ã“ã®å‘¼ã³å‡ºã—ã®å®Ÿå¼•æ•°ã‚’è¿½åŠ ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„ï¼
      * 
-     * @param arguments ’Ç‰Á‚·‚éÀˆø”
+     * @param arguments è¿½åŠ ã™ã‚‹å®Ÿå¼•æ•°
      */
     public final void addArguments(final List<ExpressionInfo> arguments) {
 
@@ -100,9 +100,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚Ìƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÌŒ^ˆø”‚ğ’Ç‰ÁDƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã®å‹å¼•æ•°ã‚’è¿½åŠ ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„
      * 
-     * @param typeArgument ’Ç‰Á‚·‚éŒ^ˆø”
+     * @param typeArgument è¿½åŠ ã™ã‚‹å‹å¼•æ•°
      */
     public final void addTypeArgument(final ReferenceTypeInfo typeArgument) {
 
@@ -115,9 +115,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚ÌŒ^ˆø”‚ğ’Ç‰ÁDƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÍŒÄ‚Ño‚¹‚È‚¢D
+     * ã“ã®å‘¼ã³å‡ºã—ã®å‹å¼•æ•°ã‚’è¿½åŠ ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã¯å‘¼ã³å‡ºã›ãªã„ï¼
      * 
-     * @param typeArguments ’Ç‰Á‚·‚éŒ^ˆø”
+     * @param typeArguments è¿½åŠ ã™ã‚‹å‹å¼•æ•°
      */
     public final void addTypeArguments(final List<ReferenceTypeInfo> typeArguments) {
 
@@ -130,27 +130,27 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚ÌÀˆø”‚ÌList‚ğ•Ô‚·D
+     * ã“ã®å‘¼ã³å‡ºã—ã®å®Ÿå¼•æ•°ã®Listã‚’è¿”ã™ï¼
      * 
-     * @return@‚±‚ÌŒÄ‚Ño‚µ‚ÌÀˆø”‚ÌList
+     * @returnã€€ã“ã®å‘¼ã³å‡ºã—ã®å®Ÿå¼•æ•°ã®List
      */
     public List<ExpressionInfo> getArguments() {
         return Collections.unmodifiableList(this.arguments);
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚ÌŒ^ˆø”‚ÌList‚ğ•Ô‚·D
+     * ã“ã®å‘¼ã³å‡ºã—ã®å‹å¼•æ•°ã®Listã‚’è¿”ã™ï¼
      * 
-     * @return ‚±‚ÌŒÄ‚Ño‚µ‚ÌŒ^ˆø”‚ÌList
+     * @return ã“ã®å‘¼ã³å‡ºã—ã®å‹å¼•æ•°ã®List
      */
     public List<ReferenceTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚É‚¨‚¯‚é•Ï”g—pŒQ‚ğ•Ô‚·
+     * ã“ã®å‘¼ã³å‡ºã—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒÄ‚Ño‚µ‚É‚¨‚¯‚é•Ï”g—pŒQ
+     * @return ã“ã®å‘¼ã³å‡ºã—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -162,9 +162,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å‘¼ã³å‡ºã—ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -180,9 +180,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚ÅŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚à‚Ì‚ğ•Ô‚·
+     * ã“ã®å‘¼ã³å‡ºã—ã§å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒÄ‚Ño‚µ‚ÅŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚à‚Ì
+     * @return ã“ã®å‘¼ã³å‡ºã—ã§å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‚‚ã®
      */
     public final T getCallee() {
         return this.callee;
@@ -195,7 +195,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     private final List<ReferenceTypeInfo> typeArguments;
 
     /**
-     * ‹ó‚ÌŒÄ‚Ño‚µ‚ÌSet‚ğ•\‚·
+     * ç©ºã®å‘¼ã³å‡ºã—ã®Setã‚’è¡¨ã™
      */
     public static final SortedSet<CallInfo<? extends CallableUnitInfo>> EmptySet = Collections
             .unmodifiableSortedSet(new TreeSet<CallInfo<? extends CallableUnitInfo>>());

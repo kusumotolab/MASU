@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒ[ƒJƒ‹—Ìˆæ(ƒƒ\ƒbƒh‚âƒƒ\ƒbƒh“àƒuƒƒbƒN)‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸ(ãƒ¡ã‚½ãƒƒãƒ‰ã‚„ãƒ¡ã‚½ãƒƒãƒ‰å†…ãƒ–ãƒ­ãƒƒã‚¯)ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -20,12 +20,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit {
 
     /**
-     * •K—v‚Èî•ñ‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‹Šô‰½
+     * å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å±…å¹¾ä½•
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumnI—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumnçµ‚äº†åˆ—
      */
     LocalSpaceInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
@@ -36,9 +36,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹å†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹å†…ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -50,9 +50,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚É•¶‚ğ’Ç‰Á‚·‚éDƒvƒ‰ƒOƒCƒ“‚©‚çŒÄ‚Ô‚Æƒ‰ƒ“ƒ^ƒCƒ€ƒGƒ‰[D
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã«æ–‡ã‚’è¿½åŠ ã™ã‚‹ï¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰å‘¼ã¶ã¨ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼ï¼
      * 
-     * @param statement ’Ç‰Á‚·‚é•¶
+     * @param statement è¿½åŠ ã™ã‚‹æ–‡
      */
     public void addStatement(final StatementInfo statement) {
 
@@ -65,9 +65,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚©‚ç•¶‚ğíœ‚·‚éD
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã‹ã‚‰æ–‡ã‚’å‰Šé™¤ã™ã‚‹ï¼
      * 
-     * @param statement íœ‚·‚é•¶
+     * @param statement å‰Šé™¤ã™ã‚‹æ–‡
      */
     public void removeStatement(final StatementInfo statement) {
 
@@ -80,9 +80,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ƒƒ\ƒbƒh‚¨‚æ‚ÑƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µˆê——‚ğ•Ô‚·
+     * ãƒ¡ã‚½ãƒƒãƒ‰ãŠã‚ˆã³ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ä¸€è¦§ã‚’è¿”ã™
      * 
-     * @return ƒƒ\ƒbƒh‚¨‚æ‚ÑƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ
+     * @return ãƒ¡ã‚½ãƒƒãƒ‰ãŠã‚ˆã³ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -94,9 +94,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚Ì•Ï”—˜—p‚ÌSet‚ğ•Ô‚·
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®å¤‰æ•°åˆ©ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚Ì•Ï”—˜—p‚ÌSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«é ˜åŸŸã®å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -108,20 +108,20 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚È‚ÇCSubsequentialBlockInfo‚ÍŠÜ‚Ü‚È‚¢
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoãªã©ï¼ŒSubsequentialBlockInfoã¯å«ã¾ãªã„
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì“à‚ÌSubsequentialBlock‚ğŠÜ‚Ş•¶î•ñ‚Ì SortedSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®å†…ã®SubsequentialBlockã‚’å«ã‚€æ–‡æƒ…å ±ã® SortedSet
      */
     public SortedSet<StatementInfo> getStatements() {
         return this.getStatementsWithoutSubsequencialBlocks();
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚È‚ÇCSubsequentialBlockInfo‚ğŠÜ‚Ş
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoãªã©ï¼ŒSubsequentialBlockInfoã‚’å«ã‚€
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì“à‚ÌSubsequentialBlock‚ğŠÜ‚Ş•¶î•ñ‚Ì SortedSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®å†…ã®SubsequentialBlockã‚’å«ã‚€æ–‡æƒ…å ±ã® SortedSet
      */
     public SortedSet<StatementInfo> getStatementsWithSubsequencialBlocks() {
         final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
@@ -151,10 +151,10 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /** 
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet ‚ğ•Ô‚·D
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚ÍŠÜ‚Ü‚ê‚È‚¢D
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet ã‚’è¿”ã™ï¼
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoã¯å«ã¾ã‚Œãªã„ï¼
      * 
-     * @return ‚±‚Ìƒ[ƒJƒ‹ƒXƒy[ƒX‚Ì’¼“à‚Ì•¶î•ñ‚Ì SortedSet
+     * @return ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹ã®ç›´å†…ã®æ–‡æƒ…å ±ã® SortedSet
      */
     public SortedSet<StatementInfo> getStatementsWithoutSubsequencialBlocks() {
         final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
@@ -163,20 +163,20 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * Š‘®‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ•Ô‚·
+     * æ‰€å±ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™
      * 
-     * @return Š‘®‚µ‚Ä‚¢‚éƒNƒ‰ƒX
+     * @return æ‰€å±ã—ã¦ã„ã‚‹ã‚¯ãƒ©ã‚¹
      */
     public final ClassInfo getOwnerClass() {
         return this.getOuterClass();
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½LocalSpace“à‚É‘¶İ‚µ‚Ä‚¢‚é‘S‚Ä‚ÌStatementInfo‚ÌSortedSet‚ğ•Ô‚·
-     * ‚±‚ê‚É‚ÍElseBlockInfo, CatchBlockInfo, FinallyBlockInfo‚ªŠÜ‚Ü‚ê‚éD
+     * ä¸ãˆã‚‰ã‚ŒãŸLocalSpaceå†…ã«å­˜åœ¨ã—ã¦ã„ã‚‹å…¨ã¦ã®StatementInfoã®SortedSetã‚’è¿”ã™
+     * ã“ã‚Œã«ã¯ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoãŒå«ã¾ã‚Œã‚‹ï¼
      * 
-     * @param localSpace ƒ[ƒJƒ‹ƒXƒy[ƒX
-     * @return —^‚¦‚ç‚ê‚½LocalSpace“à‚É‘¶İ‚µ‚Ä‚¢‚é‘S‚Ä‚ÌStatementInfo‚ÌSortedSet
+     * @param localSpace ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒšãƒ¼ã‚¹
+     * @return ä¸ãˆã‚‰ã‚ŒãŸLocalSpaceå†…ã«å­˜åœ¨ã—ã¦ã„ã‚‹å…¨ã¦ã®StatementInfoã®SortedSet
      */
     @Deprecated
     public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
@@ -196,8 +196,8 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
             if (innerStatement instanceof BlockInfo) {
                 allStatements.addAll(LocalSpaceInfo.getAllStatements((BlockInfo) innerStatement));
                 /*                
-                                // Else, Catch, Finally ‚Ì“Á•Êˆ—
-                                // FIXME ‹¤’Ê‚ÌeƒNƒ‰ƒX‚ğì‚é‚È‚Ç‚µ‚Ä‘Ì‘Îˆ‚·‚×‚«
+                                // Else, Catch, Finally ã®ç‰¹åˆ¥å‡¦ç†
+                                // FIXME å…±é€šã®è¦ªã‚¯ãƒ©ã‚¹ã‚’ä½œã‚‹ãªã©ã—ã¦ä½“å¯¾å‡¦ã™ã¹ã
                                 if (innerStatement instanceof IfBlockInfo) {
                                     final ElseBlockInfo elseStatement = ((IfBlockInfo) innerStatement).getSequentElseBlock();
                                     allStatements.add(elseStatement);
@@ -219,7 +219,7 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Ô‚·
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¿”ã™
      */
     @Override
     public UnitInfo getOuterUnit() {
@@ -228,9 +228,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğİ’è‚·‚é
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹
      * 
-     * @param ŠO‘¤‚Ìƒ†ƒjƒbƒg
+     * @param å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆ
      */
     @Override
     public void setOuterUnit(final UnitInfo outerUnit) {
@@ -244,9 +244,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ŠO‘¤‚ÌƒNƒ‰ƒX‚ğ•Ô‚·.
+     * å¤–å´ã®ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚ÌƒNƒ‰ƒX
+     * @returnã€€å¤–å´ã®ã‚¯ãƒ©ã‚¹
      */
     @Override
     public final ClassInfo getOuterClass() {
@@ -255,7 +255,7 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
 
         while (true) {
 
-            // ƒCƒ“ƒi[ƒNƒ‰ƒX‚È‚Ì‚Å‚©‚È‚ç‚¸ŠO‘¤‚ÌƒNƒ‰ƒX‚ª‚ ‚é
+            // ã‚¤ãƒ³ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ãªã®ã§ã‹ãªã‚‰ãšå¤–å´ã®ã‚¯ãƒ©ã‚¹ãŒã‚ã‚‹
             if (null == outer) {
                 throw new IllegalStateException();
             }
@@ -269,9 +269,9 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ŠO‘¤‚Ìƒƒ\ƒbƒh‚ğ•Ô‚·.
+     * å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿”ã™.
      * 
-     * @return@ŠO‘¤‚Ìƒƒ\ƒbƒh
+     * @returnã€€å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰
      */
     @Override
     public final CallableUnitInfo getOuterCallableUnit() {
@@ -297,12 +297,12 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
     }
 
     /**
-     * ‚±‚Ìƒ[ƒJƒ‹ƒXƒR[ƒv‚Ì’¼“à‚Ì•¶î•ñˆê——‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã®ç›´å†…ã®æ–‡æƒ…å ±ä¸€è¦§ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final SortedSet<StatementInfo> statements;
 
     /**
-     * ŠO‘¤‚Ìƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¤–å´ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private UnitInfo outerUnit;
 }

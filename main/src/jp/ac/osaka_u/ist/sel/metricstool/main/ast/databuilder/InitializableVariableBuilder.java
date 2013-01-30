@@ -55,12 +55,12 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.ENTER_VARIABLE_DEF)) {
 
-            // •Ï”‚Ì‰Šú‰»Ž®‚ª‚ ‚é‚©‚Ç‚¤‚©‚í‚©‚ç‚È‚¢‚Ì‚Å‚Æ‚è‚ ‚¦‚¸null‚ð‚¢‚ê‚é
+            // å¤‰æ•°ã®åˆæœŸåŒ–å¼ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚ã‹ã‚‰ãªã„ã®ã§ã¨ã‚Šã‚ãˆãšnullã‚’ã„ã‚Œã‚‹
             this.builtInitializerStack.push(null);
 
         } else if (eventType.equals(VARIABLE_STATE.ENTER_VARIABLE_INITIALIZER)) {
 
-            // ‰Šú‰»Ž®‚ª‘¶Ý‚µ‚½‚Ì‚ÅéŒ¾•”‚É“ü‚Á‚½‚Æ‚«‚ÉƒXƒ^ƒbƒN‚ÉÏ‚ñ‚¾null‚ðœ‹Ž
+            // åˆæœŸåŒ–å¼ãŒå­˜åœ¨ã—ãŸã®ã§å®£è¨€éƒ¨ã«å…¥ã£ãŸã¨ãã«ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚“ã nullã‚’é™¤åŽ»
             assert this.builtInitializerStack.peek() == null : "Illegal state: incorrect stack state";
             this.builtInitializerStack.pop();
 
@@ -85,7 +85,7 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
     }
 
     /**
-     * \’z‚µ‚½‰Šú‰»Ž®‚ðŠi”[‚µ‚Ä‚¨‚­ƒXƒ^ƒbƒN
+     * æ§‹ç¯‰ã—ãŸåˆæœŸåŒ–å¼ã‚’æ ¼ç´ã—ã¦ãŠãã‚¹ã‚¿ãƒƒã‚¯
      */
     protected final Stack<UnresolvedExpressionInfo<? extends ExpressionInfo>> builtInitializerStack = new Stack<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
 

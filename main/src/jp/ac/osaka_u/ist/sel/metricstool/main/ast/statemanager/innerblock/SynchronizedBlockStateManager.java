@@ -15,7 +15,7 @@ public class SynchronizedBlockStateManager extends InnerBlockStateManager {
 
     @Override
     protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
-        // 既にイベントが発行済みの場合，何もせず終了
+        // 譌｢縺ｫ繧､繝吶Φ繝医′逋ｺ陦梧ｸ医∩縺ｮ蝣ｴ蜷茨ｼ御ｽ輔ｂ縺帙★邨ゆｺ�
         if (super.fireStateChangeEnterEvent(event)) {
             return true;
         }
@@ -31,7 +31,7 @@ public class SynchronizedBlockStateManager extends InnerBlockStateManager {
 
     @Override
     protected boolean fireStateChangeExitEvent(AstVisitEvent event) {
-        // 既にイベントが発行済みの場合，何もせず終了
+        // 譌｢縺ｫ繧､繝吶Φ繝医′逋ｺ陦梧ｸ医∩縺ｮ蝣ｴ蜷茨ｼ御ｽ輔ｂ縺帙★邨ゆｺ�
         if (super.fireStateChangeExitEvent(event)) {
             return true;
         }

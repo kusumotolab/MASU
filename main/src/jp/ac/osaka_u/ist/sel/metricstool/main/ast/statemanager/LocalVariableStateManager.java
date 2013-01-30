@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 
 
 /**
- * ASTƒrƒWƒ^[‚ªƒ[ƒJƒ‹•Ï”’è‹`•”‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒ
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å®šç¾©éƒ¨ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
  * 
  * @author kou-tngt
  *
@@ -13,11 +13,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public class LocalVariableStateManager extends VariableDefinitionStateManager {
 
     /**
-     * ƒg[ƒNƒ“‚ªƒ[ƒJƒ‹•Ï”’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * ”»’è‚É‚Ítoken.isLocalVariableDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚é
+     * ãƒˆãƒ¼ã‚¯ãƒ³ãŒãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * åˆ¤å®šã«ã¯token.isLocalVariableDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã‚‹
      * 
-     * @param token@ƒ[ƒJƒ‹•Ï”’è‹`•”‚Ç‚¤‚©”»’è‚·‚éƒg[ƒNƒ“
-     * @return ƒ[ƒJƒ‹•Ï”’è‹`•”‚Å‚ ‚ê‚Îtrue.
+     * @param tokenã€€ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å®šç¾©éƒ¨ã©ã†ã‹åˆ¤å®šã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°å®šç¾©éƒ¨ã§ã‚ã‚Œã°true.
      */
     @Override
     protected boolean isDefinitionToken(final AstToken token) {

@@ -5,28 +5,28 @@ import java.util.EventListener;
 
 
 /**
- * i’»•ñ‚ğó‚¯æ‚é‚½‚ß‚ÌƒCƒ“ƒ^ƒtƒF[ƒX
+ * é€²æ—å ±å‘Šã‚’å—ã‘å–ã‚‹ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author kou-tngt
  *
  */
 public interface ProgressListener extends EventListener {
     /**
-     * i’»•ñ‚ª‚ ‚é‚ÆŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh
+     * é€²æ—å ±å‘ŠãŒã‚ã‚‹ã¨å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
      * 
-     * @param event i’»•ñ“à—e‚ğ•\‚·ƒCƒxƒ“ƒg
+     * @param event é€²æ—å ±å‘Šå†…å®¹ã‚’è¡¨ã™ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void updataProgress(ProgressEvent event);
 
     /**
-     * i’»•ñ‚ª“rØ‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh
-     * @param event i’»•ñ‚ª“rØ‚ê‚½‚±‚Æ‚ğ•\‚·ƒCƒxƒ“ƒg
+     * é€²æ—å ±å‘ŠãŒé€”åˆ‡ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param event é€²æ—å ±å‘ŠãŒé€”åˆ‡ã‚ŒãŸã“ã¨ã‚’è¡¨ã™ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void disconnected(ProgressEvent event);
 
     /**
-     * i’»•ñ‚ªI—¹‚·‚é‚ÆŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh
-     * @param event i’»•ñ‚ªI—¹‚µ‚½‚±‚Æ‚ğ•\‚·ƒCƒxƒ“ƒg
+     * é€²æ—å ±å‘ŠãŒçµ‚äº†ã™ã‚‹ã¨å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param event é€²æ—å ±å‘ŠãŒçµ‚äº†ã—ãŸã“ã¨ã‚’è¡¨ã™ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     public void progressEnd(ProgressEvent event);
 }

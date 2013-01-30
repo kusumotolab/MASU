@@ -11,30 +11,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆƒCƒjƒVƒƒƒ‰ƒCƒU‚Ì‹¤’Ê‚ÌeƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã®å…±é€šã®è¦ªã‚¯ãƒ©ã‚¹
  * <br>
- * ƒCƒjƒVƒƒƒ‰ƒCƒU‚Æ‚ÍCƒXƒ^ƒeƒBƒbƒNEƒCƒjƒVƒƒƒ‰ƒCƒU‚âƒCƒ“ƒXƒ^ƒ“ƒXEƒCƒjƒVƒƒƒ‰ƒCƒU@‚È‚Ç‚Å‚ ‚é 
+ * ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã¨ã¯ï¼Œã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ»ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã‚„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ»ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶ã€€ãªã©ã§ã‚ã‚‹ 
  * 
- * @param <T> ‰ğŒˆÏ‚İƒCƒjƒVƒƒƒ‰ƒCƒUî•ñ‚ÌŒ^
- * @author@g-yamada
+ * @param <T> è§£æ±ºæ¸ˆã¿ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚¶æƒ…å ±ã®å‹
+ * @authorã€€g-yamada
  *
  */
 public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> extends
         UnresolvedCallableUnitInfo<T> {
 
     /**
-     * Š—LƒNƒ‰ƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedInitializerInfo(final UnresolvedClassInfo ownerClass) {
         super(ownerClass);
     }
 
     /**
-     * Š—LƒNƒ‰ƒX‚ğ—^‚¦‚ÄCƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * æ‰€æœ‰ã‚¯ãƒ©ã‚¹ã‚’ä¸ãˆã¦ï¼Œã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param ownerClass Š—LƒNƒ‰ƒX
+     * @param ownerClass æ‰€æœ‰ã‚¯ãƒ©ã‚¹
      */
     public UnresolvedInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
             int fromColumn, int toLine, int toColumn) {
@@ -42,17 +42,17 @@ public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> exten
     }
 
     /**
-     * –¼‘O‰ğŒˆ‚ğs‚¤
+     * åå‰è§£æ±ºã‚’è¡Œã†
      */
     @Override
     public T resolve(final TargetClassInfo usingClass, final CallableUnitInfo usingMethod,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }

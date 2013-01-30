@@ -14,10 +14,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedP
 
 
 /**
- * Š‡ŒÊ®î•ñ‚ğ\’z‚·‚éƒNƒ‰ƒX 
+ * æ‹¬å¼§å¼æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ 
  * <br>
- * ®‚ğ\¬‚·‚é—v‘f‚Å‚Í‚ ‚é‚ªC®‚Ì\•¶–Øî•ñ‚É‰e‹¿‚ğ—^‚¦‚Ä‚Í‚¢‚¯‚È‚¢‚½‚ßC 
- * {@link ExpressionBuilder}‚ÌqƒNƒ‰ƒX‚É‚Í‚µ‚Ä‚¢‚È‚¢D
+ * å¼ã‚’æ§‹æˆã™ã‚‹è¦ç´ ã§ã¯ã‚ã‚‹ãŒï¼Œå¼ã®æ§‹æ–‡æœ¨æƒ…å ±ã«å½±éŸ¿ã‚’ä¸ãˆã¦ã¯ã„ã‘ãªã„ãŸã‚ï¼Œ 
+ * {@link ExpressionBuilder}ã®å­ã‚¯ãƒ©ã‚¹ã«ã¯ã—ã¦ã„ãªã„ï¼
  * 
  * @author g-yamada
  * 
@@ -26,7 +26,7 @@ public class ParenthesesExpressionBuilder extends
         StateDrivenDataBuilder<UnresolvedParenthesesExpressionInfo> {
 
     /**
-     * ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
      * @param expressionManager ExpressionElementManager
      * @param buildDataManager 
@@ -49,7 +49,7 @@ public class ParenthesesExpressionBuilder extends
     }
 
     /**
-     * exit ‚µ‚½ƒm[ƒh‚ªŠ‡ŒÊ®‚È‚çCUnresolvedParenthesesExpressionInfo‚ğ‚Â‚­‚é–½—ß‚ğ‚·‚é
+     * exit ã—ãŸãƒãƒ¼ãƒ‰ãŒæ‹¬å¼§å¼ãªã‚‰ï¼ŒUnresolvedParenthesesExpressionInfoã‚’ã¤ãã‚‹å‘½ä»¤ã‚’ã™ã‚‹
      */
     @Override
     public void exited(AstVisitEvent e) throws ASTParseException {
@@ -62,7 +62,7 @@ public class ParenthesesExpressionBuilder extends
     }
 
     /**
-     * –½—ß‚³‚ê‚ÄÀÛ‚ÉUnresolvedParenthesesExpressionInfo‚ğ‚Â‚­‚é
+     * å‘½ä»¤ã•ã‚Œã¦å®Ÿéš›ã«UnresolvedParenthesesExpressionInfoã‚’ã¤ãã‚‹
      */
     protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
         final ExpressionElement parentheticElement = expressionManager.popExpressionElement();
@@ -70,7 +70,7 @@ public class ParenthesesExpressionBuilder extends
                 .getUsage();
 
         if (null != parentheticExpression) {
-            // expressionAnalyzeStack‚Ì“ª‚Ì—v‘f‚ğƒ|ƒbƒv‚µ‚ÄC‚©‚í‚è‚ÉŠ‡ŒÊ®‚ğƒvƒbƒVƒ…‚·‚é
+            // expressionAnalyzeStackã®é ­ã®è¦ç´ ã‚’ãƒãƒƒãƒ—ã—ã¦ï¼Œã‹ã‚ã‚Šã«æ‹¬å¼§å¼ã‚’ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
             final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
                     parentheticExpression);
             paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
@@ -80,7 +80,7 @@ public class ParenthesesExpressionBuilder extends
             paren.setToColumn(e.getEndColumn());
             expressionManager.pushExpressionElement(new UsageElement(paren));
         } else if (parentheticElement instanceof IdentifierElement) {
-            // (a) ‚Ì‚æ‚¤‚É¯•Êq‚Ì‚İ‚ğˆÍ‚ŞŠ‡ŒÊ‚Ìê‡CUsage‚ª–¢‰ğŒˆ‚Å‚ ‚é‚½‚ßŠ‡ŒÊElement‚ğì‚èpush‚·‚é
+            // (a) ã®ã‚ˆã†ã«è­˜åˆ¥å­ã®ã¿ã‚’å›²ã‚€æ‹¬å¼§ã®å ´åˆï¼ŒUsageãŒæœªè§£æ±ºã§ã‚ã‚‹ãŸã‚æ‹¬å¼§Elementã‚’ä½œã‚Špushã™ã‚‹
             expressionManager.pushExpressionElement(new ParenthesizedIdentifierElement(
                     (IdentifierElement) parentheticElement, e.getStartLine(), e.getStartColumn(), e
                             .getEndLine(), e.getEndColumn()));

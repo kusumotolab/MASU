@@ -52,8 +52,8 @@ public class JavaByteCodeParser implements ClassVisitor {
             this.classInfo.addModifier(modifier);
         }
 
-        // signature ‚ªnull‚Å‚È‚¢‚Æ‚«
-        // ‚Â‚Ü‚èCŒ^ƒpƒ‰ƒ[ƒ^‚Ìg—p‚ª‚ ‚é‚Æ‚«
+        // signature ãŒnullã§ãªã„ã¨ã
+        // ã¤ã¾ã‚Šï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä½¿ç”¨ãŒã‚ã‚‹ã¨ã
         if (null != signature) {
             final String[] typeParameters = this.getTypeParameters(signature);
             for (final String typeParameter : typeParameters) {
@@ -66,8 +66,8 @@ public class JavaByteCodeParser implements ClassVisitor {
             }
         }
 
-        // signature ‚ªnull‚Ì‚Æ‚«
-        // ‚Â‚Ü‚èCŒ^ƒpƒ‰ƒ[ƒ^‚Ìg—p‚ª‚È‚¢‚Æ‚«
+        // signature ãŒnullã®ã¨ã
+        // ã¤ã¾ã‚Šï¼Œå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä½¿ç”¨ãŒãªã„ã¨ã
         else {
             {
                 final StringBuilder superType = new StringBuilder();
@@ -134,7 +134,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     @Override
     public void visitInnerClass(final String name, final String outerName, final String innerName,
             final int value) {
-        // “à•”ƒNƒ‰ƒX‚ğ’Ç‰Á‚·‚éˆ—‚ª•K—v
+        // å†…éƒ¨ã‚¯ãƒ©ã‚¹ã‚’è¿½åŠ ã™ã‚‹å‡¦ç†ãŒå¿…è¦
     }
 
     @Override
@@ -217,7 +217,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * ˆø”‚Å—^‚¦‚ç‚ê‚½Cüq‚Ìˆê——‚ÉŠÜ‚Ü‚ê‚éCüq‚ğ•Ô‚·
+     * å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸä¿®é£¾å­ã®ä¸€è¦§ã«å«ã¾ã‚Œã‚‹ä¿®é£¾å­ã‚’è¿”ã™
      * 
      * @param access
      * @return
@@ -226,7 +226,7 @@ public class JavaByteCodeParser implements ClassVisitor {
 
         final List<String> modifiers = new LinkedList<String>();
 
-        // ‚±‚±‚©‚çCüq
+        // ã“ã“ã‹ã‚‰ä¿®é£¾å­
         if (0 != (access & Opcodes.ACC_PUBLIC)) {
             modifiers.add(JavaPredefinedModifierInfo.PUBLIC_STRING);
         }
@@ -259,7 +259,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒƒ\ƒbƒh‚Ìsignature‚ÉŠÜ‚Ü‚ê‚éŒ^ƒpƒ‰ƒ[ƒ^‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®signatureã«å«ã¾ã‚Œã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿”ã™
      * 
      * @param signature
      * @return
@@ -278,7 +278,7 @@ public class JavaByteCodeParser implements ClassVisitor {
             throw new IllegalArgumentException();
         }
 
-        // ƒWƒFƒlƒŠƒNƒXî•ñ‚ğ1‚Â‚P‚Â•ª‰ğ‚µCSet‚É“ü‚ê‚é
+        // ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹æƒ…å ±ã‚’1ã¤ï¼‘ã¤åˆ†è§£ã—ï¼ŒSetã«å…¥ã‚Œã‚‹
         final List<String> typeParameters = new LinkedList<String>();
         int startIndex = 1;
         int endIndex = 0;
@@ -290,7 +290,7 @@ public class JavaByteCodeParser implements ClassVisitor {
 
             else if ('>' == signature.charAt(endIndex)) {
                 nestLevel--;
-                if (0 == nestLevel) { // ƒWƒFƒlƒŠƒNƒX•”•ª‚ªI‚í‚Á‚½‚Ì‚Åƒ‹[ƒvˆ—‚ğI—¹‚·‚é
+                if (0 == nestLevel) { // ã‚¸ã‚§ãƒãƒªã‚¯ã‚¹éƒ¨åˆ†ãŒçµ‚ã‚ã£ãŸã®ã§ãƒ«ãƒ¼ãƒ—å‡¦ç†ã‚’çµ‚äº†ã™ã‚‹
                     break;
                 }
             }
@@ -308,7 +308,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒƒ\ƒbƒh‚Ìsignature‚ÉŠÜ‚Ü‚ê‚éˆø”‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®signatureã«å«ã¾ã‚Œã‚‹å¼•æ•°ã‚’è¿”ã™
      * 
      * @param signature
      * @return
@@ -327,7 +327,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒƒ\ƒbƒh‚Ìsignature‚ÉŠÜ‚Ü‚ê‚é•Ô‚è’l‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®signatureã«å«ã¾ã‚Œã‚‹è¿”ã‚Šå€¤ã‚’è¿”ã™
      * 
      * @param signature
      * @return
@@ -345,7 +345,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒƒ\ƒbƒh‚Ìsignature‚ÉŠÜ‚Ü‚ê‚éƒXƒ[‚³‚ê‚é—áŠO‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®signatureã«å«ã¾ã‚Œã‚‹ã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ä¾‹å¤–ã‚’è¿”ã™
      * 
      * @param signature
      * @return
@@ -365,7 +365,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒƒ\ƒbƒh‚Ìsignature‚ÉŠÜ‚Ü‚ê‚éƒX[ƒp[ƒ^ƒCƒv‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ã®signatureã«å«ã¾ã‚Œã‚‹ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
      * 
      * @param signature
      * @return
@@ -373,7 +373,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     private String[] getSuperTypes(final String signature) {
 
         int startIndex = 0;
-        if (signature.startsWith("<")) { // Œ^ƒpƒ‰ƒ[ƒ^‚ª‚ ‚éê‡‚Í“Ç‚İ”ò‚Î‚·ˆ—‚ª•K—v
+        if (signature.startsWith("<")) { // å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã‚ã‚‹å ´åˆã¯èª­ã¿é£›ã°ã™å‡¦ç†ãŒå¿…è¦
             for (int index = 0, nestLevel = 0; index < signature.length(); index++) {
 
                 if ('<' == signature.charAt(index)) {

@@ -8,9 +8,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ASTƒrƒWƒ^[‚ª‰½‚ç‚©‚Ì•Ï”’è‹`•”‚Æ‚»‚Ì‰Šú‰»•”‚É“’B‚µ‚½‚Éó‘Ô‘JˆÚ‚ğ‹N‚±‚·ƒXƒe[ƒgƒ}ƒVƒ“‚ğÀ‘•‚·‚é’ŠÛƒNƒ‰ƒX.
+ * ASTãƒ“ã‚¸ã‚¿ãƒ¼ãŒä½•ã‚‰ã‹ã®å¤‰æ•°å®šç¾©éƒ¨ã¨ãã®åˆæœŸåŒ–éƒ¨ã«åˆ°é”ã—ãŸæ™‚ã«çŠ¶æ…‹é·ç§»ã‚’èµ·ã“ã™ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã‚’å®Ÿè£…ã™ã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹.
  * 
- * ƒTƒuƒNƒ‰ƒX‚Í{@link #isDefinitionToken(AstToken)}ƒƒ\ƒbƒh‚ğÀ‘•‚µC‘Î‰‚·‚é•Ï”’è‹`•”ƒm[ƒh‚ğ•\‚·ƒg[ƒNƒ“‚ğw’è‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢.
+ * ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¯{@link #isDefinitionToken(AstToken)}ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®Ÿè£…ã—ï¼Œå¯¾å¿œã™ã‚‹å¤‰æ•°å®šç¾©éƒ¨ãƒãƒ¼ãƒ‰ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æŒ‡å®šã—ãªã‘ã‚Œã°ãªã‚‰ãªã„.
  * @author kou-tngt
  *
  */
@@ -22,7 +22,7 @@ public abstract class VariableDefinitionStateManager extends
     }
 
     /**
-     * ó‘Ô•Ï‰»‚Ìí—Ş‚ğ•\‚·enum
+     * çŠ¶æ…‹å¤‰åŒ–ã®ç¨®é¡ã‚’è¡¨ã™enum
      * 
      * @author kou-tngt
      *
@@ -32,20 +32,20 @@ public abstract class VariableDefinitionStateManager extends
     }
 
     /**
-     * ƒrƒWƒ^[‚ªASTƒm[ƒh‚Ì’†‚É“ü‚Á‚½‚ÌƒCƒxƒ“ƒg’Ê’m‚ğó‚¯æ‚èC
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒASTãƒãƒ¼ãƒ‰ã®ä¸­ã«å…¥ã£ãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆé€šçŸ¥ã‚’å—ã‘å–ã‚Šï¼Œ
      * 
-     * @param event ƒCƒxƒ“ƒg
+     * @param event ã‚¤ãƒ™ãƒ³ãƒˆ
      */
     @Override
     public void entered(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
         if (isStateChangeTriggerEvent(event)) {
-            //Œ»İ‚Ìó‘Ô‚ğ•Û‘¶
+            //ç¾åœ¨ã®çŠ¶æ…‹ã‚’ä¿å­˜
             super.entered(event);
 
             if (this.isDefinitionToken(token)) {
-                //’è‹`•”‚É“ü‚Á‚½‚Ì‚Åó‘Ô‘JˆÚ‚ğ‚µ‚ÄƒCƒxƒ“ƒg‚ğ”­s‚·‚é
+                //å®šç¾©éƒ¨ã«å…¥ã£ãŸã®ã§çŠ¶æ…‹é·ç§»ã‚’ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
                 this.setState(STATE.DEFINITION);
                 this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_DEF, event);
             } /*else if (this.isInDefinition() && token.isAnnotation()) {
@@ -53,9 +53,9 @@ public abstract class VariableDefinitionStateManager extends
               }*/
 
             else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
-                //ƒAƒmƒe[ƒVƒ‡ƒ““à‚Ì‘ã“ü‰‰Zq‚Í–³‹
+                //ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³å†…ã®ä»£å…¥æ¼”ç®—å­ã¯ç„¡è¦–
                 if (!event.getParentToken().isAnnotationString()) {
-                    //’è‹`•”“à‚É‘ã“ü‰‰Zq‚ª‚ ‚Á‚½‚Ì‚ÅC‰Šú‰»•”‚Ö‚Æí‘Ô‘JˆÚ‚ğ‚µ‚ÄƒCƒxƒ“ƒg‚ğ”­s‚·‚é                    
+                    //å®šç¾©éƒ¨å†…ã«ä»£å…¥æ¼”ç®—å­ãŒã‚ã£ãŸã®ã§ï¼ŒåˆæœŸåŒ–éƒ¨ã¸ã¨å¸¸æ…‹é·ç§»ã‚’ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹                    
                     this.setState(STATE.INITIALIZER);
                     this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_INITIALIZER, event);
                 }
@@ -71,16 +71,16 @@ public abstract class VariableDefinitionStateManager extends
         final AstToken token = event.getToken();
 
         if (isStateChangeTriggerEvent(event)) {
-            //ó‘Ô‚ğ•œŒ³
+            //çŠ¶æ…‹ã‚’å¾©å…ƒ
             super.exited(event);
 
             if (this.isDefinitionToken(token)) {
-                //’è‹`•”‚©‚ço‚½‚Ì‚ÅƒCƒxƒ“ƒg‚ğ”­s‚·‚é
+                //å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
                 this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_DEF, event);
             } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
-                //ƒAƒmƒe[ƒVƒ‡ƒ““à‚Ì‘ã“ü‰‰Zq‚Í–³‹
+                //ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³å†…ã®ä»£å…¥æ¼”ç®—å­ã¯ç„¡è¦–
                 if (!event.getParentToken().isAnnotationString()) {
-                    //‰Šú‰»•”‚©‚ço‚½‚Ì‚ÅƒCƒxƒ“ƒg‚ğ”­s‚·‚é
+                    //åˆæœŸåŒ–éƒ¨ã‹ã‚‰å‡ºãŸã®ã§ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹
                     this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_INITIALIZER, event);
                 }
             }
@@ -88,35 +88,35 @@ public abstract class VariableDefinitionStateManager extends
     }
 
     /**
-     * ƒrƒWƒ^[‚ª‘Î‰‚·‚é•Ï”’è‹`•”‚É‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * @return •Ï”’è‹`•”‚É‚¢‚éê‡‚Ítrue
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒå¯¾å¿œã™ã‚‹å¤‰æ•°å®šç¾©éƒ¨ã«ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * @return å¤‰æ•°å®šç¾©éƒ¨ã«ã„ã‚‹å ´åˆã¯true
      */
     public boolean isInDefinition() {
         return STATE.DEFINITION == this.getState();
     }
 
     /**
-     * ƒrƒWƒ^[‚ª‘Î‰‚·‚é•Ï”‰Šú‰»•”‚É‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·.
-     * @return@•Ï”‰Šú‰»•”‚É‚¢‚éê‡‚Ítrue
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒå¯¾å¿œã™ã‚‹å¤‰æ•°åˆæœŸåŒ–éƒ¨ã«ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™.
+     * @returnã€€å¤‰æ•°åˆæœŸåŒ–éƒ¨ã«ã„ã‚‹å ´åˆã¯true
      */
     public boolean isInInitializer() {
         return STATE.INITIALIZER == this.getState();
     }
 
     /**
-     * ƒg[ƒNƒ“‚ª‘Î‰‚·‚é•Ï”’è‹`•”‚©‚Ç‚¤‚©‚ğ•Ô‚·’ŠÛƒƒ\ƒbƒhD
-     * ‚±‚Ìƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚·‚é‚±‚Æ‚ÅCƒTƒuƒNƒ‰ƒX‚ª‘Î‰‚·‚é•Ï”‚Ìí—Ş‚ğw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚éD
+     * ãƒˆãƒ¼ã‚¯ãƒ³ãŒå¯¾å¿œã™ã‚‹å¤‰æ•°å®šç¾©éƒ¨ã‹ã©ã†ã‹ã‚’è¿”ã™æŠ½è±¡ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹ã“ã¨ã§ï¼Œã‚µãƒ–ã‚¯ãƒ©ã‚¹ãŒå¯¾å¿œã™ã‚‹å¤‰æ•°ã®ç¨®é¡ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ï¼
      * 
-     * @param token@•Ï”’è‹`•”‚©‚Ç‚¤‚©”»’è‚·‚éƒg[ƒNƒ“
-     * @return •Ï”’è‹`•”‚Å‚ ‚ê‚Îtrue.
+     * @param tokenã€€å¤‰æ•°å®šç¾©éƒ¨ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return å¤‰æ•°å®šç¾©éƒ¨ã§ã‚ã‚Œã°true.
      */
     protected abstract boolean isDefinitionToken(AstToken token);
 
     /**
-     * ‘ã“ü‰‰ZqC‚Ü‚½‚Í•Ï”’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚©‚Ç‚¤‚©‚ğ•Ô‚·.
+     * ä»£å…¥æ¼”ç®—å­ï¼Œã¾ãŸã¯å¤‰æ•°å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã©ã†ã‹ã‚’è¿”ã™.
      * 
-     * @param ‘ã“ü‰‰ZqC‚Ü‚½‚Í•Ï”’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éƒg[ƒNƒ“
-     * @return ‘ã“ü‰‰ZqC‚Ü‚½‚Í•Ï”’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
+     * @param ä»£å…¥æ¼”ç®—å­ï¼Œã¾ãŸã¯å¤‰æ•°å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒˆãƒ¼ã‚¯ãƒ³
+     * @return ä»£å…¥æ¼”ç®—å­ï¼Œã¾ãŸã¯å¤‰æ•°å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°trueã‚’è¿”ã™
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
     @Override
@@ -127,7 +127,7 @@ public abstract class VariableDefinitionStateManager extends
     }
 
     /**
-     * ó‘Ô‚ğ•\‚·enum
+     * çŠ¶æ…‹ã‚’è¡¨ã™enum
      * @author kou-tngt
      */
     protected static enum STATE {

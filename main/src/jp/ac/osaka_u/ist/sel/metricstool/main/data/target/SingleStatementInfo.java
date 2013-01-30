@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ’P•¶‚Ìî•ñ‚ğ•Û—L‚·‚é’ŠÛƒNƒ‰ƒXD
+ * å˜æ–‡ã®æƒ…å ±ã‚’ä¿æœ‰ã™ã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author t-miyake
  *
@@ -14,13 +14,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class SingleStatementInfo implements StatementInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param ownerSpace •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param ownerSpace æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public SingleStatementInfo(final LocalSpaceInfo ownerSpace, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -118,27 +118,27 @@ public abstract class SingleStatementInfo implements StatementInfo {
     }
 
     /**
-     * •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ‚ğ•\‚·•Ï”
+     * æ–‡ã‚’ç›´æ¥æ‰€æœ‰ã™ã‚‹ç©ºé–“ã‚’è¡¨ã™å¤‰æ•°
      */
     private final LocalSpaceInfo ownerSpace;
 
     /**
-     * ŠJns‚ğ•\‚·•Ï”
+     * é–‹å§‹è¡Œã‚’è¡¨ã™å¤‰æ•°
      */
     private final int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•\‚·•Ï”
+     * é–‹å§‹åˆ—ã‚’è¡¨ã™å¤‰æ•°
      */
     private final int fromColumn;
 
     /**
-     * I—¹s‚ğ•\‚·•Ï”
+     * çµ‚äº†è¡Œã‚’è¡¨ã™å¤‰æ•°
      */
     private final int toLine;
 
     /**
-     * I—¹—ñ‚ğ•\‚·•Ï”
+     * çµ‚äº†åˆ—ã‚’è¡¨ã™å¤‰æ•°
      */
     private final int toColumn;
 

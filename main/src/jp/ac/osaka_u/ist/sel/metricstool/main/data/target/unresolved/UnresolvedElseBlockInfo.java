@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆ else ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±º else ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -21,10 +21,10 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
         UnresolvedSubsequentialBlockInfo<UnresolvedIfBlockInfo> {
 
     /**
-     * ŠO‘¤‚ÌƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ—^‚¦‚ÄCelse ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
+     * å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¸ãˆã¦ï¼Œelse ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’åˆæœŸåŒ–
      * 
      * @param ownerIfBlock
-     * @param outerSpace ŠO‘¤‚ÌƒuƒƒbƒN
+     * @param outerSpace å¤–å´ã®ãƒ–ãƒ­ãƒƒã‚¯
      */
     public UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock,
             final UnresolvedLocalSpaceInfo<?> outerSpace) {
@@ -38,28 +38,28 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆ else ƒuƒƒbƒN‚ğ‰ğŒˆ‚·‚é
+     * ã“ã®æœªè§£æ±º else ãƒ–ãƒ­ãƒƒã‚¯ã‚’è§£æ±ºã™ã‚‹
      * 
-     * @param usingClass Š‘®ƒNƒ‰ƒX
-     * @param usingMethod Š‘®ƒƒ\ƒbƒh
-     * @param classInfoManager —p‚¢‚éƒNƒ‰ƒXƒ}ƒl[ƒWƒƒ
-     * @param fieldInfoManager —p‚¢‚éƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ
-     * @param methodInfoManager —p‚¢‚éƒƒ\ƒbƒhƒ}ƒl[ƒWƒƒ
+     * @param usingClass æ‰€å±ã‚¯ãƒ©ã‚¹
+     * @param usingMethod æ‰€å±ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param classInfoManager ç”¨ã„ã‚‹ã‚¯ãƒ©ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param fieldInfoManager ç”¨ã„ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
+     * @param methodInfoManager ç”¨ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£
      */
     @Override
     public ElseBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // ‚±‚Ì else ƒuƒƒbƒN‚ÌˆÊ’uî•ñ‚ğæ“¾
+        // ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã®ä½ç½®æƒ…å ±ã‚’å–å¾—
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -67,7 +67,7 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
 
         this.resolvedInfo = new ElseBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
-        // ‚±‚Ì else ƒuƒƒbƒN‚ª‘®‚·‚é if ƒuƒƒbƒN‚ğæ“¾
+        // ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ãŒå±ã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’å–å¾—
         final UnresolvedIfBlockInfo unresolvedOwnerIfBlock = this.getOwnerBlock();
         final IfBlockInfo ownerIfBlock = unresolvedOwnerIfBlock.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -82,11 +82,11 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Ô‚·
-     * ‚±‚Ìƒƒ\ƒbƒh‚Í«—ˆ”p~—\’è‚Å‚ ‚èCg—p‚Í„§‚³‚ê‚È‚¢
-     * {@link UnresolvedElseBlockInfo#getOwnerBlock()}‚ğg—p‚·‚×‚«‚Å‚ ‚éD
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å°†æ¥å»ƒæ­¢äºˆå®šã§ã‚ã‚Šï¼Œä½¿ç”¨ã¯æ¨å¥¨ã•ã‚Œãªã„
+     * {@link UnresolvedElseBlockInfo#getOwnerBlock()}ã‚’ä½¿ç”¨ã™ã¹ãã§ã‚ã‚‹ï¼
      * 
-     * @return ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN
+     * @return ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯
      * @deprecated
      */
     public UnresolvedIfBlockInfo getOwnerIfBlock() {
@@ -94,9 +94,9 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Ô‚·
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN
+     * @return ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯
      */
     @Override
     public UnresolvedIfBlockInfo getOwnerBlock() {
@@ -104,7 +104,7 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
     }
 
     /**
-     * ‚±‚Ì else ƒuƒƒbƒN‚Æ‘Î‰‚·‚é if ƒuƒƒbƒN‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * ã“ã® else ãƒ–ãƒ­ãƒƒã‚¯ã¨å¯¾å¿œã™ã‚‹ if ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final UnresolvedIfBlockInfo ownerIfBlock;
 

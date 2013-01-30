@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * CSVƒtƒ@ƒCƒ‹‚É‘‚«o‚·ƒNƒ‰ƒX‚ªŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒCƒ“ƒ^[ƒtƒF[ƒX
+ * CSVãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  * 
  * @author higo
  *
@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public interface CSVWriter {
 
     /**
-     * CSVƒtƒ@ƒCƒ‹‚ÌƒZƒpƒŒ[ƒ^
+     * CSVãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
      */
     char SEPARATOR = ',';
 

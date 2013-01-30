@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 
 /**
- * ���̗�O�̓v���O�C���̍\�������L�^����XML�t�@�C���̌`�����AXML�̍\���㐳�����Ȃ��ꍇ��
- * ����̃t�H�[�}�b�g�ɏ]���Ă��Ȃ��ꍇ�C�K�v�ȏ�񂪌����Ă���ꍇ�ɓ�������D
+ * この例外はプラグインの構成情報を記録したXMLファイルの形式が、XMLの構文上正しくない場合や
+ * 既定のフォーマットに従っていない場合，必要な情報が欠けている場合に投げられる．
  * 
  * @author kou-tngt
  */

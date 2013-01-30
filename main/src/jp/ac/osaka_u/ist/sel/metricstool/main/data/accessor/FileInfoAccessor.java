@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
 
 /**
- * ‚±‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ÍCƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒhŒS‚ğ’ñ‹Ÿ‚·‚éD
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã¯ï¼Œãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰éƒ¡ã‚’æä¾›ã™ã‚‹ï¼
  * 
  * @author higo
  *
@@ -14,8 +14,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 public interface FileInfoAccessor extends Iterable<FileInfo>{
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return ‘ÎÛƒtƒ@ƒCƒ‹‚Ì”
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ•°
      */
     public int getFileCount();
 }

@@ -8,9 +8,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
 
 /**
- * ‘—M‚³‚ê‚½ƒƒbƒZ[ƒW‚ğƒŠƒXƒi[‚É‘—‚è“Í‚¯‚éƒNƒ‰ƒX
+ * é€ä¿¡ã•ã‚ŒãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒªã‚¹ãƒŠãƒ¼ã«é€ã‚Šå±Šã‘ã‚‹ã‚¯ãƒ©ã‚¹
  * 
- * ƒƒbƒZ[ƒWƒ^ƒCƒv–ˆ‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚·‚é.
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—æ¯ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹.
  * 
  * @author kou-tngt
  *
@@ -18,10 +18,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 public class MessagePool {
 
     /**
-     * ƒ^ƒCƒv‚²‚Æ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·ƒƒ\ƒbƒh
-     * @param type æ“¾‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒ^ƒCƒv
-     * @return type‚É‘Î‰‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws IllegalArgumentException type—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+     * ã‚¿ã‚¤ãƒ—ã”ã¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param type å–å¾—ã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚¿ã‚¤ãƒ—
+     * @return typeã«å¯¾å¿œã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws IllegalArgumentException typeç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
      */
     public static MessagePool getInstance(final MESSAGE_TYPE type) {
         for (final MessagePool instance : INSTANCES) {
@@ -29,16 +29,16 @@ public class MessagePool {
                 return instance;
             }
         }
-        //ƒƒbƒZ[ƒWƒ^ƒCƒv–ˆ‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ª—pˆÓ‚µ‚Ä‚ ‚é‚Í‚¸‚È‚Ì‚ÅC‚±‚±‚É—ˆ‚é‚Ì‚Í‚ ‚è‚¦‚È‚¢
+        //ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—æ¯ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”¨æ„ã—ã¦ã‚ã‚‹ã¯ãšãªã®ã§ï¼Œã“ã“ã«æ¥ã‚‹ã®ã¯ã‚ã‚Šãˆãªã„
         assert (false) : "Illegal state : unknown message type " + type.name() + " is found.";
 
         throw new IllegalArgumentException("unknown message type " + type.name());
     }
 
     /**
-     * ƒŠƒXƒi[‚ğ’Ç‰Á‚·‚é
-     * @param listener ’Ç‰Á‚µ‚½‚¢ƒŠƒXƒi[
-     * @throws NullPointerException listener‚ªnull‚Ìê‡
+     * ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹
+     * @param listener è¿½åŠ ã—ãŸã„ãƒªã‚¹ãƒŠãƒ¼
+     * @throws NullPointerException listenerãŒnullã®å ´åˆ
      */
     public void addMessageListener(final MessageListener listener) {
         if (null == listener) {
@@ -50,16 +50,16 @@ public class MessagePool {
     }
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª‘Î‰‚·‚éƒƒbƒZ[ƒWƒ^ƒCƒv‚ğ•Ô‚·
-     * @return ƒƒbƒZ[ƒWƒ^ƒCƒv
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå¯¾å¿œã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
+     * @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—
      */
     public MESSAGE_TYPE getMessageType() {
         return this.messageType;
     }
 
     /**
-     * ƒŠƒXƒi[‚ğíœ‚·‚é
-     * @param listener íœ‚·‚éƒŠƒXƒi[
+     * ãƒªã‚¹ãƒŠãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
+     * @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠãƒ¼
      */
     public void removeMessageListener(final MessageListener listener) {
         if (null != listener) {
@@ -70,10 +70,10 @@ public class MessagePool {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğ‘—M‚·‚éƒƒ\ƒbƒh
-     * @param source ƒƒbƒZ[ƒW‘—MÒ
-     * @param message ƒƒbƒZ[ƒW
-     * @throws NullPointerException source‚Ü‚½‚Ímessage‚ªnull‚Ìê‡
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param source ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
+     * @param message ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+     * @throws NullPointerException sourceã¾ãŸã¯messageãŒnullã®å ´åˆ
      */
     public void sendMessage(final MessageSource source, final String message) {
         if (null == message) {
@@ -87,9 +87,9 @@ public class MessagePool {
     }
 
     /**
-     * ƒƒbƒZ[ƒWƒCƒxƒ“ƒg‚ğƒŠƒXƒi[‚É‘—M‚·‚éƒƒ\ƒbƒh
-     * @param event ‘—M‚·‚éƒCƒxƒ“ƒg
-     * @throws NullPointerException event‚ªnull‚Ìê‡
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¤ãƒ™ãƒ³ãƒˆã‚’ãƒªã‚¹ãƒŠãƒ¼ã«é€ä¿¡ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param event é€ä¿¡ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆ
+     * @throws NullPointerException eventãŒnullã®å ´åˆ
      */
     private void fireMessage(final MessageEvent event) {
         if (null == event) {
@@ -104,7 +104,7 @@ public class MessagePool {
     }
 
     /**
-     * ƒƒbƒZ[ƒWƒ^ƒCƒv‚É‘Î‰‚·‚éƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚·‚éprivateƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—ã«å¯¾å¿œã™ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹privateã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @param type
      */
     private MessagePool(final MESSAGE_TYPE type) {
@@ -112,22 +112,22 @@ public class MessagePool {
     }
 
     /**
-     * ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒƒbƒZ[ƒWƒ^ƒCƒv
+     * ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—
      */
     private final MESSAGE_TYPE messageType;
 
     /**
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒƒbƒZ[ƒWƒŠƒXƒi
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒªã‚¹ãƒŠ
      */
     private final Set<MessageListener> listeners = new ConcurrentHashSet<MessageListener>();
 
     /**
-     * ƒCƒ“ƒXƒ^ƒ“ƒXŒQ
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç¾¤
      */
     private static final MessagePool[] INSTANCES;
 
     static {
-        //ƒƒbƒZ[ƒWƒ^ƒCƒv–ˆ‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚·‚é
+        //ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—æ¯ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã™ã‚‹
         final MESSAGE_TYPE[] types = MESSAGE_TYPE.values();
         final int size = types.length;
         INSTANCES = new MessagePool[size];

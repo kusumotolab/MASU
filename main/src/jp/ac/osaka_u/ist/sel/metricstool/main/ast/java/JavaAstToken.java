@@ -8,7 +8,7 @@ import java.lang.Enum;
 
 
 /**
- * Java“Á—L‚Ì—v‘f‚ğ•\‚·ƒg[ƒNƒ“‚ğ’è‹`‚·‚éƒNƒ‰ƒX
+ * Javaç‰¹æœ‰ã®è¦ç´ ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å®šç¾©ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * @author kou-tngt
  *
@@ -16,7 +16,7 @@ import java.lang.Enum;
 public class JavaAstToken extends AstTokenAdapter {
 
     /**
-     * import‹Lq•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * importè¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken CLASS_IMPORT = new JavaAstToken("CLASS_IMPORT") {
         @Override
@@ -26,7 +26,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * import‹Lq•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * importè¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken MEMBER_IMPORT = new JavaAstToken("MEMBER_IMPORT") {
         @Override
@@ -36,9 +36,9 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * throw‹Lq•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * throwè¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
-    //TODO: êŠ‚±‚±‚Å‚¢‚¢‚Ì‚©‚È?
+    //TODO: å ´æ‰€ã“ã“ã§ã„ã„ã®ã‹ãª?
     public static final JavaAstToken THROWS = new JavaAstToken("THROWS") {
         @Override
         public boolean isThrows() {
@@ -47,7 +47,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * enum—v‘f‚Ì‹Lq•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * enumè¦ç´ ã®è¨˜è¿°éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ENUM_CONSTANT = new JavaAstToken("ENUM_CONST") {
         @Override
@@ -64,12 +64,12 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * super‹Lq‚µ‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * superè¨˜è¿°ã—ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken SUPER = new JavaAstToken("SUPER");
 
     /**
-     * ”z—ñ‰Šú‰»•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * é…åˆ—åˆæœŸåŒ–éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ARRAY_INIT = new JavaAstToken("ARRAY_INIT") {
         @Override
@@ -79,12 +79,12 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * new•¶‚É‚æ‚é”z—ñŒ^w’èi[]j‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * newæ–‡ã«ã‚ˆã‚‹é…åˆ—å‹æŒ‡å®šï¼ˆ[]ï¼‰ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ARRAY_INSTANTIATION = new JavaAstToken("ARRAY_INSTANTIATION");
 
     /**
-     * this()‚Ì‚æ‚¤‚È©ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒÄ‚Ño‚µ‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * this()ã®ã‚ˆã†ãªè‡ªã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å‘¼ã³å‡ºã—ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken CONSTRUCTOR_CALL = new JavaAstToken("CONSTRUCTOR_CALL") {
         @Override
@@ -94,7 +94,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * super()‚Ì‚æ‚¤‚ÈeƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒÄ‚Ño‚µ‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * super()ã®ã‚ˆã†ãªè¦ªã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å‘¼ã³å‡ºã—ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken SUPER_CONSTRUCTOR_CALL = new JavaAstToken(
             "SUPER_CONSTRUCTOR_CALL") {
@@ -105,12 +105,12 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * .class‚ğ‹Lq‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * .classã‚’è¨˜è¿°ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken CLASS = new JavaAstToken("CLASS");
 
     /**
-     * ƒCƒ“ƒ^ƒtƒF[ƒX’è‹`•”‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹å®šç¾©éƒ¨ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken INTERFACE_DEFINITION = new JavaAstToken("INTERFACE_DEFINITION") {
         @Override
@@ -125,7 +125,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“—ñ‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³åˆ—ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATIONS = new JavaAstToken("ANNOTATIONS") {
         @Override
@@ -135,7 +135,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“‚ğ•\‚·’è”ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¡¨ã™å®šæ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATION = new JavaAstToken("ANNOTATION") {
         @Override
@@ -145,7 +145,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“‚É“n‚·”z—ñƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«æ¸¡ã™é…åˆ—ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATION_MEMBER = new JavaAstToken("ANNOTATION_MEMBER") {
         @Override
@@ -155,7 +155,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“‚É“n‚·ˆø”—ñƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«æ¸¡ã™å¼•æ•°åˆ—ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATION_MEMBER_VALUE_PAIR = new JavaAstToken(
             "ANNOTATION_MEMBER_VALUE_PAIR") {
@@ -166,7 +166,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“‚É“n‚·”z—ñƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«æ¸¡ã™é…åˆ—ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATION_ARRAY_INIT = new JavaAstToken(
             "ANNOTATION_ARRAY_INIT") {
@@ -177,7 +177,7 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * ƒAƒmƒe[ƒVƒ‡ƒ“ˆø”(•¶š—ñŒ`®)ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³å¼•æ•°(æ–‡å­—åˆ—å½¢å¼)ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static final JavaAstToken ANNOTATION_STRING = new JavaAstToken("ANNOTATION_STRING") {
         @Override
@@ -187,8 +187,8 @@ public class JavaAstToken extends AstTokenAdapter {
     };
 
     /**
-     * w’è‚³‚ê‚½•¶š—ñ‚ğ•\‚·ƒg[ƒNƒ“‚ğì¬‚·‚é.
-     * @param text ƒg[ƒNƒ“‚Ì•¶š—ñ
+     * æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆã™ã‚‹.
+     * @param text ãƒˆãƒ¼ã‚¯ãƒ³ã®æ–‡å­—åˆ—
      */
     public JavaAstToken(final String text) {
         super(text);

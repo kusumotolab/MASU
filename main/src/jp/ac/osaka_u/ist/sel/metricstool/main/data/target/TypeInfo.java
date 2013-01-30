@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 /**
- * uŒ^v‚ğ•\‚·ƒCƒ“ƒ^[ƒtƒF[ƒXD
+ * ã€Œå‹ã€ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ï¼
  * 
  * @author higo
  * 
@@ -13,17 +13,17 @@ import java.io.Serializable;
 public interface TypeInfo extends Serializable {
 
     /**
-     * Œ^–¼‚ğ•Ô‚·
+     * å‹åã‚’è¿”ã™
      * 
-     * @return Œ^–¼
+     * @return å‹å
      */
     String getTypeName();
 
     /**
-     * “™‰¿«‚Ìƒ`ƒFƒbƒN
+     * ç­‰ä¾¡æ€§ã®ãƒã‚§ãƒƒã‚¯
      * 
-     * @param typeInfo ”äŠr‘ÎÆƒIƒuƒWƒFƒNƒg
-     * @return “™‚µ‚¢ê‡‚ÍtrueC‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
+     * @param typeInfo æ¯”è¼ƒå¯¾ç…§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @return ç­‰ã—ã„å ´åˆã¯trueï¼Œãã†ã§ãªã„å ´åˆã¯false
      */
     boolean equals(TypeInfo typeInfo);
 

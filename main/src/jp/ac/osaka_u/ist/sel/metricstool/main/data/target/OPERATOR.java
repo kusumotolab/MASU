@@ -5,7 +5,7 @@ import static jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE.*
 
 
 /**
- * ‰‰Zq‚ğ•\‚·—ñ‹“Œ^
+ * æ¼”ç®—å­ã‚’è¡¨ã™åˆ—æŒ™å‹
  * 
  * @author t-miyake
  *
@@ -13,190 +13,190 @@ import static jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE.*
 public enum OPERATOR {
 
     /**
-     * Zp‰‰Zq"+"
+     * ç®—è¡“æ¼”ç®—å­"+"
      */
     PLUS(ARITHMETIC, "+", null, true, false),
 
     /**
-     * Zp‰‰Zq"-"
+     * ç®—è¡“æ¼”ç®—å­"-"
      */
     MINUS(ARITHMETIC, "-", null, true, false),
 
     /**
-     * Zp‰‰Zq"*"
+     * ç®—è¡“æ¼”ç®—å­"*"
      */
     STAR(ARITHMETIC, "*", null, true, false),
 
     /**
-     * Zp‰‰Zq"/"
+     * ç®—è¡“æ¼”ç®—å­"/"
      */
     DIV(ARITHMETIC, "/", null, true, false),
 
     /**
-     * Zp‰‰Zq"%"
+     * ç®—è¡“æ¼”ç®—å­"%"
      */
     MOD(ARITHMETIC, "%", null, true, false),
 
     /**
-     * ”äŠr‰‰Zq"=="
+     * æ¯”è¼ƒæ¼”ç®—å­"=="
      */
     EQUAL(COMPARATIVE, "==", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ”äŠr‰‰Zq"!="
+     * æ¯”è¼ƒæ¼”ç®—å­"!="
      */
     NOT_EQUAL(COMPARATIVE, "!=", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ”äŠr‰‰Zq"<"
+     * æ¯”è¼ƒæ¼”ç®—å­"<"
      */
     LT(COMPARATIVE, "<", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ”äŠr‰‰Zq">"
+     * æ¯”è¼ƒæ¼”ç®—å­">"
      */
     GT(COMPARATIVE, ">", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ”äŠr‰‰Zq"<="
+     * æ¯”è¼ƒæ¼”ç®—å­"<="
      */
     LE(COMPARATIVE, "<=", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ”äŠr‰‰Zq">="
+     * æ¯”è¼ƒæ¼”ç®—å­">="
      */
     GE(COMPARATIVE, ">=", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * instanceof‰‰Zq
+     * instanceofæ¼”ç®—å­
      */
     INSTANCEOF(COMPARATIVE, "instanceof", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ˜_—‰‰Zq"&&"
+     * è«–ç†æ¼”ç®—å­"&&"
      */
     LAND(LOGICAL, "&&", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ˜_—‰‰Zq"||"
+     * è«–ç†æ¼”ç®—å­"||"
      */
     LOR(LOGICAL, "||", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ˜_—‰‰Zq"!"
+     * è«–ç†æ¼”ç®—å­"!"
      */
     LNOT(LOGICAL, "!", PrimitiveTypeInfo.BOOLEAN, true, false),
 
     /**
-     * ƒrƒbƒg‰‰Zq"&"
+     * ãƒ“ãƒƒãƒˆæ¼”ç®—å­"&"
      */
     BAND(BITS, "&", null, true, false),
 
     /**
-     * ƒrƒbƒg‰‰Zq"|"
+     * ãƒ“ãƒƒãƒˆæ¼”ç®—å­"|"
      */
     BOR(BITS, "|", null, true, false),
 
     /**
-     * ƒrƒbƒg‰‰Zq"^"
+     * ãƒ“ãƒƒãƒˆæ¼”ç®—å­"^"
      */
     BXOR(BITS, "^", null, true, false),
 
     /**
-     * ƒrƒbƒg‰‰Zq"~"
+     * ãƒ“ãƒƒãƒˆæ¼”ç®—å­"~"
      */
     BNOT(BITS, "~", null, true, false),
 
     /**
-     * ƒVƒtƒg‰‰Zq"<<"
+     * ã‚·ãƒ•ãƒˆæ¼”ç®—å­"<<"
      */
     SL(SHIFT, "<<", null, true, false),
 
     /**
-     * ƒVƒtƒg‰‰Zq">>"
+     * ã‚·ãƒ•ãƒˆæ¼”ç®—å­">>"
      */
     SR(SHIFT, ">>", null, true, false),
 
     /**
-     * ƒVƒtƒg‰‰Zq">>>"
+     * ã‚·ãƒ•ãƒˆæ¼”ç®—å­">>>"
      */
     BSR(SHIFT, ">>>", null, true, false),
 
     /**
-     * ‘ã“ü‰‰Zq"="
+     * ä»£å…¥æ¼”ç®—å­"="
      */
     ASSIGN(ASSIGNMENT, "=", null, false, true),
 
     /**
-     * ‘ã“ü‰‰Zq"+="
+     * ä»£å…¥æ¼”ç®—å­"+="
      */
     PLUS_ASSIGN(ASSIGNMENT, "+=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"-="
+     * ä»£å…¥æ¼”ç®—å­"-="
      */
     MINUS_ASSIGN(ASSIGNMENT, "-=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"*="
+     * ä»£å…¥æ¼”ç®—å­"*="
      */
     STAR_ASSIGN(ASSIGNMENT, "*=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"/="
+     * ä»£å…¥æ¼”ç®—å­"/="
      */
     DIV_ASSIGN(ASSIGNMENT, "/=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"%="
+     * ä»£å…¥æ¼”ç®—å­"%="
      */
     MOD_ASSIGN(ASSIGNMENT, "%=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"&="
+     * ä»£å…¥æ¼”ç®—å­"&="
      */
     BAND_ASSIGN(ASSIGNMENT, "&=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"|="
+     * ä»£å…¥æ¼”ç®—å­"|="
      */
     BOR_ASSIGN(ASSIGNMENT, "|=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"^="
+     * ä»£å…¥æ¼”ç®—å­"^="
      */
     BXOR_ASSIGN(ASSIGNMENT, "^=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq"<<="
+     * ä»£å…¥æ¼”ç®—å­"<<="
      */
     SL_ASSIGN(ASSIGNMENT, "<<=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq">>="
+     * ä»£å…¥æ¼”ç®—å­">>="
      */
     SR_ASSIGN(ASSIGNMENT, ">>=", null, true, true),
 
     /**
-     * ‘ã“ü‰‰Zq">>>="
+     * ä»£å…¥æ¼”ç®—å­">>>="
      */
     BSR_ASSIGN(ASSIGNMENT, ">>>=", null, true, true),
 
     /**
-     * Zpˆê€‰‰Zq"++"
+     * ç®—è¡“ä¸€é …æ¼”ç®—å­"++"
      */
     INC(ARITHMETIC, "++", PrimitiveTypeInfo.INT, true, true),
 
     /**
-     * Zpˆê€‰‰Zq"--"
+     * ç®—è¡“ä¸€é …æ¼”ç®—å­"--"
      */
     DEC(ARITHMETIC, "--", PrimitiveTypeInfo.INT, true, true), ;
 
     /**
-     * ‰‰Zq‚Ìƒ^ƒCƒv‚Æƒg[ƒNƒ“‚ğ—^‚¦‚Ä‰Šú‰»
+     * æ¼”ç®—å­ã®ã‚¿ã‚¤ãƒ—ã¨ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä¸ãˆã¦åˆæœŸåŒ–
      * 
-     * @param operatorType ‰‰Zq‚Ìƒ^ƒCƒv
-     * @param token ‰‰Zq‚Ìƒg[ƒNƒ“
+     * @param operatorType æ¼”ç®—å­ã®ã‚¿ã‚¤ãƒ—
+     * @param token æ¼”ç®—å­ã®ãƒˆãƒ¼ã‚¯ãƒ³
      */
     private OPERATOR(final OPERATOR_TYPE operatorType, final String token,
             final PrimitiveTypeInfo specifiedResultType, final boolean firstIsReferencee,
@@ -210,18 +210,18 @@ public enum OPERATOR {
     }
 
     /**
-     * ‰‰Zq‚Ìƒ^ƒCƒv‚ğ•Ô‚·
+     * æ¼”ç®—å­ã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
      * 
-     * @return ‰‰Zq‚Ìƒ^ƒCƒv
+     * @return æ¼”ç®—å­ã®ã‚¿ã‚¤ãƒ—
      */
     public OPERATOR_TYPE getOperatorType() {
         return this.operatorType;
     }
 
     /**
-     * ‰‰Zq‚Ìƒg[ƒNƒ“‚ğ•Ô‚·
+     * æ¼”ç®—å­ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¿”ã™
      * 
-     * @return ‰‰Zq‚Ìƒg[ƒNƒ“
+     * @return æ¼”ç®—å­ã®ãƒˆãƒ¼ã‚¯ãƒ³
      */
     public String getToken() {
         return this.token;
@@ -245,9 +245,9 @@ public enum OPERATOR {
     }
 
     /**
-     * ‰‰ZŒ‹‰Ê‚ÌŒ^‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡‚Í‚»‚ÌŒ^‚ğ•Ô‚·.
-     * Œˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull‚ğ•Ô‚·.
-     * @return ‰‰ZŒ‹‰Ê‚ÌŒ^‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡‚Í‚»‚ÌŒ^CŒˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * æ¼”ç®—çµæœã®å‹ãŒæ±ºã¾ã£ã¦ã„ã‚‹å ´åˆã¯ãã®å‹ã‚’è¿”ã™.
+     * æ±ºã¾ã£ã¦ã„ãªã„å ´åˆã¯nullã‚’è¿”ã™.
+     * @return æ¼”ç®—çµæœã®å‹ãŒæ±ºã¾ã£ã¦ã„ã‚‹å ´åˆã¯ãã®å‹ï¼Œæ±ºã¾ã£ã¦ã„ãªã„å ´åˆã¯null
      */
     public PrimitiveTypeInfo getSpecifiedResultType() {
         return this.specifiedResultType;
@@ -256,22 +256,22 @@ public enum OPERATOR {
     final private PrimitiveTypeInfo specifiedResultType;
 
     /**
-     * ‰‰Zq‚Ìƒ^ƒCƒv‚ğ•\‚·•Ï”
+     * æ¼”ç®—å­ã®ã‚¿ã‚¤ãƒ—ã‚’è¡¨ã™å¤‰æ•°
      */
     final private OPERATOR_TYPE operatorType;
 
     /**
-     * ‰‰Zq‚Ìƒg[ƒNƒ“‚ğ•\‚·•Ï”
+     * æ¼”ç®—å­ã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’è¡¨ã™å¤‰æ•°
      */
     final private String token;
 
     /**
-     * ˆê€‚Ö‚Ì‘ã“ü‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•\‚·
+     * ä¸€é …ã¸ã®ä»£å…¥ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean firstIsAssignmentee;
 
     /**
-     * ˆê€‚ªQÆ‚Æ‚µ‚Ä—˜—p‚³‚ê‚é‚©‚Ç‚¤‚©‚ğ•\‚·
+     * ä¸€é …ãŒå‚ç…§ã¨ã—ã¦åˆ©ç”¨ã•ã‚Œã‚‹ã‹ã©ã†ã‹ã‚’è¡¨ã™
      */
     private final boolean firstIsReferencee;
 }

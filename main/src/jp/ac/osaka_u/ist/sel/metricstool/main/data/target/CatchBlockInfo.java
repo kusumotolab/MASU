@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * catch ƒuƒƒbƒNî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * catch ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -18,8 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class CatchBlockInfo extends BlockInfo implements SubsequentialBlockInfo<TryBlockInfo> {
 
     /**
-     * ExecutableElement‚Æ—áŠO‚ğ“ü—Í‚Æ‚µ‚ÄC‚»‚ÌExecutableElement‚ğŠÜ‚Ştry•¶‚É‘Î‰‚µ‚ÄCexception‚ğƒLƒƒƒbƒ`‚·‚écatchBlock‚ğ•Ô‚·D
-     * ‚à‚µC‚»‚Ì‚æ‚¤‚ÈƒLƒƒƒbƒ`ß‚ª‚È‚¢ê‡‚Ínull ‚ğ•Ô‚·D
+     * ExecutableElementã¨ä¾‹å¤–ã‚’å…¥åŠ›ã¨ã—ã¦ï¼Œãã®ExecutableElementã‚’å«ã‚€tryæ–‡ã«å¯¾å¿œã—ã¦ï¼Œexceptionã‚’ã‚­ãƒ£ãƒƒãƒã™ã‚‹catchBlockã‚’è¿”ã™ï¼
+     * ã‚‚ã—ï¼Œãã®ã‚ˆã†ãªã‚­ãƒ£ãƒƒãƒç¯€ãŒãªã„å ´åˆã¯null ã‚’è¿”ã™ï¼
      * 
      * @param element
      * @param exception
@@ -56,12 +56,12 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒNî•ñ‚ğ—^‚¦‚Ä catch ƒuƒƒbƒN‚ğ‰Šú‰»
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ä¸ãˆã¦ catch ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public CatchBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
@@ -70,11 +70,11 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
-     * ‚±‚Ìƒƒ\ƒbƒh‚Í«—ˆ”p~‚³‚ê‚é‚½‚ßCg—p‚Í„§‚³‚ê‚È‚¢
-     * {@link CatchBlockInfo#getOwnerBlock()} ‚ğg—p‚·‚×‚«‚Å‚ ‚éD
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯å°†æ¥å»ƒæ­¢ã•ã‚Œã‚‹ãŸã‚ï¼Œä½¿ç”¨ã¯æ¨å¥¨ã•ã‚Œãªã„
+     * {@link CatchBlockInfo#getOwnerBlock()} ã‚’ä½¿ç”¨ã™ã¹ãã§ã‚ã‚‹ï¼
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      * @deprecated
      */
     public final TryBlockInfo getOwnerTryBlock() {
@@ -82,9 +82,9 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * ‘Î‰‚·‚é try ƒuƒƒbƒN‚ğ•Ô‚·
+     * å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
      * 
-     * @return ‘Î‰‚·‚é try ƒuƒƒbƒN
+     * @return å¯¾å¿œã™ã‚‹ try ãƒ–ãƒ­ãƒƒã‚¯
      */
     @Override
     public TryBlockInfo getOwnerBlock() {
@@ -107,8 +107,8 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * catch‚·‚é—áŠO‚ğ•\‚·•Ï”‚Ìî•ñ‚ğ•Ô‚·
-     * @return catch‚·‚é—áŠO‚ğ•\‚·•Ï”‚Ìî•ñ
+     * catchã™ã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¤‰æ•°ã®æƒ…å ±ã‚’è¿”ã™
+     * @return catchã™ã‚‹ä¾‹å¤–ã‚’è¡¨ã™å¤‰æ•°ã®æƒ…å ±
      */
     public final LocalVariableInfo getCaughtException() {
         assert null != this.caughtException : "this.caughtException must not be null!";
@@ -116,9 +116,9 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * ‚±‚Ìcatchß‚Åó‚¯‚é—áŠO‚ğƒZƒbƒg‚·‚é
+     * ã“ã®catchç¯€ã§å—ã‘ã‚‹ä¾‹å¤–ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *  
-     * @param caughtException ‚±‚Ìcatchß‚Åó‚¯‚é—áŠO
+     * @param caughtException ã“ã®catchç¯€ã§å—ã‘ã‚‹ä¾‹å¤–
      */
     public void setCaughtException(final LocalVariableInfo caughtException) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -143,9 +143,9 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     }
 
     /**
-     * ‚±‚Ìcatch@•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j‚ğ•Ô‚·
+     * ã“ã®catchã€€æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìcatch@•¶‚ÌƒeƒLƒXƒg•\Œ»iStringŒ^j
+     * @return ã“ã®catchã€€æ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆStringå‹ï¼‰
      */
     @Override
     public String getText() {

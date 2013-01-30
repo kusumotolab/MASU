@@ -7,20 +7,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
 
 /**
- * ƒvƒ‰ƒOƒCƒ“‚ð”äŠr‚·‚éƒRƒ“ƒpƒŒ[ƒ^.
- * ƒƒgƒŠƒNƒX‚Ìƒ^ƒCƒv->ƒƒgƒŠƒNƒX–¼->ƒNƒ‰ƒX–¼‚Ì‡‚Å”äŠr‚·‚é.
- * ƒNƒ‰ƒX–¼‚Ü‚Åˆê’v‚·‚éƒvƒ‰ƒOƒCƒ“‚Í“¯ˆê‚Æ”»’è‚·‚é.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’æ¯”è¼ƒã™ã‚‹ã‚³ãƒ³ãƒ‘ãƒ¬ãƒ¼ã‚¿.
+ * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ã‚¿ã‚¤ãƒ—->ãƒ¡ãƒˆãƒªã‚¯ã‚¹å->ã‚¯ãƒ©ã‚¹åã®é †ã§æ¯”è¼ƒã™ã‚‹.
+ * ã‚¯ãƒ©ã‚¹åã¾ã§ä¸€è‡´ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯åŒä¸€ã¨åˆ¤å®šã™ã‚‹.
  * @author kou-tngt
  *
  */
 public class MetricTypeAndNamePluginComparator implements Comparator<AbstractPlugin> {
 
     /**
-     * ƒƒgƒŠƒNƒX‚Ìƒ^ƒCƒv->ƒƒgƒŠƒNƒX–¼->ƒNƒ‰ƒX–¼‚Ì‡‚Å”äŠr‚·‚é.
-     * ƒNƒ‰ƒX–¼‚Ü‚Åˆê’v‚·‚éƒvƒ‰ƒOƒCƒ“‚Í“¯ˆê‚Æ”»’è‚·‚é.
-     * @param o1 ”äŠr‚³‚êƒvƒ‰ƒOƒCƒ“
-     * @param o2 ”äŠr‚·‚éƒvƒ‰ƒOƒCƒ“
-     * @return o1‚ªo2‚æ‚è‚à‡˜“I‚É¬‚³‚¯‚ê‚Î•‰‚Ì”C“¯‚¶‚Å‚ ‚ê‚Î0C‘å‚«‚¯‚ê‚Î³‚Ì”‚ð•Ô‚·.
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ã®ã‚¿ã‚¤ãƒ—->ãƒ¡ãƒˆãƒªã‚¯ã‚¹å->ã‚¯ãƒ©ã‚¹åã®é †ã§æ¯”è¼ƒã™ã‚‹.
+     * ã‚¯ãƒ©ã‚¹åã¾ã§ä¸€è‡´ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯åŒä¸€ã¨åˆ¤å®šã™ã‚‹.
+     * @param o1 æ¯”è¼ƒã•ã‚Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @param o2 æ¯”è¼ƒã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
+     * @return o1ãŒo2ã‚ˆã‚Šã‚‚é †åºçš„ã«å°ã•ã‘ã‚Œã°è² ã®æ•°ï¼ŒåŒã˜ã§ã‚ã‚Œã°0ï¼Œå¤§ãã‘ã‚Œã°æ­£ã®æ•°ã‚’è¿”ã™.
      */
     public int compare(final AbstractPlugin o1, final AbstractPlugin o2) {
         final PluginInfo info1 = o1.getPluginInfo();

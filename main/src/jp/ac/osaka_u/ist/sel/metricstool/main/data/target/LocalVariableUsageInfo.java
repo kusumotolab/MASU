@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ƒ[ƒJƒ‹•Ï”‚Ìg—p‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®ä½¿ç”¨ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -46,16 +46,16 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param usedLocalVariable g—p‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param usedLocalVariable ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     private LocalVariableUsageInfo(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
@@ -66,17 +66,17 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * g—p‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”Cg—p‚Ìí—ŞCg—p‚³‚ê‚Ä‚¢‚éˆÊ’uî•ñ‚ğ—^‚¦‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
+     * ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ï¼Œä½¿ç”¨ã®ç¨®é¡ï¼Œä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
      * 
-     * @param usedLocalVariable g—p‚³‚ê‚Ä‚¢‚éƒ[ƒJƒ‹•Ï”
-     * @param reference QÆ‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param assignment ‘ã“ü‚Å‚ ‚é‚©‚Ç‚¤‚©
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
-     * @return ƒ[ƒJƒ‹•Ï”g—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+     * @param usedLocalVariable ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+     * @param reference å‚ç…§ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param assignment ä»£å…¥ã§ã‚ã‚‹ã‹ã©ã†ã‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
+     * @return ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static LocalVariableUsageInfo getInstance(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
@@ -88,8 +88,8 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * ƒ[ƒJƒ‹•Ï”g—p‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğƒ[ƒJƒ‹•Ï”‚©‚çƒ[ƒJƒ‹•Ï”g—p‚Ö‚Ìƒ}ƒbƒv‚É’Ç‰Á
-     * @param localVariableUsage ƒ[ƒJƒ‹•Ï”g—p
+     * ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨ã¸ã®ãƒãƒƒãƒ—ã«è¿½åŠ 
+     * @param localVariableUsage ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨
      */
     private static void addLocalVariableUsage(final LocalVariableUsageInfo localVariableUsage) {
 
@@ -111,9 +111,9 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½ƒ[ƒJƒ‹•Ï”‚Ìg—pî•ñ‚ÌƒZƒbƒg‚ğæ“¾
-     * @param localVarible g—pî•ñ‚ğæ“¾‚µ‚½‚¢ƒ[ƒJƒ‹•Ï”
-     * @return ƒ[ƒJƒ‹•Ï”g—p‚ÌƒZƒbƒgDˆø”‚Å—^‚¦‚ç‚ê‚½ƒ[ƒJƒ‹•Ï”‚ªg—p‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ínull
+     * ä¸ãˆã‚‰ã‚ŒãŸãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®ä½¿ç”¨æƒ…å ±ã®ã‚»ãƒƒãƒˆã‚’å–å¾—
+     * @param localVarible ä½¿ç”¨æƒ…å ±ã‚’å–å¾—ã—ãŸã„ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+     * @return ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ä½¿ç”¨ã®ã‚»ãƒƒãƒˆï¼å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ãŒä½¿ç”¨ã•ã‚Œã¦ã„ãªã„å ´åˆã¯null
      */
     public final static Set<LocalVariableUsageInfo> getUsages(final LocalVariableInfo localVarible) {
         if (USAGE_MAP.containsKey(localVarible)) {
@@ -124,10 +124,10 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éƒ[ƒJƒ‹•Ï”—˜—p‚ÌSet‚ğ•Ô‚·
+     * ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°åˆ©ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @param variableUsages •Ï”—˜—p‚ÌCollection
-     * @return —^‚¦‚ç‚ê‚½•Ï”—˜—p‚ÌCollection‚ÉŠÜ‚Ü‚ê‚éƒ[ƒJƒ‹•Ï”—˜—p‚ÌSet
+     * @param variableUsages å¤‰æ•°åˆ©ç”¨ã®Collection
+     * @return ä¸ãˆã‚‰ã‚ŒãŸå¤‰æ•°åˆ©ç”¨ã®Collectionã«å«ã¾ã‚Œã‚‹ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°åˆ©ç”¨ã®Set
      */
     public final static Set<LocalVariableUsageInfo> getLocalVariableUsages(
             Collection<VariableUsageInfo<?>> variableUsages) {

@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * ƒrƒWƒ^[‚ªŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Öo“ü‚è‚·‚éÛ‚Ìó‘Ô‚ğŠÇ—‚·‚éƒXƒe[ƒgƒ}ƒl[ƒWƒƒD
+ * ãƒ“ã‚¸ã‚¿ãƒ¼ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã¸å‡ºå…¥ã‚Šã™ã‚‹éš›ã®çŠ¶æ…‹ã‚’ç®¡ç†ã™ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ï¼
  * @author kou-tngt
  *
  */
@@ -19,7 +19,7 @@ public class TypeParameterStateManager extends
     }
 
     /**
-     * ‘—M‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•\‚·enum
+     * é€ä¿¡ã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¡¨ã™enum
      * @author kou-tngt
      *
      */
@@ -29,8 +29,8 @@ public class TypeParameterStateManager extends
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Ìƒm[ƒh‚É“ü‚Á‚½‚ÉŒÄ‚Ño‚³‚êC
-     * ó‘Ô•Ï‰»‚ğˆø‚«‹N‚±‚µ‚ÄCó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚éD
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã®ãƒãƒ¼ãƒ‰ã«å…¥ã£ãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œ
+     * çŠ¶æ…‹å¤‰åŒ–ã‚’å¼•ãèµ·ã“ã—ã¦ï¼ŒçŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
@@ -56,8 +56,8 @@ public class TypeParameterStateManager extends
     }
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Ìƒm[ƒh‚©‚ço‚½‚ÉŒÄ‚Ño‚³‚êC
-     * ó‘Ô•Ï‰»‚ğˆø‚«‹N‚±‚µ‚ÄCó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m‚·‚éD
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã®ãƒãƒ¼ãƒ‰ã‹ã‚‰å‡ºãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œï¼Œ
+     * çŠ¶æ…‹å¤‰åŒ–ã‚’å¼•ãèµ·ã“ã—ã¦ï¼ŒçŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ï¼
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
@@ -79,16 +79,16 @@ public class TypeParameterStateManager extends
     }
 
     /**
-     * ƒrƒWƒ^[‚ÌŒ»İˆÊ’u‚ªŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Ì’†‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return@ƒrƒWƒ^[‚ÌŒ»İˆÊ’u‚ªŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚Ì’†‚Å‚ ‚ê‚Îtrue
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã®ç¾åœ¨ä½ç½®ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã®ä¸­ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @returnã€€ãƒ“ã‚¸ã‚¿ãƒ¼ã®ç¾åœ¨ä½ç½®ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã®ä¸­ã§ã‚ã‚Œã°true
      */
     public boolean isEnterParameterDefinition() {
         return STATE.OUT != this.getState();
     }
 
     /**
-     * ƒrƒWƒ^[‚ÌŒ»İˆÊ’u‚ªŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”(ãŠEéŒ¾•”‚É“ü‚é‘O)‚Ì’†‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return@ƒrƒWƒ^[‚ÌŒ»İˆÊ’u‚ªŒ^ƒpƒ‰ƒ[ƒ^’è‹`•”(ãŠEéŒ¾•”‚É“ü‚é‘O)‚Ì’†‚Å‚ ‚ê‚Îtrue
+     * ãƒ“ã‚¸ã‚¿ãƒ¼ã®ç¾åœ¨ä½ç½®ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨(ä¸Šç•Œå®£è¨€éƒ¨ã«å…¥ã‚‹å‰)ã®ä¸­ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @returnã€€ãƒ“ã‚¸ã‚¿ãƒ¼ã®ç¾åœ¨ä½ç½®ãŒå‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨(ä¸Šç•Œå®£è¨€éƒ¨ã«å…¥ã‚‹å‰)ã®ä¸­ã§ã‚ã‚Œã°true
      */
     public boolean isInTypeParameterDefinition(){
         return STATE.IN_PARAMETER_DEF == this.getState();
@@ -96,7 +96,7 @@ public class TypeParameterStateManager extends
     
 
     /**
-     * Œ^ƒpƒ‰ƒ[ƒ^’è‹`•”‚ÉŠÖ˜A‚·‚éƒm[ƒh‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+     * å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å®šç¾©éƒ¨ã«é–¢é€£ã™ã‚‹ãƒãƒ¼ãƒ‰ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
      *  
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
@@ -108,7 +108,7 @@ public class TypeParameterStateManager extends
     }
 
     /**
-     * ó‘Ô‚ğ•\‚·enum
+     * çŠ¶æ…‹ã‚’è¡¨ã™enum
      * 
      * @author kou-tngt
      *

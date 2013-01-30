@@ -12,17 +12,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 
 /**
- * Java‚ÌŒ^ƒpƒ‰ƒ[ƒ^î•ñ‚ğ\’z‚·‚éD
+ * Javaã®å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
  * 
- * {@link TypeParameterBuilder}@‚Ì {@link #getUpperBounds()}ƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µ‚ÄC
- * ãŒÀƒNƒ‰ƒX‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍCjava.lang.Object‚ğ•\‚·Œ^î•ñ‚ğ\’z‚·‚éD
+ * {@link TypeParameterBuilder}ã€€ã® {@link #getUpperBounds()}ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ï¼Œ
+ * ä¸Šé™ã‚¯ãƒ©ã‚¹ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ï¼Œjava.lang.Objectã‚’è¡¨ã™å‹æƒ…å ±ã‚’æ§‹ç¯‰ã™ã‚‹ï¼
  * @author kou-tngt, t-miyake
  *
  */
 public class JavaTypeParameterBuilder extends TypeParameterBuilder {
 
     /**
-     * eƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğŒÄ‚Ño‚·D
+     * è¦ªã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‘¼ã³å‡ºã™ï¼
      * @param buildDataManager
      */
     public JavaTypeParameterBuilder(BuildDataManager buildDataManager) {
@@ -30,10 +30,10 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder {
     }
 
     /**
-     * \’z‚·‚éŒ^ƒpƒ‰ƒ[ƒ^‚ÌãŒÀƒNƒ‰ƒX‚ğ•Ô‚·D
-     * eƒNƒ‰ƒX‚ÅãŒÀ‚ÌŒ^‚ªŒˆ’è‚Å‚«‚ê‚Î‚»‚ê‚ğC‚Å‚«‚È‚¯‚ê‚Îjava.lang.Object‚ğ•\‚·Œ^î•ñ‚ğ•Ô‚·D
+     * æ§‹ç¯‰ã™ã‚‹å‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä¸Šé™ã‚¯ãƒ©ã‚¹ã‚’è¿”ã™ï¼
+     * è¦ªã‚¯ãƒ©ã‚¹ã§ä¸Šé™ã®å‹ãŒæ±ºå®šã§ãã‚Œã°ãã‚Œã‚’ï¼Œã§ããªã‘ã‚Œã°java.lang.Objectã‚’è¡¨ã™å‹æƒ…å ±ã‚’è¿”ã™ï¼
      * 
-     * @return eƒNƒ‰ƒX‚ÅãŒÀ‚ÌŒ^‚ªŒˆ’è‚Å‚«‚ê‚Î‚»‚Ìî•ñC‚Å‚«‚È‚¯‚ê‚Îjava.lang.Object‚ğ•\‚·Œ^î•ñ
+     * @return è¦ªã‚¯ãƒ©ã‚¹ã§ä¸Šé™ã®å‹ãŒæ±ºå®šã§ãã‚Œã°ãã®æƒ…å ±ï¼Œã§ããªã‘ã‚Œã°java.lang.Objectã‚’è¡¨ã™å‹æƒ…å ±
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder#getUpperBounds()
      */
     @Override

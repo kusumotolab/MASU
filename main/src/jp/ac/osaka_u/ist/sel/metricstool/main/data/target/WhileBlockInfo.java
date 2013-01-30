@@ -5,7 +5,7 @@ import java.util.SortedSet;
 
 
 /**
- * while ƒuƒƒbƒN‚ğ•\‚·ƒNƒ‰ƒX
+ * while ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
@@ -14,12 +14,12 @@ import java.util.SortedSet;
 public final class WhileBlockInfo extends ConditionalBlockInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä while ƒuƒƒbƒN‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ while ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆæœŸåŒ–
      * 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public WhileBlockInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {

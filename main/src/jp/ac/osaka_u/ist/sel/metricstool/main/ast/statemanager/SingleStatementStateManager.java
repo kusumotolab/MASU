@@ -21,7 +21,7 @@ public abstract class SingleStatementStateManager extends
         super.entered(event);
 
         if (this.isStateChangeTriggerEvent(event)) {
-            //ó‘Ô•Ï‰»ƒgƒŠƒK‚È‚ç
+            //çŠ¶æ…‹å¤‰åŒ–ãƒˆãƒªã‚¬ãªã‚‰
             fireStateChangeEnterEvent(event);
         }
     }
@@ -30,7 +30,7 @@ public abstract class SingleStatementStateManager extends
         final AstToken token = event.getToken();
 
         if (this.isHeaderToken(token)) {
-            //’è‹`ƒm[ƒh‚È‚çó‘Ô‘JˆÚ‚µ‚ÄƒCƒxƒ“ƒg‚ğ”­s
+            //å®šç¾©ãƒãƒ¼ãƒ‰ãªã‚‰çŠ¶æ…‹é·ç§»ã—ã¦ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œ
             this.setState(STATE.IN);
             this.fireStateChangeEvent(this.getStatementEnterEventType(), event);
         }
@@ -40,9 +40,9 @@ public abstract class SingleStatementStateManager extends
     public void exited(final AstVisitEvent event) {
 
         if (this.isStateChangeTriggerEvent(event)) {
-            //ó‘Ô•Ï‰»ƒgƒŠƒK‚È‚ç
+            //çŠ¶æ…‹å¤‰åŒ–ãƒˆãƒªã‚¬ãªã‚‰
 
-            //ƒXƒ^ƒbƒN‚Ìˆê”Ôã‚Ìó‘Ô‚É–ß‚·
+            //ã‚¹ã‚¿ãƒƒã‚¯ã®ä¸€ç•ªä¸Šã®çŠ¶æ…‹ã«æˆ»ã™
             super.exited(event);
 
             fireStateChangeExitEvent(event);
@@ -51,7 +51,7 @@ public abstract class SingleStatementStateManager extends
 
     protected void fireStateChangeExitEvent(final AstVisitEvent event) {
         if (this.isHeaderToken(event.getToken())) {
-            //’è‹`ƒm[ƒh‚È‚çƒCƒxƒ“ƒg‚ğ”­s
+            //å®šç¾©ãƒãƒ¼ãƒ‰ãªã‚‰ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œ
             this.fireStateChangeEvent(this.getStatementExitEventType(), event);
         }
     }

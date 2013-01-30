@@ -8,19 +8,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 
 
 /**
- * {@link LANGUAGE} ‚Ìƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX.
+ * {@link LANGUAGE} ã®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹.
  * 
  * @author rniitani
  */
 public class LanguageUtil {
 
     /**
-     * ‘S‚Ä‚ÌŒ¾Œê‚©‚ç filter ‚É‚æ‚Á‚Äƒ}ƒbƒ`‚µ‚½Œ¾Œê‚Ì‚İ‚ğ•Ô‚·.
+     * å…¨ã¦ã®è¨€èªã‹ã‚‰ filter ã«ã‚ˆã£ã¦ãƒãƒƒãƒã—ãŸè¨€èªã®ã¿ã‚’è¿”ã™.
      * 
-     * {@link AbstractPlugin#getMeasurableLanguages()} ‚È‚Ç‚Åg—p‚·‚é.
+     * {@link AbstractPlugin#getMeasurableLanguages()} ãªã©ã§ä½¿ç”¨ã™ã‚‹.
      * 
-     * @param filter Œ¾Œê‚ÌƒtƒBƒ‹ƒ^
-     * @return ƒtƒBƒ‹ƒ^‚³‚ê‚½Œ¾Œê‚Ì”z—ñ
+     * @param filter è¨€èªã®ãƒ•ã‚£ãƒ«ã‚¿
+     * @return ãƒ•ã‚£ãƒ«ã‚¿ã•ã‚ŒãŸè¨€èªã®é…åˆ—
      */
     public static LANGUAGE[] filterLanguages(LanguageFilter filter) {
         final LANGUAGE[] allLanguages = LANGUAGE.values();
@@ -38,9 +38,9 @@ public class LanguageUtil {
 
 
     /**
-     * ƒIƒuƒWƒFƒNƒgwŒü‚ÈŒ¾Œê‚Ì‚İ‚ğæ“¾.
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘ãªè¨€èªã®ã¿ã‚’å–å¾—.
      * 
-     * @return ƒIƒuƒWƒFƒNƒgwŒü‚ÈŒ¾Œê‚Ì”z—ñ
+     * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘ãªè¨€èªã®é…åˆ—
      */
     public static LANGUAGE[] getObjectOrientedLanguages() {
         return filterLanguages(new LanguageFilter() {

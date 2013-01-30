@@ -5,7 +5,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
  * 
  * @author higo
  * 
- * —˜—p‰Â”\‚Å‚È‚¢ƒvƒƒOƒ‰ƒ~ƒ“ƒOŒ¾Œê‚ªw’è‚³‚ê‚½ê‡‚É—p‚¢‚ç‚ê‚éD
+ * åˆ©ç”¨å¯èƒ½ã§ãªã„ãƒ—ãƒ­ã‚°ãƒ©ãƒŸãƒ³ã‚°è¨€èªãŒæŒ‡å®šã•ã‚ŒãŸå ´åˆã«ç”¨ã„ã‚‰ã‚Œã‚‹ï¼
  * 
  */
 public class UnavailableLanguageException extends RuntimeException {

@@ -2,75 +2,75 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
 
 /**
- * ”CˆÓ‚ÌƒIƒuƒWƒFƒNƒg‚ÉŠÖ‚µ‚ÄCŠJnsCŠJn—ñCI—¹sCI—¹—ñ‚ğŠÇ—‚·‚éƒCƒ“ƒ^ƒtƒF[ƒX.
+ * ä»»æ„ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«é–¢ã—ã¦ï¼Œé–‹å§‹è¡Œï¼Œé–‹å§‹åˆ—ï¼Œçµ‚äº†è¡Œï¼Œçµ‚äº†åˆ—ã‚’ç®¡ç†ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹.
  * @author kou-tngt
  *
  */
 public interface PositionManager {
 
     /**
-     * ˆø”key‚ÌŠJns‚ğ•Ô‚·
-     * @param key@ŠJns‚ğæ“¾‚µ‚½‚¢—v‘f
-     * @return@ŠJns
+     * å¼•æ•°keyã®é–‹å§‹è¡Œã‚’è¿”ã™
+     * @param keyã€€é–‹å§‹è¡Œã‚’å–å¾—ã—ãŸã„è¦ç´ 
+     * @returnã€€é–‹å§‹è¡Œ
      */
     public int getStartLine(Object key);
 
     /**
-     * ˆø”key‚ÌŠJn—ñ‚ğ•Ô‚·
-     * @param key@ŠJn—ñ‚ğæ“¾‚µ‚½‚¢—v‘f
-     * @return@ŠJn—ñ
+     * å¼•æ•°keyã®é–‹å§‹åˆ—ã‚’è¿”ã™
+     * @param keyã€€é–‹å§‹åˆ—ã‚’å–å¾—ã—ãŸã„è¦ç´ 
+     * @returnã€€é–‹å§‹åˆ—
      */
     public int getStartColumn(Object key);
 
     /**
-     * ˆø”key‚ÌI—¹s‚ğ•Ô‚·
-     * @param key@I—¹s‚ğæ“¾‚µ‚½‚¢—v‘f
-     * @return@I—¹s
+     * å¼•æ•°keyã®çµ‚äº†è¡Œã‚’è¿”ã™
+     * @param keyã€€çµ‚äº†è¡Œã‚’å–å¾—ã—ãŸã„è¦ç´ 
+     * @returnã€€çµ‚äº†è¡Œ
      */
     public int getEndLine(Object key);
 
     /**
-     * ˆø”key‚ÌI—¹—ñ‚ğ•Ô‚·
-     * @param key@I—¹—ñ‚ğæ“¾‚µ‚½‚¢—v‘f
-     * @return@ŠJn—ñ
+     * å¼•æ•°keyã®çµ‚äº†åˆ—ã‚’è¿”ã™
+     * @param keyã€€çµ‚äº†åˆ—ã‚’å–å¾—ã—ãŸã„è¦ç´ 
+     * @returnã€€é–‹å§‹åˆ—
      */
     public int getEndColumn(Object key);
 
     /**
-     * ˆø”key‚ÌŠJns‚ğƒZƒbƒg‚·‚é
-     * @param key@ŠJns‚ğƒZƒbƒg‚·‚é—v‘f
-     * @param line@ŠJns
+     * å¼•æ•°keyã®é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param keyã€€é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹è¦ç´ 
+     * @param lineã€€é–‹å§‹è¡Œ
      */
     public void setStartLine(Object key, int line);
 
     /**
-     * ˆø”key‚ÌŠJn—ñ‚ğƒZƒbƒg‚·‚é
-     * @param key@ŠJn—ñ‚ğƒZƒbƒg‚·‚é—v‘f
-     * @param column@ŠJn—ñ
+     * å¼•æ•°keyã®é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param keyã€€é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹è¦ç´ 
+     * @param columnã€€é–‹å§‹åˆ—
      */
     public void setStartColumn(Object key, int column);
 
     /**
-     * ˆø”key‚ÌI—¹s‚ğƒZƒbƒg‚·‚é
-     * @param key@I—¹s‚ğƒZƒbƒg‚·‚é—v‘f
-     * @param line@I—¹s
+     * å¼•æ•°keyã®çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param keyã€€çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹è¦ç´ 
+     * @param lineã€€çµ‚äº†è¡Œ
      */
     public void setEndLine(Object key, int line);
 
     /**
-     * ˆø”key‚ÌI—¹—ñ‚ğƒZƒbƒg‚·‚é
-     * @param key@I—¹—ñ‚ğƒZƒbƒg‚·‚é—v‘f
-     * @param column@I—¹—ñ
+     * å¼•æ•°keyã®çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param keyã€€çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹è¦ç´ 
+     * @param columnã€€çµ‚äº†åˆ—
      */
     public void setEndColumn(Object key, int column);
 
     /**
-     * ˆø”key‚ÌŠJnsCŠJn—ñCI—¹sCI—¹—ñ‚ğƒZƒbƒg‚·‚é
-     * @param key@î•ñ‚ğƒZƒbƒg‚µ‚½‚¢—v‘f
-     * @param startLine ŠJns
-     * @param startColumn@ŠJn—ñ
-     * @param endLine@I—¹s
-     * @param endColumn@I—¹—ñ
+     * å¼•æ•°keyã®é–‹å§‹è¡Œï¼Œé–‹å§‹åˆ—ï¼Œçµ‚äº†è¡Œï¼Œçµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+     * @param keyã€€æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã—ãŸã„è¦ç´ 
+     * @param startLine é–‹å§‹è¡Œ
+     * @param startColumnã€€é–‹å§‹åˆ—
+     * @param endLineã€€çµ‚äº†è¡Œ
+     * @param endColumnã€€çµ‚äº†åˆ—
      */
     public void setPosition(Object key, int startLine, int startColumn, int endLine, int endColumn);
 

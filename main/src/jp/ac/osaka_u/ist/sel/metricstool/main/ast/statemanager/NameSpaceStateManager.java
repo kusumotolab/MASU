@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
- * –¼‘O‹óŠÔ’è‹`•”‚Æ‚»‚ÌŒã‚ÌƒuƒƒbƒN‚É‘Î‚·‚éƒrƒWƒ^[‚Ìó‘Ô‚ğŠÇ—‚µCó‘Ô‘JˆÚƒCƒxƒ“ƒg‚ğ”­s‚·‚éƒNƒ‰ƒXD
+ * åå‰ç©ºé–“å®šç¾©éƒ¨ã¨ãã®å¾Œã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¯¾ã™ã‚‹ãƒ“ã‚¸ã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’ç®¡ç†ã—ï¼ŒçŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºè¡Œã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
  * @author kou-tngt
  *
@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class NameSpaceStateManager extends DeclaredBlockStateManager {
 
     /**
-     * ”­s‚·‚éó‘Ô‘JˆÚƒCƒxƒ“ƒg‚Ìí—Ş‚ğ•\‚·Enum
+     * ç™ºè¡Œã™ã‚‹çŠ¶æ…‹é·ç§»ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’è¡¨ã™Enum
      * 
      * @author kou-tngt
      *
@@ -26,8 +26,8 @@ public class NameSpaceStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * –¼‘O‹óŠÔ’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return –¼‘O‹óŠÔ’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * åå‰ç©ºé–“å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return åå‰ç©ºé–“å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockEnterEventType() {
@@ -35,8 +35,8 @@ public class NameSpaceStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * –¼‘O‹óŠÔ’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return –¼‘O‹óŠÔ’è‹`•”‚É‘±‚­ƒuƒƒbƒN‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * åå‰ç©ºé–“å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return åå‰ç©ºé–“å®šç¾©éƒ¨ã«ç¶šããƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getBlockExitEventType() {
@@ -44,8 +44,8 @@ public class NameSpaceStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * –¼‘O‹óŠÔ’è‹`•”‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return –¼‘O‹óŠÔ’è‹`•”‚É‚É“ü‚Á‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * åå‰ç©ºé–“å®šç¾©éƒ¨ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return åå‰ç©ºé–“å®šç¾©éƒ¨ã«ã«å…¥ã£ãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionEnterEventType() {
@@ -53,8 +53,8 @@ public class NameSpaceStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * –¼‘O‹óŠÔ’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒgƒ^ƒCƒv‚ğ•Ô‚·D
-     * @return –¼‘O‹óŠÔ’è‹`•”‚©‚ço‚½‚É”­s‚·‚éó‘Ô•Ï‰»ƒCƒxƒ“ƒg‚ÌƒCƒxƒ“ƒgƒ^ƒCƒv
+     * åå‰ç©ºé–“å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™ï¼
+     * @return åå‰ç©ºé–“å®šç¾©éƒ¨ã‹ã‚‰å‡ºãŸæ™‚ã«ç™ºè¡Œã™ã‚‹çŠ¶æ…‹å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—
      */
     @Override
     protected StateChangeEventType getDefinitionExitEventType() {
@@ -62,11 +62,11 @@ public class NameSpaceStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * ˆø”‚ÌƒCƒxƒ“ƒg‚ª–¼‘O‹óŠÔ’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ•Ô‚·D
-     * token.isNameSpaceDefinition()ƒƒ\ƒbƒh‚ğ—p‚¢‚Ä”»’è‚·‚éD
+     * å¼•æ•°ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒåå‰ç©ºé–“å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’è¿”ã™ï¼
+     * token.isNameSpaceDefinition()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç”¨ã„ã¦åˆ¤å®šã™ã‚‹ï¼
      * 
-     * @param token@–¼‘O‹óŠÔ’è‹`•”‚ğ•\‚·‚©‚Ç‚¤‚©‚ğ’²‚×‚½‚¢ASTƒCƒxƒ“ƒg
-     * @return –¼‘O‹óŠÔ’è‹`•”‚ğ•\‚·ƒg[ƒNƒ“‚Å‚ ‚ê‚Îtrue
+     * @param tokenã€€åå‰ç©ºé–“å®šç¾©éƒ¨ã‚’è¡¨ã™ã‹ã©ã†ã‹ã‚’èª¿ã¹ãŸã„ASTã‚¤ãƒ™ãƒ³ãƒˆ
+     * @return åå‰ç©ºé–“å®šç¾©éƒ¨ã‚’è¡¨ã™ãƒˆãƒ¼ã‚¯ãƒ³ã§ã‚ã‚Œã°true
      */
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {

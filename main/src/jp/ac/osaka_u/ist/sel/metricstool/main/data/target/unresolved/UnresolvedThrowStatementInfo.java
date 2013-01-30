@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * –¢‰ğŒˆthrow•¶î•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºthrowæ–‡æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -21,9 +21,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<ThrowStatementInfo> {
 
     /**
-     * ŠO‘¤‚ÌƒXƒR[ƒv‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * å¤–å´ã®ã‚¹ã‚³ãƒ¼ãƒ—ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param outerLocalSpace ŠO‘¤‚ÌƒXƒR[ƒv
+     * @param outerLocalSpace å¤–å´ã®ã‚¹ã‚³ãƒ¼ãƒ—
      */
     public UnresolvedThrowStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
@@ -35,14 +35,14 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {
 
-        // •s³‚ÈŒÄ‚Ño‚µ‚Å‚È‚¢‚©‚ğƒ`ƒFƒbƒN
+        // ä¸æ­£ãªå‘¼ã³å‡ºã—ã§ãªã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
             throw new IllegalArgumentException();
         }
 
-        // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+        // æ—¢ã«è§£æ±ºæ¸ˆã¿ã§ã‚ã‚‹å ´åˆã¯ï¼Œã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
@@ -69,8 +69,8 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
     }
 
     /**
-     * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é
-     * @param thrownExpression throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚Ì–¢‰ğŒˆî•ñ
+     * throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹
+     * @param thrownExpression throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã®æœªè§£æ±ºæƒ…å ±
      */
     public final void setThrownExpresasion(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression) {
@@ -84,7 +84,7 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
     }
 
     /**
-     * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
+     * throwæ–‡ã«ã‚ˆã£ã¦æŠ•ã’ã‚‰ã‚Œã‚‹ä¾‹å¤–ã®æœªè§£æ±ºæƒ…å ±ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
      */
     private UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression;
 

@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
- * ‚±‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ÍCƒNƒ‰ƒXî•ñ‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒhŒS‚ğ’ñ‹Ÿ‚·‚éD
+ * ã“ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã¯ï¼Œã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰éƒ¡ã‚’æä¾›ã™ã‚‹ï¼
  * 
  * @author higo
  *
@@ -13,8 +13,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public interface ClassInfoAccessor extends Iterable<TargetClassInfo> {
 
     /**
-     * ‘ÎÛƒNƒ‰ƒX‚Ì”‚ğ•Ô‚·ƒƒ\ƒbƒh.
-     * @return ‘ÎÛƒNƒ‰ƒX‚Ì”
+     * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°ã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰.
+     * @return å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®æ•°
      */
     public int getClassCount();
 }

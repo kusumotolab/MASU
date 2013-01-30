@@ -15,35 +15,35 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
 
 /**
- * ƒƒgƒŠƒNƒXƒc[ƒ‹‚ÌƒAƒNƒZƒX§Œä‚ğƒXƒŒƒbƒh’PˆÊ‚Å“®“I‚És‚¤ƒZƒLƒ…ƒŠƒeƒBƒ}ƒl[ƒWƒƒ
+ * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãƒ„ãƒ¼ãƒ«ã®ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡ã‚’ã‚¹ãƒ¬ãƒƒãƒ‰å˜ä½ã§å‹•çš„ã«è¡Œã†ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒãƒ¼ã‚¸ãƒ£
  * <p>
- * Å‰‚É {@link #getInstance()} ‚ğŒÄ‚ñ‚¾ƒXƒŒƒbƒh‚É‘S‚Ä‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚é“Á•ÊŒ ŒÀ‚ğ—^‚¦‚éD
- * ‚»‚ÌŒãC“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚éƒXƒŒƒbƒh‚ª {@link #addPrivilegeThread(Thread)} ƒƒ\ƒbƒh‚ğ’Ê‚¶‚Ä“o˜^‚µ‚½ƒXƒŒƒbƒh‚É‚à“¯—l‚Ì“Á•ÊŒ ŒÀ‚ğ—^‚¦‚éD
- * “Á•ÊŒ ŒÀ‚ğ—^‚¦‚ç‚ê‚½ƒXƒŒƒbƒh‚Ì“Á•ÊŒ ŒÀ‚Ííœ‚³‚ê‚È‚¢D
+ * æœ€åˆã« {@link #getInstance()} ã‚’å‘¼ã‚“ã ã‚¹ãƒ¬ãƒƒãƒ‰ã«å…¨ã¦ã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹ç‰¹åˆ¥æ¨©é™ã‚’ä¸ãˆã‚‹ï¼
+ * ãã®å¾Œï¼Œç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãŒ {@link #addPrivilegeThread(Thread)} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’é€šã˜ã¦ç™»éŒ²ã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ã«ã‚‚åŒæ§˜ã®ç‰¹åˆ¥æ¨©é™ã‚’ä¸ãˆã‚‹ï¼
+ * ç‰¹åˆ¥æ¨©é™ã‚’ä¸ãˆã‚‰ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ã®ç‰¹åˆ¥æ¨©é™ã¯å‰Šé™¤ã•ã‚Œãªã„ï¼
  * <p>
- * ‚±‚ÌƒNƒ‰ƒX‚Ì—˜—pÒ‚Í“Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚©‚ç‚ÌƒAƒNƒZƒX‚ğ”rœ‚µ‚½‚¢ê‡‚Í {@link #checkAccess()} ƒƒ\ƒbƒh‚ğŒÄ‚ÔD
- * ŒÄ‚Ño‚µ‚½ƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡‚ÍC {@link AccessControlException}@—áŠO‚ªƒXƒ[‚³‚ê‚éD
- * “Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚Å‚ ‚Á‚½ê‡‚ÍC‰½‚à‚¹‚¸‚Éˆ—‚ğ•Ô‚·D
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã®åˆ©ç”¨è€…ã¯ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’æ’é™¤ã—ãŸã„å ´åˆã¯ {@link #checkAccess()} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã¶ï¼
+ * å‘¼ã³å‡ºã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆã¯ï¼Œ {@link AccessControlException}ã€€ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ï¼
+ * ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã§ã‚ã£ãŸå ´åˆã¯ï¼Œä½•ã‚‚ã›ãšã«å‡¦ç†ã‚’è¿”ã™ï¼
  * <p>
- * ƒvƒ‰ƒOƒCƒ“‚©‚ç‚ÌƒAƒNƒZƒX‚ğ”rœ‚µ‚½‚¢ê‡‚ÍC {@link #checkPlugin()} ƒƒ\ƒbƒh‚ğŒÄ‚Ô.
- * ŒÄ‚Ño‚µ‚½ƒvƒ‰ƒOƒCƒ“‚ª“o˜^‚³‚ê‚½ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚Æ“¯‚¶ƒOƒ‹[ƒv‚É‘®‚µ‚Ä‚¢‚ê‚ÎC {@link AccessControlException}‚ªƒXƒ[‚³‚ê‚é.
- * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚Æ“¯‚¶ƒOƒ‹[ƒv‚Å‚È‚¯‚ê‚ÎC‰½‚à‚¹‚¸‚Éˆ—‚ğ•Ô‚·.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’æ’é™¤ã—ãŸã„å ´åˆã¯ï¼Œ {@link #checkPlugin()} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã¶.
+ * å‘¼ã³å‡ºã—ãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒç™»éŒ²ã•ã‚ŒãŸãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã¨åŒã˜ã‚°ãƒ«ãƒ¼ãƒ—ã«å±ã—ã¦ã„ã‚Œã°ï¼Œ {@link AccessControlException}ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹.
+ * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã¨åŒã˜ã‚°ãƒ«ãƒ¼ãƒ—ã§ãªã‘ã‚Œã°ï¼Œä½•ã‚‚ã›ãšã«å‡¦ç†ã‚’è¿”ã™.
  * <p>
- * ‚Ü‚½C•Ê‚ÌƒAƒNƒZƒXƒRƒ“ƒgƒ[ƒ‹‚Æ‚µ‚ÄƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚¢‚¤ŠT”O‚ğˆµ‚¤D
- * ƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚Íƒvƒ‰ƒOƒCƒ“‚âGUI‚ğŠÜ‚ŞVMã‚Ì‘S‚Ä‚ÌƒNƒ‰ƒX‚É‹–‚³‚ê‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ì‚±‚Æ‚ÅC
- * {@link #addGlobalPermission(Permission)}‚É‚æ‚Á‚Ä“o˜^‚³‚ê‚½ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ÍC
- * ‘S‚Ä‚ÌƒXƒŒƒbƒhC‘S‚Ä‚ÌƒRƒ“ƒeƒLƒXƒgC‘S‚Ä‚ÌƒR[ƒhƒ\[ƒX‚É‹–‰Â‚³‚ê‚éD
- * ‚½‚¾‚µCƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ì’Ç‰Á‚Í“Á•ÊŒ ŒÀƒXƒŒƒbƒh‚Ì‚İ‚©‚ç‰Â”\‚Å‚ ‚éD
+ * ã¾ãŸï¼Œåˆ¥ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã¨ã—ã¦ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã„ã†æ¦‚å¿µã‚’æ‰±ã†ï¼
+ * ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã¯ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚„GUIã‚’å«ã‚€VMä¸Šã®å…¨ã¦ã®ã‚¯ãƒ©ã‚¹ã«è¨±ã•ã‚Œã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®ã“ã¨ã§ï¼Œ
+ * {@link #addGlobalPermission(Permission)}ã«ã‚ˆã£ã¦ç™»éŒ²ã•ã‚ŒãŸãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¯ï¼Œ
+ * å…¨ã¦ã®ã‚¹ãƒ¬ãƒƒãƒ‰ï¼Œå…¨ã¦ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆï¼Œå…¨ã¦ã®ã‚³ãƒ¼ãƒ‰ã‚½ãƒ¼ã‚¹ã«è¨±å¯ã•ã‚Œã‚‹ï¼
+ * ãŸã ã—ï¼Œã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®è¿½åŠ ã¯ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã‹ã‚‰å¯èƒ½ã§ã‚ã‚‹ï¼
  * <p>
- * ŠeƒXƒŒƒbƒh’PˆÊ‚Ì“Á’è‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚é‚±‚Æ‚à‚Å‚«‚é.
- * {@link #addThreadPermission(Thread, Permission)}ƒƒ\ƒbƒh‚É‚æ‚Á‚ÄC”CˆÓ‚ÌƒXƒŒƒbƒh‚É”CˆÓ‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚é‚±‚Æ‚ª‚Å‚«‚é.
- * ‚½‚¾‚µC‚±‚Ìƒƒ\ƒbƒh‚Í“Á•ÊŒ ŒÀ‚ğ‚ÂƒXƒŒƒbƒh‚Ì‚İ‚©‚çŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚é.
+ * å„ã‚¹ãƒ¬ãƒƒãƒ‰å˜ä½ã®ç‰¹å®šã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹ã“ã¨ã‚‚ã§ãã‚‹.
+ * {@link #addThreadPermission(Thread, Permission)}ãƒ¡ã‚½ãƒƒãƒ‰ã«ã‚ˆã£ã¦ï¼Œä»»æ„ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã«ä»»æ„ã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹ã“ã¨ãŒã§ãã‚‹.
+ * ãŸã ã—ï¼Œã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ç‰¹åˆ¥æ¨©é™ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã‹ã‚‰å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã‚‹.
  * <p>
- * “Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ƒXƒŒƒbƒh‚ÅCƒp[ƒ~ƒbƒVƒ‡ƒ““o˜^‚³‚ê‚Ä‚¢‚È‚¢‚à‚Ì‚É‚Â‚¢‚Ä‚ÍC
- * ’Êí‚Ì {@link SecurityManager} ‚Æ“¯“™‚Ì‹@\‚ğ“K—p‚·‚éD
+ * ç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„ã‚¹ãƒ¬ãƒƒãƒ‰ã§ï¼Œãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ç™»éŒ²ã•ã‚Œã¦ã„ãªã„ã‚‚ã®ã«ã¤ã„ã¦ã¯ï¼Œ
+ * é€šå¸¸ã® {@link SecurityManager} ã¨åŒç­‰ã®æ©Ÿæ§‹ã‚’é©ç”¨ã™ã‚‹ï¼
  * <p>
- * ƒVƒ“ƒOƒ‹ƒgƒ“ƒNƒ‰ƒX‚Å‚ ‚é‚½‚ßCƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í private ‚Å‚ ‚èC‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚·‚é‚±‚Æ‚Í‚Å‚«‚È‚¢‚ªC
- * ‚»‚ê‚ğ–¾¦“I‚ÉéŒ¾‚·‚é‚½‚ß‚É final Cüq‚ğ‚Â‚¯‚Ä‚¢‚éD
+ * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ãŸã‚ï¼Œã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯ private ã§ã‚ã‚Šï¼Œã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã™ã‚‹ã“ã¨ã¯ã§ããªã„ãŒï¼Œ
+ * ãã‚Œã‚’æ˜ç¤ºçš„ã«å®£è¨€ã™ã‚‹ãŸã‚ã« final ä¿®é£¾å­ã‚’ã¤ã‘ã¦ã„ã‚‹ï¼
  * 
  * @author kou-tngt
  *
@@ -51,8 +51,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 public final class MetricsToolSecurityManager extends SecurityManager {
 
     /**
-     * ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é
-     * @return ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
+     * @return ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public static MetricsToolSecurityManager getInstance() {
         if (null == SINGLETON) {
@@ -66,12 +66,12 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒƒgƒŠƒNƒXƒc[ƒ‹‚ğÀs‚µ‚Ä‚¢‚éVMã‚Ì‘S‘Ì‚Å‹–‰Â‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ’Ç‰Á‚·‚éD
-     * ƒƒMƒ“ƒO‚Æ‚©‚â‚è‚½‚¢ê‡‚ÍC‚±‚ê‚ğg‚Á‚Ä“o˜^‚·‚éD
-     * “o˜^‚·‚é‚É‚ÍŒÄ‚Ño‚µƒXƒŒƒbƒh‚É“Á•ÊŒ ŒÀ‚ª•K—v
-     * @param permission ‹–‰Â‚µ‚½‚¢ƒp[ƒ~ƒbƒVƒ‡ƒ“ƒCƒ“ƒXƒ^ƒ“ƒX
-     * @throws AccessControlException ƒXƒŒƒbƒh‚É“Á•ÊŒ ŒÀ‚ª‚È‚¢ê‡
-     * @throws NullPointerException permission‚ªnull‚Ìê‡
+     * ãƒ¡ãƒˆãƒªã‚¯ã‚¹ãƒ„ãƒ¼ãƒ«ã‚’å®Ÿè¡Œã—ã¦ã„ã‚‹VMä¸Šã®å…¨ä½“ã§è¨±å¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¿½åŠ ã™ã‚‹ï¼
+     * ãƒ­ã‚®ãƒ³ã‚°ã¨ã‹ã‚„ã‚ŠãŸã„å ´åˆã¯ï¼Œã“ã‚Œã‚’ä½¿ã£ã¦ç™»éŒ²ã™ã‚‹ï¼
+     * ç™»éŒ²ã™ã‚‹ã«ã¯å‘¼ã³å‡ºã—ã‚¹ãƒ¬ãƒƒãƒ‰ã«ç‰¹åˆ¥æ¨©é™ãŒå¿…è¦
+     * @param permission è¨±å¯ã—ãŸã„ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+     * @throws AccessControlException ã‚¹ãƒ¬ãƒƒãƒ‰ã«ç‰¹åˆ¥æ¨©é™ãŒãªã„å ´åˆ
+     * @throws NullPointerException permissionãŒnullã®å ´åˆ
      */
     public final void addGlobalPermission(final Permission permission) {
         this.checkAccess();
@@ -84,10 +84,10 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚ğ“o˜^‚·‚é.
-     * “o˜^‚³‚ê‚½ƒXƒŒƒbƒh‚Æ“¯‚¶ƒXƒŒƒbƒhƒOƒ‹[ƒv‚É‘®‚·‚éƒXƒŒƒbƒh‚ªCƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚Æ”»’è‚³‚ê‚é
-     * @param thread “o˜^‚·‚éƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh
-     * @throws NullPointerException@thread‚ªnull‚Ìê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ç™»éŒ²ã™ã‚‹.
+     * ç™»éŒ²ã•ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ã¨åŒã˜ã‚¹ãƒ¬ãƒƒãƒ‰ã‚°ãƒ«ãƒ¼ãƒ—ã«å±ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãŒï¼Œãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã¨åˆ¤å®šã•ã‚Œã‚‹
+     * @param thread ç™»éŒ²ã™ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰
+     * @throws NullPointerExceptionã€€threadãŒnullã®å ´åˆ
      */
     public final void addPluginThread(final Thread thread) {
         if (null == thread) {
@@ -98,10 +98,10 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ˆø” thread ‚Å—^‚¦‚ç‚ê‚½ƒXƒŒƒbƒh‚É“Á•ÊŒ ŒÀ‚ğ•t—^‚·‚é
-     * @param thread “Á•ÊŒ ŒÀ‚ğ•t—^‚µ‚½‚¢ƒXƒŒƒbƒh
-     * @throws AccessControlException ŒÄ‚Ño‚µ‘¤‚ÌƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡
-     * @throws NullPointerException thread‚ªnull‚¾‚Á‚½ê‡
+     * å¼•æ•° thread ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ã«ç‰¹åˆ¥æ¨©é™ã‚’ä»˜ä¸ã™ã‚‹
+     * @param thread ç‰¹åˆ¥æ¨©é™ã‚’ä»˜ä¸ã—ãŸã„ã‚¹ãƒ¬ãƒƒãƒ‰
+     * @throws AccessControlException å‘¼ã³å‡ºã—å´ã®ã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ãªã‹ã£ãŸå ´åˆ
+     * @throws NullPointerException threadãŒnullã ã£ãŸå ´åˆ
      */
     public final void addPrivilegeThread(final Thread thread) {
         this.checkAccess();
@@ -113,13 +113,13 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒXƒŒƒbƒhŒÂ•Ê‚É‹–‰Â‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğİ’è‚·‚é.
-     * ‚±‚Ìƒƒ\ƒbƒh‚Åİ’è‚³‚ê‚½ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ÍCˆø”‚Å—^‚¦‚ç‚ê‚½ƒXƒŒƒbƒh‚Ì‚İ‚Å—LŒø‚Å‚ ‚èC
-     * ‚»‚ÌƒXƒŒƒbƒh‚©‚çì¬‚³‚ê‚½•Ê‚ÌƒXƒŒƒbƒh‚É‚Í÷“n‚³‚ê‚È‚¢.
-     * @param thread ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚éƒXƒŒƒbƒh
-     * @param permission ‹–‰Â‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
-     * @throws AccessControlException ŒÄ‚Ño‚µŒ³‚ÌƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚½‚È‚¢ê‡
-     * @throws NullPointerException permission‚ªnull‚Ìê‡
+     * ã‚¹ãƒ¬ãƒƒãƒ‰å€‹åˆ¥ã«è¨±å¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹.
+     * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã§è¨­å®šã•ã‚ŒãŸãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¯ï¼Œå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã§æœ‰åŠ¹ã§ã‚ã‚Šï¼Œ
+     * ãã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ä½œæˆã•ã‚ŒãŸåˆ¥ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã«ã¯è­²æ¸¡ã•ã‚Œãªã„.
+     * @param thread ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰
+     * @param permission è¨±å¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
+     * @throws AccessControlException å‘¼ã³å‡ºã—å…ƒã®ã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒãŸãªã„å ´åˆ
+     * @throws NullPointerException permissionãŒnullã®å ´åˆ
      */
     public final void addThreadPermission(final Thread thread, final Permission permission) {
         this.checkAccess();
@@ -141,20 +141,20 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éƒƒ\ƒbƒhD
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒhˆÈŠO‚©‚çŒÄ‚Ño‚³‚ê‚é‚ÆC {@link AccessControlException}@‚ğƒXƒ[‚·‚éD
-     * @throws AccessControlException “Á•ÊŒ ŒÀƒXƒŒƒbƒhˆÈŠO‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã¨ï¼Œ {@link AccessControlException}ã€€ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹ï¼
+     * @throws AccessControlException ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public final void checkAccess() {
-        //ƒJƒŒƒ“ƒgƒXƒŒƒbƒh‚ğæ“¾
+        //ã‚«ãƒ¬ãƒ³ãƒˆã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å–å¾—
         final Thread currentThread = Thread.currentThread();
         if (!this.isPrivilegeThread(currentThread)) {
-            //“o˜^‚³‚ê‚Ä‚¢‚È‚©‚Á‚½
+            //ç™»éŒ²ã•ã‚Œã¦ã„ãªã‹ã£ãŸ
 
-            //ƒGƒ‰[•\¦—p‚ÉƒXƒ^ƒbƒN‚ÆƒŒ[ƒX‚Ìæ“¾
+            //ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºç”¨ã«ã‚¹ã‚¿ãƒƒã‚¯ã¨ãƒ¬ãƒ¼ã‚¹ã®å–å¾—
             final StackTraceElement[] traces = currentThread.getStackTrace();
 
-            //‚±‚Ìƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µŒ³‚Ìƒƒ\ƒbƒh‚ğæ“¾
+            //ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—å…ƒã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å–å¾—
             assert (null != traces && 3 < traces.length) : "Illegal state: empty stack trace.";
             final StackTraceElement callerMethod = traces[3];
 
@@ -166,20 +166,20 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éƒƒ\ƒbƒh.
-     * ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µ‚Å‚ ‚ê‚ÎC{@link AccessControlException}@‚ğƒXƒ[‚·‚éD
-     * @throws AccessControlException ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚½ê‡
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ã§ã‚ã‚Œã°ï¼Œ{@link AccessControlException}ã€€ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹ï¼
+     * @throws AccessControlException ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚ŒãŸå ´åˆ
      */
     public final void checkPlugin() {
-        //ƒJƒŒƒ“ƒgƒXƒŒƒbƒh‚ğæ“¾
+        //ã‚«ãƒ¬ãƒ³ãƒˆã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å–å¾—
         final Thread currentThread = Thread.currentThread();
         if (this.isPluginThread(currentThread)) {
-            //ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚¾‚Á‚½
+            //ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã ã£ãŸ
 
-            //ƒGƒ‰[•\¦—p‚ÉƒXƒ^ƒbƒN‚ÆƒŒ[ƒX‚Ìæ“¾
+            //ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºç”¨ã«ã‚¹ã‚¿ãƒƒã‚¯ã¨ãƒ¬ãƒ¼ã‚¹ã®å–å¾—
             final StackTraceElement[] traces = currentThread.getStackTrace();
 
-            //‚±‚Ìƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µŒ³‚Ìƒƒ\ƒbƒh‚ğæ“¾
+            //ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—å…ƒã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å–å¾—
             assert (null != traces && 3 < traces.length) : "Illegal state: empty stack trace.";
             final StackTraceElement callerMethod = traces[3];
 
@@ -191,13 +191,13 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * {@link SecurityManager#checkPermission(Permission)} ƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µC
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚©‚ç‚ÌŒÄ‚Ño‚µCƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚µ‚Ä“o˜^Ï‚İCƒXƒŒƒbƒhŒÂ•Ê‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚µ‚Ä“o˜^Ï‚İ‚Å‚ ‚ê‚ÎC
-     * ƒp[ƒ~ƒbƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚ğ‚¹‚¸‚ÉI—¹‚·‚éD
-     * ‚»‚¤‚Å‚È‚¢‚È‚çCeƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚ğŒÄ‚ÑCƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ìƒ`ƒFƒbƒN‚ğs‚¤D
-     * @param perm ƒ`ƒFƒbƒN‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
-     * @throws NullPointerException ˆø”perm‚ªnull‚Ìê‡
-     * @throws SecurityException ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ª‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢ê‡
+     * {@link SecurityManager#checkPermission(Permission)} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ï¼Œ
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®å‘¼ã³å‡ºã—ï¼Œã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã—ã¦ç™»éŒ²æ¸ˆã¿ï¼Œã‚¹ãƒ¬ãƒƒãƒ‰å€‹åˆ¥ã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã—ã¦ç™»éŒ²æ¸ˆã¿ã§ã‚ã‚Œã°ï¼Œ
+     * ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ã‚’ã›ãšã«çµ‚äº†ã™ã‚‹ï¼
+     * ãã†ã§ãªã„ãªã‚‰ï¼Œè¦ªã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³ï¼Œãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†ï¼
+     * @param perm ãƒã‚§ãƒƒã‚¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
+     * @throws NullPointerException å¼•æ•°permãŒnullã®å ´åˆ
+     * @throws SecurityException ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãŒè¨±å¯ã•ã‚Œã¦ã„ãªã„å ´åˆ
      * @see java.lang.SecurityManager#checkPermission(java.security.Permission)
      */
     @Override
@@ -213,20 +213,20 @@ public final class MetricsToolSecurityManager extends SecurityManager {
         } else {
             final Thread current = Thread.currentThread();
 
-            //‚±‚Ìƒƒ\ƒbƒh“à‚©‚çŒÄ‚Ño‚³‚ê‚ÄC©•ª‚ªŠ‘®‚µ‚Ä‚¢‚éƒXƒŒƒbƒhƒOƒ‹[ƒv‚ÌeƒOƒ‹[ƒv‚ªnull‚©‚Ç‚¤‚©‚ğ’²‚×‚É—ˆ‚½ƒXƒŒƒbƒh‚¾‚¯‹–‰Â‚·‚é
+            //ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å†…ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã¦ï¼Œè‡ªåˆ†ãŒæ‰€å±ã—ã¦ã„ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚°ãƒ«ãƒ¼ãƒ—ã®è¦ªã‚°ãƒ«ãƒ¼ãƒ—ãŒnullã‹ã©ã†ã‹ã‚’èª¿ã¹ã«æ¥ãŸã‚¹ãƒ¬ãƒƒãƒ‰ã ã‘è¨±å¯ã™ã‚‹
             if (perm.getName().equals("modifyThreadGroup")
                     && this.groupParentCheckingThread.contains(current)) {
                 return;
             }
 
-            //©•ª‚ªŠ‘®‚µ‚Ä‚¢‚éƒXƒŒƒbƒhƒOƒ‹[ƒv‚ÌeƒOƒ‹[ƒv‚ªnull‚©‚Ç‚¤‚©‚ğ’²‚×‚É‚¢‚­
-            //null‚È‚çƒVƒXƒeƒ€ƒXƒŒƒbƒh‚Å‚ ‚éD
+            //è‡ªåˆ†ãŒæ‰€å±ã—ã¦ã„ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚°ãƒ«ãƒ¼ãƒ—ã®è¦ªã‚°ãƒ«ãƒ¼ãƒ—ãŒnullã‹ã©ã†ã‹ã‚’èª¿ã¹ã«ã„ã
+            //nullãªã‚‰ã‚·ã‚¹ãƒ†ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ã§ã‚ã‚‹ï¼
             this.groupParentCheckingThread.add(current);
             boolean isSystemThread = null == current.getThreadGroup().getParent();
             this.groupParentCheckingThread.remove(current);
 
             if (isSystemThread) {
-                //ƒVƒXƒeƒ€ƒXƒŒƒbƒh‚Ìê‡‚Í‘S‚Ä‚ğ‹–‰Â‚µ‚Ä‚µ‚Ü‚¤D
+                //ã‚·ã‚¹ãƒ†ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ã®å ´åˆã¯å…¨ã¦ã‚’è¨±å¯ã—ã¦ã—ã¾ã†ï¼
                 return;
             } else if (this.threadPermissions.containsKey(current)) {
                 final Permissions permissions = this.threadPermissions.get(current);
@@ -240,12 +240,12 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * {@link SecurityManager#checkPermission(Permission, Object)} ƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µC
-     * ƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚µ‚Ä“o˜^Ï‚İ‚Å‚ ‚ê‚Îƒp[ƒ~ƒbƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚ğ‚¹‚¸‚ÉI—¹‚·‚éD
-     * ‚»‚¤‚Å‚È‚¢‚È‚çCeƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚ğŒÄ‚ÑCƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ìƒ`ƒFƒbƒN‚ğs‚¤D
-     * @param perm ƒ`ƒFƒbƒN‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
-     * @throws NullPointerException ˆø”perm‚ªnull‚Ìê‡
-     * @throws SecurityException perm‚ªƒOƒ[ƒoƒ‹ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Å‚È‚¢ê‡‚ÉCƒp[ƒ~ƒbƒVƒ‡ƒ“‚ª‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢ê‡
+     * {@link SecurityManager#checkPermission(Permission, Object)} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ï¼Œ
+     * ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã—ã¦ç™»éŒ²æ¸ˆã¿ã§ã‚ã‚Œã°ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ã‚’ã›ãšã«çµ‚äº†ã™ã‚‹ï¼
+     * ãã†ã§ãªã„ãªã‚‰ï¼Œè¦ªã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³ï¼Œãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†ï¼
+     * @param perm ãƒã‚§ãƒƒã‚¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
+     * @throws NullPointerException å¼•æ•°permãŒnullã®å ´åˆ
+     * @throws SecurityException permãŒã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã§ãªã„å ´åˆã«ï¼Œãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãŒè¨±å¯ã•ã‚Œã¦ã„ãªã„å ´åˆ
      * @see java.lang.SecurityManager#checkPermission(Permission, Object)
      */
     @Override
@@ -261,47 +261,47 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒJƒŒƒ“ƒgƒXƒŒƒbƒh‚ªƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @return ƒJƒŒƒ“ƒgƒXƒŒƒbƒh‚ªƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚È‚çtrueC‚»‚¤‚Å‚È‚¢‚È‚çfalse
+     * ã‚«ãƒ¬ãƒ³ãƒˆã‚¹ãƒ¬ãƒƒãƒ‰ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @return ã‚«ãƒ¬ãƒ³ãƒˆã‚¹ãƒ¬ãƒƒãƒ‰ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ãªã‚‰trueï¼Œãã†ã§ãªã„ãªã‚‰false
      */
     public final boolean isPluginThread() {
         return this.isPluginThread(Thread.currentThread());
     }
 
     /**
-     * ˆø”‚ÌƒXƒŒƒbƒh‚ªƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚©‚Ç‚¤‚©‚ğ•Ô‚·
-     * @param thread ’²‚×‚½‚¢ƒXƒŒƒbƒh
-     * @return ƒvƒ‰ƒOƒCƒ“ƒXƒŒƒbƒh‚È‚çtrueC‚»‚¤‚Å‚È‚¢‚È‚çfalse
+     * å¼•æ•°ã®ã‚¹ãƒ¬ãƒƒãƒ‰ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã©ã†ã‹ã‚’è¿”ã™
+     * @param thread èª¿ã¹ãŸã„ã‚¹ãƒ¬ãƒƒãƒ‰
+     * @return ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ãªã‚‰trueï¼Œãã†ã§ãªã„ãªã‚‰false
      */
     public final boolean isPluginThread(final Thread thread) {
         return this.pluginThreadGroups.contains(thread.getThreadGroup());
     }
 
     /**
-     * ƒJƒŒƒ“ƒgƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚é‚©‚ğ•Ô‚·
-     * @return “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚ê‚Îtrue
+     * ã‚«ãƒ¬ãƒ³ãƒˆã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‹ã‚’è¿”ã™
+     * @return ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚Œã°true
      */
     public final boolean isPrivilegeThread() {
         return this.isPrivilegeThread(Thread.currentThread());
     }
 
     /**
-     * ˆø” thread ‚Å—^‚¦‚ç‚ê‚½ƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚é‚©‚ğ•Ô‚·
-     * @param thread “Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚é‚©‚ğ’²‚×‚½‚¢ƒXƒŒƒbƒh
-     * @return ˆø” thread ‚Å—^‚¦‚ç‚ê‚½ƒXƒŒƒbƒh‚ª“Á•ÊŒ ŒÀ‚ğ‚Á‚Ä‚¢‚ê‚Îtrue
+     * å¼•æ•° thread ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‹ã‚’è¿”ã™
+     * @param thread ç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‹ã‚’èª¿ã¹ãŸã„ã‚¹ãƒ¬ãƒƒãƒ‰
+     * @return å¼•æ•° thread ã§ä¸ãˆã‚‰ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ãŒç‰¹åˆ¥æ¨©é™ã‚’æŒã£ã¦ã„ã‚Œã°true
      */
     public final boolean isPrivilegeThread(final Thread thread) {
         return this.privilegeThreads.contains(thread);
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌƒAƒNƒZƒXŒ ŒÀ‚ğ‰ğœ‚·‚é
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¢ã‚¯ã‚»ã‚¹æ¨©é™ã‚’è§£é™¤ã™ã‚‹
      * @param plugin
      */
     public final void removePluginPermission(final AbstractPlugin plugin) {
         Thread current = Thread.currentThread();
 
-        //‹–‰Â‚³‚ê‚Ä‚¢‚½ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğæ‚Á‚Ä‚­‚é.
+        //è¨±å¯ã•ã‚Œã¦ã„ãŸãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’å–ã£ã¦ãã‚‹.
         Permissions permissions;
         if (this.threadPermissions.containsKey(current)) {
             permissions = this.threadPermissions.get(current);
@@ -310,10 +310,10 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             this.threadPermissions.put(current, permissions);
         }
 
-        //V‹Kƒp[ƒ~ƒbƒVƒ‡ƒ“ƒZƒbƒg‚ğì‚é
+        //æ–°è¦ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã‚’ä½œã‚‹
         Permissions newPermissions = new Permissions();
 
-        //‹–‰Â‚³‚ê‚Ä‚¢‚½ƒp[ƒ~ƒbƒVƒ‡ƒ“‚ªƒvƒ‰ƒOƒCƒ“‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“ƒZƒbƒg‚ÉŠÜ‚Ü‚ê‚Ä‹‚È‚¯‚ê‚ÎV‹Kƒp[ƒ~ƒbƒVƒ‡ƒ“ƒZƒbƒg‚É“ü‚ê‚é
+        //è¨±å¯ã•ã‚Œã¦ã„ãŸãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãŒãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã«å«ã¾ã‚Œã¦å±…ãªã‘ã‚Œã°æ–°è¦ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã«å…¥ã‚Œã‚‹
         for (Enumeration<Permission> enumerator = permissions.elements(); enumerator
                 .hasMoreElements();) {
             Permission permission = enumerator.nextElement();
@@ -321,7 +321,7 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             for (Enumeration<Permission> pluginPermissions = plugin.getPermissions().elements(); pluginPermissions
                     .hasMoreElements();) {
                 Permission pluginPermission = pluginPermissions.nextElement();
-                if (pluginPermission == permission) {//ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì”äŠr‚ğ‚·‚é
+                if (pluginPermission == permission) {//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®æ¯”è¼ƒã‚’ã™ã‚‹
                     include = true;
                     break;
                 }
@@ -330,13 +330,13 @@ public final class MetricsToolSecurityManager extends SecurityManager {
                 newPermissions.add(permission);
             }
         }
-        //V‹Kƒp[ƒ~ƒbƒVƒ‡ƒ“ƒZƒbƒg‚ğ‚±‚ÌƒXƒŒƒbƒh‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚Æ‚µ‚ÄƒZƒbƒg‚·‚é
+        //æ–°è¦ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã‚’ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã¨ã—ã¦ã‚»ãƒƒãƒˆã™ã‚‹
         this.threadPermissions.put(current, newPermissions);
     }
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌƒAƒNƒZƒXŒ ŒÀ‚ğİ’è‚·‚é
-     * @param plugin@ƒvƒ‰ƒOƒCƒ“ƒCƒ“ƒXƒ^ƒ“ƒX
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¢ã‚¯ã‚»ã‚¹æ¨©é™ã‚’è¨­å®šã™ã‚‹
+     * @param pluginã€€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      */
     public final void requestPluginPermission(final AbstractPlugin plugin) {
         Thread current = Thread.currentThread();
@@ -358,8 +358,8 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * ƒVƒ“ƒOƒ‹ƒgƒ“—pprivateƒRƒ“ƒXƒgƒ‰ƒNƒ^D
-     * ‚±‚±‚ğŒÄ‚Ño‚µ‚½ƒXƒŒƒbƒh‚ğ‰Šú“Á•ÊŒ ŒÀƒNƒ‰ƒX‚Æ‚µ‚Ä“o˜^‚·‚éD
+     * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ç”¨privateã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼
+     * ã“ã“ã‚’å‘¼ã³å‡ºã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åˆæœŸç‰¹åˆ¥æ¨©é™ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ç™»éŒ²ã™ã‚‹ï¼
      */
     private MetricsToolSecurityManager() {
         final Thread thread = Thread.currentThread();
@@ -368,38 +368,38 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
 
     /**
-     * “Á•ÊŒ ŒÀƒXƒŒƒbƒh‚ÌƒZƒbƒgD
-     * ‘¼‚Ì‘S‚Ä‚ÌQÆ‚ªØ‚ê‚½‚ç“Á•ÊŒ ŒÀƒXƒŒƒbƒh‚ğ‚Á‚Ä‚¢‚Ä‚àˆÓ–¡‚ª‚È‚¢‚Ì‚ÅCãQÆ‚É‚·‚é‚½‚ß‚É {@link WeakHashSet} ‚ğ—p‚¢‚éD
-     * ‚Ü‚½Cƒ}ƒ‹ƒ`ƒXƒŒƒbƒhŠÂ‹«‚Å“KØ‚É“®ì‚³‚¹‚é‚½‚ß‚É {@link Collections#synchronizedSet(Set)} ‚ğg‚Á‚Ä“¯Šú‚³‚¹‚éD
+     * ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã‚»ãƒƒãƒˆï¼
+     * ä»–ã®å…¨ã¦ã®å‚ç…§ãŒåˆ‡ã‚ŒãŸã‚‰ç‰¹åˆ¥æ¨©é™ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’æŒã£ã¦ã„ã¦ã‚‚æ„å‘³ãŒãªã„ã®ã§ï¼Œå¼±å‚ç…§ã«ã™ã‚‹ãŸã‚ã« {@link WeakHashSet} ã‚’ç”¨ã„ã‚‹ï¼
+     * ã¾ãŸï¼Œãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ç’°å¢ƒã§é©åˆ‡ã«å‹•ä½œã•ã›ã‚‹ãŸã‚ã« {@link Collections#synchronizedSet(Set)} ã‚’ä½¿ã£ã¦åŒæœŸã•ã›ã‚‹ï¼
      */
     private final Set<Thread> privilegeThreads = Collections
             .synchronizedSet((new WeakHashSet<Thread>()));
 
     /**
-     * ƒvƒ‰ƒOƒCƒ“‚ÌƒXƒŒƒbƒhƒOƒ‹[ƒv‚ÌƒZƒbƒg.
+     * ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚°ãƒ«ãƒ¼ãƒ—ã®ã‚»ãƒƒãƒˆ.
      * 
      */
     private final Set<ThreadGroup> pluginThreadGroups = Collections
             .synchronizedSet(new WeakHashSet<ThreadGroup>());
 
     /**
-     * {@link #checkPermission(Permission)}ƒƒ\ƒbƒh‚É‚¨‚¢‚Ä—˜—p‚³‚ê‚é {@link ThreadGroup#getParent()} ƒƒ\ƒbƒh‚ÌŒÄ‚Ño‚µ‚ğ
-     * Às‚µ‚½ƒXƒŒƒbƒh‚ğˆê“I‚É•Û‘¶‚µ‚Ä‚¨‚­‚½‚ß‚ÌƒZƒbƒgD
+     * {@link #checkPermission(Permission)}ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã„ã¦åˆ©ç”¨ã•ã‚Œã‚‹ {@link ThreadGroup#getParent()} ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼ã³å‡ºã—ã‚’
+     * å®Ÿè¡Œã—ãŸã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ä¸€æ™‚çš„ã«ä¿å­˜ã—ã¦ãŠããŸã‚ã®ã‚»ãƒƒãƒˆï¼
      */
     private final Set<Thread> groupParentCheckingThread = new WeakHashSet<Thread>();
 
     /**
-     * ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒXD
+     * ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ï¼
      */
     private static MetricsToolSecurityManager SINGLETON;
 
     /**
-     * VM‘S‘Ì‚Å‹–‰Â‚·‚éƒp[ƒ~ƒbƒVƒ‡ƒ“
+     * VMå…¨ä½“ã§è¨±å¯ã™ã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³
      */
     private final Permissions globalPermissions = new Permissions();
 
     /**
-     * ŠeƒXƒŒƒbƒh–ˆ‚É•t—^‚³‚ê‚éƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ìƒ}ƒbƒv
+     * å„ã‚¹ãƒ¬ãƒƒãƒ‰æ¯ã«ä»˜ä¸ã•ã‚Œã‚‹ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®ãƒãƒƒãƒ—
      */
     private final Map<Thread, Permissions> threadPermissions = new WeakHashMap<Thread, Permissions>();
 }

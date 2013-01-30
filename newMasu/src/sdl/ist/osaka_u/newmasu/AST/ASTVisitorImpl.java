@@ -43,7 +43,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public boolean visit(CompilationUnit node) {
 		this.unit = node;
-		FileManager.rel.AddRelation(filePath, node);
+		FileManager.rel.addRelation(filePath, node);
 
 		return super.visit(node);
 	}

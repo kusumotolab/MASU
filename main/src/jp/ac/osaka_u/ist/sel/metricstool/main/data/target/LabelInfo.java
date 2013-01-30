@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 /**
- * ƒ‰ƒxƒ‹’è‹`‚ğ•\‚·ƒNƒ‰ƒX
+ * ãƒ©ãƒ™ãƒ«å®šç¾©ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -16,14 +16,14 @@ import java.util.Set;
 public final class LabelInfo extends UnitInfo implements StatementInfo {
 
     /**
-     * ˆÊ’uî•ñ‚ğ—^‚¦‚Äƒ‰ƒxƒ‹ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ä½ç½®æƒ…å ±ã‚’ä¸ãˆã¦ãƒ©ãƒ™ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param name ƒ‰ƒxƒ‹–¼
-     * @param labeledStatement ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * @param name ãƒ©ãƒ™ãƒ«å
+     * @param labeledStatement ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public LabelInfo(final String name, final StatementInfo labeledStatement, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -34,10 +34,10 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì•¶iƒ‰ƒxƒ‹’è‹`j‚Å—p‚¢‚ç‚ê‚Ä‚¢‚é•Ï”—˜—p‚Ìˆê——‚ğ•Ô‚·D
-     * ‚Ç‚Ì•Ï”‚à—p‚¢‚ç‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅC‹ó‚Ìset‚ª•Ô‚³‚ê‚é
+     * ã“ã®æ–‡ï¼ˆãƒ©ãƒ™ãƒ«å®šç¾©ï¼‰ã§ç”¨ã„ã‚‰ã‚Œã¦ã„ã‚‹å¤‰æ•°åˆ©ç”¨ã®ä¸€è¦§ã‚’è¿”ã™ï¼
+     * ã©ã®å¤‰æ•°ã‚‚ç”¨ã„ã‚‰ã‚Œã¦ã„ãªã„ã®ã§ï¼Œç©ºã®setãŒè¿”ã•ã‚Œã‚‹
      * 
-     * @return •Ï”—˜—p‚ÌSet
+     * @return å¤‰æ•°åˆ©ç”¨ã®Set
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
@@ -45,9 +45,9 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * •Ï”’è‹`‚ÌSet‚ğ•Ô‚·
+     * å¤‰æ•°å®šç¾©ã®Setã‚’è¿”ã™
      * 
-     * @return •Ï”’è‹`‚ÌSet‚ğ•Ô‚·
+     * @return å¤‰æ•°å®šç¾©ã®Setã‚’è¿”ã™
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -55,9 +55,9 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ŒÄ‚Ño‚µ‚ÌSet
+     * @return å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -65,9 +65,9 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹•t‚«•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ä»˜ãæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ‰ƒxƒ‹•t‚«•¶‚ÌƒeƒLƒXƒg•\Œ»iŒ^j
+     * @return ã“ã®ãƒ©ãƒ™ãƒ«ä»˜ãæ–‡ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ï¼ˆå‹ï¼‰
      */
     @Override
     public String getText() {
@@ -79,18 +79,18 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ‰ƒxƒ‹‚Ì–¼‘O
+     * @return ã“ã®ãƒ©ãƒ™ãƒ«ã®åå‰
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶
+     * @return ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡
      */
     public StatementInfo getLabeledStatement() {
         return this.labeledStatement;
@@ -107,9 +107,9 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -117,7 +117,7 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     public final int hashCode() {
@@ -141,12 +141,12 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * ƒ‰ƒxƒ‹‚Ì–¼‘O‚ğ•\‚·•Ï”
+     * ãƒ©ãƒ™ãƒ«ã®åå‰ã‚’è¡¨ã™å¤‰æ•°
      */
     private final String name;
 
     /**
-     * ‚±‚Ìƒ‰ƒxƒ‹‚ª•t‚¢‚½•¶‚ğ•\‚·•Ï”‚ğ•Ô‚·
+     * ã“ã®ãƒ©ãƒ™ãƒ«ãŒä»˜ã„ãŸæ–‡ã‚’è¡¨ã™å¤‰æ•°ã‚’è¿”ã™
      */
     private final StatementInfo labeledStatement;
 }

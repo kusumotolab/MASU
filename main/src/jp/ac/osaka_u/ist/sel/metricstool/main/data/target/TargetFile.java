@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  * 
- * ‘ÎÛƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^‚ğŠi”[‚·‚éƒNƒ‰ƒX
+ * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹ã‚¯ãƒ©ã‚¹
  * 
  * since 2006.11.12
  */
@@ -16,9 +16,9 @@ public final class TargetFile implements Comparable<TargetFile> {
 
     /**
      * 
-     * @param name ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX
+     * @param name å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
      * 
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğ—p‚¢‚Ä‰Šú‰»
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’ç”¨ã„ã¦åˆæœŸåŒ–
      */
     public TargetFile(final String name) {
 
@@ -32,10 +32,10 @@ public final class TargetFile implements Comparable<TargetFile> {
     }
 
     /**
-     * ‚±‚ÌƒIƒuƒWƒFƒNƒg‚Æ‘ÎÛƒIƒuƒWƒFƒNƒg‚Ì‡˜ŠÖŒW‚ğ•Ô‚·D
+     * ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é †åºé–¢ä¿‚ã‚’è¿”ã™ï¼
      * 
-     * @param targetFile ”äŠr‘ÎÛƒIƒuƒWƒFƒNƒg
-     * @return ‡˜ŠÖŒW
+     * @param targetFile æ¯”è¼ƒå¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @return é †åºé–¢ä¿‚
      */
     public int compareTo(final TargetFile targetFile) {
 
@@ -50,10 +50,10 @@ public final class TargetFile implements Comparable<TargetFile> {
 
     /**
      * 
-     * @param o ”äŠr‘ÎÛƒtƒ@ƒCƒ‹
-     * @return ‚±‚Ì‘ÎÛƒtƒ@ƒCƒ‹‚Æ”äŠr‘ÎÛƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ª“™‚µ‚¢ê‡‚Í trueC‚»‚¤‚Å‚È‚¯‚ê‚Î false
+     * @param o æ¯”è¼ƒå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«
+     * @return ã“ã®å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¨æ¯”è¼ƒå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒç­‰ã—ã„å ´åˆã¯ trueï¼Œãã†ã§ãªã‘ã‚Œã° false
      * 
-     * ‚±‚Ì‘ÎÛƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ÆCˆø”‚Å—^‚¦‚ç‚ê‚½‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ª“™‚µ‚¢‚©‚ğƒ`ƒFƒbƒN‚·‚éD“™‚µ‚¢ê‡‚Í true ‚ğ•Ô‚µC‚»‚¤‚Å‚È‚¢ê‡‚Í false ‚ğ•Ô‚·D
+     * ã“ã®å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã¨ï¼Œå¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ãŒç­‰ã—ã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ï¼ç­‰ã—ã„å ´åˆã¯ true ã‚’è¿”ã—ï¼Œãã†ã§ãªã„å ´åˆã¯ false ã‚’è¿”ã™ï¼
      * 
      */
     @Override
@@ -74,18 +74,18 @@ public final class TargetFile implements Comparable<TargetFile> {
 
     /**
      * 
-     * @return ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX
+     * @return å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
      * 
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğ•Ô‚·
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’è¿”ã™
      */
     public final String getName() {
         return this.name;
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      * 
-     * @return ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…ƒR[ƒh
+     * @return å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰
      * 
      */
     @Override
@@ -95,31 +95,31 @@ public final class TargetFile implements Comparable<TargetFile> {
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ª•¶–@‚ª³‚µ‚¢‚©‚ğ•Ô‚·
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ–‡æ³•ãŒæ­£ã—ã„ã‹ã‚’è¿”ã™
      * 
-     * @return •¶–@‚ª³‚µ‚¢ê‡‚Í true, ³‚µ‚­‚È‚¢ê‡‚Í false
+     * @return æ–‡æ³•ãŒæ­£ã—ã„å ´åˆã¯ true, æ­£ã—ããªã„å ´åˆã¯ false
      */
     public boolean isCorrectSyntax() {
         return this.correctSyntax;
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚Ì•¶–@‚ª³‚µ‚¢‚©‚Ç‚¤‚©‚ğ•Û‘¶‚·‚é
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ–‡æ³•ãŒæ­£ã—ã„ã‹ã©ã†ã‹ã‚’ä¿å­˜ã™ã‚‹
      * 
-     * @param correctSyntax ‘ÎÛƒtƒ@ƒCƒ‹‚Ì•¶–@‚Ì³‚µ‚³D³‚µ‚¢ê‡‚Í trueC³‚µ‚­‚È‚¢ê‡‚Í false
+     * @param correctSyntax å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ–‡æ³•ã®æ­£ã—ã•ï¼æ­£ã—ã„å ´åˆã¯ trueï¼Œæ­£ã—ããªã„å ´åˆã¯ false
      */
     public void setCorrectSytax(final boolean correctSyntax) {
         this.correctSyntax = correctSyntax;
     }
 
     /**
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚Ì\•¶‚ª³‚µ‚¢‚©‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ§‹æ–‡ãŒæ­£ã—ã„ã‹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private boolean correctSyntax;
 
     /**
      * 
-     * ‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private final String name;
 

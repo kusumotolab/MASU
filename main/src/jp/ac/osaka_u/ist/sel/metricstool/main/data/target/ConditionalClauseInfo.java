@@ -5,7 +5,7 @@ import java.util.Set;
 
 
 /**
- * ğŒ•¶‚ÌğŒß‚Ìî•ñ‚ğ•\‚·ƒNƒ‰ƒX
+ * æ¡ä»¶æ–‡ã®æ¡ä»¶ç¯€ã®æƒ…å ±ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake
  *
@@ -14,13 +14,13 @@ import java.util.Set;
 public final class ConditionalClauseInfo extends UnitInfo {
 
     /**
-     * ğŒß‚ğ•Û‚·‚éƒuƒƒbƒN•¶‚ÆˆÊ’uî•ñ
-     * @param ownerConditionalBlock ğŒ•¶‚ÌğŒß‚ğ•Û‚·‚éƒuƒƒbƒN
-     * @param condition ğŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éğŒ
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJnˆÊ’u
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * æ¡ä»¶ç¯€ã‚’ä¿æŒã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯æ–‡ã¨ä½ç½®æƒ…å ±
+     * @param ownerConditionalBlock æ¡ä»¶æ–‡ã®æ¡ä»¶ç¯€ã‚’ä¿æŒã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯
+     * @param condition æ¡ä»¶ç¯€ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹æ¡ä»¶
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹ä½ç½®
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public ConditionalClauseInfo(final ConditionalBlockInfo ownerConditionalBlock,
             final ConditionInfo condition, final int fromLine, final int fromColumn,
@@ -48,32 +48,32 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
-     * ğŒß‚ğ•Û‚·‚éƒuƒƒbƒN‚ğ•Ô‚·
-     * @return ğŒß‚ğ•Û‚·‚éƒuƒƒbƒN
+     * æ¡ä»¶ç¯€ã‚’ä¿æŒã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™
+     * @return æ¡ä»¶ç¯€ã‚’ä¿æŒã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯
      */
     public final ConditionalBlockInfo getOwnerConditionalBlock() {
         return this.ownerConditionalBlock;
     }
 
     /**
-     * ğŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éğŒ‚ğ•Ô‚·
-     * @return ğŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éğŒ
+     * æ¡ä»¶ç¯€ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹æ¡ä»¶ã‚’è¿”ã™
+     * @return æ¡ä»¶ç¯€ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹æ¡ä»¶
      */
     public final ConditionInfo getCondition() {
         return this.condition;
     }
 
     /**
-     * ğŒß‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * æ¡ä»¶ç¯€ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      * 
-     * @return ğŒß‚ÌƒeƒLƒXƒg•\Œ»
+     * @return æ¡ä»¶ç¯€ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      */
     public final String getText() {
         return this.getCondition().getText();
     }
 
     /**
-     * ‚±‚ÌğŒß‚ÌƒnƒbƒVƒ…ƒR[ƒh‚ğ•Ô‚·
+     * ã“ã®æ¡ä»¶ç¯€ã®ãƒãƒƒã‚·ãƒ¥ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™
      */
     @Override
     public final int hashCode() {
@@ -81,9 +81,9 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
-     * ğŒß“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet‚ğ•Ô‚·
+     * æ¡ä»¶ç¯€å†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Setã‚’è¿”ã™
      * 
-     * @return ğŒß“à‚É‚¨‚¯‚é•Ï”g—p‚ÌSet 
+     * @return æ¡ä»¶ç¯€å†…ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ã®Set 
      */
     @Override
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
@@ -91,9 +91,9 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
-     * ğŒß‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * æ¡ä»¶ç¯€ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Setã‚’è¿”ã™
      * 
-     * @return ğŒß‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     * @return æ¡ä»¶ç¯€ã§å®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã®Set
      */
     @Override
     public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
@@ -101,9 +101,9 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
-     * ğŒß‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * æ¡ä»¶ç¯€ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Setã‚’è¿”ã™
      * 
-     * @return ğŒs‚Â‚É‚¨‚¯‚éŒÄ‚Ño‚µ‚ÌSet
+     * @return æ¡ä»¶sã¤ã«ãŠã‘ã‚‹å‘¼ã³å‡ºã—ã®Set
      */
     @Override
     public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -126,12 +126,12 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
-     * ğŒß‚ğ•Û‚·‚éƒuƒƒbƒN‚ğ•\‚·•Ï”
+     * æ¡ä»¶ç¯€ã‚’ä¿æŒã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¡¨ã™å¤‰æ•°
      */
     private final ConditionalBlockInfo ownerConditionalBlock;
 
     /**
-     * ğŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éğŒ‚ğ•\‚·•Ï”
+     * æ¡ä»¶ç¯€ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹æ¡ä»¶ã‚’è¡¨ã™å¤‰æ•°
      */
     private final ConditionInfo condition;
 }

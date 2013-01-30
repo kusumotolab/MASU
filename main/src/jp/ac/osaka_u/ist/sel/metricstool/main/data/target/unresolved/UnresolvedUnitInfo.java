@@ -6,19 +6,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
 /**
- * –¢‰ğŒˆƒvƒƒOƒ‰ƒ€ƒ†ƒjƒbƒg‚ğ•\‚·ƒNƒ‰ƒX
+ * æœªè§£æ±ºãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  * 
- * @param <T> ‰ğŒˆÏ‚İƒ†ƒjƒbƒg‚ÌŒ^
+ * @param <T> è§£æ±ºæ¸ˆã¿ãƒ¦ãƒ‹ãƒƒãƒˆã®å‹
  */
 public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvable<T>,
         PositionSetting {
 
     /**
-     * ŠJns‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param fromLine ŠJns
+     * @param fromLine é–‹å§‹è¡Œ
      */
     public final void setFromLine(final int fromLine) {
 
@@ -30,9 +30,9 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     }
 
     /**
-     * ŠJn—ñ‚ğƒZƒbƒg‚·‚é
+     * é–‹å§‹åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param fromColumn ŠJn—ñ
+     * @param fromColumn é–‹å§‹åˆ—
      */
     public final void setFromColumn(final int fromColumn) {
 
@@ -44,9 +44,9 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     }
 
     /**
-     * I—¹s‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†è¡Œã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param toLine I—¹s
+     * @param toLine çµ‚äº†è¡Œ
      */
     public final void setToLine(final int toLine) {
 
@@ -58,9 +58,9 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     }
 
     /**
-     * I—¹—ñ‚ğƒZƒbƒg‚·‚é
+     * çµ‚äº†åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      * 
-     * @param toColumn I—¹—ñ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public final void setToColumn(final int toColumn) {
 
@@ -72,45 +72,45 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     }
 
     /**
-     * ŠJns‚ğ•Ô‚·
+     * é–‹å§‹è¡Œã‚’è¿”ã™
      * 
-     * @return ŠJns
+     * @return é–‹å§‹è¡Œ
      */
     public final int getFromLine() {
         return this.fromLine;
     }
 
     /**
-     * ŠJn—ñ‚ğ•Ô‚·
+     * é–‹å§‹åˆ—ã‚’è¿”ã™
      * 
-     * @return ŠJn—ñ
+     * @return é–‹å§‹åˆ—
      */
     public final int getFromColumn() {
         return this.fromColumn;
     }
 
     /**
-     * I—¹s‚ğ•Ô‚·
+     * çµ‚äº†è¡Œã‚’è¿”ã™
      * 
-     * @return I—¹s
+     * @return çµ‚äº†è¡Œ
      */
     public final int getToLine() {
         return this.toLine;
     }
 
     /**
-     * I—¹—ñ‚ğ•Ô‚·
+     * çµ‚äº†åˆ—ã‚’è¿”ã™
      * 
-     * @return I—¹—ñ
+     * @return çµ‚äº†åˆ—
      */
     public final int getToColumn() {
         return this.toColumn;
     }
 
     /**
-     * ‚±‚Ìƒ†ƒjƒbƒg‚Ìs”‚ğ•Ô‚·
+     * ã“ã®ãƒ¦ãƒ‹ãƒƒãƒˆã®è¡Œæ•°ã‚’è¿”ã™
      * 
-     * @return ƒ†ƒjƒbƒg‚Ìs”
+     * @return ãƒ¦ãƒ‹ãƒƒãƒˆã®è¡Œæ•°
      */
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
@@ -156,27 +156,27 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     }
     
     /**
-     * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int fromLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int fromColumn;
 
     /**
-     * I—¹s‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * çµ‚äº†è¡Œã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int toLine;
 
     /**
-     * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
+     * é–‹å§‹åˆ—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     private int toColumn;
 
     /**
-     * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğŠi”[‚·‚é‚½‚ß‚Ì•Ï”
+     * åå‰è§£æ±ºã•ã‚ŒãŸæƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®å¤‰æ•°
      */
     protected T resolvedInfo;
 }

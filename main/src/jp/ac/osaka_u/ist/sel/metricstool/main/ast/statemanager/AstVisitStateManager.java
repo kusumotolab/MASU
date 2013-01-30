@@ -4,9 +4,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 
 /**
- * ���ۍ\���؂̃r�W�^�[���ǂ̂悤�ȏ�Ԃɂ��邩���Ǘ����C��ԕω��C�x���g�𔭍s����.
- * ���̃C���^�t�F�[�X�����������N���X�Q����̃C�x���g���󂯎��C������g�ݍ��킹�邱�Ƃł��ƂŁC
- * �r�W�^�[������AST�̂ǂ̕����ɓ��B���Ă��邩�𔻒f���邱�Ƃ��ł���.
+ * 抽象構文木のビジターがどのような状態にあるかを管理し，状態変化イベントを発行する.
+ * このインタフェースを実装したクラス群からのイベントを受け取り，それらを組み合わせることでことで，
+ * ビジターが現在ASTのどの部分に到達しているかを判断することができる.
  * 
  * @author kou-tngt
  *

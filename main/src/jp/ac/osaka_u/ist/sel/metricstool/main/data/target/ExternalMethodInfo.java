@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 
 /**
- * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒhî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  */
@@ -17,10 +17,10 @@ import java.util.TreeSet;
 public final class ExternalMethodInfo extends MethodInfo {
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
-     * ƒAƒNƒZƒX§Œäq‚Ü‚Å•ª‚©‚Á‚Ä‚¢‚éê‡
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
+     * ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡å­ã¾ã§åˆ†ã‹ã£ã¦ã„ã‚‹å ´åˆ
      *  
-     * @param methodName ƒƒ\ƒbƒh–¼
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public ExternalMethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
             final boolean instance) {
@@ -32,9 +32,9 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ŠO•”ƒNƒ‰ƒX‚É’è‹`‚³‚ê‚Ä‚¢‚éƒƒ\ƒbƒhƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»‚·‚é
+     * å¤–éƒ¨ã‚¯ãƒ©ã‚¹ã«å®šç¾©ã•ã‚Œã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
      * 
-     * @param methodName ƒƒ\ƒbƒh–¼
+     * @param methodName ãƒ¡ã‚½ãƒƒãƒ‰å
      */
     public ExternalMethodInfo(final String methodName) {
 
@@ -46,7 +46,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ‹ó‚ÌSortedSet‚ğ•Ô‚·
+     * ç©ºã®SortedSetã‚’è¿”ã™
      */
     @Override
     public SortedSet<StatementInfo> getStatements() {

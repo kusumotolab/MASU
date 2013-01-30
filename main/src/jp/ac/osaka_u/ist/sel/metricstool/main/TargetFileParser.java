@@ -38,7 +38,7 @@ import antlr.collections.AST;
 
 
 /**
- * AST‚ğƒp[ƒX‚µC–¢‰ğŒˆƒNƒ‰ƒXî•ñ‚ğ‚Ì\’z‚ğƒ}ƒ‹ƒ`ƒXƒŒƒbƒh‚ğs‚¤‚½‚ß‚ÌƒNƒ‰ƒX
+ * ASTã‚’ãƒ‘ãƒ¼ã‚¹ã—ï¼Œæœªè§£æ±ºã‚¯ãƒ©ã‚¹æƒ…å ±ã‚’ã®æ§‹ç¯‰ã‚’ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ã‚’è¡Œã†ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -191,11 +191,11 @@ class TargetFileParser implements Runnable {
             } catch (RecognitionException e) {
                 this.files[i].setCorrectSytax(false);
                 err.println(e.getMessage());
-                // TODO ƒGƒ‰[‚ª‹N‚±‚Á‚½‚±‚Æ‚ğ TargetFileData ‚È‚Ç‚É’Ê’m‚·‚éˆ—‚ª•K—v
+                // TODO ã‚¨ãƒ©ãƒ¼ãŒèµ·ã“ã£ãŸã“ã¨ã‚’ TargetFileData ãªã©ã«é€šçŸ¥ã™ã‚‹å‡¦ç†ãŒå¿…è¦
             } catch (TokenStreamException e) {
                 this.files[i].setCorrectSytax(false);
                 err.println(e.getMessage());
-                // TODO ƒGƒ‰[‚ª‹N‚±‚Á‚½‚±‚Æ‚ğ TargetFileData ‚È‚Ç‚É’Ê’m‚·‚éˆ—‚ª•K—v
+                // TODO ã‚¨ãƒ©ãƒ¼ãŒèµ·ã“ã£ãŸã“ã¨ã‚’ TargetFileData ãªã©ã«é€šçŸ¥ã™ã‚‹å‡¦ç†ãŒå¿…è¦
             } catch (ASTParseException e) {
                 err.println(e.getMessage());
             } catch (IOException e) {

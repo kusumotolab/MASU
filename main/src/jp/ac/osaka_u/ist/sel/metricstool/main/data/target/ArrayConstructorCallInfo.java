@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * ”z—ñƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•\‚·ƒNƒ‰ƒX
+ * é…åˆ—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
  * 
  * @author higo
  *
@@ -24,14 +24,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTypeInfo> {
 
     /**
-     * Œ^‚ğ—^‚¦‚Ä”z—ñƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ‰Šú‰»
+     * å‹ã‚’ä¸ãˆã¦é…åˆ—ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’åˆæœŸåŒ–
      * 
-     * @param arrayType ŒÄ‚Ño‚µ‚ÌŒ^
-     * @param ownerMethod ƒI[ƒi[ƒƒ\ƒbƒh 
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ 
+     * @param arrayType å‘¼ã³å‡ºã—ã®å‹
+     * @param ownerMethod ã‚ªãƒ¼ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ 
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ— 
      */
     public ArrayConstructorCallInfo(final ArrayTypeInfo arrayType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
@@ -54,27 +54,27 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
     }
 
     /**
-     * ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğæ“¾
-     * @param dimention ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ğæ“¾‚·‚é”z—ñ‚ÌŸŒ³
-     * @return w’è‚µ‚½ŸŒ³‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì®
+     * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’å–å¾—
+     * @param dimention ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã‚’å–å¾—ã™ã‚‹é…åˆ—ã®æ¬¡å…ƒ
+     * @return æŒ‡å®šã—ãŸæ¬¡å…ƒã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼
      */
     public ExpressionInfo getIndexExpression(final int dimention) {
         return this.indexExpressions.get(dimention);
     }
 
     /**
-     * ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ÌƒŠƒXƒg‚ğæ“¾
+     * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
      * 
-     * @return ƒCƒ“ƒfƒbƒNƒX‚Ì®‚ÌƒŠƒXƒg 
+     * @return ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¼ã®ãƒªã‚¹ãƒˆ 
      */
     public SortedMap<Integer, ExpressionInfo> getIndexExpressions() {
         return Collections.unmodifiableSortedMap(this.indexExpressions);
     }
 
     /**
-     * ”z—ñ‚Ì‰Šú‰»®‚ÌƒeƒLƒXƒg•\Œ»‚ğ•Ô‚·
+     * é…åˆ—ã®åˆæœŸåŒ–å¼ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾ã‚’è¿”ã™
      * 
-     * @return ”z—ñ‚Ì‰Šú‰»®‚ÌƒeƒLƒXƒg•\Œ»
+     * @return é…åˆ—ã®åˆæœŸåŒ–å¼ã®ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¾
      * 
      */
     @Override
@@ -107,9 +107,9 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
     }
 
     /**
-     * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
+     * ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Setã‚’è¿”ã™
      * 
-     * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
+     * @returnã€€ã“ã®å¼ã§æŠ•ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ä¾‹å¤–ã®Set
      */
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
@@ -122,9 +122,9 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
     }
 
     /**
-     * ‚±‚ÌŒÄ‚Ño‚µ‚É‚¨‚¯‚é•Ï”g—pŒQ‚ğ•Ô‚·
+     * ã“ã®å‘¼ã³å‡ºã—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤ã‚’è¿”ã™
      * 
-     * @return ‚±‚ÌŒÄ‚Ño‚µ‚É‚¨‚¯‚é•Ï”g—pŒQ
+     * @return ã“ã®å‘¼ã³å‡ºã—ã«ãŠã‘ã‚‹å¤‰æ•°ä½¿ç”¨ç¾¤
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {

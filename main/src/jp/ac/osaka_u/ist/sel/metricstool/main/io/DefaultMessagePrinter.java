@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
 /**
- * ƒƒbƒZ[ƒWƒvƒŠƒ“ƒ^‚ÌƒfƒtƒHƒ‹ƒgÀ‘•
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ—ãƒªãƒ³ã‚¿ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®Ÿè£…
  * 
  * @author kou-tngt
  *
@@ -10,9 +10,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 public class DefaultMessagePrinter implements MessagePrinter {
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @param source ƒƒbƒZ[ƒW‘—MÒ
-     * @param type ƒƒbƒZ[ƒWƒ^ƒCƒv
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @param source ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
+     * @param type ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¿ã‚¤ãƒ—
      */
     public DefaultMessagePrinter(final MessageSource source, final MESSAGE_TYPE type) {
         this.pool = MessagePool.getInstance(type);
@@ -20,31 +20,31 @@ public class DefaultMessagePrinter implements MessagePrinter {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğ‚»‚Ì‚Ü‚Üo—Í‚·‚é
-     * @param o o—Í‚·‚éƒƒbƒZ[ƒW
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãã®ã¾ã¾å‡ºåŠ›ã™ã‚‹
+     * @param o å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public void print(final Object o) {
         this.pool.sendMessage(this.source, String.valueOf(o));
     }
 
     /**
-     * ‰üs‚·‚é
+     * æ”¹è¡Œã™ã‚‹
      */
     public void println() {
         this.print(LINE_SEPARATOR);
     }
 
     /**
-     * ƒƒbƒZ[ƒW‚ğo—Í‚µ‚Ä‰üs‚·‚é
-     * @param o o—Í‚·‚éƒƒbƒZ[ƒW
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºåŠ›ã—ã¦æ”¹è¡Œã™ã‚‹
+     * @param o å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
      */
     public void println(final Object o) {
         this.print(String.valueOf(o) + LINE_SEPARATOR);
     }
 
     /**
-     * •¡”s‚ÌƒƒbƒZ[ƒW‚ÌŠÔ‚ÉC‘¼‚ÌƒƒbƒZ[ƒW‚ÌŠ„‚è‚İ‚ª‚È‚¢‚æ‚¤‚Éo—Í‚·‚é.
-     * @param objects o—Í‚·‚éƒƒbƒZ[ƒW‚Ì”z—ñ
+     * è¤‡æ•°è¡Œã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é–“ã«ï¼Œä»–ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‰²ã‚Šè¾¼ã¿ãŒãªã„ã‚ˆã†ã«å‡ºåŠ›ã™ã‚‹.
+     * @param objects å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é…åˆ—
      */
     public void println(final Object[] objects) {
         final StringBuilder builder = new StringBuilder();
@@ -56,17 +56,17 @@ public class DefaultMessagePrinter implements MessagePrinter {
     }
 
     /**
-     * ƒƒbƒZ[ƒW‘—MÒ
+     * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡è€…
      */
     private final MessageSource source;
 
     /**
-     * ‘Î‰‚·‚éƒƒbƒZ[ƒWƒv[ƒ‹
+     * å¯¾å¿œã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ—ãƒ¼ãƒ«
      */
     private final MessagePool pool;
 
     /**
-     * ƒVƒXƒeƒ€ˆË‘¶‚Ì‰üs‹L†
+     * ã‚·ã‚¹ãƒ†ãƒ ä¾å­˜ã®æ”¹è¡Œè¨˜å·
      */
     private final static String LINE_SEPARATOR = System.getProperty("line.separator");
 

@@ -9,10 +9,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedR
 
 
 /**
- * Java‚Ì®’†‚É“oê‚·‚éŒ^—v‘f‚ğ\’z‚·‚éƒNƒ‰ƒXD
+ * Javaã®å¼ä¸­ã«ç™»å ´ã™ã‚‹å‹è¦ç´ ã‚’æ§‹ç¯‰ã™ã‚‹ã‚¯ãƒ©ã‚¹ï¼
  * 
- * eƒNƒ‰ƒX‚Ì {@link TypeElementBuilder#getTypeUpperBounds()} ƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µC
- * null‚ª‹A‚Á‚Ä‚«‚½ê‡‚Íjava.lang.Object‚ğ•Ô‚·‚æ‚¤‚ÉŠg’£‚·‚éD
+ * è¦ªã‚¯ãƒ©ã‚¹ã® {@link TypeElementBuilder#getTypeUpperBounds()} ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ï¼Œ
+ * nullãŒå¸°ã£ã¦ããŸå ´åˆã¯java.lang.Objectã‚’è¿”ã™ã‚ˆã†ã«æ‹¡å¼µã™ã‚‹ï¼
  * 
  * @author kou-tngt
  *

@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
 /**
- * –¢‰ğŒˆƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æœªè§£æ±ºã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * 
  * @author t-miyake, higo
  *
@@ -16,9 +16,9 @@ public abstract class UnresolvedConstructorCallInfo<T extends UnresolvedReferenc
         extends UnresolvedCallInfo<R> {
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éQÆŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‚ç…§å‹ã‚’ä¸ãˆã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–
      * 
-     * @param unresolvedReferenceType ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éŒ^
+     * @param unresolvedReferenceType ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‹
      */
     public UnresolvedConstructorCallInfo(final T unresolvedReferenceType) {
 
@@ -30,12 +30,12 @@ public abstract class UnresolvedConstructorCallInfo<T extends UnresolvedReferenc
     }
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éQÆŒ^‚ğ—^‚¦‚Ä‰Šú‰»
-     * @param unresolvedReferenceType ƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ªÀs‚³‚ê‚éŒ^
-     * @param fromLine ŠJns
-     * @param fromColumn ŠJn—ñ
-     * @param toLine I—¹s
-     * @param toColumn I—¹—ñ
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‚ç…§å‹ã‚’ä¸ãˆã¦åˆæœŸåŒ–
+     * @param unresolvedReferenceType ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ãŒå®Ÿè¡Œã•ã‚Œã‚‹å‹
+     * @param fromLine é–‹å§‹è¡Œ
+     * @param fromColumn é–‹å§‹åˆ—
+     * @param toLine çµ‚äº†è¡Œ
+     * @param toColumn çµ‚äº†åˆ—
      */
     public UnresolvedConstructorCallInfo(final T unresolvedReferenceType,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
@@ -51,9 +51,9 @@ public abstract class UnresolvedConstructorCallInfo<T extends UnresolvedReferenc
     }
 
     /**
-     * ‚±‚Ì–¢‰ğŒˆƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ÌŒ^‚ğ•Ô‚·
+     * ã“ã®æœªè§£æ±ºã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®å‹ã‚’è¿”ã™
      * 
-     * @return ‚±‚Ì–¢‰ğŒˆƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ‚ÌŒ^
+     * @return ã“ã®æœªè§£æ±ºã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—ã®å‹
      */
     public T getReferenceType() {
         return this.unresolvedReferenceType;
