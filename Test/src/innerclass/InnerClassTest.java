@@ -34,6 +34,9 @@ public class InnerClassTest {
 
 		public InnerClass2(){
 			field = 1;
+			class II{
+
+			}
 		}
 
 		public int getField(){

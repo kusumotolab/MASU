@@ -1,0 +1,97 @@
+﻿MASUZ 開発者情報
+=================================
+
+
+
+ASTNodeから名前の取得
+---------------------------------
+
+ClassDeclarationのbindingに対してgetQualifiedName()をすると，パッケージ名も含めた完全修飾名が取得される．
+内部クラスでも同様．
+ただし，匿名クラス中のClassDeclarationのbindingでは，getQualifiedName()は空が返り，getName()はクラスの名前が返ってくる．
+
+
+完全修飾名
+---------------------------------
+
+### 完全修飾名が必要なもの
+* クラス
+    * 通常クラス
+    * 内部クラス
+    * 匿名クラス
+* メソッド
+* フィールド
+
+
+### 完全修飾名の付け方
+
+
+#### 通常クラス，内部クラス
+ITypeBinding.getQualifiedName()で取得  
+
+<full-qualified-class-name>  
+sample : java.lang.String
+
+#### 匿名クラス
+定義されているクラスのfullQualifiedName + ( メソッド名 ) +  "." + ID  
+IDは登場順の番号
+
+sample: 1個目はフィールド
+
+sdl.ist.Hoge.1
+sdl.ist.Hoge#Hoge.2
+
+
+#### メソッド
+<full-qualified-class-name> "#" <method-name> "(" ( <type> (* "," <type> )* )? ")"  
+
+sample : java.lang.String#equals(java.lang.String)
+
+
+#### フィールド
+
+<full-qualified-class-name> "$" <field-name>
+
+フィールドの親クラスをたどって取得．クラスのbindingを解決し，クラスと同様に処理．
+
+sample : sdl.ist.osaka.u.Hoge$hog
+
+
+### 完全修飾名の取得方法
+
+#### ASTNode
+ASTNodeの親を再帰的にたどってゆき，それぞれの名前を取得．
+トップの要素はTypeDeclarationであるはずなので，それに対してはgetQualifiedName()する．
+
+#### IBinding
+各bindingごとに親が異なるので，種類ごとに親を取得し，ASTNodeと同様再帰的に処理．
+
+
+
+
+
+## Manager	
+
+### FileManager
+Fileの絶対パス - CompilationUnit
+1:1
+key1 : java.nio.file.Path  -  ファイルの絶対パス
+key2 : CompilationUnit  -  そのファイルが保持するCompilationUnit
+双方向検索が可能
+
+
+### MethodManager
+呼び出し先と呼び出し元を結びつける
+呼び出し元は，Statement
+IBinding - MethodInvocation
+1:1
+key
+
+
+### VariableManager
+定義とそのbindingを結びつける
+IBinding - VariableDeclarationStatement
+
+使用
+IBinding - ExpressionStatement
+
