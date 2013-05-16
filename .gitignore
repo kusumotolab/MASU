@@ -2,3 +2,6 @@
 bin/
 .settings/
 .DS_Store
+*.iml
+.idea/
+out/
