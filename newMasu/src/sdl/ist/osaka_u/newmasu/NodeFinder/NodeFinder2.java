@@ -1,10 +1,7 @@
 package sdl.ist.osaka_u.newmasu.NodeFinder;
 
 import com.sun.tools.javac.util.Pair;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +58,36 @@ public class NodeFinder2 {
         };
     }
 
+    public static Delegate<NodeOrBinding,NodeOrBinding> getInheritedAndBlock(){
+        return new Delegate<NodeOrBinding, NodeOrBinding>() {
+            @Override
+            public NodeOrBinding invoke(NodeOrBinding arg) {
+                if(arg.isNode()){
+                    if( arg.getNode().getNodeType() == ASTNode.TYPE_DECLARATION ){
+                        TypeDeclaration td = (TypeDeclaration)arg.getNode();
+                        return new NodeOrBinding(td.resolveBinding().getSuperclass());
+                    }
+                    else if( arg.getNode().getNodeType() == ASTNode.BLOCK ){
+                        Block bc = (Block)arg.getNode();
+                        System.out.println("This is Block ");
+                        return new NodeOrBinding(bc.getParent());
+                    }
+                    else{
+                        return new NodeOrBinding(arg.getNode().getParent());
+                    }
+                }
+                else{
+                    if( arg.getBinding().getKind() == IBinding.TYPE ){
+                        ITypeBinding bind = (ITypeBinding)arg.getBinding();
+                        return new NodeOrBinding(bind.getSuperclass());
+                    }
+                    else
+                        return null;
+                }
+            }
+        };
+    }
+
     public static Delegate<Pair<NodeOrBinding,Integer>, Boolean> bindingNullJudge(){
         return new Delegate<Pair<NodeOrBinding, Integer>, Boolean>() {
             @Override
@@ -80,16 +107,16 @@ public class NodeFinder2 {
                                                   Delegate<Pair<NodeOrBinding,Integer>, Boolean> judge){
         return get(new NodeOrBinding(node), target, getNext, judge);
     }
-/*
+
     // IBinding wrapper
     public static <T extends IBinding> List<T> get(IBinding node, int target,
                                                   Delegate<NodeOrBinding,NodeOrBinding> getNext,
                                                   Delegate<Pair<NodeOrBinding,Integer>, Boolean> judge){
         return get(new NodeOrBinding(node), target, getNext, judge);
     }
-*/
 
-    public static <T extends ASTNode> List<T> get(NodeOrBinding node, int target,
+
+    public static <T> List<T> get(NodeOrBinding node, int target,
                             Delegate<NodeOrBinding,NodeOrBinding> getNext,
                             Delegate<Pair<NodeOrBinding,Integer>, Boolean> judge){
 
