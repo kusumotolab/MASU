@@ -1,13 +1,13 @@
-package sdl.ist.osaka_u.newmasu.NodeFinder;
+package sdl.ist.osaka_u.newmasu.Finder;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IBinding;
 
 public class NodeOrBinding {
     private boolean isNode = false;
-    public boolean isNode(){ return isNode; }
+    // public boolean isNode(){ return isNode; }
     private boolean isBinding = false;
-    public boolean isBinding(){ return isBinding; }
+    // public boolean isBinding(){ return isBinding; }
 
     ASTNode node = null;
     public ASTNode getNode(){
@@ -24,6 +24,20 @@ public class NodeOrBinding {
             return null;
         }
         return binding;
+    }
+
+    public boolean isValidNode(){
+        if( isNode && node!=null )
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isValidBinding(){
+        if( isBinding && binding!=null )
+            return true;
+        else
+            return false;
     }
 
     public NodeOrBinding(ASTNode node){
