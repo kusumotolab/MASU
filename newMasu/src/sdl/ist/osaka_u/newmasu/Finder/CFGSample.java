@@ -1,17 +1,16 @@
 package sdl.ist.osaka_u.newmasu.Finder;
 
 import org.eclipse.jdt.core.dom.*;
+import sdl.ist.osaka_u.newmasu.data.dataManager.FileManager;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CFGSample extends ASTVisitor {
 
     private Map<ASTNode, String> nameMap = new HashMap<>();
     private Integer _name = 0;
     private String getName(){
-        return "A" + _name.toString();
+        return "NODE_" + _name.toString();
     }
     private String nextName(){
         _name++;
@@ -23,11 +22,21 @@ public class CFGSample extends ASTVisitor {
 
     @Override public boolean visit(CompilationUnit node){
         TestWriter.newFile();
-        TestWriter.println("graph CFG {");
+        TestWriter.println("digraph CFG {");
         return true;
     }
     @Override public void endVisit(CompilationUnit node){
         TestWriter.println("}");
+    }
+
+
+    private Queue<ASTNode> graphQueue = new LinkedList<>();
+    private void addQueue(ASTNode node){
+        if(graphQueue.size()==1){
+            ASTNode prev = graphQueue.poll();
+            TestWriter.println(nameMap.get(prev) + " -> " + nameMap.get(node) + ";");
+        }
+        graphQueue.add(node);
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -36,6 +45,8 @@ public class CFGSample extends ASTVisitor {
         System.out.println(indent + node.toString());
         nameMapping(node);
         TestWriter.println(getName() + " [label=\"" + node.toString().trim() + "\"];");
+
+        addQueue(node);
     }
 
 
@@ -45,6 +56,10 @@ public class CFGSample extends ASTVisitor {
         System.out.println(indent + "if  --  " + node.getExpression());
         System.out.println( indent + "then");
         node.getThenStatement().accept(this);
+
+        nameMapping(node);
+        TestWriter.println(getName() + " [label=\"" + node.getExpression().toString().trim() + "\", shape=\"diamond\"];");
+        addQueue(node);
 
         if(node.getElseStatement()!=null){
             System.out.println( indent + "else");
