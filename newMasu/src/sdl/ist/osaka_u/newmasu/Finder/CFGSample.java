@@ -1,21 +1,48 @@
 package sdl.ist.osaka_u.newmasu.Finder;
 
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.Experimental.Processor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class CFGSample extends StatementProcessor {
+public class CFGSample extends ASTVisitor {
 
+    private Map<ASTNode, String> nameMap = new HashMap<>();
+    private Integer _name = 0;
+    private String getName(){
+        return "A" + _name.toString();
+    }
+    private String nextName(){
+        _name++;
+        return getName();
+    }
+    private void nameMapping(ASTNode node){
+        nameMap.put(node, nextName());
+    }
+
+    @Override public boolean visit(CompilationUnit node){
+        TestWriter.newFile();
+        TestWriter.println("graph CFG {");
+        return true;
+    }
+    @Override public void endVisit(CompilationUnit node){
+        TestWriter.println("}");
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
 
     public void def(ASTNode node){
         System.out.println(indent + node.toString());
+        nameMapping(node);
+        TestWriter.println(getName() + " [label=\"" + node.toString().trim() + "\"];");
     }
+
 
     @Override
     public boolean visit(IfStatement node){
 
-        System.out.println( indent + "if  --  " + ((IfStatement)node).getExpression() );
+        System.out.println(indent + "if  --  " + node.getExpression());
         System.out.println( indent + "then");
         node.getThenStatement().accept(this);
 
@@ -32,9 +59,9 @@ public class CFGSample extends StatementProcessor {
 
         System.out.println( indent + "{");
         indent += "  ";
-        List<Statement> list = ((Block)node).statements();
+        List<Statement> list = node.statements();
         for( Statement s : list)
-            Processor.get(s,this).process(s);
+            DefaultProcessor.get(s, this).process(s);  // To process default nodes
         indent = indent.substring(0,indent.length()-2);
         System.out.println( indent + "}");
 

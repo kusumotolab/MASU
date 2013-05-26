@@ -1,16 +1,12 @@
-package sdl.ist.osaka_u.newmasu.Experimental;
+package sdl.ist.osaka_u.newmasu.Finder;
 
 
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.Statement;
-import sdl.ist.osaka_u.newmasu.Finder.CFGSample;
 
-import java.util.List;
-
-public enum Processor {
+public enum DefaultProcessor {
 
     IF(IfStatement.class){
         @Override
@@ -37,15 +33,15 @@ public enum Processor {
     private static CFGSample vis = null;
 
     private final Class<?> clazz;
-    private Processor(Class<?> clazz) {
+    private DefaultProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
     public abstract void process(ASTNode node);
 
-    public static Processor get(Object obj, CFGSample vi) {
+    public static DefaultProcessor get(Object obj, CFGSample vi) {
         vis = vi;
-        for (Processor processor : values()) {
+        for (DefaultProcessor processor : values()) {
             if(processor.clazz.isAssignableFrom(obj.getClass())) {
                 return processor;
             }
