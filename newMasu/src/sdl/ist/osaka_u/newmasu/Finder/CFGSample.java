@@ -1,8 +1,6 @@
 package sdl.ist.osaka_u.newmasu.Finder;
 
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.data.dataManager.FileManager;
-
 import java.util.*;
 
 public class CFGSample extends ASTVisitor {
@@ -21,128 +19,138 @@ public class CFGSample extends ASTVisitor {
     }
 
     @Override public boolean visit(CompilationUnit node){
-        TestWriter.newFile();
-        TestWriter.println("digraph CFG {");
+//        TestWriter.newFile();
+//        TestWriter.println("digraph CFG {");
         return true;
     }
     @Override public void endVisit(CompilationUnit node){
+//        TestWriter.println("}");
+
+        nowNode.addChild(new CFGNode("End", "END", "box"));
+
+        TestWriter.newFile();
+        TestWriter.println("digraph CFG {");
+        root.showChildren();
         TestWriter.println("}");
     }
 
+    private static class CFGNode{
+        private String label="";
+        private String name="";
+        private String shape="";
+        private String edge="";
 
-    private Queue<ASTNode> graphQueue = new LinkedList<>();
-    private void addQueue(ASTNode node){
-        if(graphQueue.size()==1){
-            ASTNode prev = graphQueue.poll();
-            TestWriter.println(nameMap.get(prev) + " -> " + nameMap.get(node) + ";");
+        private boolean dummy=false;
+
+        private List<CFGNode> children = new ArrayList<>();
+
+        public CFGNode addChild(CFGNode cn){
+            if(dummy){
+                this.label = cn.label;
+                this.name = cn.name;
+                this.shape = cn.shape;
+                this.edge = cn.edge;
+                this.dummy = false;
+                children = new ArrayList<>();
+                return this;
+            }
+            else{
+                children.add(cn);
+                return cn;
+            }
         }
-        graphQueue.add(node);
+
+        public CFGNode(boolean dummy){
+            this("dummy", "dummy", "box");
+            this.dummy = true;
+        }
+        public CFGNode(String label, String name){
+            this(label, name, "box", "");
+        }
+        public CFGNode(String label, String name, String shape){
+            this(label, name, shape, "");
+        }
+        public CFGNode(String label, String name, String shape, String edge){
+            this.label = label.trim();
+            this.name = name.trim();
+            this.shape = shape;
+            this.edge = edge;
+        }
+
+        private static Set<CFGNode> used;
+        public void showChildren(){
+            used = new HashSet<>();
+            _showChildren();
+        }
+
+        private void _showChildren(){
+            if(!used.contains(this)){
+                used.add(this);
+                TestWriter.println(name + " [label=\"" + label + "\", shape=\"" + shape + "\"];");
+
+                for(CFGNode cn : children){
+                    TestWriter.println(name + " -> " + cn.name + "[label=\"" + edge + "\"];");
+                    System.out.println(label + " -> " + cn.label);
+                    cn._showChildren();
+                }
+
+            }
+        }
     }
+
+    private CFGNode root = new CFGNode("root","R");
+    private CFGNode nowNode = root;
+
+
 
     //////////////////////////////////////////////////////////////////////////////////
 
     public void def(ASTNode node){
-        System.out.println(indent + node.toString());
-        nameMapping(node);
-        TestWriter.println(getName() + " [label=\"" + node.toString().trim() + "\"];");
-
-        addQueue(node);
+        CFGNode cn = new CFGNode(node.toString(), nextName());
+        nowNode = nowNode.addChild(cn);
     }
 
 
     @Override
     public boolean visit(IfStatement node){
+        CFGNode cif = new CFGNode(node.getExpression().toString(), nextName(), "diamond");
+        nowNode = nowNode.addChild(cif);
 
-        System.out.println(indent + "if  --  " + node.getExpression());
-        System.out.println( indent + "then");
-        node.getThenStatement().accept(this);
+        CFGNode dummy = new CFGNode(true);
 
-        nameMapping(node);
-        TestWriter.println(getName() + " [label=\"" + node.getExpression().toString().trim() + "\", shape=\"diamond\"];");
-        addQueue(node);
+//        CFGNode cthen = new CFGNode(node.getThenStatement().toString(), nextName());
+        nowNode = cif;
+        DefaultProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
+        nowNode.addChild(dummy);
 
         if(node.getElseStatement()!=null){
-            System.out.println( indent + "else");
-            node.getElseStatement().accept(this);
+//            CFGNode celse = new CFGNode(node.getElseStatement().toString(), nextName());
+            nowNode = cif;
+            DefaultProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
+            nowNode.addChild(dummy);
         }
+
+        nowNode = dummy;
+        return false;
+    }
+
+    @Override
+    public boolean visit(ForStatement node){
+        CFGNode cond = new CFGNode(node.getExpression().toString(), nextName(), "ellipse");
+        nowNode = nowNode.addChild(cond);
 
         return false;
     }
 
     @Override
     public boolean visit(Block node){
-
-        System.out.println( indent + "{");
-        indent += "  ";
         List<Statement> list = node.statements();
         for( Statement s : list)
-            DefaultProcessor.get(s, this).process(s);  // To process default nodes
-        indent = indent.substring(0,indent.length()-2);
-        System.out.println( indent + "}");
-
+            DefaultProcessor.get(s, this).process(s);
         return false;
     }
 
     /*
-    private boolean isVisited = false;
-
-    @Override
-    public boolean visit(IfStatement node){
-        isVisited = true;
-        System.out.println(indent + "If Statement");
-        System.out.println(indent + node.getExpression().toString() );
-        node.getThenStatement().accept(new CFGSample(indent));
-        return false;
-    }
-
-/*
-    @Override
-    public boolean visit(ForStatement node){
-        isVisited = true;
-        System.out.println(indent + "For Statement");
-        System.out.println(indent + node.getExpression().toString() );
-        return true;
-    }
-
-
-    @Override
-    public void endVisit(Block node){
-        System.out.println( indent + "*}" );
-        delIndent();
-    }
-
-
-    @Override
-    public boolean visit(Block node){
-
-        System.out.println( indent + "{*" );
-        addIndent();
-
-        List<Statement> statements = node.statements();
-        int i=0;
-        for(Statement s : statements){
-
-            isVisited=false;
-            s.accept( this );
-            if(isVisited){
-                System.out.println( s.getLength() + " is visited");
-            }
-            if(!isVisited){
-                System.out.print( indent + i +  ": " + s.toString() );
-            }
-            i++;
-        }
-
-        return false;
-    }
-
-
-    public CFGSample(String ind){
-        indent = ind;
-    }
-    public CFGSample(){
-    }
-*/
     private String indent = "";
     private void addIndent(){
         indent += "  ";
@@ -151,4 +159,5 @@ public class CFGSample extends ASTVisitor {
         if(indent.length() > 2)
             indent = indent.substring(0,indent.length()-2);
     }
+    */
 }

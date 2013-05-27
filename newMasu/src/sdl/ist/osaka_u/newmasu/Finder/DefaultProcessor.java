@@ -4,6 +4,7 @@ package sdl.ist.osaka_u.newmasu.Finder;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 
 public enum DefaultProcessor {
@@ -12,6 +13,12 @@ public enum DefaultProcessor {
         @Override
         public void process(ASTNode node){
            vis.visit((IfStatement)node);
+        }
+    },
+    FOR(ForStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((ForStatement)node);
         }
     },
     BLOCK(Block.class){
