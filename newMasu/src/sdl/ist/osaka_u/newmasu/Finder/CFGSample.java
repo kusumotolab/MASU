@@ -81,6 +81,12 @@ public class CFGSample extends ASTVisitor {
             this.edge = edge;
         }
 
+        private String sanitize(String str){
+            str = str.trim();
+            str = str.replaceAll("\\\"", "\\\\\\\"");
+            return str;
+        }
+
         private static Set<CFGNode> used;
         public void showChildren(){
             used = new HashSet<>();
@@ -90,7 +96,7 @@ public class CFGSample extends ASTVisitor {
         private void _showChildren(){
             if(!used.contains(this)){
                 used.add(this);
-                TestWriter.println(name + " [label=\"" + label + "\", shape=\"" + shape + "\"];");
+                TestWriter.println(name + " [label=\"" + sanitize(label) + "\", shape=\"" + shape + "\"];");
 
                 for(CFGNode cn : children){
                     String edge="";
