@@ -165,8 +165,18 @@ public class CFGSample extends ASTVisitor {
 
     @Override
     public boolean visit(ForStatement node){
-        CFGNode cond = new CFGNode(node.getExpression().toString(), nextName(), "ellipse");
+        CFGNode cond = new CFGNode(
+                node.initializers().toString() + " " + node.getExpression().toString() + " " + node.updaters().toString(),
+                nextName(), "diamond");
         nowNode = nowNode.addChild(cond);
+
+        nowNode = cond;
+        nowNode.setTrigger(cond, null, "then");
+        DefaultProcessor.get(node.getBody(), this).process(node.getBody());
+        nowNode.addChild(cond);
+
+        nowNode = cond;
+        nowNode.setTrigger(cond, null, "else");
 
         return false;
     }
@@ -181,18 +191,15 @@ public class CFGSample extends ASTVisitor {
 
     @Override
     public boolean visit(MethodDeclaration node){
-
+        root = new CFGNode(node.getName().toString(),nextName(), "Msquare");
+        nowNode = root;
         return true;
     }
     @Override
     public void endVisit(MethodDeclaration node){
-
-        nowNode.addChild(new CFGNode("End", nextName(), "box"));
+        nowNode.addChild(new CFGNode("End " + node.getName().toString(), nextName(), "Msquare"));
         root.showChildren();
 //        TestWriter.println("}");
-
-        root = new CFGNode("root",nextName());
-        nowNode = root;
     }
 
     /*
