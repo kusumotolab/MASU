@@ -2,10 +2,7 @@ package sdl.ist.osaka_u.newmasu.Finder;
 
 
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.*;
 
 public enum DefaultProcessor {
 
@@ -25,6 +22,12 @@ public enum DefaultProcessor {
         @Override
         public void process(ASTNode node){
             vis.visit((Block)node);
+        }
+    },
+    METHOD_DECLARATION(MethodDeclaration.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((MethodDeclaration)node);
         }
     },
 

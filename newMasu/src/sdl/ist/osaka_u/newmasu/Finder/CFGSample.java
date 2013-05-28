@@ -1,5 +1,6 @@
 package sdl.ist.osaka_u.newmasu.Finder;
 
+import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
 import java.util.*;
 
@@ -19,18 +20,16 @@ public class CFGSample extends ASTVisitor {
     }
 
     @Override public boolean visit(CompilationUnit node){
-//        TestWriter.newFile();
-//        TestWriter.println("digraph CFG {");
+        TestWriter.newFile();
+        TestWriter.println("digraph CFG {");
         return true;
     }
     @Override public void endVisit(CompilationUnit node){
 //        TestWriter.println("}");
 
-        nowNode.addChild(new CFGNode("End", "END", "box"));
-
-        TestWriter.newFile();
-        TestWriter.println("digraph CFG {");
-        root.showChildren();
+//        TestWriter.newFile();
+//        TestWriter.println("digraph CFG {");
+//        root.showChildren();
         TestWriter.println("}");
     }
 
@@ -45,6 +44,8 @@ public class CFGSample extends ASTVisitor {
         private List<CFGNode> children = new ArrayList<>();
 
         public CFGNode addChild(CFGNode cn){
+            CFGNode node = null;
+
             if(dummy){
                 this.label = cn.label;
                 this.name = cn.name;
@@ -52,12 +53,15 @@ public class CFGSample extends ASTVisitor {
                 this.edge = cn.edge;
                 this.dummy = false;
                 children = new ArrayList<>();
-                return this;
+                node = this;
             }
             else{
                 children.add(cn);
-                return cn;
+                node = cn;
             }
+
+            addEdgeLabel(node);
+            return node;
         }
 
         public CFGNode(boolean dummy){
@@ -89,12 +93,37 @@ public class CFGSample extends ASTVisitor {
                 TestWriter.println(name + " [label=\"" + label + "\", shape=\"" + shape + "\"];");
 
                 for(CFGNode cn : children){
+                    String edge="";
+                    if(edgeLabel.containsKey(Pair.of(this, cn)))
+                        edge = edgeLabel.get(Pair.of(this, cn));
                     TestWriter.println(name + " -> " + cn.name + "[label=\"" + edge + "\"];");
                     System.out.println(label + " -> " + cn.label);
                     cn._showChildren();
                 }
 
             }
+        }
+
+
+        private static Map<Pair<CFGNode,CFGNode>, String> edgeLabel = new HashMap<>();
+        private static String trigger = null;
+        private static CFGNode triggerNode1 = null, triggerNode2 = null;
+        public void setTrigger(CFGNode n1, CFGNode n2, String str){
+            trigger = str;
+            triggerNode1 = n1;
+            triggerNode2 = n2;
+        }
+        private void addEdgeLabel(CFGNode node){
+            if(triggerNode1==null && triggerNode2!=null)
+                edgeLabel.put(Pair.of(node,triggerNode2),trigger);
+            else if(triggerNode1!=null && triggerNode2==null)
+                edgeLabel.put(Pair.of(triggerNode1,node),trigger);
+//        else
+//            edgeLabel.put(Pair.of(n1,n2),str);
+
+            trigger = null;
+            triggerNode1 = null;
+            triggerNode2 = null;
         }
     }
 
@@ -118,14 +147,14 @@ public class CFGSample extends ASTVisitor {
 
         CFGNode dummy = new CFGNode(true);
 
-//        CFGNode cthen = new CFGNode(node.getThenStatement().toString(), nextName());
         nowNode = cif;
+        nowNode.setTrigger(cif, null, "then");
         DefaultProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
         nowNode.addChild(dummy);
 
         if(node.getElseStatement()!=null){
-//            CFGNode celse = new CFGNode(node.getElseStatement().toString(), nextName());
             nowNode = cif;
+            nowNode.setTrigger(cif, null, "else");
             DefaultProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
             nowNode.addChild(dummy);
         }
@@ -148,6 +177,22 @@ public class CFGSample extends ASTVisitor {
         for( Statement s : list)
             DefaultProcessor.get(s, this).process(s);
         return false;
+    }
+
+    @Override
+    public boolean visit(MethodDeclaration node){
+
+        return true;
+    }
+    @Override
+    public void endVisit(MethodDeclaration node){
+
+        nowNode.addChild(new CFGNode("End", nextName(), "box"));
+        root.showChildren();
+//        TestWriter.println("}");
+
+        root = new CFGNode("root",nextName());
+        nowNode = root;
     }
 
     /*
