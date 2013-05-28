@@ -2,6 +2,8 @@ package sdl.ist.osaka_u.newmasu.Finder;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
+import sdl.ist.osaka_u.newmasu.data.dataManager.BindingManager;
+
 import java.util.*;
 
 public class CFGSample extends ASTVisitor {
@@ -134,8 +136,13 @@ public class CFGSample extends ASTVisitor {
             DefaultProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
             nowNode.addChild(dummy);
         }
+        else{
+            setTrigger(cif, null, "else");
+            cif.addChild(dummy);
+        }
 
         nowNode = dummy;
+
         return false;
     }
 
@@ -166,7 +173,8 @@ public class CFGSample extends ASTVisitor {
     }
 
     @Override public boolean visit(CompilationUnit node){
-        TestWriter.newFile();
+        TestWriter.newFile(node.getPackage().getName().toString() + "." +
+                BindingManager.getRel().getCalleeMap().get(node).getFileName() );
         TestWriter.println("digraph CFG {");
         return true;
     }

@@ -8,14 +8,10 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class TestWriter {
-    final static private String path = "./sample/out.dot";
-    static private File file = new File(path);
-
-
+    final static private String outdir = "./sample/";
+    static private File file = null;
 
     public static void println(String str){
-
-
         try {
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
             pw.println(str);
@@ -26,6 +22,12 @@ public class TestWriter {
     }
 
     public static void newFile(){
+        newFile("hoge");
+    }
+
+    public static void newFile(String name){
+        file = new File(outdir + name + ".dot");
+
         if(file.exists())
             file.delete();
 
@@ -37,11 +39,6 @@ public class TestWriter {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-    }
-
-    public static void newFile(String path){
-        file = new File(path);
-        newFile();
     }
 
 }
