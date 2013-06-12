@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Finder;
+package sdl.ist.osaka_u.newmasu.gomi;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
