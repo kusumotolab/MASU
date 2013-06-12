@@ -1,8 +1,8 @@
-package sdl.ist.osaka_u.newmasu.Finder;
+package sdl.ist.osaka_u.newmasu.Plugins.CFG;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.data.dataManager.BindingManager;
+import sdl.ist.osaka_u.newmasu.gomi.dataManager.BindingManager;
 
 import java.util.*;
 
@@ -127,13 +127,13 @@ public class CFGSample extends ASTVisitor {
 
         nowNode = cif;
         setTrigger(cif, null, "then");
-        DefaultProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
+        CFGSampleProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
         nowNode.addChild(dummy);
 
         if(node.getElseStatement()!=null){
             nowNode = cif;
             setTrigger(cif, null, "else");
-            DefaultProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
+            CFGSampleProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
             nowNode.addChild(dummy);
         }
         else{
@@ -155,7 +155,7 @@ public class CFGSample extends ASTVisitor {
 
         nowNode = cond;
         setTrigger(cond, null, "then");
-        DefaultProcessor.get(node.getBody(), this).process(node.getBody());
+        CFGSampleProcessor.get(node.getBody(), this).process(node.getBody());
         nowNode.addChild(cond);
 
         nowNode = cond;
@@ -168,7 +168,7 @@ public class CFGSample extends ASTVisitor {
     public boolean visit(Block node){
         List<Statement> list = node.statements();
         for( Statement s : list)
-            DefaultProcessor.get(s, this).process(s);
+            CFGSampleProcessor.get(s, this).process(s);
         return false;
     }
 

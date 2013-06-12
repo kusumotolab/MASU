@@ -1,11 +1,6 @@
-package sdl.ist.osaka_u.newmasu.Finder;
-
-import org.eclipse.jdt.core.dom.ASTNode;
+package sdl.ist.osaka_u.newmasu.Plugins.CFG;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
 
 public class TestWriter {
     final static private String outdir = "./sample/";

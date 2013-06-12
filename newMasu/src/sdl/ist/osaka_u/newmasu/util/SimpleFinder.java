@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Finder;
+package sdl.ist.osaka_u.newmasu.util;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 

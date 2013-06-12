@@ -1,10 +1,10 @@
-package sdl.ist.osaka_u.newmasu.Finder;
+package sdl.ist.osaka_u.newmasu.Plugins.CFG;
 
 
 
 import org.eclipse.jdt.core.dom.*;
 
-public enum DefaultProcessor {
+public enum CFGSampleProcessor {
 
     IF(IfStatement.class){
         @Override
@@ -43,15 +43,15 @@ public enum DefaultProcessor {
     private static CFGSample vis = null;
 
     private final Class<?> clazz;
-    private DefaultProcessor(Class<?> clazz) {
+    private CFGSampleProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
     public abstract void process(ASTNode node);
 
-    public static DefaultProcessor get(Object obj, CFGSample vi) {
+    public static CFGSampleProcessor get(Object obj, CFGSample vi) {
         vis = vi;
-        for (DefaultProcessor processor : values()) {
+        for (CFGSampleProcessor processor : values()) {
             if(processor.clazz.isAssignableFrom(obj.getClass())) {
                 return processor;
             }
