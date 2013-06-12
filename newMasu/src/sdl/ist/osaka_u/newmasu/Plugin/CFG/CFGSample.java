@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Plugins.CFG;
+package sdl.ist.osaka_u.newmasu.Plugin.CFG;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
