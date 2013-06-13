@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Finder;
+package sdl.ist.osaka_u.newmasu.gomi;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IBinding;
