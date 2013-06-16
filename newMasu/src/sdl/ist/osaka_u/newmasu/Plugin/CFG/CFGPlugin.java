@@ -3,7 +3,7 @@ package sdl.ist.osaka_u.newmasu.Plugin.CFG;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import sdl.ist.osaka_u.newmasu.Plugin.Plugin;
 import sdl.ist.osaka_u.newmasu.Settings;
-import sdl.ist.osaka_u.newmasu.gomi.dataManager.BindingManager;
+import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 import java.nio.file.Paths;
 import java.util.Set;
