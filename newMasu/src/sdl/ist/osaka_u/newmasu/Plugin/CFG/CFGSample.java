@@ -2,7 +2,7 @@ package sdl.ist.osaka_u.newmasu.Plugin.CFG;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.gomi.dataManager.BindingManager;
+import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 import java.util.*;
 

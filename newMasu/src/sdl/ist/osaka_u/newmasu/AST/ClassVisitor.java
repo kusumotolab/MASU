@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import sdl.ist.osaka_u.newmasu.data.ClassInfo;
 import sdl.ist.osaka_u.newmasu.data.MethodInfo;
 import sdl.ist.osaka_u.newmasu.data.VariableInfo;
-import sdl.ist.osaka_u.newmasu.gomi.dataManager.BindingManager;
+import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 
 public class ClassVisitor extends ASTVisitor {

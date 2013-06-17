@@ -7,6 +7,7 @@ public class A2 extends A1 {
 
 	public int calc(int a, int b) {
 		int c = a * b;
+        calc2(c);
 		return c;
 	}
 
