@@ -14,8 +14,11 @@ public class CFGPlugin implements Plugin {
         Set<String> paths = Settings.getInstance().getListFiles();
         for(String path : paths){
             CompilationUnit unit = BindingManager.getRel().getCallerMap().get(Paths.get(path));
-            CFGSample mv = new CFGSample();
-            unit.accept(mv);
+            unit.accept(getVisitor());
         }
+    }
+
+    protected CFGSample getVisitor(){
+        return new CFGSample();
     }
 }
