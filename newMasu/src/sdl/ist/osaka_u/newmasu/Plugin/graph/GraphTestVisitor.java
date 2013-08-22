@@ -1,5 +1,6 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
+import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
 import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
@@ -9,7 +10,7 @@ public class GraphTestVisitor extends ASTVisitor{
 
     private Branch nowBranch = null;
     private Set<Branch> tree = new LinkedHashSet<>();
-    private Set<String> edge = new LinkedHashSet<>();
+    private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
 
     public void def(ASTNode node){
         final Node n = new Node(node.toString(),false,"ellipse");
@@ -26,18 +27,26 @@ public class GraphTestVisitor extends ASTVisitor{
         final Branch previousBranch = nowBranch;
         tree.add(previousBranch);
 
+        // create then branch
         final Branch thenBranch = previousBranch.newBranch();
         tree.add(thenBranch);
         nowBranch = thenBranch;
         GraphTestProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
         nowBranch.insert(dummy);
+        // create edge label
+        final Pair<Node,Node> thenEdge = new Pair<>(thenBranch.getPath().get(0), thenBranch.getPath().get(1));
+        edge.put(thenEdge, "true");
 
+        // create else branch
         final Branch elseBranch = previousBranch.newBranch();
         tree.add(elseBranch);
         nowBranch = elseBranch;
         if( node.getElseStatement() != null )
             GraphTestProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
         nowBranch.insert(dummy);
+        // create edge label
+        final Pair<Node,Node> elseEdge = new Pair<>(elseBranch.getPath().get(0), elseBranch.getPath().get(1));
+        edge.put(elseEdge, "false");
 
         nowBranch = new Branch();
         tree.add(nowBranch);
@@ -98,6 +107,6 @@ public class GraphTestVisitor extends ASTVisitor{
         nowBranch.insert( new Node("End " + label,false, "rect") );
 
         for(Branch b : tree)
-            b.print();
+            b.print(edge);
     }
 }

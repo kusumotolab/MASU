@@ -1,12 +1,13 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
+import com.sun.tools.javac.util.Pair;
 import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
 import java.util.*;
 
 public class Branch {
 
-    private LinkedList<Node> path = new LinkedList<>();
+    private final LinkedList<Node> path = new LinkedList<>();
 
     public Branch(Node first, Node last){
         path.add(first);
@@ -20,7 +21,9 @@ public class Branch {
         return b;
     }
 
-    static Map<Node,Node> replaceNodes = new HashMap<>();
+    public LinkedList<Node> getPath(){ return path;}
+
+    private static Map<Node,Node> replaceNodes = new LinkedHashMap<>();
     public void insert(Node node){
         if(!path.isEmpty() && path.getLast().getDummy() && node.getDummy())
             replaceNodes.put(path.getLast(), node);
@@ -31,12 +34,12 @@ public class Branch {
     }
 
 
-    private static Set<Node> usedNodeInToGraph = new HashSet<>();
-    public void print(){
+    private static Set<Node> usedNodeInToGraph = new LinkedHashSet<>();
+    public void print(Map<Pair<Node,Node>,String> edge){
         usedNodeInToGraph.clear();
-        TestWriter.println(toGraph());
+        TestWriter.println(toGraph(edge));
     }
-    public String toGraph(){
+    public String toGraph(Map<Pair<Node,Node>,String> edge){
         StringBuilder sb = new StringBuilder();
         Node prev = null;
         for(Node node : path){
@@ -47,8 +50,12 @@ public class Branch {
                 sb.append(node.toGraph());
             }
             sb.append(System.lineSeparator());
-            if(prev!=null)
+            if(prev!=null){
                 sb.append(prev.toGraphId() + " -> " + node.toGraphId());
+                final Pair<Node,Node> e = new Pair<>(prev,node);
+                if(edge.containsKey(e))
+                    sb.append(" [label=\"" + edge.get(e) + "\"];");
+            }
             prev = node;
             sb.append(System.lineSeparator());
         }
