@@ -1,94 +1,68 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.CFGNode;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.CFGSampleProcessor;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.NodeName;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
-import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GraphTestVisitor extends ASTVisitor{
 
-    //protected CFGNode root = new CFGNode("root","R");
-    //protected CFGNode nowNode = root;
-
-    private Tree mainBranch = new Tree(new Node("S"), new Node("E"));
-    private Tree nowBranch = mainBranch;
+    private Branch nowBranch = null;
+    private Set<Branch> tree = new HashSet<>();
+    private Set<String> edge = new HashSet<>();
 
     public void def(ASTNode node){
-        //CFGNode cn = new CFGNode(node.toString(), NodeName.nextName());
-        //nowNode = nowNode.addChild(cn);
-        final Node n = new Node(node.toString());
+        final Node n = new Node(node.toString(),false,"ellipse");
         nowBranch.insert(n);
     }
 
     @Override
     public boolean visit(IfStatement node){
 
-        final ConditionNode condNode = new ConditionNode();
+        final Node condNode = new Node();
         condNode.setLabel(node.getExpression().toString());
+        condNode.setShape("diamond");
         nowBranch.insert(condNode);
 
-        final Tree tmpBranch = nowBranch;
+        final Node dummy = new Node("dummy", true, "ellipse");
 
-        final Tree thenBranch = nowBranch.newBranch();
+        final Branch tmpBranch = nowBranch;
+
+        final Branch thenBranch = nowBranch.newBranch();
         nowBranch = thenBranch;
         GraphTestProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
-        condNode.thenTree = thenBranch;
+        nowBranch.insert(dummy);
+        tree.add(thenBranch);
         nowBranch = tmpBranch;
 
         if( node.getElseStatement() != null ){
-            final Tree elseBranch = nowBranch.newBranch();
+            final Branch elseBranch = nowBranch.newBranch();
             nowBranch = elseBranch;
             GraphTestProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
-            condNode.elseTree = elseBranch;
+            nowBranch.insert(dummy);
+            tree.add(elseBranch);
             nowBranch = tmpBranch;
         }
-        /*
-        CFGNode cif = new CFGNode(node.getExpression().toString(), NodeName.nextName(), "diamond");
-        nowNode = nowNode.addChild(cif);
-
-        CFGNode dummy = new CFGNode(true);
-
-        nowNode = cif;
-        cif.setTrigger(cif, null, "then");
-        CFGSampleProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
-        nowNode.addChild(dummy);
-
-        if(node.getElseStatement()!=null){
-            nowNode = cif;
-            cif.setTrigger(cif, null, "else");
-            CFGSampleProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
-            nowNode.addChild(dummy);
-        }
         else{
-            cif.setTrigger(cif, null, "else");
-            cif.addChild(dummy);
+            final Branch elseBranch = nowBranch.newBranch();
+            elseBranch.insert(dummy);
+            tree.add(elseBranch);
+            nowBranch = tmpBranch;
         }
 
-        nowNode = dummy;
-*/
+        tree.add(nowBranch);
+
+        nowBranch = new Branch();
+        nowBranch.insert(dummy);
+        tree.add(nowBranch);
+
         return false;
     }
 
     @Override
     public boolean visit(ForStatement node){
-        /*
-        CFGNode cond = new CFGNode(
-                node.initializers().toString() + " " + node.getExpression().toString() + " " + node.updaters().toString(),
-                NodeName.nextName(), "diamond");
-        nowNode = nowNode.addChild(cond);
-
-        nowNode = cond;
-        cond.setTrigger(cond, null, "then");
-        CFGSampleProcessor.get(node.getBody(), this).process(node.getBody());
-        nowNode.addChild(cond);
-
-        nowNode = cond;
-        cond.setTrigger(cond, null, "else");
-*/
         return false;
     }
 
@@ -103,50 +77,41 @@ public class GraphTestVisitor extends ASTVisitor{
 
 
     @Override public boolean visit(CompilationUnit node){
-        //mainBranch = new Tree(new Node("S"), new Node("E"));
-        //nowBranch = mainBranch;
-        /*
-        TestWriter.newFile(node.getPackage().getName().toString() + "." +
-                BindingManager.getRel().getCalleeMap().get(node).getFileName() );
-        TestWriter.println("digraph CFG {");
-        */
+        System.out.println("digraph CFG {");
         return true;
-
     }
 
     @Override public void endVisit(CompilationUnit node){
-        //TestWriter.println("}");
-        //mainBranch.print();
+        System.out.println("}");
     }
 
     @Override
     public boolean visit(MethodDeclaration node){
-
-
         String label = node.getReturnType2().toString() + " " + node.getName() + "(";
         for(Object t : node.parameters()){
             SingleVariableDeclaration s = (SingleVariableDeclaration)t;
             label += " " + s.getType().toString() + " " + s.getName();
         }
         label += ")";
-        /*
-        root = new CFGNode(label, NodeName.nextName(), "Msquare");
-        nowNode = root;
-        */
 
-        mainBranch = new Tree(new Node(label), new Node("End " + label));
-        nowBranch = mainBranch;
+        tree.clear();
+        nowBranch = new Branch();
+        nowBranch.insert( new Node("Start " + label,false, "rect") );
+        tree.add(nowBranch);
+
         return true;
     }
     @Override
     public void endVisit(MethodDeclaration node){
+        String label = node.getReturnType2().toString() + " " + node.getName() + "(";
+        for(Object t : node.parameters()){
+            SingleVariableDeclaration s = (SingleVariableDeclaration)t;
+            label += " " + s.getType().toString() + " " + s.getName();
+        }
+        label += ")";
+        nowBranch.insert( new Node("End " + label,false, "rect") );
 
-        /*
-        nowNode.addChild(new CFGNode("End " + node.getName().toString(), NodeName.nextName(), "Msquare"));
-        root.showChildren();
-        */
-        mainBranch.print();
+        for(Branch b : tree)
+            b.print();
     }
-
-
 }
