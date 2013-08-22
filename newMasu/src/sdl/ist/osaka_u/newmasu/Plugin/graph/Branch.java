@@ -1,5 +1,7 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
+import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
+
 import java.util.*;
 
 public class Branch {
@@ -32,7 +34,7 @@ public class Branch {
     private static Set<Node> usedNodeInToGraph = new HashSet<>();
     public void print(){
         usedNodeInToGraph.clear();
-        System.out.println(toGraph());
+        TestWriter.println(toGraph());
     }
     public String toGraph(){
         StringBuilder sb = new StringBuilder();

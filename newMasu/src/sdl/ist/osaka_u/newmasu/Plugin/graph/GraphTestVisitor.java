@@ -1,17 +1,15 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 import org.eclipse.jdt.core.dom.*;
+import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GraphTestVisitor extends ASTVisitor{
 
     private Branch nowBranch = null;
-    private Set<Branch> tree = new HashSet<>();
-    private Set<String> edge = new HashSet<>();
+    private Set<Branch> tree = new LinkedHashSet<>();
+    private Set<String> edge = new LinkedHashSet<>();
 
     public void def(ASTNode node){
         final Node n = new Node(node.toString(),false,"ellipse");
@@ -21,42 +19,29 @@ public class GraphTestVisitor extends ASTVisitor{
     @Override
     public boolean visit(IfStatement node){
 
-        final Node condNode = new Node();
-        condNode.setLabel(node.getExpression().toString());
-        condNode.setShape("diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
         nowBranch.insert(condNode);
 
         final Node dummy = new Node("dummy", true, "ellipse");
+        final Branch previousBranch = nowBranch;
+        tree.add(previousBranch);
 
-        final Branch tmpBranch = nowBranch;
-
-        final Branch thenBranch = nowBranch.newBranch();
+        final Branch thenBranch = previousBranch.newBranch();
+        tree.add(thenBranch);
         nowBranch = thenBranch;
         GraphTestProcessor.get(node.getThenStatement(), this).process(node.getThenStatement());
         nowBranch.insert(dummy);
-        tree.add(thenBranch);
-        nowBranch = tmpBranch;
 
-        if( node.getElseStatement() != null ){
-            final Branch elseBranch = nowBranch.newBranch();
-            nowBranch = elseBranch;
+        final Branch elseBranch = previousBranch.newBranch();
+        tree.add(elseBranch);
+        nowBranch = elseBranch;
+        if( node.getElseStatement() != null )
             GraphTestProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
-            nowBranch.insert(dummy);
-            tree.add(elseBranch);
-            nowBranch = tmpBranch;
-        }
-        else{
-            final Branch elseBranch = nowBranch.newBranch();
-            elseBranch.insert(dummy);
-            tree.add(elseBranch);
-            nowBranch = tmpBranch;
-        }
-
-        tree.add(nowBranch);
+        nowBranch.insert(dummy);
 
         nowBranch = new Branch();
-        nowBranch.insert(dummy);
         tree.add(nowBranch);
+        nowBranch.insert(dummy);
 
         return false;
     }
@@ -77,12 +62,13 @@ public class GraphTestVisitor extends ASTVisitor{
 
 
     @Override public boolean visit(CompilationUnit node){
-        System.out.println("digraph CFG {");
+        TestWriter.newFile();
+        TestWriter.println("digraph CFG {");
         return true;
     }
 
     @Override public void endVisit(CompilationUnit node){
-        System.out.println("}");
+        TestWriter.println("}");
     }
 
     @Override
@@ -96,8 +82,8 @@ public class GraphTestVisitor extends ASTVisitor{
 
         tree.clear();
         nowBranch = new Branch();
-        nowBranch.insert( new Node("Start " + label,false, "rect") );
         tree.add(nowBranch);
+        nowBranch.insert( new Node("Start " + label,false, "rect") );
 
         return true;
     }
