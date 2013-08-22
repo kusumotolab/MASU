@@ -11,8 +11,15 @@ public class PDGSample extends CFGSample {
 
     @Override
     public boolean visit(FieldDeclaration node){
+        System.out.println("hoge");
         def(node);
         return false;
     }
-
+    @Override
+    public boolean visit(Block node){
+        List<Statement> list = node.statements();
+        for( Statement s : list)
+            PDGSampleProcessor.get(s, this).process(s);
+        return false;
+    }
 }
