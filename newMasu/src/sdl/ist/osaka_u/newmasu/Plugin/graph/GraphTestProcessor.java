@@ -31,6 +31,18 @@ public enum GraphTestProcessor {
             vis.visit((MethodDeclaration)node);
         }
     },
+    BREAK(BreakStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((BreakStatement)node);
+        }
+    },
+    RETURN(ReturnStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((ReturnStatement)node);
+        }
+    },
 
     _DEF_(Object.class){
         @Override

@@ -12,6 +12,10 @@ public class GraphTestVisitor extends ASTVisitor{
     private Set<Branch> tree = new LinkedHashSet<>();
     private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
 
+    // nodes - possible to be jumped
+    private Stack<Node> enter = new Stack<>();
+    private Stack<Node> exit = new Stack<>();
+
     public void def(ASTNode node){
         final Node n = new Node(node.toString(),false,"ellipse");
         nowBranch.insert(n);
@@ -57,8 +61,65 @@ public class GraphTestVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(ForStatement node){
+
+        nowBranch.insert(new Node(node.initializers().toString(), false, "ellipse"));
+
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        nowBranch.insert(condNode);
+
+        final Node dummy = new Node("dummy", true, "ellipse");
+        final Branch previousBranch = nowBranch;
+        tree.add(previousBranch);
+
+        // set enter & exit node
+        enter.push(condNode);
+        exit.push(dummy);
+
+        // create then branch
+        final Branch thenBranch = previousBranch.newBranch();
+        tree.add(thenBranch);
+        nowBranch = thenBranch;
+        GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
+        nowBranch.insert(new Node(node.updaters().toString(), false, "ellipse"));
+        nowBranch.insert(condNode);
+        // create edge label
+        final Pair<Node,Node> thenEdge = new Pair<>(thenBranch.getPath().get(0), thenBranch.getPath().get(1));
+        edge.put(thenEdge, "true");
+
+        // create else branch
+        final Branch elseBranch = previousBranch.newBranch();
+        tree.add(elseBranch);
+        elseBranch.insert(dummy);
+        // create edge label
+        final Pair<Node,Node> elseEdge = new Pair<>(elseBranch.getPath().get(0), elseBranch.getPath().get(1));
+        edge.put(elseEdge, "false");
+
+        nowBranch = new Branch();
+        tree.add(nowBranch);
+        nowBranch.insert(dummy);
+
+        // pop enter & exit node
+        enter.pop();
+        exit.pop();
+
         return false;
     }
+    @Override
+    public boolean visit(BreakStatement node){
+        nowBranch.insert(exit.peek());
+        nowBranch = new Branch();
+        tree.add(nowBranch);
+        return false;
+    }
+    @Override
+    public boolean visit(ReturnStatement node){
+        nowBranch.insert(exit.get(0));
+//        nowBranch.getPath().getLast().setId(exit.get(0).getId());
+        nowBranch = new Branch();
+        tree.add(nowBranch);
+        return false;
+    }
+
 
     @Override
     public boolean visit(Block node){
@@ -94,17 +155,16 @@ public class GraphTestVisitor extends ASTVisitor{
         tree.add(nowBranch);
         nowBranch.insert( new Node("Start " + label,false, "rect") );
 
+        // set exit node
+        exit.push(new Node("End " + label, false, "rect"));
+
         return true;
     }
     @Override
     public void endVisit(MethodDeclaration node){
-        String label = node.getReturnType2().toString() + " " + node.getName() + "(";
-        for(Object t : node.parameters()){
-            SingleVariableDeclaration s = (SingleVariableDeclaration)t;
-            label += " " + s.getType().toString() + " " + s.getName();
-        }
-        label += ")";
-        nowBranch.insert( new Node("End " + label,false, "rect") );
+        // if exit(0) replaces dummy node, the reference
+        nowBranch.insert( exit.peek() );
+        nowBranch.getPath().getLast().setId(exit.pop().getId());
 
         for(Branch b : tree)
             b.print(edge);

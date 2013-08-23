@@ -5,6 +5,7 @@ public class Node {
     private String label = "";
     private Boolean isDummy = false;
     private String shape = "ellipse";
+    private int id;
     public void copy(Node node){
         label = node.label;
         isDummy = node.isDummy;
@@ -20,10 +21,15 @@ public class Node {
     public String getShape() { return shape; }
     public void setShape(String shape) { this.shape = shape; }
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
     public Node(String name, Boolean dummy, String shape){
+        this();
         label=name; isDummy=dummy; this.shape=shape;
     }
     public Node(){
+        id = hashCode();
     }
 
     public String toGraph(){
@@ -34,6 +40,6 @@ public class Node {
         return label.trim();
     }
     public String toGraphId(){
-        return  Integer.toString(hashCode());
+        return Integer.toString(id);
     }
 }
