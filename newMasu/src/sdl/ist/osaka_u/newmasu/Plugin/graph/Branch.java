@@ -1,5 +1,6 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
+import com.sun.javafx.geom.Edge;
 import com.sun.tools.javac.util.Pair;
 import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
@@ -52,9 +53,17 @@ public class Branch {
             sb.append(System.lineSeparator());
             if(prev!=null){
                 sb.append(prev.toGraphId() + " -> " + node.toGraphId());
-                final Pair<Node,Node> e = new Pair<>(prev,node);
-                if(edge.containsKey(e))
-                    sb.append(" [label=\"" + edge.get(e) + "\"];");
+                final Pair<Integer,Integer> target = new Pair<>(prev.getId(),node.getId());
+
+                StringBuilder edgesb = new StringBuilder();
+                edgesb.append(" [label=\"");
+                for(Map.Entry<Pair<Node,Node>,String> e : edge.entrySet()){
+                    if(e.getKey().fst.getId() == target.fst &&
+                            e.getKey().snd.getId() == target.snd)
+                        edgesb.append(e.getValue());
+                }
+                edgesb.append("\"];");
+                sb.append(edgesb.toString());
             }
             prev = node;
             sb.append(System.lineSeparator());

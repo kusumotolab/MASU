@@ -106,6 +106,7 @@ public class GraphTestVisitor extends ASTVisitor{
     }
     @Override
     public boolean visit(BreakStatement node){
+        nowBranch.insert(new Node("break", false, "triangle"));
         nowBranch.insert(exit.peek());
         nowBranch = new Branch();
         tree.add(nowBranch);
@@ -113,6 +114,7 @@ public class GraphTestVisitor extends ASTVisitor{
     }
     @Override
     public boolean visit(ReturnStatement node){
+        nowBranch.insert(new Node("return", false, "triangle"));
         nowBranch.insert(exit.get(0));
 //        nowBranch.getPath().getLast().setId(exit.get(0).getId());
         nowBranch = new Branch();
