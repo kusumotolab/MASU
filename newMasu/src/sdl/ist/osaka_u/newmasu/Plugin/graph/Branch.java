@@ -24,10 +24,15 @@ public class Branch {
 
     public LinkedList<Node> getPath(){ return path;}
 
-    private static Map<Node,Node> replaceNodes = new LinkedHashMap<>();
+//    private static Map<Node,Node> replaceNodes = new LinkedHashMap<>();
     public void insert(Node node){
-        if(!path.isEmpty() && path.getLast().getDummy() && node.getDummy())
-            replaceNodes.put(path.getLast(), node);
+        if(!path.isEmpty() && path.getLast().getDummy() && node.getDummy()){
+            //replaceNodes.put(path.getLast(), node);
+            int id = path.getLast().getId();
+            path.getLast().copy(node);
+            path.getLast().setId(node.getId());
+
+        }
         else if(!path.isEmpty() && path.getLast().getDummy())
             path.getLast().copy(node);
         else
@@ -44,8 +49,8 @@ public class Branch {
         StringBuilder sb = new StringBuilder();
         Node prev = null;
         for(Node node : path){
-            if(replaceNodes.containsKey(node))
-                node = replaceNodes.get(node);
+//            if(replaceNodes.containsKey(node))
+//                node = replaceNodes.get(node);
             if(!usedNodeInToGraph.contains(node)){
                 usedNodeInToGraph.add(node);
                 sb.append(node.toGraph());

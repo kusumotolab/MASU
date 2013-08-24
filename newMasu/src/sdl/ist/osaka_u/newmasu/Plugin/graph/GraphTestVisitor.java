@@ -164,9 +164,33 @@ public class GraphTestVisitor extends ASTVisitor{
     }
     @Override
     public void endVisit(MethodDeclaration node){
-        // if exit(0) replaces dummy node, the reference
-        nowBranch.insert( exit.peek() );
-        nowBranch.getPath().getLast().setId(exit.pop().getId());
+
+        // exit(0) is references many places, so the ObjectID of exit(0) should not be changed.
+        // the id of exit(0) should be the id of the previous node.
+        final Node exit0 = exit.pop();
+        final Node last = nowBranch.getPath().getLast();
+        int id = exit0.getId();
+        if(last.getDummy())
+            id = last.getId();
+        exit0.setId(id);
+        nowBranch.insert(exit0);
+
+        // This may cause the duplication of the id of nodes, so self-loop in End should be removed.
+
+
+        for(Branch b : tree){
+            if(b.getPath().size()>=2 &&
+                    b.getPath().get(b.getPath().size()-2).getId()
+                            == b.getPath().getLast().getId()){
+                b.getPath().removeLast();
+            }
+        }
+
+
+
+
+        assert enter.isEmpty();
+        assert exit.isEmpty();
 
         for(Branch b : tree)
             b.print(edge);
