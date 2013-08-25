@@ -26,17 +26,46 @@ public class Branch {
 
 //    private static Map<Node,Node> replaceNodes = new LinkedHashMap<>();
     public void insert(Node node){
+        /*
         if(!path.isEmpty() && path.getLast().getDummy() && node.getDummy()){
             //replaceNodes.put(path.getLast(), node);
             int id = path.getLast().getId();
             path.getLast().copy(node);
             path.getLast().setId(node.getId());
-
+            path.add(node);
         }
-        else if(!path.isEmpty() && path.getLast().getDummy())
+        else if(!path.isEmpty() && path.getLast().getDummy()){
+            // path.getLast().copy(node);
             path.getLast().copy(node);
+        path.getLast().setId(node.getId());
+        }
         else
-            path.add(path.size(),node);
+        */
+            //path.add(path.size(),node);
+        path.add(node);
+    }
+
+    public void removeEdge(Map<Pair<Node,Node>,String> edge){
+        for(int i=0; i<path.size(); i++){
+            if(path.size()-i < 3)
+                break;
+            if(path.get(i+1).getDummy()){
+                final Pair<Node,Node> p1 = new Pair<>(path.get(i), path.get(i+1));
+                final Pair<Node,Node> p2 = new Pair<>(path.get(i+1), path.get(i+2));
+                final Pair<Node, Node> np = new Pair<>(path.get(i), path.get(i+2));
+                if(edge.containsKey(p1)){
+                    final String v = edge.get(p1);
+                    edge.remove(p1);
+                    edge.put(np,v);
+                }
+                if(edge.containsKey(p2)){
+                    final String v = edge.get(p2);
+                    edge.remove(p2);
+                    edge.put(np,v);
+                }
+                path.remove(i+1);
+            }
+        }
     }
 
 

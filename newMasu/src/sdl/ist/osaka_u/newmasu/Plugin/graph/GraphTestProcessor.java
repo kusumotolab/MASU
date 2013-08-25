@@ -19,6 +19,12 @@ public enum GraphTestProcessor {
             vis.visit((ForStatement)node);
         }
     },
+    WHILE(WhileStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((WhileStatement)node);
+        }
+    },
     BLOCK(Block.class){
         @Override
         public void process(ASTNode node){
@@ -41,6 +47,12 @@ public enum GraphTestProcessor {
         @Override
         public void process(ASTNode node){
             vis.visit((ReturnStatement)node);
+        }
+    },
+    CONTINUE(ContinueStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((ContinueStatement)node);
         }
     },
 
