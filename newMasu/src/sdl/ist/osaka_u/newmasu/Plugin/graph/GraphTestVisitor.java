@@ -23,7 +23,6 @@ public class GraphTestVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(IfStatement node){
-
         nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
 
         final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
@@ -49,7 +48,54 @@ public class GraphTestVisitor extends ASTVisitor{
 
         return false;
     }
+    @Override
+    public boolean visit(SwitchStatement node){
+        nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
 
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        nowNode = nowNode.addChildren(condNode);
+
+        final Node dummy = new Node("}", true, "ellipse");
+
+        final List<String> caseLabel = new ArrayList<>();
+        for(Object tmp : node.statements()){
+            final Statement s = (Statement)tmp;
+            System.out.println(s.toString());
+            if(s instanceof SwitchCase){
+                final SwitchCase sc = (SwitchCase)s;
+
+                if(sc.getExpression()!=null)
+                    caseLabel.add(sc.getExpression().toString());
+                else
+                    caseLabel.add("default");
+
+                nowNode = condNode;
+            }
+/*            else if(s instanceof BreakStatement){
+                final BreakStatement bs = (BreakStatement)s;
+                nowNode.addChildren(dummy);
+                nowNode = condNode;
+            }
+*/
+            else{
+                GraphTestProcessor.get(s, this).process(s);
+            }
+
+        }
+
+        if(caseLabel.size()==0)
+            nowNode = nowNode.addChildren(dummy);  // condNode.add
+        else{
+            for(int i=0; i<caseLabel.size(); i++){
+                // create edge label
+                final Pair<Node,Node> thenEdge = new Pair<>(condNode, condNode.getChildren().get(i));
+                edge.put(thenEdge, caseLabel.get(i));
+            }
+        }
+        nowNode = dummy;
+
+        return false;
+    }
     @Override
     public boolean visit(ForStatement node){
 
@@ -120,6 +166,77 @@ public class GraphTestVisitor extends ASTVisitor{
 
         return false;
     }
+    @Override
+    public boolean visit(DoStatement node){
+        final Node doStart = new Node("do {", true, "ellipse");
+        nowNode = nowNode.addChildren(doStart);
+        final Node dummy = new Node("}", true, "ellipse");
+
+        // set enter & exit node
+        enter.push(doStart);
+        exit.push(dummy);
+
+        // create then branch
+        GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
+
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        nowNode = nowNode.addChildren(condNode);
+        nowNode = nowNode.addChildren(doStart);
+        // create edge label
+        final Pair<Node,Node> thenEdge = new Pair<>(condNode,doStart);
+        edge.put(thenEdge, "true");
+
+        // create else branch
+        condNode.addChildren(dummy);
+        nowNode = dummy;
+        // create edge label
+        final Pair<Node,Node> elseEdge = new Pair<>(
+                condNode, dummy);
+        edge.put(elseEdge, "false");
+
+        // pop enter & exit node
+        enter.pop();
+        exit.pop();
+
+        return false;
+    }
+    @Override
+    public boolean visit(EnhancedForStatement node){
+        nowNode =  nowNode.addChildren(new Node("{", true, "ellipse"));
+        final Node condNode = new Node(
+                node.getParameter().toString() + " <- " + node.getExpression().toString(),
+                false, "diamond");
+        nowNode = nowNode.addChildren(condNode);
+        final Node dummy = new Node("}", true, "ellipse");
+
+        // set enter & exit node
+        enter.push(condNode);
+        exit.push(dummy);
+
+        // create then branch
+        GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
+        nowNode = nowNode.addChildren(condNode);
+        // create edge label
+        final Pair<Node,Node> thenEdge = new Pair<>(
+                nowNode, nowNode.getChildren().get(0));
+        edge.put(thenEdge, "true");
+
+        // create else branch
+        condNode.addChildren(dummy);
+        nowNode = dummy;
+        // create edge label
+        final Pair<Node,Node> elseEdge = new Pair<>(
+                condNode, dummy);
+        edge.put(elseEdge, "false");
+
+        // pop enter & exit node
+        enter.pop();
+        exit.pop();
+
+        return false;
+    }
+
+
     @Override
     public boolean visit(BreakStatement node){
         nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle"));

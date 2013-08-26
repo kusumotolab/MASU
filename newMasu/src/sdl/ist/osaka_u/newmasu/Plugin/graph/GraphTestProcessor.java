@@ -13,16 +13,34 @@ public enum GraphTestProcessor {
            vis.visit((IfStatement)node);
         }
     },
+    SWITCH(SwitchStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((SwitchStatement)node);
+        }
+    },
     FOR(ForStatement.class){
         @Override
         public void process(ASTNode node){
             vis.visit((ForStatement)node);
         }
     },
+    ENHANCEDFOR(EnhancedForStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((EnhancedForStatement)node);
+        }
+    },
     WHILE(WhileStatement.class){
         @Override
         public void process(ASTNode node){
             vis.visit((WhileStatement)node);
+        }
+    },
+    DO(DoStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((DoStatement)node);
         }
     },
     BLOCK(Block.class){

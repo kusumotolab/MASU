@@ -39,12 +39,12 @@ public class Node {
         label=name; isDummy=dummy; this.shape=shape;
     }
 
-    public String toGraph(){
+    public String toGraphDefine(){
         return toGraphId() + " [label=\"" + toGraphLabel() + "\", shape=\"" + shape + "\"];";
     }
 
     public String toGraphLabel(){
-        return label.trim();
+        return sanitize(label.trim());
     }
     public String toGraphId(){
         return Integer.toString(hashCode());
@@ -121,7 +121,7 @@ public class Node {
         usedNodeInToGraph.add(this);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(toGraph());
+        sb.append(toGraphDefine());
         sb.append(System.lineSeparator());
 
         for(Node c : children){
@@ -131,7 +131,7 @@ public class Node {
             edgesb.append(" [label=\"");
             Pair<Node,Node> p = new Pair<>(this,c);
             if(edge.containsKey(p)){
-                edgesb.append(edge.get(p));
+                edgesb.append(sanitize(edge.get(p)));
             }
             edgesb.append("\"];");
             sb.append(edgesb.toString());
@@ -142,6 +142,16 @@ public class Node {
         for(Node f : children)
             sb.append( f.__toGraph(edge) );
 
+        return sb.toString();
+    }
+
+    private String sanitize(String str){
+        final StringBuilder sb = new StringBuilder();
+        for(char c : str.toCharArray()){
+            if(c=='"')
+                sb.append('\\');
+            sb.append(c);
+        }
         return sb.toString();
     }
 }
