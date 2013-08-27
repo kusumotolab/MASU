@@ -3,6 +3,7 @@ package sdl.ist.osaka_u.newmasu.Plugin.graph;
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
 import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
+import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class GraphTestVisitor extends ASTVisitor{
     private Stack<Node> exit = new Stack<>();
 
     public void def(ASTNode node){
-        final Node n = new Node(node.toString(),false,"ellipse");
+        final Node n = new Node(node.toString(),false,"ellipse", node);
         nowNode = nowNode.addChildren(n);
     }
 
@@ -25,7 +26,7 @@ public class GraphTestVisitor extends ASTVisitor{
     public boolean visit(IfStatement node){
         nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
 
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
         nowNode = nowNode.addChildren(condNode);
 
         final Node dummy = new Node("}", true, "ellipse");
@@ -48,11 +49,12 @@ public class GraphTestVisitor extends ASTVisitor{
 
         return false;
     }
+    /*
     @Override
     public boolean visit(SwitchStatement node){
         nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
 
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
         nowNode = nowNode.addChildren(condNode);
 
         final Node dummy = new Node("}", true, "ellipse");
@@ -71,12 +73,12 @@ public class GraphTestVisitor extends ASTVisitor{
 
                 nowNode = condNode;
             }
-/*            else if(s instanceof BreakStatement){
+///*            else if(s instanceof BreakStatement){
                 final BreakStatement bs = (BreakStatement)s;
                 nowNode.addChildren(dummy);
                 nowNode = condNode;
             }
-*/
+//
             else{
                 GraphTestProcessor.get(s, this).process(s);
             }
@@ -96,13 +98,17 @@ public class GraphTestVisitor extends ASTVisitor{
 
         return false;
     }
+*/
     @Override
     public boolean visit(ForStatement node){
 
         nowNode =  nowNode.addChildren(new Node("{", true, "ellipse"));
-        nowNode = nowNode.addChildren(new Node(node.initializers().toString(), false, "ellipse"));
+        for( Object o : node.initializers() ){
+            Expression exp = (Expression)o;
+            nowNode = nowNode.addChildren(new Node(exp.toString(), false, "ellipse", exp));
+        }
 
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
         nowNode = nowNode.addChildren(condNode);
 
         final Node dummy = new Node("}", true, "ellipse");
@@ -113,7 +119,10 @@ public class GraphTestVisitor extends ASTVisitor{
 
         // create then branch
         GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
-        nowNode = nowNode.addChildren(new Node(node.updaters().toString(), false, "ellipse"));
+        for( Object o : node.initializers() ){
+            Expression exp = (Expression)o;
+            nowNode = nowNode.addChildren(new Node(exp.toString(), false, "ellipse", exp));
+        }
         nowNode = nowNode.addChildren(condNode);
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(
@@ -136,7 +145,7 @@ public class GraphTestVisitor extends ASTVisitor{
     @Override
     public boolean visit(WhileStatement node){
         nowNode =  nowNode.addChildren(new Node("{", true, "ellipse"));
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
         nowNode = nowNode.addChildren(condNode);
         final Node dummy = new Node("}", true, "ellipse");
 
@@ -148,8 +157,7 @@ public class GraphTestVisitor extends ASTVisitor{
         GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
         nowNode = nowNode.addChildren(condNode);
         // create edge label
-        final Pair<Node,Node> thenEdge = new Pair<>(
-                nowNode, nowNode.getChildren().get(0));
+        final Pair<Node,Node> thenEdge = new Pair<>(nowNode, nowNode.getChildren().get(0));
         edge.put(thenEdge, "true");
 
         // create else branch
@@ -179,7 +187,7 @@ public class GraphTestVisitor extends ASTVisitor{
         // create then branch
         GraphTestProcessor.get(node.getBody(), this).process(node.getBody());
 
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond");
+        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
         nowNode = nowNode.addChildren(condNode);
         nowNode = nowNode.addChildren(doStart);
         // create edge label
@@ -206,6 +214,9 @@ public class GraphTestVisitor extends ASTVisitor{
         final Node condNode = new Node(
                 node.getParameter().toString() + " <- " + node.getExpression().toString(),
                 false, "diamond");
+        condNode.addBindings( node.getParameter() );
+        condNode.addBindings( node.getExpression() );
+
         nowNode = nowNode.addChildren(condNode);
         final Node dummy = new Node("}", true, "ellipse");
 
@@ -239,23 +250,22 @@ public class GraphTestVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(BreakStatement node){
-        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle"));
+        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle", node));
         nowNode.addChildren(exit.peek());
         return false;
     }
     @Override
     public boolean visit(ReturnStatement node){
-        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle"));
+        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle", node));
         nowNode.addChildren(exit.get(0));
         return false;
     }
     @Override
     public boolean visit(ContinueStatement node){
-        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle"));
+        nowNode = nowNode.addChildren(new Node(node.toString(), false, "triangle", node));
         nowNode.addChildren(enter.peek());
         return false;
     }
-
 
     @Override
     public boolean visit(Block node){
@@ -267,7 +277,7 @@ public class GraphTestVisitor extends ASTVisitor{
 
 
     @Override public boolean visit(CompilationUnit node){
-        TestWriter.newFile();
+        TestWriter.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
         TestWriter.println("digraph CFG {");
         return true;
     }
@@ -278,19 +288,22 @@ public class GraphTestVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(MethodDeclaration node){
-        String label = node.getReturnType2().toString() + " " + node.getName() + "(";
+        final StringBuilder sb = new StringBuilder();
+        if(!node.isConstructor())
+            sb.append(node.getReturnType2().toString() + " ");
+        sb.append(node.getName() + "(");
         for(Object t : node.parameters()){
             SingleVariableDeclaration s = (SingleVariableDeclaration)t;
-            label += " " + s.getType().toString() + " " + s.getName();
+            sb.append(" " + s.getType().toString() + " " + s.getName());
         }
-        label += ")";
+        sb.append(")");
 
-        final Node start = new Node("Start " + label, false, "rect");
+        final Node start = new Node("Start " + sb.toString(), false, "rect");
         root = start;
         nowNode = root;
 
         enter.push(start);
-        exit.push(new Node("End " + label, false, "rect"));
+        exit.push(new Node("End " + sb.toString(), false, "rect"));
 
         return true;
     }
@@ -301,10 +314,12 @@ public class GraphTestVisitor extends ASTVisitor{
 
         root.used.clear();
         root.removeDummy(edge);
+        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge();
 
         assert enter.isEmpty();
         assert exit.isEmpty();
 
+        // root.print(edge, varEdge);
         root.print(edge);
     }
 }

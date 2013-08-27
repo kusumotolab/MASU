@@ -1,6 +1,8 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 import com.sun.tools.javac.util.Pair;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
 import java.util.*;
@@ -16,13 +18,17 @@ public class Node {
         shape = node.shape;
     }
 
+    private List<IVariableBinding> decVar = new ArrayList<>();
+    private List<IVariableBinding> useVar = new ArrayList<>();
+
     private List<Node> children = new LinkedList<>();
 
     public List<Node> getChildren() {
         return children;
     }
     public Node addChildren(Node node){
-        children.add(node);
+        if(!children.contains(node))
+            children.add(node);
         return node;
     }
 
@@ -37,6 +43,18 @@ public class Node {
 
     public Node(String name, Boolean dummy, String shape){
         label=name; isDummy=dummy; this.shape=shape;
+    }
+
+    public Node(String name, Boolean dummy, String shape, ASTNode n){
+        this(name,dummy,shape);
+        addBindings(n);
+    }
+
+    public void addBindings(ASTNode node){
+        VariableDecVisitor vis = new VariableDecVisitor();
+        node.accept(vis);
+        decVar.addAll(vis.decBindings);
+        useVar.addAll(vis.useBindings);
     }
 
     public String toGraphDefine(){
@@ -108,6 +126,23 @@ public class Node {
             t.__removeDummyWorker(edge);
     }
 
+    public Map<Pair<Node,Node>,String> createVarEdge(){
+        used.clear();
+        Map<Pair<Node,Node>,String> edge = new LinkedHashMap<>();
+        __createVarEdgeWorker(edge);
+        return edge;
+    }
+    private void __createVarEdgeWorker(Map<Pair<Node,Node>,String> edge){
+        if(used.contains(this))
+            return;
+        used.add(this);
+
+        // visit all node except myself
+
+
+        for(Node t : children)
+            t.__createVarEdgeWorker(edge);
+    }
 
 
     private static Set<Node> usedNodeInToGraph = new LinkedHashSet<>();

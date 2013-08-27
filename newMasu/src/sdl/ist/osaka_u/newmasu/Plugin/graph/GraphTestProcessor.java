@@ -73,7 +73,14 @@ public enum GraphTestProcessor {
             vis.visit((ContinueStatement)node);
         }
     },
-
+/*
+    VARDEC(VariableDeclaration.class){
+        @Override
+        public void process(ASTNode node){
+            vis.varDec((VariableDeclaration)node);
+        }
+    },
+*/
     _DEF_(Object.class){
         @Override
         public void process(ASTNode node){
