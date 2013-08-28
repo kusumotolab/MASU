@@ -7,7 +7,7 @@ public class B2 extends A3 implements I1, I2 {
         int a = 0;
 		{
 		if(a==100){
-		  a == 200;
+		  a = 200;
 		}
 		
 			System.out.println("hoge2");
