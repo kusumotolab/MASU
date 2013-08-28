@@ -41,6 +41,14 @@ public class Node {
     public String getShape() { return shape; }
     public void setShape(String shape) { this.shape = shape; }
 
+    public List<IVariableBinding> getDecVar() {
+        return decVar;
+    }
+
+    public List<IVariableBinding> getUseVar() {
+        return useVar;
+    }
+
     public Node(String name, Boolean dummy, String shape){
         label=name; isDummy=dummy; this.shape=shape;
     }
@@ -126,29 +134,78 @@ public class Node {
             t.__removeDummyWorker(edge);
     }
 
-    public Map<Pair<Node,Node>,String> createVarEdge(){
+    public Map<Pair<Node,Node>,String> createVarEdge(List<Node> fields){
         used.clear();
         Map<Pair<Node,Node>,String> edge = new LinkedHashMap<>();
         __createVarEdgeWorker(edge);
+        used.clear();
+        __createFieldEdgeWorker(edge, fields);
         return edge;
     }
+    public static Set<Node> eused = new LinkedHashSet<>();
     private void __createVarEdgeWorker(Map<Pair<Node,Node>,String> edge){
         if(used.contains(this))
             return;
         used.add(this);
 
-        // visit all node except myself
-
+        // visit all node to make variable-dependency edges
+        eused.clear();
+        __chkEdge(edge,this);
 
         for(Node t : children)
             t.__createVarEdgeWorker(edge);
     }
+    private void __chkEdge(Map<Pair<Node,Node>,String> edge, Node target){
+        if(eused.contains(this))
+            return;
+        eused.add(this);
+
+        for( IVariableBinding dec : target.getDecVar() ){
+            if( this.getUseVar().contains(dec) )
+                edge.put( new Pair<>(target, this), dec.getName() );
+        }
+
+        for(Node t : this.children)
+            t.__chkEdge(edge, target);
+    }
+
+    private void __createFieldEdgeWorker(Map<Pair<Node,Node>,String> edge, List<Node> fields){
+        if(used.contains(this))
+            return;
+        used.add(this);
+
+        for(Node n : fields)
+            __chkFieldEdge(edge,n);
+
+        for(Node t : children)
+            t.__createVarEdgeWorker(edge);
+    }
+    private void __chkFieldEdge(Map<Pair<Node,Node>,String> edge, Node target){
+        if(eused.contains(this))
+            return;
+        eused.add(this);
+
+        for( IVariableBinding dec : target.getDecVar() ){
+            if( this.getUseVar().contains(dec) )
+                edge.put( new Pair<>(target, this), dec.getName() );
+        }
+
+        for(Node t : this.children)
+            t.__chkEdge(edge, target);
+    }
 
 
     private static Set<Node> usedNodeInToGraph = new LinkedHashSet<>();
-    public void print(Map<Pair<Node,Node>,String> edge){
+    public void print(Map<Pair<Node,Node>,String> edge, Map<Pair<Node,Node>,String> varEdge){
         usedNodeInToGraph.clear();
         TestWriter.println(__toGraph(edge));
+
+        for( Map.Entry<Pair<Node,Node>,String> e : varEdge.entrySet() ){
+            StringBuilder sb = new StringBuilder();
+            sb.append(e.getKey().fst.toGraphId() + " -> " + e.getKey().snd.toGraphId());
+            sb.append(" [label=\"" + sanitize(e.getValue()) + "\", style=\"dotted\"];");
+            TestWriter.println(sb.toString());
+        }
     }
     private String __toGraph(Map<Pair<Node,Node>,String> edge){
         if(usedNodeInToGraph.contains(this))

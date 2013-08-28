@@ -12,6 +12,7 @@ public class GraphTestVisitor extends ASTVisitor{
     private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
     private Node root = null;
     private Node nowNode = null;
+    private List<Node> fields = new ArrayList<>();
 
     // nodes - possible to be jumped
     private Stack<Node> enter = new Stack<>();
@@ -275,19 +276,34 @@ public class GraphTestVisitor extends ASTVisitor{
         return false;
     }
 
+    @Override
+    public boolean visit(FieldDeclaration node){
+        fields.add(new Node(node.toString(), false, "octagon", node));
+        return false;
+    }
+
 
     @Override public boolean visit(CompilationUnit node){
         TestWriter.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
-        TestWriter.println("digraph CFG {");
+        TestWriter.println("digraph PDG {");
         return true;
     }
 
     @Override public void endVisit(CompilationUnit node){
+        TestWriter.println("subgraph clusterField {");
+        TestWriter.println("label = \"fields\";");
+        for( Node n : fields )
+            TestWriter.println( n.toGraphDefine() );
+        TestWriter.println("}");
+
         TestWriter.println("}");
     }
 
+    private static int graphCount = 0;
     @Override
     public boolean visit(MethodDeclaration node){
+        TestWriter.println("subgraph cluster" + graphCount++ + "{");
+
         final StringBuilder sb = new StringBuilder();
         if(!node.isConstructor())
             sb.append(node.getReturnType2().toString() + " ");
@@ -298,6 +314,7 @@ public class GraphTestVisitor extends ASTVisitor{
         }
         sb.append(")");
 
+        TestWriter.println("label = \"" + sb.toString() + "\";");
         final Node start = new Node("Start " + sb.toString(), false, "rect");
         root = start;
         nowNode = root;
@@ -314,12 +331,12 @@ public class GraphTestVisitor extends ASTVisitor{
 
         root.used.clear();
         root.removeDummy(edge);
-        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge();
+        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge(fields);
 
         assert enter.isEmpty();
         assert exit.isEmpty();
 
-        // root.print(edge, varEdge);
-        root.print(edge);
+        root.print(edge, varEdge);
+        TestWriter.println("}");
     }
 }
