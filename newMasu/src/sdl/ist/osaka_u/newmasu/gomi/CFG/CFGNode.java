@@ -1,6 +1,7 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
 
 import com.sun.tools.javac.util.Pair;
+import sdl.ist.osaka_u.newmasu.Plugin.graph.Writer;
 
 import java.util.*;
 
@@ -75,13 +76,13 @@ public class CFGNode {
     private void _showChildren(){
         if(!used.contains(this)){
             used.add(this);
-            TestWriter.println(name + " [label=\"" + sanitize(label) + "\", shape=\"" + shape + "\"];");
+            Writer.println(name + " [label=\"" + sanitize(label) + "\", shape=\"" + shape + "\"];");
 
             for(CFGNode cn : children){
                 String edge="";
                 if(edgeLabel.containsKey(Pair.of(this, cn)))
                     edge = edgeLabel.get(Pair.of(this, cn));
-                TestWriter.println(name + " -> " + cn.name + "[label=\"" + edge + "\"];");
+                Writer.println(name + " -> " + cn.name + "[label=\"" + edge + "\"];");
                 cn._showChildren();
             }
 

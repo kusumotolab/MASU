@@ -3,7 +3,6 @@ package sdl.ist.osaka_u.newmasu.Plugin.graph;
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.TestWriter;
 
 import java.util.*;
 
@@ -198,13 +197,13 @@ public class Node {
     private static Set<Node> usedNodeInToGraph = new LinkedHashSet<>();
     public void print(Map<Pair<Node,Node>,String> edge, Map<Pair<Node,Node>,String> varEdge){
         usedNodeInToGraph.clear();
-        TestWriter.println(__toGraph(edge));
+        Writer.println(__toGraph(edge));
 
         for( Map.Entry<Pair<Node,Node>,String> e : varEdge.entrySet() ){
             StringBuilder sb = new StringBuilder();
             sb.append(e.getKey().fst.toGraphId() + " -> " + e.getKey().snd.toGraphId());
             sb.append(" [label=\"" + sanitize(e.getValue()) + "\", style=\"dotted\"];");
-            TestWriter.println(sb.toString());
+            Writer.println(sb.toString());
         }
     }
     private String __toGraph(Map<Pair<Node,Node>,String> edge){

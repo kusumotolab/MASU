@@ -3,9 +3,8 @@ package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 
 import org.eclipse.jdt.core.dom.*;
-import sdl.ist.osaka_u.newmasu.Plugin.CFG.CFGSample;
 
-public enum GraphTestProcessor {
+public enum GraphProcessor {
 
     IF(IfStatement.class){
         @Override
@@ -90,18 +89,18 @@ public enum GraphTestProcessor {
     ;
 
     private static String indent = "  ";
-    private static GraphTestVisitor vis = null;
+    private static GraphVisitor vis = null;
 
     private final Class<?> clazz;
-    private GraphTestProcessor(Class<?> clazz) {
+    private GraphProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
     public abstract void process(ASTNode node);
 
-    public static GraphTestProcessor get(Object obj, GraphTestVisitor vi) {
+    public static GraphProcessor get(Object obj, GraphVisitor vi) {
         vis = vi;
-        for (GraphTestProcessor processor : values()) {
+        for (GraphProcessor processor : values()) {
             if(processor.clazz.isAssignableFrom(obj.getClass())) {
                 return processor;
             }

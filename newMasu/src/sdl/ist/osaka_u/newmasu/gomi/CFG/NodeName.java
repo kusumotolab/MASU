@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
 
 public class NodeName {
     private static Integer _name = 0;

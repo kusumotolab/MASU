@@ -1,8 +1,10 @@
-package sdl.ist.osaka_u.newmasu.Plugin.PDG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
+
+
 
 import org.eclipse.jdt.core.dom.*;
 
-public enum PDGSampleProcessor {
+public enum CFGSampleProcessor {
 
     IF(IfStatement.class){
         @Override
@@ -38,18 +40,18 @@ public enum PDGSampleProcessor {
     ;
 
     private static String indent = "  ";
-    private static PDGSample vis = null;
+    private static CFGSample vis = null;
 
     private final Class<?> clazz;
-    private PDGSampleProcessor(Class<?> clazz) {
+    private CFGSampleProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
     public abstract void process(ASTNode node);
 
-    public static PDGSampleProcessor get(Object obj, PDGSample vi) {
+    public static CFGSampleProcessor get(Object obj, CFGSample vi) {
         vis = vi;
-        for (PDGSampleProcessor processor : values()) {
+        for (CFGSampleProcessor processor : values()) {
             if(processor.clazz.isAssignableFrom(obj.getClass())) {
                 return processor;
             }

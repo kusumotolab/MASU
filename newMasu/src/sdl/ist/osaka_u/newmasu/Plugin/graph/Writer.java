@@ -1,8 +1,8 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 import java.io.*;
 
-public class TestWriter {
+public class Writer {
     final static private String outdir = "./sample/";
     static private File file = null;
 

@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import sdl.ist.osaka_u.newmasu.Plugin.Plugin;

@@ -1,7 +1,7 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
 
-import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
+import sdl.ist.osaka_u.newmasu.Plugin.graph.Writer;
 import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 import java.util.*;
@@ -71,13 +71,13 @@ public class CFGSample extends ASTVisitor{
     }
 
     @Override public boolean visit(CompilationUnit node){
-        TestWriter.newFile(node.getPackage().getName().toString() + "." +
-                BindingManager.getRel().getCalleeMap().get(node).getFileName() );
-        TestWriter.println("digraph CFG {");
+        Writer.newFile(node.getPackage().getName().toString() + "." +
+                BindingManager.getRel().getCalleeMap().get(node).getFileName());
+        Writer.println("digraph CFG {");
         return true;
     }
     @Override public void endVisit(CompilationUnit node){
-        TestWriter.println("}");
+        Writer.println("}");
     }
 
     @Override
