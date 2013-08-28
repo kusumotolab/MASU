@@ -1,9 +1,15 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class TestWriter {
-    final static private String outdir = "./sample/";
+public class Writer {
+    private static Path outdir = Paths.get("./sample/");
+    public static void setOutDir(Path p){
+        outdir = p;
+    }
+
     static private File file = null;
 
     public static void println(String str){
@@ -17,11 +23,11 @@ public class TestWriter {
     }
 
     public static void newFile(){
-        newFile("hoge");
+        newFile("./sample/hoge");
     }
 
     public static void newFile(String name){
-        file = new File(outdir + name + ".dot");
+        file = new File(outdir + java.nio.file.FileSystems.getDefault().getSeparator() + name + ".dot");
 
         if(file.exists())
             file.delete();

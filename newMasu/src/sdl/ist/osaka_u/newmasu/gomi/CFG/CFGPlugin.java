@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Plugin.CFG;
+package sdl.ist.osaka_u.newmasu.gomi.CFG;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import sdl.ist.osaka_u.newmasu.Plugin.Plugin;
@@ -14,8 +14,11 @@ public class CFGPlugin implements Plugin {
         Set<String> paths = Settings.getInstance().getListFiles();
         for(String path : paths){
             CompilationUnit unit = BindingManager.getRel().getCallerMap().get(Paths.get(path));
-            CFGSample mv = new CFGSample();
-            unit.accept(mv);
+            unit.accept(getVisitor());
         }
+    }
+
+    protected CFGSample getVisitor(){
+        return new CFGSample();
     }
 }
