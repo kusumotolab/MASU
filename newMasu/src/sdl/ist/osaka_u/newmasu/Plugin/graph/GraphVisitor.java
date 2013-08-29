@@ -281,6 +281,11 @@ public class GraphVisitor extends ASTVisitor{
         return false;
     }
 
+    @Override
+    public boolean visit(SynchronizedStatement node){   // ignore
+        GraphProcessor.get(node.getBody(), this).process(node.getBody());
+        return false;
+    }
 
     @Override public boolean visit(CompilationUnit node){
         Writer.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
