@@ -52,7 +52,7 @@ public class GraphVisitor extends ASTVisitor{
 
         return false;
     }
-    /*
+
     @Override
     public boolean visit(SwitchStatement node){
         nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
@@ -63,31 +63,37 @@ public class GraphVisitor extends ASTVisitor{
         final Node dummy = new Node("}", true, "ellipse");
 
         final List<String> caseLabel = new ArrayList<>();
+        boolean isBeforeCase = false;
         for(Object tmp : node.statements()){
             final Statement s = (Statement)tmp;
             System.out.println(s.toString());
             if(s instanceof SwitchCase){
                 final SwitchCase sc = (SwitchCase)s;
-
+                /*
                 if(sc.getExpression()!=null)
                     caseLabel.add(sc.getExpression().toString());
                 else
                     caseLabel.add("default");
-
-                nowNode = condNode;
+*/
+//                nowNode = condNode;
+                isBeforeCase = true;
             }
-///*            else if(s instanceof BreakStatement){
+            else if(s instanceof BreakStatement){
                 final BreakStatement bs = (BreakStatement)s;
                 nowNode.addChildren(dummy);
                 nowNode = condNode;
             }
-//
             else{
                 GraphProcessor.get(s, this).process(s);
+                if(isBeforeCase){
+                    condNode.addChildren(nowNode);
+                    isBeforeCase = false;
+                }
             }
 
         }
 
+        /*
         if(caseLabel.size()==0)
             nowNode = nowNode.addChildren(dummy);  // condNode.add
         else{
@@ -97,11 +103,12 @@ public class GraphVisitor extends ASTVisitor{
                 edge.put(thenEdge, caseLabel.get(i));
             }
         }
+        */
         nowNode = dummy;
 
         return false;
     }
-*/
+
     @Override
     public boolean visit(ForStatement node){
 
