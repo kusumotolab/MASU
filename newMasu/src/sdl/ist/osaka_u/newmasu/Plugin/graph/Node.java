@@ -133,12 +133,14 @@ public class Node {
             t.__removeDummyWorker(edge);
     }
 
-    public Map<Pair<Node,Node>,String> createVarEdge(List<Node> fields){
+    public Map<Pair<Node,Node>,String> createVarEdge(List<Node> fields, List<Node> args){
         used.clear();
         Map<Pair<Node,Node>,String> edge = new LinkedHashMap<>();
         __createVarEdgeWorker(edge);
         used.clear();
         __createFieldEdgeWorker(edge, fields);
+        used.clear();
+        __createFieldEdgeWorker(edge, args);
         return edge;
     }
     public static Set<Node> eused = new LinkedHashSet<>();
@@ -195,16 +197,9 @@ public class Node {
 
 
     private static Set<Node> usedNodeInToGraph = new LinkedHashSet<>();
-    public void print(Map<Pair<Node,Node>,String> edge, Map<Pair<Node,Node>,String> varEdge){
+    public void print(Map<Pair<Node,Node>,String> edge){
         usedNodeInToGraph.clear();
         Writer.println(__toGraph(edge));
-
-        for( Map.Entry<Pair<Node,Node>,String> e : varEdge.entrySet() ){
-            StringBuilder sb = new StringBuilder();
-            sb.append(e.getKey().fst.toGraphId() + " -> " + e.getKey().snd.toGraphId());
-            sb.append(" [label=\"" + sanitize(e.getValue()) + "\", style=\"dotted\"];");
-            Writer.println(sb.toString());
-        }
     }
     private String __toGraph(Map<Pair<Node,Node>,String> edge){
         if(usedNodeInToGraph.contains(this))
@@ -236,7 +231,7 @@ public class Node {
         return sb.toString();
     }
 
-    private String sanitize(String str){
+    public String sanitize(String str){
         final StringBuilder sb = new StringBuilder();
         for(char c : str.toCharArray()){
             if(c=='"')
