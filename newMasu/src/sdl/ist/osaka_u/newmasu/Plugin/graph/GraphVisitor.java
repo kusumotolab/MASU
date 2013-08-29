@@ -47,8 +47,13 @@ public class GraphVisitor extends ASTVisitor{
             GraphProcessor.get(node.getElseStatement(), this).process(node.getElseStatement());
         nowNode = nowNode.addChildren(dummy);
         // create edge label
-        final Pair<Node,Node> elseEdge = new Pair<>(condNode, condNode.getChildren().get(1));
-        nowMethod.edge.put(elseEdge, "false");
+        if(condNode.getChildren().size()==1){  // when "then statement" is empty
+            nowMethod.edge.put(thenEdge, "true/false");
+        }
+        else{
+            final Pair<Node,Node> elseEdge = new Pair<>(condNode, condNode.getChildren().get(1));
+            nowMethod.edge.put(elseEdge, "false");
+        }
 
         return false;
     }
