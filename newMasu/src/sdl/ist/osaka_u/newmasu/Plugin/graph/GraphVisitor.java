@@ -8,11 +8,13 @@ import java.util.*;
 
 public class GraphVisitor extends ASTVisitor{
 
-    private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
-    private Node root = null;
+    private ClassTrees classTrees = null;
+    private MethodTrees nowMethod = null;
+//    private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
+//    private List<Node> args = new ArrayList<>();
+
+//    private Node root = null;
     private Node nowNode = null;
-    private List<Node> fields = new ArrayList<>();
-    private List<Node> args = new ArrayList<>();
 
     // nodes - possible to be jumped
     private Stack<Node> enter = new Stack<>();
@@ -37,7 +39,7 @@ public class GraphVisitor extends ASTVisitor{
         nowNode.addChildren(dummy);
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(condNode, condNode.getChildren().get(0));
-        edge.put(thenEdge, "true");
+        nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         nowNode = condNode;
@@ -46,7 +48,7 @@ public class GraphVisitor extends ASTVisitor{
         nowNode = nowNode.addChildren(dummy);
         // create edge label
         final Pair<Node,Node> elseEdge = new Pair<>(condNode, condNode.getChildren().get(1));
-        edge.put(elseEdge, "false");
+        nowMethod.edge.put(elseEdge, "false");
 
         return false;
     }
@@ -128,14 +130,14 @@ public class GraphVisitor extends ASTVisitor{
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(
                 nowNode, nowNode.getChildren().get(0));
-        edge.put(thenEdge, "true");
+        nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         condNode.addChildren(dummy);
         nowNode = dummy;
         // create edge label
         final Pair<Node,Node> elseEdge = new Pair<>(condNode, dummy);
-        edge.put(elseEdge, "false");
+        nowMethod.edge.put(elseEdge, "false");
 
         // pop enter & exit node
         enter.pop();
@@ -159,15 +161,14 @@ public class GraphVisitor extends ASTVisitor{
         nowNode = nowNode.addChildren(condNode);
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(nowNode, nowNode.getChildren().get(0));
-        edge.put(thenEdge, "true");
+        nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         condNode.addChildren(dummy);
         nowNode = dummy;
         // create edge label
-        final Pair<Node,Node> elseEdge = new Pair<>(
-                condNode, dummy);
-        edge.put(elseEdge, "false");
+        final Pair<Node,Node> elseEdge = new Pair<>(condNode, dummy);
+        nowMethod.edge.put(elseEdge, "false");
 
         // pop enter & exit node
         enter.pop();
@@ -193,15 +194,14 @@ public class GraphVisitor extends ASTVisitor{
         nowNode = nowNode.addChildren(doStart);
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(condNode,doStart);
-        edge.put(thenEdge, "true");
+        nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         condNode.addChildren(dummy);
         nowNode = dummy;
         // create edge label
-        final Pair<Node,Node> elseEdge = new Pair<>(
-                condNode, dummy);
-        edge.put(elseEdge, "false");
+        final Pair<Node,Node> elseEdge = new Pair<>(condNode, dummy);
+        nowMethod.edge.put(elseEdge, "false");
 
         // pop enter & exit node
         enter.pop();
@@ -229,17 +229,15 @@ public class GraphVisitor extends ASTVisitor{
         GraphProcessor.get(node.getBody(), this).process(node.getBody());
         nowNode = nowNode.addChildren(condNode);
         // create edge label
-        final Pair<Node,Node> thenEdge = new Pair<>(
-                nowNode, nowNode.getChildren().get(0));
-        edge.put(thenEdge, "true");
+        final Pair<Node,Node> thenEdge = new Pair<>(nowNode, nowNode.getChildren().get(0));
+        nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         condNode.addChildren(dummy);
         nowNode = dummy;
         // create edge label
-        final Pair<Node,Node> elseEdge = new Pair<>(
-                condNode, dummy);
-        edge.put(elseEdge, "false");
+        final Pair<Node,Node> elseEdge = new Pair<>(condNode, dummy);
+        nowMethod.edge.put(elseEdge, "false");
 
         // pop enter & exit node
         enter.pop();
@@ -278,7 +276,7 @@ public class GraphVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(FieldDeclaration node){
-        fields.add(new Node(node.toString(), false, "octagon", node));
+        classTrees.fields.add(new Node(node.toString(), false, "octagon", node));
         return false;
     }
 
@@ -289,25 +287,19 @@ public class GraphVisitor extends ASTVisitor{
     }
 
     @Override public boolean visit(CompilationUnit node){
+        classTrees = new ClassTrees();
         Writer.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
-        Writer.println("digraph PDG {");
         return true;
     }
 
     @Override public void endVisit(CompilationUnit node){
-        Writer.println("subgraph clusterField {");
-        Writer.println("label = \"fields\";");
-        for( Node n : fields )
-            Writer.println(n.toGraphDefine());
-        Writer.println("}");
-
-        Writer.println("}");
+        classTrees.outputGraph();
     }
 
-    private static int graphCount = 0;
     @Override
     public boolean visit(MethodDeclaration node){
-        Writer.println("subgraph cluster" + graphCount++ + "{");
+        nowMethod = new MethodTrees();
+        classTrees.methods.add(nowMethod);
 
         final StringBuilder sb = new StringBuilder();
         if(!node.isConstructor())
@@ -316,17 +308,13 @@ public class GraphVisitor extends ASTVisitor{
         for(Object t : node.parameters()){
             final SingleVariableDeclaration s = (SingleVariableDeclaration)t;
             sb.append(" " + s.getType().toString() + " " + s.getName());
-            args.add(new Node(s.toString(), false, "octagon", s));
+            nowMethod.args.add(new Node(s.toString(), false, "trapezium", s));
         }
         sb.append(")");
 
-        for( Node n : args )
-            Writer.println(n.toGraphDefine());
-
-        Writer.println("label = \"" + sb.toString() + "\";");
         final Node start = new Node("Start " + sb.toString(), false, "rect");
-        root = start;
-        nowNode = root;
+        nowMethod.root = start;
+        nowNode = nowMethod.root;
 
         enter.push(start);
         exit.push(new Node("End " + sb.toString(), false, "rect"));
@@ -336,17 +324,14 @@ public class GraphVisitor extends ASTVisitor{
     @Override
     public void endVisit(MethodDeclaration node){
         nowNode.addChildren(exit.pop());
-        root = enter.pop();
+        nowMethod.root = enter.pop();
 
-        root.used.clear();
-        root.removeDummy(edge);
-        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge(fields, args);
+        nowMethod.root.used.clear();
+        nowMethod.root.removeDummy(nowMethod.edge);
 
         assert enter.isEmpty();
         assert exit.isEmpty();
 
-        root.print(edge, varEdge);
-        args.clear();
-        Writer.println("}");
+        //root.print(nowMethod.edge, varEdge);
     }
 }
