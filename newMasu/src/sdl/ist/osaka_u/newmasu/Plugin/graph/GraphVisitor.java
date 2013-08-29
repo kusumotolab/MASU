@@ -12,6 +12,7 @@ public class GraphVisitor extends ASTVisitor{
     private Node root = null;
     private Node nowNode = null;
     private List<Node> fields = new ArrayList<>();
+    private List<Node> args = new ArrayList<>();
 
     // nodes - possible to be jumped
     private Stack<Node> enter = new Stack<>();
@@ -313,10 +314,14 @@ public class GraphVisitor extends ASTVisitor{
             sb.append(node.getReturnType2().toString() + " ");
         sb.append(node.getName() + "(");
         for(Object t : node.parameters()){
-            SingleVariableDeclaration s = (SingleVariableDeclaration)t;
+            final SingleVariableDeclaration s = (SingleVariableDeclaration)t;
             sb.append(" " + s.getType().toString() + " " + s.getName());
+            args.add(new Node(s.toString(), false, "octagon", s));
         }
         sb.append(")");
+
+        for( Node n : args )
+            Writer.println(n.toGraphDefine());
 
         Writer.println("label = \"" + sb.toString() + "\";");
         final Node start = new Node("Start " + sb.toString(), false, "rect");
@@ -335,12 +340,13 @@ public class GraphVisitor extends ASTVisitor{
 
         root.used.clear();
         root.removeDummy(edge);
-        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge(fields);
+        final Map<Pair<Node,Node>,String> varEdge = root.createVarEdge(fields, args);
 
         assert enter.isEmpty();
         assert exit.isEmpty();
 
         root.print(edge, varEdge);
+        args.clear();
         Writer.println("}");
     }
 }

@@ -133,12 +133,14 @@ public class Node {
             t.__removeDummyWorker(edge);
     }
 
-    public Map<Pair<Node,Node>,String> createVarEdge(List<Node> fields){
+    public Map<Pair<Node,Node>,String> createVarEdge(List<Node> fields, List<Node> args){
         used.clear();
         Map<Pair<Node,Node>,String> edge = new LinkedHashMap<>();
         __createVarEdgeWorker(edge);
         used.clear();
         __createFieldEdgeWorker(edge, fields);
+        used.clear();
+        __createFieldEdgeWorker(edge, args);
         return edge;
     }
     public static Set<Node> eused = new LinkedHashSet<>();
