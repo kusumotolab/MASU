@@ -1,9 +1,6 @@
 package sdl.ist.osaka_u.newmasu.Plugin.graph;
 
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +18,11 @@ public class VariableDecVisitor extends ASTVisitor {
             else
                 useBindings.add((IVariableBinding)b);
         return true;
+    }
+
+    // ignore anonymous class
+    @Override
+    public boolean visit(AnonymousClassDeclaration node){
+        return false;
     }
 }
