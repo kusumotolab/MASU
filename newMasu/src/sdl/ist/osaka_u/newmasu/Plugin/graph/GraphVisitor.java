@@ -10,10 +10,6 @@ public class GraphVisitor extends ASTVisitor{
 
     private ClassTrees classTrees = null;
     private MethodTrees nowMethod = null;
-//    private Map<Pair<Node,Node>, String> edge = new LinkedHashMap<>();
-//    private List<Node> args = new ArrayList<>();
-
-//    private Node root = null;
     private Node nowNode = null;
 
     // nodes - possible to be jumped
@@ -71,7 +67,6 @@ public class GraphVisitor extends ASTVisitor{
         boolean isBeforeCase = false;
         for(Object tmp : node.statements()){
             final Statement s = (Statement)tmp;
-            System.out.println(s.toString());
             if(s instanceof SwitchCase){
                 final SwitchCase sc = (SwitchCase)s;
                 /*
@@ -343,7 +338,5 @@ public class GraphVisitor extends ASTVisitor{
 
         assert enter.isEmpty();
         assert exit.isEmpty();
-
-        //root.print(nowMethod.edge, varEdge);
     }
 }
