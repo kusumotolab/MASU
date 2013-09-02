@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu.Plugin.graph;
+package sdl.ist.osaka_u.newmasu.Plugin.pdg;
 
 import com.sun.tools.javac.util.Pair;
 import org.eclipse.jdt.core.dom.*;
