@@ -1,0 +1,1 @@
+package sdl.ist.osaka_u.newmasu.data;import org.eclipse.jdt.core.dom.IVariableBinding;public interface VariableInfo extends UnitInfo{	public boolean isDeclaration();	public boolean isField();	public boolean isParameter();	public IVariableBinding resolveBinding();	public String getName();}
