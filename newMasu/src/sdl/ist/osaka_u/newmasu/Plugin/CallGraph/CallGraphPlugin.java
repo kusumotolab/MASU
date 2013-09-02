@@ -1,16 +1,21 @@
 package sdl.ist.osaka_u.newmasu.Plugin.CallGraph;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import sdl.ist.osaka_u.newmasu.Plugin.MethodDependency.CalleeMethodsVisitor;
-import sdl.ist.osaka_u.newmasu.Plugin.Plugin;
-import sdl.ist.osaka_u.newmasu.Settings;
-import sdl.ist.osaka_u.newmasu.data.BindingManager;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+
+import sdl.ist.osaka_u.newmasu.Plugin.Plugin;
+import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 public class CallGraphPlugin implements Plugin {
 
