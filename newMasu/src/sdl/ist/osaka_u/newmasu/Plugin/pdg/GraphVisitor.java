@@ -8,7 +8,7 @@ import java.util.*;
 
 public class GraphVisitor extends ASTVisitor{
 
-    private ClassTrees classTrees = null;
+    public ClassTree classTrees = null;
     private MethodTrees nowMethod = null;
     private Node nowNode = null;
 
@@ -333,7 +333,7 @@ public class GraphVisitor extends ASTVisitor{
     }
 
     @Override public boolean visit(CompilationUnit node){
-        classTrees = new ClassTrees();
+        classTrees = new ClassTree();
         Writer.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
         return true;
     }

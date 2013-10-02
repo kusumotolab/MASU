@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClassTrees {
+public class ClassTree {
     public List<MethodTrees> methods = new ArrayList<>();
     public List<Node> fields = new ArrayList<>();
     public Map<Pair<Node,Node>,String> varEdge = new LinkedHashMap<>();

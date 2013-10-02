@@ -6,9 +6,15 @@ import sdl.ist.osaka_u.newmasu.Settings;
 import sdl.ist.osaka_u.newmasu.data.BindingManager;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class GraphPlugin implements Plugin {
+
+    private Map<String,ClassTree> classTrees = new HashMap<>();
+    public Map<String,ClassTree> getClassTree(){ return classTrees; }
+
     @Override
     public void run() {
         System.out.println("Graph Plugin");
@@ -16,7 +22,9 @@ public class GraphPlugin implements Plugin {
         for(String path : paths){
             System.out.println(path.toString() + " processing...");
             CompilationUnit unit = BindingManager.getRel().getCallerMap().get(Paths.get(path));
-            unit.accept(new GraphVisitor());
+            GraphVisitor gv = new GraphVisitor();
+            unit.accept(gv);
+            classTrees.put(path, gv.classTrees);
         }
     }
 }
