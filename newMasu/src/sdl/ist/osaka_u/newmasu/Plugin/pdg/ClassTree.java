@@ -1,6 +1,8 @@
 package sdl.ist.osaka_u.newmasu.Plugin.pdg;
 
 import com.sun.tools.javac.util.Pair;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -8,14 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ClassTree {
-    public List<MethodTrees> methods = new ArrayList<>();
+    public CompilationUnit rawNode = null;
+    public List<MethodTree> methods = new ArrayList<>();
     public List<Node> fields = new ArrayList<>();
     public Map<Pair<Node,Node>,String> varEdge = new LinkedHashMap<>();
 
     public void outputGraph(){
 
         // create var edge
-        for(MethodTrees mt : methods)
+        for(MethodTree mt : methods)
             varEdge.putAll(mt.root.createVarEdge(fields, mt.args));
 
         Writer.println("digraph PDG {");
@@ -27,7 +30,7 @@ public class ClassTree {
         Writer.println("}");
 
         int graphCount=0;
-        for( MethodTrees mt : methods ){
+        for( MethodTree mt : methods ){
             Writer.println("subgraph cluster" + graphCount++ + "{");
             //Writer.println("label = \"" + sb.toString() + "\";");
             for( Node n : mt.args )

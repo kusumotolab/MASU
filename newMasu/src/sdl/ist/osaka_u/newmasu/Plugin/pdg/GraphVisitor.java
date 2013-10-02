@@ -9,7 +9,7 @@ import java.util.*;
 public class GraphVisitor extends ASTVisitor{
 
     public ClassTree classTrees = null;
-    private MethodTrees nowMethod = null;
+    private MethodTree nowMethod = null;
     private Node nowNode = null;
 
     // nodes - possible to be jumped
@@ -335,6 +335,7 @@ public class GraphVisitor extends ASTVisitor{
 
     @Override public boolean visit(CompilationUnit node){
         classTrees = new ClassTree();
+        classTrees.rawNode = node;
         Writer.newFile(BindingManager.getRel().getCalleeMap().get(node).getFileName().toString());
         return true;
     }
@@ -345,7 +346,8 @@ public class GraphVisitor extends ASTVisitor{
 
     @Override
     public boolean visit(MethodDeclaration node){
-        nowMethod = new MethodTrees();
+        nowMethod = new MethodTree();
+        nowMethod.rawNode = node;
         classTrees.methods.add(nowMethod);
 
         final StringBuilder sb = new StringBuilder();
