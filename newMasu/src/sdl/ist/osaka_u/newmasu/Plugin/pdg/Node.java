@@ -17,6 +17,7 @@ public class Node {
         shape = node.shape;
     }
     private Boolean isDisableEdge = false;
+    private ASTNode rawASTNode = null;
 
     private List<IVariableBinding> decVar = new ArrayList<>();
     private List<IVariableBinding> useVar = new ArrayList<>();
@@ -44,6 +45,9 @@ public class Node {
     public Boolean getDisableEdge() { return isDisableEdge; }
     public void setDisableEdge(Boolean disableEdge) { isDisableEdge = disableEdge; }
 
+    public ASTNode getRawASTNode() { return rawASTNode; }
+    public void setRawASTNode(ASTNode rawASTNode) { this.rawASTNode = rawASTNode; }
+
     public List<IVariableBinding> getDecVar() {
         return decVar;
     }
@@ -63,6 +67,7 @@ public class Node {
     public Node(String name, Boolean dummy, String shape, ASTNode n){
         this(name,dummy,shape);
         addBindings(n);
+        setRawASTNode(n);
     }
 
     public void addBindings(ASTNode node){

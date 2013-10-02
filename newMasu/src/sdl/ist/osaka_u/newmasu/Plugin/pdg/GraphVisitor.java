@@ -26,6 +26,7 @@ public class GraphVisitor extends ASTVisitor{
         nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
 
         final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
+        condNode.setRawASTNode(node.getExpression());
         nowNode = nowNode.addChildren(condNode);
 
         final Node dummy = new Node("}", true, "ellipse");
