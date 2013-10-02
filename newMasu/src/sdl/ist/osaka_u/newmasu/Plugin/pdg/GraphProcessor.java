@@ -79,6 +79,13 @@ public enum GraphProcessor {
             vis.visit((SynchronizedStatement)node);
         }
     },
+
+    TRY(TryStatement.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((TryStatement)node);
+        }
+    },
 /*
     VARDEC(VariableDeclaration.class){
         @Override

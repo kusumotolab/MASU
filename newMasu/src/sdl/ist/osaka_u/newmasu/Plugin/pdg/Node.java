@@ -16,6 +16,7 @@ public class Node {
         isDummy = node.isDummy;
         shape = node.shape;
     }
+    private Boolean isDisableEdge = false;
 
     private List<IVariableBinding> decVar = new ArrayList<>();
     private List<IVariableBinding> useVar = new ArrayList<>();
@@ -40,6 +41,9 @@ public class Node {
     public String getShape() { return shape; }
     public void setShape(String shape) { this.shape = shape; }
 
+    public Boolean getDisableEdge() { return isDisableEdge; }
+    public void setDisableEdge(Boolean disableEdge) { isDisableEdge = disableEdge; }
+
     public List<IVariableBinding> getDecVar() {
         return decVar;
     }
@@ -50,6 +54,10 @@ public class Node {
 
     public Node(String name, Boolean dummy, String shape){
         label=name; isDummy=dummy; this.shape=shape;
+    }
+
+    public Node(String name, Boolean dummy, String shape, Boolean dis){
+        label=name; isDummy=dummy; this.shape=shape; this.setDisableEdge(dis);
     }
 
     public Node(String name, Boolean dummy, String shape, ASTNode n){
@@ -211,18 +219,20 @@ public class Node {
         sb.append(System.lineSeparator());
 
         for(Node c : children){
-            sb.append(toGraphId() + " -> " + c.toGraphId());
+            if(!c.getDisableEdge()){
+                sb.append(toGraphId() + " -> " + c.toGraphId());
 
-            StringBuilder edgesb = new StringBuilder();
-            edgesb.append(" [label=\"");
-            Pair<Node,Node> p = new Pair<>(this,c);
-            if(edge.containsKey(p)){
-                edgesb.append(sanitize(edge.get(p)));
+                StringBuilder edgesb = new StringBuilder();
+                edgesb.append(" [label=\"");
+                Pair<Node,Node> p = new Pair<>(this,c);
+                if(edge.containsKey(p)){
+                    edgesb.append(sanitize(edge.get(p)));
+                }
+                edgesb.append("\"];");
+                sb.append(edgesb.toString());
+
+                sb.append(System.lineSeparator());
             }
-            edgesb.append("\"];");
-            sb.append(edgesb.toString());
-
-            sb.append(System.lineSeparator());
         }
 
         for(Node f : children)

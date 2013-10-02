@@ -253,6 +253,45 @@ public class GraphVisitor extends ASTVisitor{
         return false;
     }
 
+    @Override
+    public boolean visit(TryStatement node){
+        final Node prev = nowNode;
+        nowNode =  nowNode.addChildren(new Node("{", true, "ellipse"));
+        GraphProcessor.get(node.getBody(), this).process(node.getBody());
+        final Node dummy = new Node("}", true, "ellipse");
+        nowNode = nowNode.addChildren(dummy);
+
+        for( Object o: node.catchClauses() ){
+            final CatchClause clause = (CatchClause)o;
+            final Node cond = new Node(clause.getException().toString(), false, "diamond", true);
+
+            nowNode = prev.addChildren(cond);
+            nowNode = nowNode.addChildren(new Node("{", true, "ellipse"));
+            GraphProcessor.get(clause.getBody(), this).process(clause.getBody());
+            nowNode = nowNode.addChildren(new Node("}", true, "ellipse"));
+
+            // create edge label
+            final Pair<Node,Node> trythenEdge = new Pair<>(cond, cond.getChildren().get(0));
+            nowMethod.edge.put(trythenEdge, "try-true");
+
+            nowNode = nowNode.addChildren(dummy);
+        }
+
+        if( node.getFinally() != null){
+            // now, nowNode is dummy
+            nowNode =  nowNode.addChildren(new Node("{", true, "ellipse"));
+
+//            // create edge label
+//            final Pair<Node,Node> edge = new Pair<>(dummy, nowNode);
+//            nowMethod.edge.put(edge, "finally");
+
+            GraphProcessor.get(node.getFinally(), this).process(node.getFinally());
+            nowNode = nowNode.addChildren(new Node("}", true, "ellipse"));
+        }
+
+        return false;
+    }
+
 
     @Override
     public boolean visit(BreakStatement node){

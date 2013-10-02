@@ -38,10 +38,12 @@ public class ClassTrees {
         }
 
         for( Map.Entry<Pair<Node,Node>,String> e : varEdge.entrySet() ){
-            StringBuilder sb = new StringBuilder();
-            sb.append(e.getKey().fst.toGraphId() + " -> " + e.getKey().snd.toGraphId());
-            sb.append(" [label=\"" + e.getKey().fst.sanitize(e.getValue()) + "\", style=\"dotted\"];");
-            Writer.println(sb.toString());
+            if(!e.getKey().snd.getDisableEdge()){
+                StringBuilder sb = new StringBuilder();
+                sb.append(e.getKey().fst.toGraphId() + " -> " + e.getKey().snd.toGraphId());
+                sb.append(" [label=\"" + e.getKey().fst.sanitize(e.getValue()) + "\", style=\"dotted\"];");
+                Writer.println(sb.toString());
+            }
         }
 
         Writer.println("}");
