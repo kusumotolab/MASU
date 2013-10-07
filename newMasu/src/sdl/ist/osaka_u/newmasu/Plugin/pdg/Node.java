@@ -88,9 +88,6 @@ public class Node {
         return Integer.toString(hashCode());
     }
 
-
-
-
     public static Set<Node> used = new LinkedHashSet<>();
     public void removeDummy(Map<Pair<Node,Node>,String> edge){
         used.clear();

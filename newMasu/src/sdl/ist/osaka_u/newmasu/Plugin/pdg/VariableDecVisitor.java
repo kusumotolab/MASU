@@ -10,6 +10,24 @@ public class VariableDecVisitor extends ASTVisitor {
     public List<IVariableBinding> useBindings = new ArrayList<>();
 
     @Override
+    public boolean visit(Assignment node){
+        AssignSimpleName visit = new AssignSimpleName();
+        node.accept(visit);
+        decBindings.addAll(visit.dec);
+        return false;
+    }
+    private class AssignSimpleName extends ASTVisitor {
+        public List<IVariableBinding> dec = new ArrayList<>();
+        @Override
+        public boolean visit(SimpleName node){
+            IBinding b = node.resolveBinding();
+            if( b != null && b.getKind() == IBinding.VARIABLE )
+                dec.add((IVariableBinding)b);
+            return true;
+        }
+    }
+
+    @Override
     public boolean visit(SimpleName node){
         IBinding b = node.resolveBinding();
         if( b != null && b.getKind() == IBinding.VARIABLE )
@@ -25,4 +43,8 @@ public class VariableDecVisitor extends ASTVisitor {
     public boolean visit(AnonymousClassDeclaration node){
         return false;
     }
+
+
 }
+
+
