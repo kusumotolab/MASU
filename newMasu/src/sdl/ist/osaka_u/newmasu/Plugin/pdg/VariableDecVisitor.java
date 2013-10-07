@@ -12,8 +12,9 @@ public class VariableDecVisitor extends ASTVisitor {
     @Override
     public boolean visit(Assignment node){
         AssignSimpleName visit = new AssignSimpleName();
-        node.accept(visit);
+        node.getLeftHandSide().accept(visit);
         decBindings.addAll(visit.dec);
+        node.getRightHandSide().accept(this);
         return false;
     }
     private class AssignSimpleName extends ASTVisitor {
