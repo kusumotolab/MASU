@@ -8,7 +8,7 @@ import java.util.List;
 public class VariableDecVisitor extends ASTVisitor {
     public List<IVariableBinding> decBindings = new ArrayList<>();
     public List<IVariableBinding> useBindings = new ArrayList<>();
-
+/*
     @Override
     public boolean visit(Assignment node){
         AssignSimpleName visit = new AssignSimpleName();
@@ -27,7 +27,7 @@ public class VariableDecVisitor extends ASTVisitor {
             return true;
         }
     }
-
+*/
     @Override
     public boolean visit(SimpleName node){
         IBinding b = node.resolveBinding();
