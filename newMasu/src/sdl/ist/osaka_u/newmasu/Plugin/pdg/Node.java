@@ -185,11 +185,13 @@ public class Node {
             return;
         used.add(this);
 
-        for(Node n : fields)
+        for(Node n : fields){
+            eused.clear();
             __chkFieldEdge(edge,n);
+        }
 
         for(Node t : children)
-            t.__createVarEdgeWorker(edge);
+            t.__createFieldEdgeWorker(edge,fields);
     }
     private void __chkFieldEdge(Map<Pair<Node,Node>,String> edge, Node target){
         if(eused.contains(this))
@@ -202,7 +204,7 @@ public class Node {
         }
 
         for(Node t : this.children)
-            t.__chkEdge(edge, target);
+            t.__chkFieldEdge(edge, target);
     }
 
 
