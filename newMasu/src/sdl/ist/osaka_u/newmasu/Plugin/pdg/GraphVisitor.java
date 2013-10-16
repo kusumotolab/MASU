@@ -119,7 +119,14 @@ public class GraphVisitor extends ASTVisitor{
             nowNode = nowNode.addChildren(new Node(exp.toString(), false, "ellipse", exp));
         }
 
-        final Node condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
+        Node condNode = null;
+        boolean existsCondNode = true;  // to remove "true" edge
+        if(node.getExpression()!=null)
+            condNode = new Node(node.getExpression().toString(), false, "diamond", node.getExpression());
+        else{
+            condNode = new Node("dummy cond", true, "diamond");
+            existsCondNode = false;
+        }
         nowNode = nowNode.addChildren(condNode);
 
         final Node dummy = new Node("}", true, "ellipse");
@@ -138,7 +145,8 @@ public class GraphVisitor extends ASTVisitor{
         // create edge label
         final Pair<Node,Node> thenEdge = new Pair<>(
                 nowNode, nowNode.getChildren().get(0));
-        nowMethod.edge.put(thenEdge, "true");
+        if(existsCondNode)
+            nowMethod.edge.put(thenEdge, "true");
 
         // create else branch
         condNode.addChildren(dummy);
