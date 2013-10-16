@@ -389,4 +389,36 @@ public class GraphVisitor extends ASTVisitor{
         assert enter.isEmpty();
         assert exit.isEmpty();
     }
+
+
+
+    @Override
+    public boolean visit(Initializer node){
+        nowMethod = new MethodTree();
+        nowMethod.rawNode = node;
+        classTrees.methods.add(nowMethod);
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("initializer " + node.hashCode());
+
+        final Node start = new Node("Start " + sb.toString(), false, "rect");
+        nowMethod.root = start;
+        nowNode = nowMethod.root;
+
+        enter.push(start);
+        exit.push(new Node("End " + sb.toString(), false, "rect"));
+
+        return true;
+    }
+    @Override
+    public void endVisit(Initializer node){
+        nowNode.addChildren(exit.pop());
+        nowMethod.root = enter.pop();
+
+        nowMethod.root.used.clear();
+        nowMethod.root.removeDummy(nowMethod.edge);
+
+        assert enter.isEmpty();
+        assert exit.isEmpty();
+    }
 }

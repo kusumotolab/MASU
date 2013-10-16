@@ -79,11 +79,16 @@ public enum GraphProcessor {
             vis.visit((SynchronizedStatement)node);
         }
     },
-
     TRY(TryStatement.class){
         @Override
         public void process(ASTNode node){
             vis.visit((TryStatement)node);
+        }
+    },
+    INITIALIZER(Initializer.class){
+        @Override
+        public void process(ASTNode node){
+            vis.visit((Initializer)node);
         }
     },
 /*
