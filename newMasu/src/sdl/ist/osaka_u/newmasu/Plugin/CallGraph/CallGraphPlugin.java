@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -22,7 +22,18 @@ public class CallGraphPlugin implements Plugin {
     private CallGraphNode root = new CallGraphNode();
     private CallGraphNode nowNode = root;
 
-    @Override
+    private Map<IMethodBinding, Integer> inCount = new HashMap<>();
+    private Map<IMethodBinding, Integer> outCount = new HashMap<>();
+
+    private Path outputPath = Paths.get("/dev/null");
+    private Path ioCountOutputPath = Paths.get("/dev/null");
+
+    public CallGraphPlugin(Path op){
+        outputPath = op.resolve("cg.dot");
+        ioCountOutputPath = op.resolve("inOut.csv");
+    }
+    public CallGraphPlugin(){}
+
     public void run() {
 
         root.bind = null;
@@ -56,23 +67,32 @@ public class CallGraphPlugin implements Plugin {
             }
 
             nowNode = parent;
-
-/*            System.out.println(
-                    NodeFinder.<TypeDeclaration>getOneParentNode(node)
-            );
-            */
         }
 
         ShowCallGraph();
-    }
 
+        try {
+            BufferedWriter ioCountWriter = Files.newBufferedWriter(ioCountOutputPath, Charset.defaultCharset());
+            for(Map.Entry<IMethodBinding, Integer> entry: inCount.entrySet()){
+                ioCountWriter.write("in:" + entry.getKey().getDeclaringClass().getQualifiedName() + ":" +
+                        entry.getKey() + ":" + entry.getValue() + System.lineSeparator());
+            }
+            for(Map.Entry<IMethodBinding, Integer> entry: outCount.entrySet()){
+                ioCountWriter.write("out:" + entry.getKey().getDeclaringClass().getQualifiedName() + ":" +
+                        entry.getKey() + ":" + entry.getValue() + System.lineSeparator());
+            }
+            ioCountWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     class CallGraphNode{
         public IMethodBinding bind = null;
         public List<CallGraphNode> children = new ArrayList<>();
     }
     private void ShowCallGraph(){
-        File file = new File("sample/cg.dot");
+        File file = outputPath.toFile();
         try {
             pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
         } catch (IOException e) {
@@ -86,13 +106,32 @@ public class CallGraphPlugin implements Plugin {
     }
     private PrintWriter pw = null;
     private Set<CallGraphNode> used = new HashSet<>();
+
+
     private void _ShowCallGraph(CallGraphNode node){
         if(!used.contains(node)){
             used.add(node);
             for( CallGraphNode c : node.children ){
-                pw.println( " " + c.bind.getKey().hashCode()  + " [label=\"" + c.bind.getName() + "\"]");
+                pw.println( " " + c.bind.getKey().hashCode()  +
+                        " [label=\"" + c.bind.getDeclaringClass().getName() + "." + c.bind.getName() + "\"]");
                 if( node.bind != null){
-                    pw.println( "  " + node.bind.getKey() .hashCode()+ " -> " + c.bind.getKey().hashCode() );
+                    pw.println( "  " + node.bind.getKey().hashCode()+ " -> " + c.bind.getKey().hashCode() );
+
+                    if( inCount.containsKey(node.bind) ){
+                        Integer inIt = inCount.get(node.bind);
+                        inCount.put(node.bind, ++inIt);
+                    }
+                    else{
+                        inCount.put(node.bind, 1);
+                    }
+
+                    if( outCount.containsKey(c.bind) ){
+                        Integer outIt = outCount.get(c.bind);
+                        outCount.put(c.bind, ++outIt);
+                    }
+                    else{
+                        outCount.put(c.bind, 1);
+                    }
                 }
                 _ShowCallGraph(c);
             }
