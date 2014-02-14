@@ -14,7 +14,8 @@ public class CallGraphVisitor extends ASTVisitor {
     @Override
     public boolean visit(MethodInvocation node){
         IMethodBinding bind = node.resolveMethodBinding();
-        methods.add(bind);
+        if(bind!=null)
+            methods.add(bind);
         return true;
     }
 }

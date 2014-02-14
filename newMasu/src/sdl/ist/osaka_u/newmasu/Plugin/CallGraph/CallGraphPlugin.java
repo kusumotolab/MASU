@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import org.eclipse.jdt.core.BindingKey;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 
@@ -74,12 +75,11 @@ public class CallGraphPlugin implements Plugin {
         try {
             BufferedWriter ioCountWriter = Files.newBufferedWriter(ioCountOutputPath, Charset.defaultCharset());
             for(Map.Entry<IMethodBinding, Integer> entry: inCount.entrySet()){
-                ioCountWriter.write("in:" + entry.getKey().getDeclaringClass().getQualifiedName() + ":" +
-                        entry.getKey() + ":" + entry.getValue() + System.lineSeparator());
+                System.out.println(entry.getKey().getKey());
+                ioCountWriter.write("in:" + entry.getKey().getKey() + ":" + entry.getValue() + System.lineSeparator());
             }
             for(Map.Entry<IMethodBinding, Integer> entry: outCount.entrySet()){
-                ioCountWriter.write("out:" + entry.getKey().getDeclaringClass().getQualifiedName() + ":" +
-                        entry.getKey() + ":" + entry.getValue() + System.lineSeparator());
+                ioCountWriter.write("out:" + entry.getKey().getKey() + ":" + entry.getValue() + System.lineSeparator());
             }
             ioCountWriter.close();
         } catch (IOException e) {
@@ -112,6 +112,19 @@ public class CallGraphPlugin implements Plugin {
         if(!used.contains(node)){
             used.add(node);
             for( CallGraphNode c : node.children ){
+                if(node.bind!=null){
+                    if(!inCount.containsKey(node.bind))
+                        inCount.put(node.bind, 0);
+                    if(!outCount.containsKey(node.bind))
+                        outCount.put(node.bind, 0);
+                }
+                if(c.bind!=null){
+                    if(!inCount.containsKey(c.bind))
+                        inCount.put(c.bind, 0);
+                    if(!outCount.containsKey(c.bind))
+                        outCount.put(c.bind, 0);
+                }
+
                 pw.println( " " + c.bind.getKey().hashCode()  +
                         " [label=\"" + c.bind.getDeclaringClass().getName() + "." + c.bind.getName() + "\"]");
                 if( node.bind != null){
