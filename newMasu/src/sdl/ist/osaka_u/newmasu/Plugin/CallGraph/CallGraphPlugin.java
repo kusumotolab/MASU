@@ -76,10 +76,10 @@ public class CallGraphPlugin implements Plugin {
             BufferedWriter ioCountWriter = Files.newBufferedWriter(ioCountOutputPath, Charset.defaultCharset());
             for(Map.Entry<IMethodBinding, Integer> entry: inCount.entrySet()){
                 System.out.println(entry.getKey().getKey());
-                ioCountWriter.write("in:" + entry.getKey().getKey() + ":" + entry.getValue() + System.lineSeparator());
+                ioCountWriter.write("in " + entry.getKey().getKey() + " " + entry.getValue() + System.lineSeparator());
             }
             for(Map.Entry<IMethodBinding, Integer> entry: outCount.entrySet()){
-                ioCountWriter.write("out:" + entry.getKey().getKey() + ":" + entry.getValue() + System.lineSeparator());
+                ioCountWriter.write("out " + entry.getKey().getKey() + " " + entry.getValue() + System.lineSeparator());
             }
             ioCountWriter.close();
         } catch (IOException e) {
